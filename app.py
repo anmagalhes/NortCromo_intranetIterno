@@ -103,8 +103,11 @@ def verificador_inicial():
 
 @app.route("/muda_de_tela", methods=["POST"])
 def muda_de_tela():  # associa uma função a esta rota.
-    qual_template = request.form["qual_template"]
-    return render_template(qual_template)
+    if verificaSeOUsuarioTemPermissao("tony", "/muda_de_tela"):
+        qual_template = request.form["qual_template"]
+        return render_template(qual_template)
+    else:
+        return "<div>Sem Permissão</div>"
 
 
 @app.route("/muda_de_tela_login", methods=["POST"])

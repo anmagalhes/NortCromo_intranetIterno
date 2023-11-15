@@ -70,11 +70,6 @@ def alterar_senha():
     return jsonify(retorno="Usuário não encontrado")
 
 
-# Mantenha a rota /cadastro existente para exibir o formulário de cadastro
-
-
-@verifica_usuario.route(
-    "/cadastrar_novo_usuario", methods=["POST"]
-)  # Altere a rota aqui
+@verifica_usuario.route("/cadastrar_novo_usuario", methods=["POST"])
 def cadastrar_novo_usuario():
     return render_template("cadastrar_usuario.html")

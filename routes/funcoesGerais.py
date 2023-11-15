@@ -6,6 +6,7 @@ import random
 import string
 import threading
 from threading import Lock
+import json
 
 lock = threading.Lock()
 
@@ -97,3 +98,18 @@ def inserir_linhas(aba, valores, ids):
         print("Erro ao inserir linha. Valores:", valores)
         print("Erro:", str(e))
         return False, None
+
+
+def verificaSeOUsuarioTemPermissao(usuario, rota):
+    # usuario = "tony"
+    # rota = "rota1"
+    aba_usuarios = arquivo().worksheet_by_title("usuarios")
+    coluna1 = aba_usuarios.get_col(1)
+    coluna1 = coluna1[1:]
+    for i in range(len(coluna1)):
+        if coluna1[i] == usuario:
+            rotasPermitidas = json.loads(aba_usuarios.get_col(4)[i + 1])
+            for rotas in rotasPermitidas:
+                if rotas == rota:
+                    return True
+    return False
