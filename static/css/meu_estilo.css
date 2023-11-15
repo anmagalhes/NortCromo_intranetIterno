@@ -1,0 +1,1431 @@
+body {
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.divisor {
+  margin: 1em;
+  display: grid;
+  grid-template-columns: 4fr 2fr 4fr;
+}
+
+.seg {
+  display: grid;
+  border-radius: 5px; /* Curvinha nos cantos */
+  padding: 2em;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 0.5em;
+}
+
+.seg > button {
+  margin-top: 1em;
+}
+
+.seg > label {
+  margin-top: 1em;
+}
+
+.seg > h3 {
+  text-align: center;
+}
+
+input[type="text"] {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+}
+
+input[type="text"]:hover {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+  background-color: #f3f8f4;
+}
+
+button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+button:hover {
+  background-color: #a0daa2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+/* Estilos gerais */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: darkgreen;
+}
+
+/* Header */
+
+.header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header span {
+  color: #fff8e1;
+  font-weight: 700;
+}
+
+/* Estilos de formulários e botões */
+
+.form-control,
+.btn {
+  border-radius: 20px;
+}
+
+#filter {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+#filter:focus {
+  box-shadow: 0 0 8px rgba(72, 239, 128, 0.8);
+  outline: none;
+}
+
+#filter:hover {
+  background-color: #45a049;
+}
+
+#filter::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.btn-enhanced {
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  transition: 0.3s;
+}
+
+.btn-enhanced:hover {
+  transform: scale(1.05);
+}
+
+.bg-success {
+  color: #ffffff;
+}
+
+/* Modals */
+.modal {
+  display: none; /* Escondido por padrão */
+  position: fixed; /* Fica fixo na janela */
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  margin: 10% auto; /* 10% a partir do topo e alinhado ao centro */
+  padding: 20px;
+  border-radius: 4px;
+  width: 60%; /* Ajuste para a largura que você deseja, talvez 60%? */
+  background-color: #fff;
+  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap; /* Isto impedirá que os itens se quebrem em duas linhas */
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.close {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-body {
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-footer {
+  padding: 10px 20px;
+  text-align: right;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.modal-header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header img {
+  width: 50px;
+  vertical-align: middle;
+  margin-right: 10px; /* adicionada margem à direita */
+}
+
+.mdl-dialog {
+  width: 90%; /* faz o modal ocupar 90% da largura da tela */
+  max-width: 100%; /* garante que não exceda a largura da tela */
+  margin: 2% auto; /* centraliza o modal */
+}
+
+/* Estilizando o título do modal */
+.mdl-dialog__title {
+  background-color: #4caf50; /* Cor verde padrão. Ajuste de acordo com o seu verde específico */
+  color: white; /* Cor do texto */
+  padding: 10px 24px; /* Espaçamento interno */
+  margin: 0; /* Remover margem padrão */
+}
+
+/* Estilizando o conteúdo do modal */
+.mdl-dialog__content {
+  border-top: 5px solid #4caf50; /* Adicionar uma borda verde no topo para continuidade do design */
+  padding: 24px; /* Espaçamento interno */
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.mdl-dialog {
+  width: 80%; /* Aumentando a largura para 80% */
+  max-width: 1000px; /* Definindo uma largura máxima */
+  margin: 2% auto;
+  border: none;
+  overflow: visible;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilização do ícone/checkbox para quando ele é selecionado */
+.options label input[type="radio"]:checked + span.checkmark {
+  background-color: #43a04d;
+  border-color: #43a04d;
+}
+
+/* Adicione aqui os estilos para ajustar o tamanho das colunas */
+
+.highlighted {
+  background-color: #a8f4a2; /* Escolha a cor que preferir */
+}
+
+.header img {
+  width: 35px; /* Ajuste o valor de acordo com o tamanho desejado */
+  height: auto; /* Mantém a proporção da imagem */
+  border-radius: 5px; /* Borda arredondada para deixar elegante */
+  margin-right: 10px; /* Espaçamento à direita da imagem */
+}
+
+.modal-header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mdl-dialog {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.modal-content {
+  padding: 0 20px 20px;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid-item {
+  flex: 1;
+}
+
+.option-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+option-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+input[type="radio"]:checked + .checkmark {
+  background-color: #43a04d;
+}
+
+.option-description {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.modal-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.confirm-btn {
+  background-color: #43a04d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.confirm-btn:hover {
+  background-color: #389c43;
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Seu CSS básico já se adapta bem nova tabela  */
+/* Estilos de tabelas */
+.tabulator {
+  white-space: nowrap;
+  max-height: 1000px;
+  overflow-y: auto;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tabulator table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabulator .tabulator-tableHolder {
+  position: relative;
+  max-height: 1000px;
+  overflow: auto;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #43a04d;
+  color: white;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+}
+
+.tabulator .tabulator-row {
+  height: 20px;
+}
+
+.tabulator .tabulator-cell {
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: #f5f5f5;
+}
+
+.tabulator .tabulator-row:last-child .tabulator-cell {
+  border-bottom: none;
+}
+
+.tabulator-row,
+.tabulator-cell {
+  border-bottom: 1px dashed #000; /* Bordas inferiores pontilhadas */
+  border-right: 1px dashed #000; /* Bordas direitas pontilhadas */
+}
+
+.tabulator-row:last-child .tabulator-cell {
+  border-bottom: none; /* Remova a borda inferior da última linha */
+}
+
+.tabulator-cell:first-child {
+  border-left: 1px dashed #000; /* Adicione a borda esquerda pontilhada à primeira célula de cada linha */
+}
+
+/* Estilos para checkbox */
+
+.checkbox-material input[type="checkbox"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.checkbox-material .checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material input[type="checkbox"]:checked + .checkmark {
+  background-color: #2196f3;
+}
+
+.checkbox-material .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+}
+
+.checkbox-material input[type="checkbox"]:checked + .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+#table {
+  width: 100%;
+  max-height: 1000px;
+  overflow-y: auto;
+}
+
+/* Coluna do checkbox */
+#table td:nth-child(1),
+#table th:nth-child(1) {
+  text-align: center; /* Centralizar horizontalmente */
+  vertical-align: middle; /* Centralizar verticalmente */
+}
+
+.editable-cell {
+  background-color: #e0e0e0 !important; /* Um cinza claro */
+  cursor: pointer !important;
+  border: 1px dashed #7e7e7e !important; /* Cinza médio para a borda tracejada */
+  padding: 5px 10px !important;
+}
+
+.highlighted-cell {
+  background-color: #c7c7c7; /* Cinza um pouco mais escuro que o anterior */
+}
+
+.highlighted-row {
+  background-color: #b0b0b0; /* Cinza ainda mais escuro */
+}
+.checkbox-material input[type="checkbox"] {
+  display: none;
+}
+.checkbox-material label {
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.checkbox-material input[type="checkbox"]:checked + label {
+  color: #4caf50; /* você pode alterar a cor se quiser */
+}
+.checkbox-material {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+}
+
+.checkbox-material input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 2px;
+}
+
+.checkbox-material:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-material input:checked ~ .checkmark {
+  background-color: #43a04d;
+  border-color: white;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-material input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  content: "\2714";
+  position: absolute;
+  display: none;
+  color: white;
+
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.tabulator .text-center {
+  text-align: center;
+}
+
+.white-bg {
+  background-color: white;
+}
+
+.custom-checkbox {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.custom-checkbox input:checked ~ span {
+  background-color: white;
+  border: 1px solid #2196f3;
+}
+
+.custom-checkbox span:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ span:after {
+  display: block;
+}
+
+.custom-checkbox span:after {
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #43a04d;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.tabulator-editing .tabulator-cell-editor {
+  vertical-align: top !important;
+  padding-top: 5px !important;
+}
+
+.tabulator .tabulator-editing input[type="text"] {
+  padding: 2px 5px !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.seg {
+  display: grid;
+  border-radius: 5px; /* Curvinha nos cantos */
+  padding: 1em;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 0.5em;
+}
+
+.seg > button {
+  margin-top: 1em;
+}
+
+.seg > label {
+  margin-top: 1em;
+}
+
+.seg > h3 {
+  text-align: center;
+}
+
+input[type="text"] {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+}
+
+input[type="text"]:hover {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+  background-color: #f3f8f4;
+}
+
+button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+button:hover {
+  background-color: #a0daa2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.menu {
+  grid-column: 2;
+  background-color: #f0f0f0; /* Cor de fundo mais clara */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: -260px;
+  height: 95vh;
+  overflow-y: auto;
+  transition: left 0.3s;
+  padding: 20px;
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-header h1 {
+  font-size: 18px;
+}
+
+.close-menu-btn {
+  display: none; /* Isso irá esconder o botão */
+}
+
+#closeMenuBtn {
+  margin-left: 15px; /* um pequeno espaço entre o logo e o botão de fechar */
+}
+
+.menu-header,
+.menu li {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menu-top img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.menu li[data-selected="true"],
+.menu-header:hover,
+.menu li:hover {
+  background-color: #98cf33; /* Cor de destaque ao passar o mouse ou quando está selecionado */
+  color: #fff;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.menu ul li i {
+  margin-right: 10px;
+}
+
+.menu nav ul li {
+  justify-content: space-between;
+}
+
+/* Estilo para quando um item do menu está selecionado */
+.menu nav ul li[data-selected="true"] {
+  background-color: #98cf33;
+  color: white;
+}
+
+.menu.collapsed li,
+.menu.collapsed span,
+.menu.collapsed button.close-menu-btn {
+  display: none; /* esconde os elementos */
+}
+
+.menu.collapsed .material-icons {
+  display: inline-block; /* garante que os ícones ainda estejam visíveis */
+}
+
+/* Design Responsivo */
+@media only screen and (max-width: 600px) {
+  #lado_esquerdo {
+    width: 0;
+  }
+
+  .menu {
+    width: 100vw;
+    left: -100vw;
+  }
+
+  .menu header h1 {
+    font-size: 18px;
+  }
+  .content {
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+
+  .menu-lateral {
+    width: 30%; /* Ocupa a tela inteira em dispositivos móveis */
+  }
+}
+.menu-header,
+.menu li {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menu li[data-selected="true"],
+.menu-header:hover,
+.menu li:hover {
+  background-color: #98cf33; /* Cor de destaque ao passar o mouse ou quando está selecionado */
+  color: #fff;
+}
+
+.toggle-submenu {
+  float: right; /* Para que a seta apareça à direita */
+}
+
+#cabecalho_NorthCromo {
+  width: 100%;
+  height: 5vh;
+  background-color: #98cf33;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu.collapsed li i {
+  display: block;
+}
+
+.menu.collapsed li span,
+.menu.collapsed ul.submenu {
+  display: none;
+}
+
+.toggle-submenu {
+  float: right; /* Coloca o ícone de expansão/recolhimento à direita */
+}
+
+input.filled {
+  border-color: green;
+}
+
+/* Estilo para destacar visualmente as opções selecionadas na tabela */
+.tabulator-row.diaInteiro .tabulator-cell {
+  background-color: #d4edda; /* Cor de fundo para "Dia Inteiro" */
+}
+
+.tabulator-row.meioPeriodo .tabulator-cell {
+  background-color: #cce5ff; /* Cor de fundo para "Meio Período" */
+}
+.custom-checkbox-cell input {
+  border: 2px solid blue;
+}
+
+.row-checkbox {
+  width: 18px; /* Ajuste o tamanho conforme necessário */
+  height: 18px; /* Ajuste o tamanho conforme necessário */
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc; /* Cor da borda padrão */
+  border-radius: 3px; /* Bordas arredondadas */
+}
+
+.row-checkbox:checked {
+  background-color: #4CAF50; /* Cor de fundo quando marcado */
+  border: 1px solid #4CAF50; /* Cor da borda quando marcado */
+}
+
+.obra-item {
+  list-style-type: none;
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.obra-item:hover {
+  background-color: #e0e0e0;
+}
+
+.obra-item {
+  /* ... Outros estilos ... */
+  transition: background-color 0.3s;
+}
+
+/* Seu arquivo de estilo (styles.css) */
+.aba {
+  display: none;
+}
+
+.campo_pesquisa {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.campo_pesquisa {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+i.material-icons {
+  font-size: 20px;
+  color: #555; /* Cor do ícone */
+  margin-right: 5px;
+}
+.selected {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
+/* Estilos gerais */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: darkgreen;
+}
+
+body {
+  background-color: #f3f3f3;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+/* Header */
+.header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header span {
+  color: #fff8e1;
+  font-weight: 700;
+}
+
+/* Estilos de formulários e botões */
+.form-control,
+.btn {
+  border-radius: 20px;
+}
+
+#filter {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+#filter:focus {
+  box-shadow: 0 0 8px rgba(72, 239, 128, 0.8);
+  outline: none;
+}
+
+#filter:hover {
+  background-color: #45a049;
+}
+
+#filter::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.btn-enhanced {
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  transition: 0.3s;
+}
+
+.btn-enhanced:hover {
+  transform: scale(1.05);
+}
+
+.bg-success {
+  color: #ffffff;
+}
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 4px;
+  width: 60%;
+  background-color: #fff;
+  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+  background-color: #43a04d;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap;
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.close {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-body {
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-footer {
+  padding: 10px 20px;
+  text-align: right;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.mdl-dialog {
+  width: 90%;
+  max-width: 100%;
+  margin: 2% auto;
+}
+
+/* Estilizando o título do modal */
+.mdl-dialog__title {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 24px;
+  margin: 0;
+}
+
+/* Estilizando o conteúdo do modal */
+.mdl-dialog__content {
+  border-top: 5px solid #4caf50;
+  padding: 24px;
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Seu CSS básico já se adapta bem à nova tabela */
+/* Estilos de tabelas */
+.tabulator {
+  width: 100% !important;
+  white-space: nowrap;
+  max-height: 1000px;
+  overflow-y: auto;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tabulator table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabulator .tabulator-tableHolder {
+  position: relative;
+  max-height: 1000px;
+  overflow: auto;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #43a04d;
+  color: white;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+}
+
+.tabulator .tabulator-row {
+  height: 20px;
+}
+
+.tabulator .tabulator-cell {
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: #f5f5f5;
+}
+
+.tabulator .tabulator-row:last-child .tabulator-cell {
+  border-bottom: none;
+}
+
+.tabulator-row,
+.tabulator-cell {
+  border-bottom: 1px dashed #000;
+  border-right: 1px dashed #000;
+}
+
+.tabulator-row:last-child .tabulator-cell {
+  border-bottom: none;
+}
+
+.tabulator-cell:first-child {
+  border-left: 1px dashed #000;
+}
+
+/* Estilos para checkbox */
+.checkbox-material input[type="checkbox"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.checkbox-material .checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material input[type="checkbox"]:checked + .checkmark {
+  background-color: #2196f3;
+}
+
+.checkbox-material .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-material input[type="checkbox"]:checked + .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+#table {
+  width: 100%;
+  max-height: 1000px;
+  overflow-y: auto;
+}
+
+/* Coluna do checkbox */
+#table td:nth-child(1),
+#table th:nth-child(1) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.editable-cell {
+  background-color: #e0e0e0 !important;
+  cursor: pointer !important;
+  border: 1px dashed #7e7e7e !important;
+  padding: 5px 10px !important;
+}
+
+.highlighted-cell {
+  background-color: #c7c7c7;
+}
+
+.highlighted-row {
+  background-color: #b0b0b0;
+}
+
+.checkbox-material input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-material label {
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.checkbox-material input[type="checkbox"]:checked + label {
+  color: #4caf50;
+}
+
+.checkbox-material {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+}
+
+.checkbox-material input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 2px;
+}
+
+.checkbox-material:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-material input:checked ~ .checkmark {
+  background-color: #43a04d;
+  border-color: white;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-material input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.tabulator .text-center {
+  text-align: center;
+}
+
+.white-bg {
+  background-color: white;
+}
+
+.custom-checkbox {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.custom-checkbox input:checked ~ span {
+  background-color: white;
+  border: 1px solid #2196f3;
+}
+
+.custom-checkbox span:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ span:after {
+  display: block;
+}
+
+.custom-checkbox span:afte {
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+}
+
+
+
+

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    {% include 'head.html' %}
+  </head>
+  <body>
+    <div class="seg">
+      <h3>Capturar Foto</h3>
+      <div class="container">
+        <!-- Formulário com campos de entrada -->
+        <form id="data-form">
+          <label for="cliente">Cliente:</label>
+          <select id="cliente" name="cliente">
+            <!-- Opções para clientes -->
+          </select>
+
+          <label for="fornecedor">Fornecedor:</label>
+          <select id="fornecedor" name="fornecedor">
+            <!-- Opções para fornecedores -->
+          </select>
+
+          <label for="data-relatorio">Data Relatório (RDO):</label>
+          <input type="date" id="data-relatorio" name="data-relatorio" />
+
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" />
+
+          <label for="contrato">Contrato (Número de Controle da Ordem):</label>
+          <input type="text" id="contrato" name="contrato" />
+
+          <label for="data-inicio">Data de Início:</label>
+          <input type="date" id="data-inicio" name="data-inicio" />
+
+          <label for="prazo-finalizacao">Prazo de Finalização:</label>
+          <input type="date" id="prazo-finalizacao" name="prazo-finalizacao" />
+
+          <label for="endereco-obra">Endereço da Obra:</label>
+          <input type="text" id="endereco-obra" name="endereco-obra" />
+
+          <label for="uf">UF:</label>
+          <input type="text" id="uf" name="uf" />
+
+          <label for="cep">CEP:</label>
+          <input type="text" id="cep" name="cep" />
+
+          <label for="responsavel-obra">Responsável pela Obra:</label>
+          <input type="text" id="responsavel-obra" name="responsavel-obra" />
+
+          <label for="gerente">Gerente:</label>
+          <input type="text" id="gerente" name="gerente" />
+
+          <label for="periodo-obra">Período da Obra (Selecionar):</label>
+          <select id="periodo-obra" name="periodo-obra">
+            <!-- Opções para período da obra -->
+          </select>
+
+          <label for="condicao-tempo"
+            >Condição do Tempo (Exemplo: Sol ou Chuva):</label
+          >
+          <input type="text" id="condicao-tempo" name="condicao-tempo" />
+
+          <label for="funcao">Função ou Cargo (Selecionado):</label>
+          <select id="funcao" name="funcao">
+            <!-- Opções para funções ou cargos -->
+          </select>
+
+          <label for="quantidade">Quantidade:</label>
+          <input type="number" id="quantidade" name="quantidade" />
+
+          <label for="quantidade-funcao-direta"
+            >Quantidade de Função Direta:</label
+          >
+          <input
+            type="number"
+            id="quantidade-funcao-direta"
+            name="quantidade-funcao-direta"
+          />
+
+          <label for="quantidade-funcao-indireta"
+            >Quantidade de Função Indireta:</label
+          >
+          <input
+            type="number"
+            id="quantidade-funcao-indireta"
+            name="quantidade-funcao-indireta"
+          />
+
+          <label for="descricao-tarefa"
+            >Descrição (Tarefa a ser Realizada):</label
+          >
+          <textarea id="descricao-tarefa" name="descricao-tarefa"></textarea>
+
+          <label for="descricao-ocorrencias">Descrição (Ocorrências):</label>
+          <textarea id="descricao-ocorrencias" name="descricao-ocorrencias">
+          </textarea>
+
+          <!-- Botão para tirar fotos -->
+          <button id="capturar-fotos">Capturar Fotos</button>
+        </form>
+        <!-- Div para exibir as fotos capturadas -->
+        <div id="fotos-capturadas"></div>
+      </div>
+    </div>
+    {% include 'funcoes_comuns.html' %}
+    <script src="capturar_foto.js"></script>
+    <script>
+      // Função para capturar fotos quando o botão "Capturar Fotos" for clicado
+      document
+        .getElementById("capturar-fotos")
+        .addEventListener("click", function () {
+          // Lógica para capturar fotos e exibir na div "fotos-capturadas"
+          // Certifique-se de controlar o número de fotos e adicionar à div "fotos-capturadas"
+        });
+    </script>
+  </body>
+</html>

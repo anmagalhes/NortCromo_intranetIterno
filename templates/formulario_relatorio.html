@@ -1,0 +1,119 @@
+<!-- templates/formulario_relatorio.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Relatório</title>
+</head>
+<body>
+    <h1>Formulário de Relatório</h1>
+        <button onclick="gerarRelatorio()";>carregarDadosFuncionario</button>
+
+<script>
+
+    function gerarRelatorio() {
+        // Obtenha os parâmetros do formulário (substitua pelos IDs reais dos seus campos)
+        //var obra_id = document.getElementById('obra_id').value;
+        //var periodo_inicial = document.getElementById('periodo_inicial').value;
+       // var periodo_final = document.getElementById('periodo_final').value;
+
+        var obra_id = 1
+        var periodo_inicial = ""
+        var periodo_final = ""
+    
+        // Construa um objeto com os parâmetros
+        var parametros = {
+            obra_id: obra_id,
+            periodo_inicial: periodo_inicial,
+            periodo_final: periodo_final
+        };
+
+        console.log(parametros)
+    
+        // Faça uma solicitação AJAX para a rota de geração de relatório no Flask
+        $.ajax({
+            //url: my_url() + "formulario_relatorio2",  // Corrigido para /formulario_relatorio
+            url: my_url() + "ler_dadosFuncionarios",
+            data: JSON.stringify(parametros),
+            contentType: 'application/json',
+            type: 'POST',
+            success: function(response) {
+                alert(response)
+                // Manipule a resposta do servidor (os relatórios em JSON)
+                console.log(response);
+    
+                // Acesse os dados detalhados
+                var detalhadoData = response.relatorio_detalhado;
+    
+                // Acesse os dados acumulados
+                var acumuladoData = response.relatorio_acumulado;
+            },
+            error: function(error) {
+                // Trate os erros de solicitação aqui
+                console.error('Erro na solicitação AJAX:', error);
+            }
+        });
+    }
+    
+
+    function carregarDadosFuncionario() {
+        $.ajax({
+          url: my_url() + "ler_dadosFuncionarios", // Corrigido para "funcionario" em vez de "funcioario"
+          type: "POST",
+        })
+          .done(function (data) {
+            let dados = data.retorno;
+            console.log("carregarDadosFuncionario:", dados);
+            updateTableData(dados);
+          })
+          .fail(function (error) {
+            console.error("Erro ao buscar dados iniciais:", error);
+          });
+      }
+  
+    
+    
+    
+    // Função para exibir os dados na interface do usuário
+    function exibirDados(dados) {
+        // Implemente a lógica para exibir os dados na interface
+        // Por exemplo, você pode atualizar tabelas HTML, gráficos, etc.
+        console.log("Exibindo dados na interface:", dados);
+    }
+
+    function obterRelatorioDetalhado() {
+        $.ajax({
+            url: my_url() + "relatorio_detalhado",
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                // Atualize sua tabela de relatório detalhado com os dados do response
+                // Exemplo: updateDetalhadoTable(response);
+            },
+            error: function(error) {
+                console.error('Erro na solicitação AJAX:', error);
+            }
+        });
+    }
+    
+    function obterRelatorioAcumulado() {
+        $.ajax({
+            url: my_url() + "relatorio_acumulado",
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                // Atualize sua tabela de relatório acumulado com os dados do response
+                // Exemplo: updateAcumuladoTable(response);
+            },
+            error: function(error) {
+                console.error('Erro na solicitação AJAX:', error);
+            }
+        });
+    }
+    
+    
+</script>
+</body>
+</html>

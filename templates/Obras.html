@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% include 'head.html' %}
+  <body>
+    <div class="seg">
+      <h3>Título</h3>
+      <!-- <label>Navegação</label> -->
+      <!-- <button onclick="meu_template('index_2')">Vai para o Index_2</button> -->
+      <button onclick="meu_post_request()">Ler</button>
+      <label>Ler Célula</label>
+      <input type="text" id="o_que_foi_lido" />
+
+      <label>O que escrever</label>
+      <input type="text" id="o_que_escrever" />
+      <button onclick="escreve_na_celulaA1()">Escrever</button>
+      <button id="btn_adicionar_cliente" onclick="adiciona_cliente()">
+        Adiciona Cliente
+      </button>
+    </div>
+  </body>
+  {% include 'funcoes_comuns.html' %}
+  <script>
+    $(document).ready(function () {
+      console.log("Colocar a função da tabela ou tabela toda aqui");
+    });
+
+    function adiciona_cliente() {
+      document.getElementById("btn_adicionar_cliente").disabled = true;
+      if (document.getElementById("o_que_escrever").value == "") {
+        alert("Preecher com o nome");
+        document.getElementById("btn_adicionar_cliente").disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + "adiciona_cliente",
+          data: {
+            o_que_escrever: document.getElementById("o_que_escrever").value,
+          },
+          type: "POST",
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById("btn_adicionar_cliente").disabled = false;
+          document.getElementById("o_que_escrever").value = "";
+        });
+      }
+    }
+
+    function escreve_na_celulaA1() {
+      var o_que_escrever = document.getElementById("o_que_escrever").value;
+      $.ajax({
+        url: my_url() + "escrever",
+        type: "POST",
+        data: {
+          o_que_escrever: o_que_escrever,
+        },
+      }).done(function (data) {
+        alert(data.retorno);
+      });
+    }
+
+    function meu_post_request() {
+      $.ajax({
+        url: my_url() + "meu_request",
+        type: "POST",
+      }).done(function (data) {
+        document.getElementById("o_que_foi_lido").value = data.retorno;
+      });
+    }
+  </script>
+</html>

@@ -1,0 +1,131 @@
+/* mobile-first.css */
+
+/* Estilos básicos (pensados primeiramente para mobile) */
+
+body {
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.divisor {
+  margin: 1em;
+  display: grid;
+  grid-template-columns: 4fr 2fr 4fr;
+}
+
+.menu-header,
+.menu li {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menu li[data-selected="true"],
+.menu-header:hover,
+.menu li:hover {
+  background-color: #98cf33; /* Cor de destaque ao passar o mouse ou quando está selecionado */
+  color: #fff;
+}
+
+.toggle-submenu {
+  float: right; /* Para que a seta apareça à direita */
+}
+
+#cabecalho_NorthCromo {
+  width: 100%;
+  height: 5vh;
+  background-color: #98cf33;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilos para telas até 412px (muito provavelmente mobile) */
+
+@media only screen and (max-width: 412px) {
+  #divide_em_dois {
+    grid-template-columns: 1fr; /* Apenas uma coluna para o menu ocupar a tela toda quando expandido */
+  }
+
+  #lado_esquerdo {
+    width: 100%; /* Tornar o lado esquerdo 100% de largura no mobile */
+    position: relative;
+  }
+
+  #menu {
+    position: fixed;
+    left: -260px; /* Escondido por padrão */
+    height: 100vh; /* Altura total da tela */
+    top: 0; /* Comece do topo da tela */
+    transition: left 0.3s; /* Transição suave */
+    z-index: 1000; /* Garantir que o menu esteja sempre no topo */
+  }
+
+  #lado_esquerdo.expanded #menu {
+    left: 0; /* Exibe o menu */
+  }
+
+  .open-menu-btn {
+    display: block; /* Mostrar botão */
+  }
+}
+
+/* Estilos para telas entre 413px e 600px (provavelmente tablets ou phablets) */
+
+@media only screen and (min-width: 413px) and (max-width: 600px) {
+  #lado_esquerdo {
+    width: 0;
+  }
+
+  .menu {
+    width: 100vw;
+    left: -100vw;
+  }
+
+  .menu header h1 {
+    font-size: 18px;
+  }
+
+  .content {
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+
+  .menu-lateral {
+    width: 30%; /* Ocupa a tela inteira em dispositivos móveis */
+  }
+}
+
+input.filled {
+  border-color: green;
+}
+
+/* [Adicione mais media queries conforme necessário para tamanhos de tela maiores] */
+
+/* Estilo para destacar visualmente as opções selecionadas na tabela */
+.tabulator-row.diaInteiro .tabulator-cell {
+  background-color: #d4edda; /* Cor de fundo para "Dia Inteiro" */
+}
+
+.tabulator-row.meioPeriodo .tabulator-cell {
+  background-color: #cce5ff; /* Cor de fundo para "Meio Período" */
+}
+.row-checkbox {
+  width: 18px; /* Ajuste o tamanho conforme necessário */
+  height: 18px; /* Ajuste o tamanho conforme necessário */
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc; /* Cor da borda padrão */
+  border-radius: 3px; /* Bordas arredondadas */
+}
+
+.row-checkbox:checked {
+  background-color: #4CAF50; /* Cor de fundo quando marcado */
+  border: 1px solid #4CAF50; /* Cor da borda quando marcado */
+}

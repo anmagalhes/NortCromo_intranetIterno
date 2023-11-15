@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% include 'head.html' %}
+  <body>
+    <div class="seg">
+      <h3>Cadastro Funcionarios</h3>
+
+      <div class="container">
+        <!-- Campos de entrada -->
+        <div class="row mt-3">
+    
+            <!-- Campo Nome -->
+            <div class="col-md-3">
+                <label for="nomeCompleto" class="custom-label">Nome Completo</label>
+                <input id="nomeCompleto" type="text" class="form-control" placeholder="Nome Completo" />
+            </div>
+    
+            <!-- Campo Data de Nascimento -->
+            <div class="col-md-3">
+                <label for="dataNascimento" class="custom-label">Data de Nascimento</label>
+                <input id="dataNascimento" type="date" class="form-control" placeholder="Data de Nascimento" />
+            </div>
+    
+            <!-- Campo Função -->
+            <div class="col-md-3">
+                <label for="funcao" class="custom-label">Função</label>
+                <input id="funcao" type="text" class="form-control" placeholder="Função" />
+            </div>
+    
+            <!-- Campo Salário -->
+            <div class="col-md-3">
+                <label for="salario" class="custom-label">Salário</label>
+                <input id="salario" type="number" step="0.01" class="form-control" placeholder="Salário" />
+            </div>
+    
+            <!-- Campo Email -->
+            <div class="col-md-4 mt-3">
+                <label for="email" class="custom-label">Email</label>
+                <input id="email" type="email" class="form-control" placeholder="Email" />
+            </div>
+    
+            <!-- Campo Telefone -->
+            <div class="col-md-4 mt-3">
+                <label for="telefone" class="custom-label">Telefone</label>
+                <input id="telefone" type="tel" class="form-control" placeholder="Telefone" />
+            </div>
+    
+            <!-- Campo Endereço -->
+            <div class="col-md-4 mt-3">
+                <label for="endereco" class="custom-label">Endereço</label>
+                <input id="endereco" type="text" class="form-control" placeholder="Endereço" />
+            </div>
+        </div>
+        <!-- Fechando a div 'row mt-3' -->
+    </div>
+    <!-- Fechando a div 'container' -->
+    
+    <!-- Botão para Salvar Dados -->
+    <div class="col-md-3 mt-3">
+        <button
+          id="btn_salvar_dados"
+          onclick="funcaoSalvarDados()"
+          class="btn btn-block button-height"
+          style="
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+          "
+        >
+          <span class="material-icons" style="margin-right: 8px">save</span>
+          Salvar Dados
+        </button>
+    </div>
+    
+    
+      <button onclick="meu_post_request()">Ler</button>
+      <label>Ler Célula</label>
+      <input type="text" id="o_que_foi_lido" />
+
+      <label>O que escrever</label>
+      <input type="text" id="o_que_escrever" />
+      <button onclick="escreve_na_celulaA1()">Escrever</button>
+      <button id="btn_adicionar_cliente" onclick="adiciona_cliente()">
+        Adiciona Cliente
+      </button>
+    </div>
+  </body>
+  {% include 'funcoes_comuns.html' %}
+  <script>
+    $(document).ready(function () {
+      console.log("Colocar a função da tabela ou tabela toda aqui");
+    });
+
+    function adiciona_cliente() {
+      document.getElementById("btn_adicionar_cliente").disabled = true;
+      if (document.getElementById("o_que_escrever").value == "") {
+        alert("Preecher com o nome");
+        document.getElementById("btn_adicionar_cliente").disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + "adiciona_cliente",
+          data: {
+            o_que_escrever: document.getElementById("o_que_escrever").value,
+          },
+          type: "POST",
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById("btn_adicionar_cliente").disabled = false;
+          document.getElementById("o_que_escrever").value = "";
+        });
+      }
+    }
+
+    function escreve_na_celulaA1() {
+      var o_que_escrever = document.getElementById("o_que_escrever").value;
+      $.ajax({
+        url: my_url() + "escrever",
+        type: "POST",
+        data: {
+          o_que_escrever: o_que_escrever,
+        },
+      }).done(function (data) {
+        alert(data.retorno);
+      });
+    }
+
+    function meu_post_request() {
+      $.ajax({
+        url: my_url() + "meu_request",
+        type: "POST",
+      }).done(function (data) {
+        document.getElementById("o_que_foi_lido").value = data.retorno;
+      });
+    }
+
+
+
+    function salvarDados() {
+    // Primeiro, vamos pegar todos os valores dos campos
+    var numeroControle = document.getElementById("numeroControle").value;
+    var inputOrcamento = document.getElementById("inputOrcamento").value;
+    var inputPedido = document.getElementById("inputPedido").value;
+    var dataLancamento = document.getElementById("dataLancamento").value;
+
+    // Verifique se os campos não estão vazios. Adapte essa verificação conforme sua necessidade.
+    if (!numeroControle || !inputOrcamento || !inputPedido || !dataLancamento) {
+        alert("Por favor, preencha todos os campos antes de salvar.");
+        return;
+    }
+
+    // Desativar o botão para evitar múltiplos cliques/envios
+    document.getElementById("btn_salvar_dados").disabled = true;
+
+    // Agora, faça o envio dos dados ao servidor via AJAX
+    $.ajax({
+        url: my_url() + "salvar_dados", // Modifique isso para sua URL de endpoint correta
+        data: {
+            numeroControle: numeroControle,
+            orcamento: inputOrcamento,
+            pedido: inputPedido,
+            dataLancamento: dataLancamento
+        },
+        type: "POST",
+    }).done(function(data) {
+        alert(data.retorno);
+        document.getElementById("btn_salvar_dados").disabled = false;
+        limparCampos();
+    });
+}
+
+function limparCampos() {
+    document.getElementById("numeroControle").value = "";
+    document.getElementById("inputOrcamento").value = "";
+    document.getElementById("inputPedido").value = "";
+    document.getElementById("dataLancamento").value = "";
+}
+
+
+
+
+
+
+
+
+
+  </script>
+</html>

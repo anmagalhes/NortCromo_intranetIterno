@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    {% include 'head.html' %}
+<body>
+    <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">Obras</a></li>
+          <li><a href="#tabs-2" onclick="mostrarTab(2)">Prensença por Obras</a></li>
+          <li>
+            <a href="#tabs-3" onclick="ler_dados_produtos_escolhidos()">Prensença por Funcionarios</a>
+          </li>
+        </ul>
+        <div id="tabs-1">
+            <div class="seg">
+                <h4> Lista de Obras</h4>
+
+                
+             <!-- Campo de pesquisar -->
+                <div class="campo_pesquisa" id="campo_pesquisa_tab1">
+                  <label for="pesquisar_obras_Escolhdido">
+                      <i class="material-icons">search</i>
+                  </label>
+                  <input type="text" id="pesquisar_obras_Escolhdido" placeholder="Digite para pesquisar" />
+              </div>
+
+
+                <ul id="obras-container"> 
+                    <!-- Lista de obras será carregada aqui dinamicamente -->
+                </ul>
+            </div>
+        <!-- Adicione o elemento detalhes-obra aqui -->
+        <div id="detalhes-obra"></div>
+        
+        </div>
+        <div id="tabs-2">
+             <!-- Adicione os inputs para os detalhes da obra na Tab 2 -->
+
+
+             <div class="seg">
+            </div>
+
+            <div class="container mt-3">
+                <div class="row">
+                    <!-- ID da Obra -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="id_Obra_input_tab2" class="custom-label">ID da Obra</label>
+                        <input
+                            id="id_Obra_input_tab2" 
+                            type="text" 
+                            class="form-control"
+                            placeholder="ID da Obra"
+                            readonly
+                        />
+                    </div>
+            
+                    <!-- Nome da Obra -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="obra_nome_input_tab2" class="custom-label">Nome da Obra</label>
+                        <input
+                            id="obra_nome_input_tab2" 
+                            type="text" 
+                            class="form-control"
+                            placeholder="Nome da Obra"
+                            readonly
+                        />
+                    </div>
+            
+                    <!-- Data Inicial -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="data_inicial_presencaObra_Escolhe" class="custom-label">Data Inicial</label>
+                        <input
+                            id="data_inicial_presencaObra_Escolhe"
+                            type="date"
+                            class="form-control"
+                            placeholder="Data Inicial"
+                        />
+                    </div>
+            
+                    <!-- Data Final -->
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="data_final_presencaObra_Escolhe" class="custom-label">Data Final</label>
+                        <input
+                            id="data_final_presencaObra_Escolhe"
+                            type="date"
+                            class="form-control"
+                            placeholder="Data Final"
+                        />
+                    </div>
+                </div>
+            </div>
+
+
+             <!-- Campo de pesquisar -->
+            <div class="campo_pesquisa" id="campo_pesquisa_tab2">
+              <label for="pesquisar_funcionario_Presenca_ObrasEscolhdido">
+                  <i class="material-icons">search</i>
+              </label>
+              <input type="text" id="pesquisar_funcionario_Presenca_ObrasEscolhdido" placeholder="Digite para pesquisar" />
+          </div>
+            
+     </div>
+
+
+            <!-- Tabela Tabular -->
+            <div class="table-responsive myTable table-wrapper">
+                <div id="table_Presenca_ObrasEscolhdido" class="tabulator myTable"></div>
+            </div>
+
+              <!-- Adicione um botão para acionar a pesquisa -->
+              <button onclick="pesquisar()">Pesquisar</button>
+       
+      
+        <div id="tabs-3">
+
+          
+             <!-- Campo de pesquisar -->
+          <div class="campo_pesquisa" id="campo_pesquisa_tab3">
+            <label for="pesquisar_funcionario_Obra_Escolhdido">
+                <i class="material-icons">search</i>
+            </label>
+            <input type="text" id="pesquisar_funcionario_Obra_Escolhdido" placeholder="Digite para pesquisar" />
+        </div>
+          
+          CRUSTUABE</div>
+    
+    {% include 'funcoes_comuns.html' %}
+    <script>
+        $(document).ready(function () {
+            const obrasContainer = document.getElementById('obras-container');
+            const detalhesObra = document.getElementById('detalhes-obra');
+    
+            // Função para carregar a lista de obras
+            function carregarObras() {
+                $.ajax({
+                    url: my_url() + "lista_obras",
+                    type: "GET",
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    const obras = data.obras;
+                    obrasContainer.innerHTML = "";  // Limpa o conteúdo atual
+    
+                    obras.forEach(obra => {
+                        const obraItem = document.createElement('li');
+                        obraItem.classList.add('obra-item');
+                        obraItem.setAttribute('data-id', obra['id_Obra']);
+                        obraItem.textContent = obra['obra_nome'];
+    
+                        obraItem.addEventListener('click', function() {
+                            const obraId = this.getAttribute('data-id');
+                            console.log(obraId)
+    
+                            carregarDetalhesObra(obraId);
+                        });
+    
+                        obrasContainer.appendChild(obraItem);
+                    });
+                })
+                .fail(function (error) {
+                    console.error("Erro ao carregar obras:", error);
+                });
+            }
+    
+            // Função para carregar os detalhes de uma obra
+            function carregarDetalhesObra(obraId) {
+                // Antes de fazer a solicitação AJAX, adicione um indicador de atividade
+                detalhesObra.innerHTML = "Carregando detalhes da obra...";
+                detalhesObra.style.display = 'block';
+    
+                // Enviar os dados para o servidor Flask usando AJAX
+                $.ajax({
+                    url: my_url() + "detalhes_obra/" + obraId,  // Adiciona o ID da obra à URL
+                    type: "GET",  // Muda para GET, pois os detalhes estão na URL
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    console.log("Resposta do servidor:", data);
+                    if (data.error) {
+                        console.error("Erro ao carregar detalhes da obra:", data.error);
+                        detalhesObra.innerHTML = "Erro ao carregar detalhes da obra. Tente novamente mais tarde.";
+                        detalhesObra.style.display = 'block';
+                    } else {
+    
+                        // Verifique se o elemento existe antes de tentar definir o valor
+                        const idObraInputTab2 = $('#id_Obra_input_tab2');
+                        if (idObraInputTab2.length > 0) {
+                            idObraInputTab2.val(data.id_Obra);
+                        } else {
+                            console.error('Elemento #id_Obra_input_tab2 não encontrado.');
+                        }
+    
+                        const obra_nomeInputTab2 = $('#obra_nome_input_tab2');
+                        if (obra_nomeInputTab2.length > 0) {
+                            obra_nomeInputTab2.val(data.obra_nome);
+                        } else {
+                            console.error('Elemento #obra_nome_input_tab2 não encontrado.');
+                        }
+    
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Erro na solicitação AJAX: " + errorThrown);
+                    console.error("Status da solicitação: " + textStatus);
+                    detalhesObra.innerHTML = "Erro ao carregar detalhes da obra. Tente novamente mais tarde.";
+                    detalhesObra.style.display = 'block';
+                });
+            }
+    
+            // Adiciona um evento de clique para o TAB1 usando jQuery
+               // $('a[href="#tabs-1"]').on('click', function() {
+                // Inicialmente, carregue a lista de obras
+                carregarObras();
+                // Restante do seu código...
+
+
+                // Adicione um manipulador de eventos para os links das guias
+                $('#tabs a').on('click', function() {
+                  // Obtenha o número da guia a partir do atributo href
+                  var numeroTab = parseInt($(this).attr('href').split('-')[1]);
+                  
+                   // Chame a função para mostrar a guia
+                  mostrarTab(numeroTab);
+
+                  // Controle de visibilidade para a "Tab 1"
+                  controleVisibilidadeCampoTab1(numeroTab);
+
+                  // Controle de visibilidade para a "Tab 2"
+                  controleVisibilidadeCampoPesquisa(numeroTab);
+
+                  // Controle de visibilidade para a "Tab 3"
+                  controleVisibilidadeCampoTab3(numeroTab);
+
+                  // Inicialize a tabela apenas quando a "Tab 2" estiver ativa
+                  if (numeroTab === 2) {
+                      carregar_presencaObra_escolhido(); 
+                      initializeTable();
+                  } else {
+                      // Se não for a "Tab 2", limpe ou esconda a tabela
+                      destruirTabela();
+                  }
+                  getDataAtual(numeroTab);
+              });
+                
+                });
+
+              // Função para controlar a visibilidade do campo de pesquisa
+              function controleVisibilidadeCampoPesquisa(numeroTab) {
+                // Verifica se é a "Tab 2"
+                if (numeroTab === 2) {
+                    // Se for, exibe o campo de pesquisa
+                    $('#campo_pesquisa').show();
+                } else {
+                    // Se não for, esconde o campo de pesquisa
+                    $('#campo_pesquisa').hide();
+                }
+              }
+
+              // Função para controlar a visibilidade do campo de pesquisa da "Tab 1"
+            function controleVisibilidadeCampoTab1(numeroTab) {
+              if (numeroTab === 1) {
+                  $('#campo_pesquisa_tab1').show();
+              } else {
+                  $('#campo_pesquisa_tab1').hide();
+              }
+            }
+
+            // Função para controlar a visibilidade do campo de pesquisa da "Tab 2"
+            function controleVisibilidadeCampoTab2(numeroTab) {
+              if (numeroTab === 2) {
+                  $('#campo_pesquisa_tab2').show();
+              } else {
+                  $('#campo_pesquisa_tab2').hide();
+              }
+            }
+
+            // Função para controlar a visibilidade do campo de pesquisa da "Tab 3"
+            function controleVisibilidadeCampoTab3(numeroTab) {
+              if (numeroTab === 3) {
+                  $('#campo_pesquisa_tab3').show();
+              } else {
+                  $('#campo_pesquisa_tab3').hide();
+              }
+            }
+
+            function carregar_presencaObra_escolhido() {
+                $.ajax({
+                  url: my_url() + "ler_dadosFuncionarios", // Corrigido para "funcionario" em vez de "funcioario"
+                  type: "POST",
+                })
+                  .done(function (data) {
+                    let dados = data.retorno;
+                    console.log("carregar_presencaObra_escolhido:", dados);
+                    updateTableData(dados);
+                  })
+                  .fail(function (error) {
+                    console.error("Erro ao buscar dados iniciais:", error);
+                  });
+              }
+          
+              function updateTableData(data) {
+                if (table_Presenca_ObrasEscolhdido) {
+                  const transformedData = transformData(data);
+                  table_Presenca_ObrasEscolhdido.setData(transformedData);
+                } else {
+                  console.error("Tabela não inicializada!");
+                }
+              }
+          
+            function transformData(data) {
+            console.log("Dados de entrada para transformação:", data);
+            const mappedColumns = {
+              idPCP: "idPCP",
+              nomeCompleto: "nome",
+              dataNascimento: "dataNascimento",
+              cpf: "cpf",
+              pis: "pis",
+              funcao: "funcao",
+              tipoSalario: "tipoSalario",
+              salario: "salario",
+              email: "email",
+              cep: "cep",
+              endereco: "endereco",
+              bairro: "bairro",
+              cidade: "cidade",
+              uf: "uf",
+              caixa: "caixa",
+              formapag: "formapag",
+              cnpj: "cnpj",
+              
+              // Adicione outras colunas mapeadas aqui
+            };
+          
+            if (!data || !Array.isArray(data)) {
+              console.error("Dados inválidos fornecidos para transformação:", data);
+              return [];
+            }
+          
+            const transformed = data.map((row) => {
+              const transformedRow = {};
+          
+              for (const columnFrom in mappedColumns) {
+                if (columnFrom in row) {
+                  transformedRow[mappedColumns[columnFrom]] = row[columnFrom] ?? "";
+                } else {
+                  transformedRow[mappedColumns[columnFrom]] = ""; // Defina um valor padrão, caso a coluna não esteja presente
+                }
+              }
+          
+              // Inclua a coluna "idPCP" com o valor original "id_funcionario"
+              transformedRow["idPCP"] = row["idPCP"];
+          
+              return transformedRow;
+            });
+          
+            console.log("Dados transformados:", transformed);
+            return transformed;
+          }
+              // Vamos adicionar uma função para inicializar a tabela
+              function initializeTable() {
+                table_Presenca_ObrasEscolhdido = new Tabulator("#table_Presenca_ObrasEscolhdido", {
+                  name: "table_Presenca_ObrasEscolhdido",  // Adicione o atributo name aqui
+                  data: [],
+                  deferRender: true,
+                  scrollCollapse: true,
+                  scroller: true,
+                  scrollY: 200,
+                  columns: [
+                  {
+                      title: "Id PCP",
+                      field: "idPCP",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "Nome",
+                      field: "nome",
+                      hozAlign: "left",
+                    },
+                    {
+                      title: "Funcao",
+                      field: "funcao",
+                      hozAlign: "left",
+                    },
+                    {
+                      title: "dataNascimento",
+                      field: "dataNascimento",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "cpf",
+                      field: "cpf",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "CNPJ",
+                      field: "cnpj",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "pis",
+                      field: "pis",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "tipoSalario",
+                      field: "tipoSalario",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "salario",
+                      field: "salario",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "email",
+                      field: "email",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "cep",
+                      field: "cep",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "endereco",
+                      field: "endereco",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "bairro",
+                      field: "bairro",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "cidade",
+                      field: "cidade",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "uf",
+                      field: "uf",
+                      hozAlign: "center",
+                      visible: false,
+                    },
+                    {
+                      title: "Caixa",
+                      field: "caixa",
+                      hozAlign: "center",
+                      visible: true,
+                    },
+                    {
+                      title: "Forma Pagamento",
+                      field: "formapag",
+                      hozAlign: "center",
+                      visible: true,
+                    },
+                    // Adicione outras colunas conforme necessário
+                  ],
+            
+                  rowClick: function (e, row) {
+                        // Remove a classe "selected" de todas as linhas
+                table_Presenca_ObrasEscolhdido.getRows().forEach(function (r) {
+                    r.getElement().classList.remove('selected');
+                });
+
+                // Adiciona a classe "selected" à linha clicada
+                row.getElement().classList.add('selected');
+                    var rowData = row.getData();
+                    preencherCamposDeEntrada(rowData);
+                  },
+                });
+              }
+
+              // Função para destruir a tabela
+            function destruirTabela() {
+              if (table_Presenca_ObrasEscolhdido) {
+                  table_Presenca_ObrasEscolhdido.destroy();
+                  table_Presenca_ObrasEscolhdido = null;
+              }
+            }
+          
+            function preencherCamposDeEntrada(rowData) {
+            console.log("Preenchendo campos de entrada:", rowData);
+            // Defina o valor do campo idPCP usando JavaScript
+            /*document.getElementById("idPCP").value = rowData.idPCP;
+            document.getElementById("nomeCompleto").value = rowData.nome;
+            document.getElementById("dataNascimento").value = rowData.dataNascimento;
+            document.getElementById("cpf").value = rowData.cpf;
+            document.getElementById("rg").value = rowData.rg;  // Corrigido para rowData.rg
+            document.getElementById("pis").value = rowData.pis;
+            document.getElementById("funcao").value = rowData.funcao;
+            document.getElementById("tipoSalario").value = rowData.tipoSalario;
+            document.getElementById("salario").value = rowData.salario;
+            document.getElementById("email").value = rowData.email;
+            document.getElementById("cep").value = rowData.cep;
+            document.getElementById("endereco").value = rowData.endereco;
+            document.getElementById("bairro").value = rowData.bairro;
+            document.getElementById("cidade").value = rowData.cidade;
+            document.getElementById("uf").value = rowData.uf;
+            document.getElementById("caixa").value = rowData.caixa;
+            document.getElementById("formapag").value = rowData.formapag;
+            */
+          }
+          
+    
+// Adicione um evento de input ao campo de pesquisa
+$('#pesquisar_funcionario_Presenca_ObrasEscolhdido').on('input', function () {
+    var valor_para_pesquisar = $(this).val().toLowerCase().trim();
+
+    // Verifique se o valor de pesquisa não está vazio
+    if (valor_para_pesquisar === "") {
+        // Se estiver vazio, remova o filtro
+        table_Presenca_ObrasEscolhdido.clearFilter();
+    } else {
+        // Se não estiver vazio, aplique o filtro
+        table_Presenca_ObrasEscolhdido.setFilter(function (data) {
+            return (
+                data.nome.toLowerCase().includes(valor_para_pesquisar) ||
+                data.funcao.toLowerCase().includes(valor_para_pesquisar) ||
+                data.cpf.toLowerCase().includes(valor_para_pesquisar) ||
+                data.pis.toLowerCase().includes(valor_para_pesquisar) ||
+                data.caixa.toLowerCase().includes(valor_para_pesquisar) ||
+                data.cnpj.toLowerCase().includes(valor_para_pesquisar) ||
+                data.endereco.toLowerCase().includes(valor_para_pesquisar) ||
+                data.bairro.toLowerCase().includes(valor_para_pesquisar) ||
+                data.cidade.toLowerCase().includes(valor_para_pesquisar) ||
+                data.uf.toLowerCase().includes(valor_para_pesquisar) ||
+                data.cep.toLowerCase().includes(valor_para_pesquisar) ||
+                data.email.toLowerCase().includes(valor_para_pesquisar) ||
+                data.tipoSalario.toLowerCase().includes(valor_para_pesquisar) ||
+                data.salario.toLowerCase().includes(valor_para_pesquisar) ||
+                data.formapag.toLowerCase().includes(valor_para_pesquisar)
+                // Adicione mais colunas conforme necessário
+            );
+        });
+    }
+});
+
+function mostrarTab(numeroTab) {
+ 
+
+   // Verifica se é a Tab 2
+   if (numeroTab === 2) {
+
+    // Obtém a data atual
+    var dataAtual = new Date();
+
+    // Subtrai 30 dias da data atual
+    var dataInicial = new Date();
+    dataInicial.setDate(dataAtual.getDate() - 30);
+
+    // Formata a data para o formato DD/MM/AAAA
+    var formatoData = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    var dataInicialFormatada = dataInicial.toLocaleDateString('pt-BR', formatoData);
+    var dataFinalFormatada = dataAtual.toLocaleDateString('pt-BR', formatoData);
+
+    console.log(dataInicialFormatada)
+
+    // Define o valor do campo de data inicial
+    document.getElementById('data_inicial_presencaObra_Escolhe').value = dataInicialFormatada;
+
+    // Define o valor do campo de data final (data atual)
+    document.getElementById('data_final_presencaObra_Escolhe').value = dataFinalFormatada
+  }
+  };
+
+          // Função para retornar a data atual no formato YYYY-MM-DD
+        function getDataAtual(numeroTab) {
+
+            // Verifica se é a Tab 2
+            if (numeroTab === 2) {
+          const hoje = new Date();
+          const ano = hoje.getFullYear();
+          const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Os meses são de 0 a 11, então adicionamos 1 e preenchemos com um zero à esquerda, se necessário
+          const dia = String(hoje.getDate()).padStart(2, '0'); // Preenche com um zero à esquerda, se necessário
+
+          return `${dia}/${mes}/${ano}`;
+        }
+        }
+
+        // Define a data de hoje para o campo dataLancamento
+        document.getElementById('data_final_presencaObra_Escolhe').value = getDataAtual();
+
+        // Função para retornar a data atual no formato YYYY-MM-DD
+        function getDataAtual(numeroTab) {
+            // Verifica se é a Tab 2
+            if (numeroTab === 2) {
+                const hoje = new Date();
+                const ano = hoje.getFullYear();
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const dia = String(hoje.getDate()).padStart(2, '0');
+
+                // Formata a data para o formato DD/MM/AAAA
+                const dataFormatada = `${dia}/${mes}/${ano}`;
+
+                // Define o valor do campo de data final
+                document.getElementById('data_final_presencaObra_Escolhe').value = dataFormatada;
+            }
+        }
+
+    </script>
+    
+</body>
+</html>

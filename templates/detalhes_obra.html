@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include 'head.html' %}
+</head>
+<body>
+    <div class="seg">
+        <h2>Detalhes da Obra</h2>
+        
+        <!-- Conteúdo específico da obra -->
+        <div>
+            <label for="id_Obra_input">ID da Obra:</label>
+            <input type="text" id="id_Obra_input" readonly>
+        </div>
+        
+        <div>
+            <label for="obra_nome_input">Nome da Obra:</label>
+            <input type="text" id="obra_nome_input" readonly>
+        </div>
+
+        <!-- Adicione outras seções conforme necessário -->
+        <div id="secao1">
+            <!-- Conteúdo da seção 1 -->
+        </div>
+
+        <div id="secao2">
+            <!-- Conteúdo da seção 2 -->
+        </div>
+
+        <!-- Adicione outros elementos conforme necessário -->
+    </div>
+
+    {% include 'funcoes_comuns.html' %}
+    <!-- Restante do seu código... -->
+
+    <script>
+        // Preencher os detalhes da obra nos inputs
+        document.getElementById('id_Obra_input').value = "4"; // Substitua pelo valor adequado
+        document.getElementById('obra_nome_input').value = "OBRA MURILO PEGORER"; // Substitua pelo valor adequado
+
+        // Chame funções ou carregue conteúdo adicional conforme necessário
+        carregarSecao1();
+        carregarSecao2();
+
+        // Restante do seu código JavaScript...
+    </script>
+</body>
+</html>
