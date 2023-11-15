@@ -83,7 +83,7 @@ def inserir_linhas(aba, valores, ids):
 app = Flask(__name__)  # Declarar o Objeto do Flask.
 
 arquivo = credencias.open_by_url(
-    "https://docs.google.com/spreadsheets/d/1v654Gt4hmzRPZmsd4W85yiLf2gSeBiKNsMjdnvC8W9A/"
+    "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
 )
 
 # Variáveis globais para armazenar os DataFrames  - BIBLIOTECA PANDAS X GOOGLESHEET
