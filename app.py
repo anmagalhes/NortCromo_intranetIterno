@@ -135,15 +135,6 @@ def submenu_muda_de_tela():
     return render_template(qual_template)
 
 
-@app.route("/upload", methods=["POST"])
-def upload():
-    if "photo" in request.files:
-        photo = request.files["photo"]
-        photo.save(os.path.join("uploads", photo.filename))
-        return "uploaded foto,  realizada com sucesso"
-    return "falhar na foto"
-
-
 @app.route("/index_2", methods=["GET"])
 def index_2():  # associa uma função a esta rota.
     # Retorna o resultado desta rota.
@@ -163,6 +154,30 @@ def escrever():
     aba = arquivo.worksheet_by_title("base_de_dados")
     aba.update_values("A1", values=[[o_que_escrever]])
     return jsonify(retorno="Tudo Certo")
+
+
+def image_to_base64(image_path):
+    import base64
+
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+        return encoded_string
+
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    file = request.files.get("file")
+    # Get the current date and time
+    now = datetime.now()
+
+    # Format the date and time into the desired string format
+    formatted_string = now.strftime("%Y%m%d_%H%M%S")
+
+    if file:
+        file.save("uploads/" + formatted_string + ".png")
+        return jsonify({"sucesso": "Arquivo armazenado"})
+    else:
+        return jsonify({"error": "Não veio nenhum arquivo."})
 
 
 if __name__ == "__main__":
