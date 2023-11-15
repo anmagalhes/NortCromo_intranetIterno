@@ -12,7 +12,7 @@ detalhes_obra = Blueprint(
 @detalhes_obra.route("/detalhes_obra/<obra_id>", methods=["GET", "POST"])
 def detalhes_obra_f(obra_id):
     try:
-        obras_aba = arquivo.worksheet_by_title("obras")
+        obras_aba = arquivo().worksheet_by_title("obras")
         dados_obras = obras_aba.get_all_values()
         df_obras = pd.DataFrame(data=dados_obras[1:], columns=dados_obras[0])
         print(df_obras)

@@ -14,7 +14,7 @@ get_pedreiros_data = Blueprint(
 
 @get_pedreiros_data.route("/get_pedreiros_data", methods=["GET"])
 def get_pedreiros_data_f():
-    aba = arquivo.worksheet_by_title("base_de_dados")
+    aba = arquivo().worksheet_by_title("base_de_dados")
     all_data = aba.get_all_records()
     pedreiros_data = [
         {"ID": row["ID"], "Nome": row["Nome"]}

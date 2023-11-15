@@ -25,17 +25,17 @@ def formulario_relatorio2_f():
         periodo_final = data.get("periodo_final")
 
         # Carregar dados da planilha "Funcionarios"
-        funcionarios_aba = arquivo.worksheet_by_title("funcionarios")
+        funcionarios_aba = arquivo().worksheet_by_title("funcionarios")
         df_funcionarios = carregar_dados_gs(funcionarios_aba)
         print(df_funcionarios)
 
         # Carregar dados da planilha "Obras"
-        obras_aba = arquivo.worksheet_by_title("obras")
+        obras_aba = arquivo().worksheet_by_title("obras")
         df_obras = carregar_dados_gs(obras_aba)
         print(df_obras)
 
         # Carregar dados da planilha "Presenca_Obras"
-        presenca_obras_aba = arquivo.worksheet_by_title("presenca_Obras")
+        presenca_obras_aba = arquivo().worksheet_by_title("presenca_Obras")
         df_presenca_obras = carregar_dados_gs(presenca_obras_aba)
 
         # Filtrar DataFrames com base nos parâmetros do formulário

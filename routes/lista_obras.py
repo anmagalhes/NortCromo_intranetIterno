@@ -12,7 +12,7 @@ lista_obras = Blueprint(
 @lista_obras.route("/lista_obras")
 def lista_obras_f():
     try:
-        obras_aba = arquivo.worksheet_by_title("obras")
+        obras_aba = arquivo().worksheet_by_title("obras")
         dados_obras = obras_aba.get_all_values()
         df_obras = pd.DataFrame(data=dados_obras[1:], columns=dados_obras[0])
         obras_ok = df_obras[df_obras["Status"] == "OK"]

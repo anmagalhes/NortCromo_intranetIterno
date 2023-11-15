@@ -17,7 +17,7 @@ adiciona_funcionario = Blueprint(
 def adiciona_funcionario_f():
     try:
         # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo.worksheet_by_title("funcionarios")
+        aba = arquivo().worksheet_by_title("funcionarios")
         dados_da_planilha = aba.get_all_values()
 
         coluna_sequencia = aba.get_col(1)

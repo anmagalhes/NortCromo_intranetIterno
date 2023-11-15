@@ -15,7 +15,7 @@ consulta_pedreiros = Blueprint(
 
 @consulta_pedreiros.route("/consulta_pedreiros", methods=["GET"])
 def consulta_pedreiros_f():
-    aba = arquivo.worksheet_by_title("base_de_dados")
+    aba = arquivo().worksheet_by_title("base_de_dados")
 
     registros = aba.get_all_values(returnas="matrix")
 

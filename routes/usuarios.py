@@ -17,7 +17,7 @@ verifica_usuario = Blueprint(
 def verifica_usuario_f():
     userName = request.form["userName"]
     password = request.form["password"]
-    aba = arquivo.worksheet_by_title("usuarios")
+    aba = arquivo().worksheet_by_title("usuarios")
     dados = aba.get_all_values()
 
     for i in range(len(dados)):
@@ -38,7 +38,7 @@ def cadastrar_usuario():
     token = gera_token()
 
     # Adicionar novo usuário ao Google Sheets
-    aba = arquivo.worksheet_by_title("usuarios")
+    aba = arquivo().worksheet_by_title("usuarios")
     nova_linha = [userName, password, "Não Confirmado", token]
     aba.append_table(nova_linha)
 
@@ -56,7 +56,7 @@ def alterar_senha():
 
     # Localize o usuário pelo nome de usuário e, se encontrado, atualize a
     # senha e o token
-    aba = arquivo.worksheet_by_title("usuarios")
+    aba = arquivo().worksheet_by_title("usuarios")
     dados = aba.get_all_values()
 
     for i in range(len(dados)):

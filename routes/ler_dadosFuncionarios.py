@@ -16,7 +16,7 @@ ler_dadosFuncionarios = Blueprint(
 def ler_dadosFuncionarios_f():
     try:
         # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo.worksheet_by_title("funcionarios")
+        aba = arquivo().worksheet_by_title("funcionarios")
 
         # Obtenha todos os valores da planilha
         dados_da_planilha = aba.get_all_values()

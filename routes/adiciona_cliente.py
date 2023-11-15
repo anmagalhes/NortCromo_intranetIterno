@@ -18,7 +18,7 @@ def adiciona_cliente_f():
     try:
         o_que_escrever = request.form["o_que_escrever"]
 
-        aba = arquivo.worksheet_by_title("base_de_dados")
+        aba = arquivo().worksheet_by_title("base_de_dados")
 
         coluna1 = aba.get_col(1)
         coluna1 = coluna1[1:]  # tirar o cabeçalho

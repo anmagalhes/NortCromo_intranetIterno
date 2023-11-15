@@ -21,8 +21,8 @@ salvar_dados_presencas = Blueprint(
 def salvar_dados_presencas_f():
     try:
         # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo.worksheet_by_title("presenca_Obras")
-        aba_funcionarios = arquivo.worksheet_by_title("funcionarios")
+        aba = arquivo().worksheet_by_title("presenca_Obras")
+        aba_funcionarios = arquivo().worksheet_by_title("funcionarios")
 
         # Leitura dos dados para DataFrames
         df_presenca_obras = aba.get_as_df()
