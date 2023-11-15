@@ -4,9 +4,8 @@ import pandas as pd
 import os
 import datetime
 import pygsheets
-import threading
 from routes.funcoesGerais import *
-from threading import Lock
+
 
 lock = threading.Lock()
 
