@@ -33,6 +33,8 @@ from routes.consulta_pedreiros import consulta_pedreiros
 from routes.salvar_dados_presencas import salvar_dados_presencas
 from routes.usuarios import verifica_usuario
 
+from routes.conferencia_dados_inicias_checklist import conferencia_dados_inicias_checklist
+
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
 app.register_blueprint(buscar_funcionarios_presenca, url_prefix="")
@@ -43,6 +45,8 @@ app.register_blueprint(ler_dadosFuncionarios, url_prefix="")
 app.register_blueprint(consulta_pedreiros, url_prefix="")
 app.register_blueprint(salvar_dados_presencas, url_prefix="")
 app.register_blueprint(verifica_usuario, url_prefix="")
+
+app.register_blueprint(conferencia_dados_inicias_checklist, url_prefix="")
 
 
 arquivo = credencias.open_by_url(
