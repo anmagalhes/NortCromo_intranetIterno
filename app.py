@@ -17,7 +17,7 @@ from routes.funcoesGerais import *
 
 
 credencias = pygsheets.authorize(
-    service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
+    service_file=os.getcwd() + "/sistemasuelopro_googleConsole.json"
 )
 
 app = Flask(__name__)
@@ -104,11 +104,11 @@ def verificador_inicial():
 
 @app.route("/muda_de_tela", methods=["POST"])
 def muda_de_tela():  # associa uma função a esta rota.
-    if verificaSeOUsuarioTemPermissao("tony", "/muda_de_tela"):
+    #if verificaSeOUsuarioTemPermissao("tony", "/muda_de_tela"):
         qual_template = request.form["qual_template"]
         return render_template(qual_template)
-    else:
-        return "<div>Sem Permissão</div>"
+    #else:
+      #  return "<div>Sem Permissão</div>"
 
 
 @app.route("/muda_de_tela_login", methods=["POST"])
