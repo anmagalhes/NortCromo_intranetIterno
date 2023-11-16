@@ -2,8 +2,8 @@
 <html lang="pt-br">
   {% include 'head.html' %}
   <body>
-    <div id="cabecalho_NorthCromo">
-      <div>NORTHCROMO SISTEMA CONTROLES</div>
+    <div id="cabecalho_SueloPro">
+      <div>SUELOPRO SISTEMA CONTROLES</div>
     </div>
     <div id="divide_em_dois">
       <div id="lado_esquerdo">
@@ -18,9 +18,9 @@
         <div class="menu" id="menu">
           <div class="menu-top">
             <img
-              class="logo-northcromo"
-              src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
-              alt="Logo da NorthCromo"
+              class="logo-suelopro"
+              src="https://drive.google.com/uc?export=view&id=1SIHKJRGxWq55NrLihYGtZwsF98iqHUhE"
+              alt="Logo da SueloPro"
             />
             <button
               class="mui-btn mui-btn--raised toggle-menu-btn"
@@ -37,7 +37,7 @@
           </button>
           <ul>
             <li class="expandable hide-text"></li>
-             <div class="menu-header">
+            <li class="expandable hide-text">
               <i class="material-icons">folder</i>
               <!-- ícone de pasta para Cadastro -->
               <span class="menu-text" id="cadastroText"> Cadastro</span>
@@ -49,7 +49,6 @@
                 "
                 >arrow_drop_down</i
               >
-            </div>
               <ul class="submenu">
                 <li>
                   <i
@@ -73,234 +72,215 @@
                     Funcionários</span
                   >
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('produto.html',event)"
-                    >shopping_basket</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('produto.html',event)"
-                  >
-                    Produtos</span
-                  >
+                  <i class="material-icons">account_balance</i>
+                  <span class="menu-text">Centro de Custo</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >store</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Clientes</span
-                  >
+                  <i class="material-icons">build</i
+                  ><span class="menu-text">Obras</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >account_circle</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Usuários</span
-                  >
+                  <i class="material-icons">account_circle</i>
+                  <span class="menu-text">Usuários</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >shopping_cart</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Vendedor</span
-                  >
+                  <i class="material-icons">shopping_basket</i>
+                  <span class="menu-text">Produto</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >build</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Serviço</span
-                  >
+                  <i class="material-icons">label</i>
+                  <span class="menu-text">Categoria</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >label</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                   Componente</span
-                  >
+                  <i class="material-icons">dashboard</i>
+                  <span class="menu-text">Área</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >dashboard</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                   Operação</span
-                  >
+                  <i class="material-icons">store</i>
+                  <span class="menu-text">Cliente</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >business</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                   Setor</span
-                  >
+                  <i class="material-icons">construction</i>
+                  <span class="menu-text">Mestre de Obras</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >report_problem</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Defeito</span
-                  >
-                </li>
-
-                <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >store</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                  Posto de Trabalho</span
-                  >
+                  <i class="material-icons">business</i>
+                  <span class="menu-text">Setor</span>
                 </li>
               </ul>
             </li>
 
-          <li class="expandable" onclick="muda_de_tela('camera.html')">
-            <!-- <li class="expandable" onclick="muda_de_tela('index_1.html')"> -->
-            <div class="menu-header">
-              <i class="material-icons">input</i>
-              <span class="menu-text"> Recebimento</span>
-              <!-- Um ícone invisível para alinhar corretamente o texto -->
-              <i class="material-icons invisible-icon">arrow_drop_down</i>
-            </div>
-          </li>
-          
-            <li class="expandable hide-text">
-            <div class="menu-header">
+     
+            <li class="expandable desktop-menu-item" data-template="lista_obras.html">
+              <div class="menu-header">
                 <i class="material-icons">build</i>
-                <span class="menu-text"> Desmontagem</span>
-                <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
-            </div>
+                <span class="menu-text"> Obras</span>
+                <i class="material-icons toggle-submenu invisible-icon"
+                  >arrow_drop_down</i
+                >
+              </div>
+            </li>
+
+            <li
+              class="expandable desktop-menu-item"
+              data-template="controle_presenca.html"
+            >
+              <div class="menu-header">
+                <i class="material-icons">check_circle</i>
+                <span class="menu-text"> Presenças</span>
+                <i class="material-icons toggle-submenu invisible-icon"
+                  >arrow_drop_down</i
+                >
+              </div>
+            </li>
+
+            <li class="expandable hide-text">
+              <i class="material-icons">monetization_on</i>
+              <span class="menu-text"> Financeiro</span>
+              <i
+                class="material-icons toggle-submenu"
+                style="
+                  transition: transform 0.3s;
+                  font-family: 'Material Icons';
+                "
+                >arrow_drop_down</i
+              >
               <ul class="submenu">
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >checklist</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Checklist</span
-                  >
+                  <i class="material-icons">payment</i>
+                  <span class="menu-text"> Contas a Pagar</span>
+                </li>
+                <li>
+                  <i class="material-icons">money_off</i>
+                  <span class="menu-text"> Contas a Receber</span>
+                </li>
+                <li>
+                  <i class="material-icons">report</i>
+                  <span class="menu-text"> Fluxo de Caixa</span>
                 </li>
               </ul>
-          </li>
+            </li>
+
             <li class="expandable hide-text">
               <div class="menu-header">
-                  <i class="material-icons">build</i>
-                  <span class="menu-text"> Programação</span>
-                  <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
+                <i class="material-icons">people</i>
+                <span class="menu-text"> RH</span>
+                <i
+                  class="material-icons toggle-submenu"
+                  style="
+                    transition: transform 0.3s;
+                    font-family: 'Material Icons';
+                  "
+                >
+                  arrow_drop_down
+                </i>
               </div>
               <ul class="submenu">
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >assignment_turned_in</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Apontamento de Tarefas</span
-                  >
+                  <i class="material-icons">person_add</i>
+                  <span class="menu-text"> Cadastro de Funcionários</span>
                 </li>
-
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >settings</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Lançamento p/ Produção</span
-                  >
+                  <i class="material-icons">list_alt</i>
+                  <span class="menu-text"> Folha de Pagamento</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >timelapse</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Andamento na Produção</span
-                  >
+                  <i class="material-icons">card_giftcard</i>
+                  <span class="menu-text"> Benefícios</span>
                 </li>
               </ul>
-          </li>
-          <li class="expandable" onclick="logout()">
+            </li>
+
+            <li class="expandable hide-text">
+              <div class="menu-header">
+                <i class="material-icons">shopping_cart</i>
+                <span class="menu-text"> Compras</span>
+                <i
+                  class="material-icons toggle-submenu"
+                  style="
+                    transition: transform 0.3s;
+                    font-family: 'Material Icons';
+                  "
+                  >arrow_drop_down</i
+                >
+              </div>
+              <ul class="submenu">
+                <li>
+                  <i class="material-icons">note_add</i>
+                  <span class="menu-text"> Nova Compra</span>
+                </li>
+                <li>
+                  <i class="material-icons">history</i>
+                  <span class="menu-text"> Histórico de Compras</span>
+                </li>
+                <li>
+                  <i class="material-icons">group</i>
+                  <span class="menu-text"> Fornecedores</span>
+                </li>
+              </ul>
+            </li>
+
+            <li class="expandable" onclick="muda_de_tela('index_1.html')">
+              <div class="menu-header">
+                <i class="material-icons">store</i>
+                <span class="menu-text"> Clientes</span>
+                <!-- Um ícone invisível para alinhar corretamente o texto -->
+                <i class="material-icons invisible-icon">arrow_drop_down</i>
+              </div>
+            </li>
+            <li class="expandable hide-text">
+              <i class="material-icons">store</i>
+              <span class="menu-text"> Almoxarifado</span>
+              <i
+                class="material-icons toggle-submenu"
+                style="
+                  transition: transform 0.3s;
+                  font-family: 'Material Icons';
+                "
+                >arrow_drop_down</i
+              >
+              <ul class="submenu">
+                <li>
+                  <i class="material-icons">input</i>
+                  <span class="menu-text"> Entrada de Materiais</span>
+                </li>
+                <li>
+                  <i class="material-icons">output</i>
+                  <span class="menu-text"> Saída de Materiais</span>
+                </li>
+                <li>
+                  <i class="material-icons">report_problem</i>
+                  <span class="menu-text"> Controle</span>
+                </li>
+                <li>
+                  <i class="material-icons">swap_horiz</i>
+                  <span class="menu-text"> Transferências</span>
+                </li>
+                <li>
+                  <i class="material-icons">assessment</i>
+                  <span class="menu-text"> Relatórios</span>
+                </li>
+                <li>
+                  <i class="material-icons">construction</i>
+                  <span class="menu-text"> Estoque Obras</span>
+                </li>
+                <li>
+                  <i class="material-icons">home_work</i>
+                  <span class="menu-text"> Estoque Depósitos</span>
+                </li>
+              </ul>
+            </li>
+            <li class="expandable" onclick="muda_de_tela('index_3.html')">
+              <div class="menu-header">
+                <i class="material-icons">account_balance_wallet</i>
+                <span class="menu-text"> Vendas</span>
+                <i class="material-icons toggle-submenu invisible-icon"
+                  >arrow_drop_down</i
+                >
+              </div>
+            </li>
+            <li class="expandable" onclick="logout()">
               <i class="material-icons">exit_to_app</i>
               <span class="menu-text"> Sair</span>
             </li>
@@ -622,12 +602,12 @@
         font-size: 16px;
       }
     
-      .logo-northcromo {
+      .logo-suelopro {
         width: 130px;
         height: auto;
       }
     
-      #cabecalho_NorthCromo {
+      #cabecalho_SueloPro {
         background-color: #5ec864;
         color: #fff;
         font-weight: bold;
