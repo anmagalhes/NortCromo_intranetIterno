@@ -29,7 +29,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://www.northcromo.com/painel/assets/css/stylesbackend.css"
+      href="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
     />
 
     <script src="https://ajax.googleapis.com/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -202,6 +202,8 @@
       window.open(my_url() + template, "_self");
     }
 
+    var motivo; 
+
     function fazLogin() {
       $.ajax({
         url: my_url() + "verifica_usuario",
@@ -211,6 +213,7 @@
           password: document.getElementById("password").value,
         },
         success: function (response) {
+          alert(response)
           if (response.retorno === "Usuário Válido!") {
             setCookie("userName", response.userName, 365);
             setCookie("token", response.token, 365);
