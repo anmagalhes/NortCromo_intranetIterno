@@ -16,7 +16,7 @@ import pandas as pd
 from routes.funcoesGerais import *
 
 credencias = pygsheets.authorize(
-    service_file=os.getcwd() + "/sistemasuelopro_googleConsole.json"
+    service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
 )
 
 app = Flask(__name__)
