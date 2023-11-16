@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% include 'head.html' %}
+  <body>
+    <div class="seg">
+      <h3>Cadastro apontamento_tarefas</h3>
+
+      <div class="container">
+        <!-- Campos de entrada -->
+        <div class="row mt-3">
+          <!-- Campo Nome -->
+          <div class="col-md-6 mb-3">
+            <label for="nomeCompleto" class="custom-label">Nome Completo</label>
+            <input
+              id="nomeCompleto"
+              type="text"
+              class="form-control"
+              placeholder="Nome Completo"
+            />
+          </div>
+
+          <!-- Campo Data de Nascimento -->
+          <div class="col-md-6 mb-3">
+            <label for="dataNascimento" class="custom-label"
+              >Data de Nascimento</label
+            >
+            <input
+              id="dataNascimento"
+              type="date"
+              class="form-control"
+              placeholder="Data de Nascimento"
+            />
+          </div>
+
+          <!-- Campo CPF -->
+          <div class="col-md-4 mb-3">
+            <label for="cpf" class="custom-label">CPF</label>
+            <input
+              id="cpf"
+              type="text"
+              class="form-control"
+              placeholder="CPF"
+            />
+          </div>
+
+            <!-- Campo CPF -->
+          <div class="col-md-4 mb-3">
+            <label for="cnpj" class="custom-label">CNPJ</label>
+            <input
+              id="cnpj"
+              type="text"
+              class="form-control"
+              placeholder="CNPJ"
+            />
+          </div>
+
+          <!-- Campo RG -->
+          <div class="col-md-4 mb-3">
+            <label for="rg" class="custom-label">RG</label>
+            <input id="rg" type="text" class="form-control" placeholder="RG" />
+          </div>
+
+          <!-- Campo PIS -->
+          <div class="col-md-4 mb-3">
+            <label for="pis" class="custom-label">PIS</label>
+            <input
+              id="pis"
+              type="text"
+              class="form-control"
+              placeholder="PIS"
+            />
+          </div>
+
+          <!-- Campo Profissão -->
+          <div class="col-md-4 mb-3">
+            <label for="funcao" class="custom-label">Função</label>
+            <input
+              id="funcao"
+              type="text"
+              class="form-control"
+              placeholder="Função"
+            />
+          </div>
+
+          <!-- Campo Tipo de Salário -->
+          <div class="col-md-3 mb-3">
+            <label for="tipoSalario" class="custom-label"
+              >Tipo de Salário</label
+            >
+            <select
+              id="tipoSalario"
+              class="form-control"
+              onchange="atualizarRotuloSalario()"
+            >
+              <option value="diario">Diário</option>
+              <option value="mensal">Mensal</option>
+            </select>
+          </div>
+
+          <!-- Campo Salário -->
+          <div class="col-md-3 mb-3">
+            <label for="salario" class="custom-label" id="rotuloSalario"
+              >Salário</label
+            >
+            <input
+              id="salario"
+              type="number"
+              step="0.01"
+              class="form-control"
+              placeholder="Salário"
+            />
+          </div>
+
+          <!-- Campo UF -->
+          <div class="col-md-4 mb-3">
+            <label for="formapag" class="custom-label">Forma Pagamento</label>
+            <select id="formapag" class="form-control">
+              <!-- Preencha com todos os estados -->
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="caixa" class="custom-label">Caixa</label>
+            <select id="caixa" class="form-control">
+              <!-- Preencha com todos os estados -->
+            </select>
+          </div>
+
+          <!-- Campo Email -->
+          <div class="col-md-4 mb-3">
+            <label for="email" class="custom-label">Email</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              placeholder="Email"
+            />
+          </div>
+
+          <!-- Campo CEP com sugestão para auto-preenchimento -->
+          <div class="col-md-4 mb-3">
+            <label for="cep" class="custom-label"
+              >CEP
+              <small>(Preencha para auto-completar o endereço)</small></label
+            >
+            <input
+              id="cep"
+              type="text"
+              class="form-control"
+              placeholder="CEP"
+            />
+          </div>
+
+          <!-- Campo Endereço -->
+          <div class="col-md-8 mb-3">
+            <label for="endereco" class="custom-label">Endereço</label>
+            <input
+              id="endereco"
+              type="text"
+              class="form-control"
+              placeholder="Endereço"
+            />
+          </div>
+
+          <!-- Campo Bairro -->
+          <div class="col-md-4 mb-3">
+            <label for="bairro" class="custom-label">Bairro</label>
+            <input
+              id="bairro"
+              type="text"
+              class="form-control"
+              placeholder="Bairro"
+            />
+          </div>
+
+          <!-- Campo Cidade -->
+          <div class="col-md-4 mb-3">
+            <label for="cidade" class="custom-label">Cidade</label>
+            <input
+              id="cidade"
+              type="text"
+              class="form-control"
+              placeholder="Cidade"
+            />
+          </div>
+
+          <!-- Campo UF -->
+          <div class="col-md-4 mb-3">
+            <label for="uf" class="custom-label">UF</label>
+            <select id="uf" class="form-control">
+              <!-- Preencha com todos os estados -->
+            </select>
+          </div>
+
+          <!-- Campo DDD + Telefone -->
+          <div class="col-md-4 mb-3">
+            <label for="telefone" class="custom-label">Telefone</label>
+            <input
+              id="telefone1"
+              type="tel"
+              class="form-control"
+              placeholder="Telefone (DDD) Número"
+              maxlength="13"
+            />
+          </div>
+
+          <!-- Campo DDD + Telefone -->
+          <div class="col-md-4 mb-3">
+            <label for="telefone" class="custom-label">Celular</label>
+            <input
+              id="telefone2"
+              type="tel"
+              class="form-control"
+              placeholder="Telefone (DDD) Número"
+              maxlength="13"
+            />
+          </div>
+
+          <!-- Campo DDD + Telefone -->
+          <div class="col-md-4 mb-3">
+            <label for="telefone" class="custom-label">Whatsapp</label>
+            <input
+              id="telefone3"
+              type="tel"
+              class="form-control"
+              placeholder="Telefone (DDD) Número"
+              maxlength="13"
+            />
+          </div>
+
+          <!-- Campo DDD + Telefone -->
+          <div class="col-md-4 mb-3">
+            <label for="idPCP" class="custom-label">ID</label>
+            <input
+              id="idPCP"
+              type="number"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <!-- Fechando a div 'row mt-3' -->
+      </div>
+      <!-- Fechando a div 'container' -->
+    </div>
+
+      <!-- Tabela Tabular -->
+      <div class="table-responsive myTable table-wrapper">
+        <div id="table_funcionario" class="tabulator myTable"></div>
+      </div>
+
+        <div class="row">
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_adiciona_funcionario"
+              onclick="Adicionar_funcionarios_mostrarAlerta()"
+              class="btn btn-block button-height"
+              style="
+                background-color: #4caf50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                width: 100%;
+              "
+            >
+              <span class="material-icons" style="margin-right: 8px">save</span>
+              Salvar Dados
+            </button>
+          </div>
+
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_excluir_funcioario"
+              onclick="excluir_funcioario()"
+              class="btn btn-block button-height"
+              style="
+                background-color: #f44336;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                width: 100%;
+              "
+            >
+              <span class="material-icons" style="margin-right: 8px"
+                >delete</span
+              >
+              Excluir Dados
+            </button>
+          </div>
+
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_editar_dados"
+              onclick="editar_funcionario()"
+              class="btn btn-block button-height"
+              style="
+                background-color: #2196f3;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                width: 100%;
+              "
+            >
+              <span class="material-icons" style="margin-right: 8px">edit</span>
+              Editar Dados
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // Adicione um ouvinte de evento para o evento beforeunload
+    window.addEventListener('beforeunload', function (event) {
+        // Limpe a tabela antes de sair da página
+        if (table_funcionario) {
+            table_funcionario.destroy();
+        }
+    });
+  </script>
+
+  {% include 'funcoes_comuns.html' %}
+  <script>
+
+    $(document).ready(function () {
+      carregarDadosFuncionario();
+      initializeTable();
+
+      console.log("Colocar a função da tabela ou tabela toda aqui");
+
+      // Formatar campo de telefone
+      $("#telefone").keyup(function () {
+        var val = this.value.replace(/\D/g, "");
+        var newVal = "";
+        while (val.length > 0) {
+          newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
+          val = val.substr(2);
+        }
+        this.value = newVal.trim();
+      });
+
+      // Adicionar estilo ao campo quando preenchido
+      $("input").blur(function () {
+        if ($(this).val()) {
+          $(this).addClass("filled");
+        } else {
+          $(this).removeClass("filled");
+        }
+      });
+    });
+
+    $("#cep").blur(function () {
+      var cep = $(this).val().replace(/\D/g, "");
+
+      if (cep != "") {
+        var validacep = /^[0-9]{8}$/;
+        if (validacep.test(cep)) {
+          $.getJSON(
+            "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+            function (dados) {
+              if (!("erro" in dados)) {
+                $("#endereco").val(dados.logradouro);
+                $("#bairro").val(dados.bairro);
+                $("#cidade").val(dados.localidade);
+                $("#uf").val(dados.uf);
+              } else {
+                alert("CEP não encontrado.");
+              }
+            }
+          );
+        }
+      }
+    });
+
+    function atualizarRotuloSalario() {
+      var tipo = $("#tipoSalario").val();
+      var rotulo = "Salário";
+
+      switch (tipo) {
+        case "diario":
+          rotulo = "Salário Diário";
+          break;
+        case "meiaColher":
+          rotulo = "Salário Meia Colher";
+          break;
+        case "mensal":
+          rotulo = "Salário Mensal";
+          break;
+      }
+
+      $("#rotuloSalario").text(rotulo);
+    }
+
+    function verifica_selecao() {
+      var tabela_funcionario = document.getElementById("tabela_funcionario");
+
+      var o_que_foi_selecionado =
+        tabela_funcionario.getElementsByClassName("selected")[0];
+
+      var tds = o_que_foi_selecionado.getElementsByTagName("td");
+      var qtd_tds = tds.length;
+
+      for (var i = 0; i < qtd_tds; i++) {
+        document.getElementsByClassName("input_funcionario")[i].value =
+          tds[i].innerHTML;
+      }
+    }
+    function excluir_funcionario() {
+      document.getElementById("btn_adiciona_funcionario").disabled = true;
+
+      var input_funcionario =
+        document.getElementsByClassName("input_funcionario");
+      var qts_inputs = input_funcionario.length;
+      var all_data = [];
+
+      for (var i = 0; i < qts_inputs; i++) {
+        all_data.push(input_funcionario[i].value);
+      }
+
+      if (input_funcionario[1].value == "") {
+        alert("Preencha um nome!");
+        document.getElementById("btn_adiciona_funcionario").disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + "exclui_funcionario",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById("btn_adiciona_funcionario").disabled = false;
+          document.getElementById("meus_inputs").innerHTML = "";
+          ler_dados_funcionarios();
+        });
+      }
+    }
+
+    // Função para converter uma string em maiúsculas, mas manter valores vazios
+    function toUpperCaseIfString(value) {
+      if (typeof value === "string") {
+        // Verifica se a string não está vazia antes de convertê-la em maiúsculas
+        if (value.trim() === "") {
+          return value; // Mantém o valor vazio
+        }
+        return value.toUpperCase(); // Converte para maiúsculas
+      }
+      return value;
+    }
+
+    function adiciona_funcionario() {
+      console.log("Função salvarFuncionario iniciada. AGORA ");
+      document.getElementById("btn_adiciona_funcionario").disabled = true;
+      // Coletar os dados dos campos de entrada do formulário
+      var idPCP = document.getElementById("idPCP").value;
+
+// Verifique se o valor não está vazio e não é NaN (não é um número)
+if (idPCP !== "" && !isNaN(idPCP)) {
+  // Converta o valor em um número (inteiro) usando parseInt
+  idPCP = parseInt(idPCP, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+} else {
+  // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
+  idPCP = 0;
+}
+
+// Agora, a variável idPCP contém o valor como um número ou 0 se não for um número válido.
+
+      var nomeCompleto = toUpperCaseIfString(
+        document.getElementById("nomeCompleto").value
+      );
+      var dataNascimento = document.getElementById("dataNascimento").value;
+      var cpf = toUpperCaseIfString(document.getElementById("cpf").value);
+      var rg = toUpperCaseIfString(document.getElementById("rg").value);
+      var pis = toUpperCaseIfString(document.getElementById("pis").value);
+      var funcao = toUpperCaseIfString(document.getElementById("funcao").value);
+      var tipoSalario = document.getElementById("tipoSalario").value;
+      var salario = toUpperCaseIfString(
+        document.getElementById("salario").value
+      );
+      var email = toUpperCaseIfString(document.getElementById("email").value);
+      var cep = toUpperCaseIfString(document.getElementById("cep").value);
+      var endereco = toUpperCaseIfString(
+        document.getElementById("endereco").value
+      );
+      var bairro = toUpperCaseIfString(document.getElementById("bairro").value);
+      var cidade = toUpperCaseIfString(document.getElementById("cidade").value);
+      var uf = toUpperCaseIfString(document.getElementById("uf").value);
+      var bairro = toUpperCaseIfString(document.getElementById("bairro").value);
+      var caixa = toUpperCaseIfString(document.getElementById("caixa").value);
+      var formapag = toUpperCaseIfString(document.getElementById("formapag").value);
+      var cnpj = toUpperCaseIfString(document.getElementById("cnpj").value);
+
+      // Coletar os campos de telefone em um array
+      var telefones = [];
+      for (var i = 1; i <= 3; i++) {
+        var campoTelefone = document.getElementById("telefone" + i);
+        if (campoTelefone) {
+          telefones.push(toUpperCaseIfString(campoTelefone.value));
+        } else {
+          console.log("Campo telefone " + i + " não encontrado.");
+        }
+      }
+      // Criar um objeto com os dados coletados
+      var all_data = {
+        idPCP: idPCP,
+        nomeCompleto: nomeCompleto,
+        cpf: cpf,
+        rg:rg,
+        dataNascimento: dataNascimento,
+        pis: pis,
+        funcao: funcao,
+        tipoSalario: tipoSalario,
+        salario: salario,
+        email: email,
+        cep: cep,
+        endereco: endereco,
+        bairro: bairro,
+        cidade: cidade,
+        uf: uf,
+        caixa:caixa,
+        formapag,formapag,
+        cnpj,cnpj,
+      };
+      console.log(all_data);
+      
+      try {
+        // Enviar os dados para o servidor Flask usando AJAX
+        $.ajax({
+          url: my_url() + "adiciona_funcionario",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        })
+          .done(function (response) {
+            // Trate erros específicos aqui
+            if (response.error) {
+              mostrarErro();
+              console.error("Erro: " + response.error);
+            } else {
+              mostrarSucesso();
+              // Limpar os campos do formulário após o envio bem-sucedido
+              document.getElementById(
+                "btn_adiciona_funcionario"
+              ).disabled = false;
+              limparCampos();
+              carregarDadosFuncionario();
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+          });
+      } catch (error) {
+        console.error("Erro na função adiciona_funcionario: " + error);
+        mostrarErro();
+      }
+    }
+
+    // Função para limpar os campos do formulário
+    function limparCampos() {
+      var campos = [
+        "nomeCompleto",
+        "dataNascimento",
+        "cpf",
+        "pis",
+        "funcao",
+        "tipoSalario",
+        "salario",
+        "email",
+        "cep",
+        "endereco",
+        "bairro",
+        "cidade",
+        "uf",
+        "caixa",
+        "formapag",
+      ];
+      for (var i = 0; i < campos.length; i++) {
+        document.getElementById(campos[i]).value = "";
+      }
+      for (var i = 1; i <= 3; i++) {
+        var campoTelefone = document.getElementById("telefone" + i);
+        if (campoTelefone) {
+          campoTelefone.value = "";
+        }
+      }
+    }
+
+    // Função para mostrar um alerta personalizado
+    function Adicionar_funcionarios_mostrarAlerta() {
+      // Verifique se o usuário deseja cancelar
+      Swal.fire({
+        title: "Deseja salvar?",
+        text: "Deseja realmente salvar e limpar os campos do formulário?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, cancelar!",
+        cancelButtonText: "Não, continuar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          adiciona_funcionario();
+          // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
+          limparCampos();
+        } else {
+          // O usuário escolheu não cancelar, continue com o processo
+          continuarProcesso();
+        }
+      });
+    }
+
+    function carregarDadosFuncionario() {
+      $.ajax({
+        url: my_url() + "ler_dadosFuncionarios", // Corrigido para "funcionario" em vez de "funcioario"
+        type: "POST",
+      })
+        .done(function (data) {
+          let dados = data.retorno;
+          console.log("carregarDadosFuncionario:", dados);
+          updateTableData(dados);
+        })
+        .fail(function (error) {
+          console.error("Erro ao buscar dados iniciais:", error);
+        });
+    }
+
+    function updateTableData(data) {
+      if (table_funcionario) {
+        const transformedData = transformData(data);
+        table_funcionario.setData(transformedData);
+      } else {
+        console.error("Tabela não inicializada!");
+      }
+    }
+
+  function transformData(data) {
+  console.log("Dados de entrada para transformação:", data);
+  const mappedColumns = {
+    idPCP: "idPCP",
+    nomeCompleto: "nome",
+    dataNascimento: "dataNascimento",
+    cpf: "cpf",
+    pis: "pis",
+    funcao: "funcao",
+    tipoSalario: "tipoSalario",
+    salario: "salario",
+    email: "email",
+    cep: "cep",
+    endereco: "endereco",
+    bairro: "bairro",
+    cidade: "cidade",
+    uf: "uf",
+    caixa: "caixa",
+    formapag: "formapag",
+    cnpj: "cnpj",
+    
+    // Adicione outras colunas mapeadas aqui
+  };
+
+  if (!data || !Array.isArray(data)) {
+    console.error("Dados inválidos fornecidos para transformação:", data);
+    return [];
+  }
+
+  const transformed = data.map((row) => {
+    const transformedRow = {};
+
+    for (const columnFrom in mappedColumns) {
+      if (columnFrom in row) {
+        transformedRow[mappedColumns[columnFrom]] = row[columnFrom] ?? "";
+      } else {
+        transformedRow[mappedColumns[columnFrom]] = ""; // Defina um valor padrão, caso a coluna não esteja presente
+      }
+    }
+
+    // Inclua a coluna "idPCP" com o valor original "id_funcionario"
+    transformedRow["idPCP"] = row["idPCP"];
+
+    return transformedRow;
+  });
+
+  console.log("Dados transformados:", transformed);
+  return transformed;
+}
+    // Vamos adicionar uma função para inicializar a tabela
+    function initializeTable() {
+      table_funcionario = new Tabulator("#table_funcionario", {
+        name: "table_funcionario",  // Adicione o atributo name aqui
+        data: [],
+        deferRender: true,
+        scrollCollapse: true,
+        scroller: true,
+        scrollY: 200,
+        columns: [
+        {
+            title: "Id PCP",
+            field: "idPCP",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "Nome",
+            field: "nome",
+            hozAlign: "left",
+          },
+          {
+            title: "Funcao",
+            field: "funcao",
+            hozAlign: "left",
+          },
+          {
+            title: "dataNascimento",
+            field: "dataNascimento",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "cpf",
+            field: "cpf",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "CNPJ",
+            field: "cnpj",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "pis",
+            field: "pis",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "tipoSalario",
+            field: "tipoSalario",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "salario",
+            field: "salario",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "email",
+            field: "email",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "cep",
+            field: "cep",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "endereco",
+            field: "endereco",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "bairro",
+            field: "bairro",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "cidade",
+            field: "cidade",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "uf",
+            field: "uf",
+            hozAlign: "center",
+            visible: false,
+          },
+          {
+            title: "Caixa",
+            field: "caixa",
+            hozAlign: "center",
+            visible: true,
+          },
+          {
+            title: "Forma Pagamento",
+            field: "formapag",
+            hozAlign: "center",
+            visible: true,
+          },
+          // Adicione outras colunas conforme necessário
+        ],
+        rowClick: function (e, row) {
+          var rowData = row.getData();
+          preencherCamposDeEntrada(rowData);
+        },
+      });
+    }
+
+    function preencherCamposDeEntrada(rowData) {
+       // Defina o valor do campo idPCP usando JavaScript
+  document.getElementById("idPCP").value = rowData.idPCP;
+  document.getElementById("nomeCompleto").value = rowData.nome;
+  document.getElementById("dataNascimento").value = rowData.dataNascimento;
+  document.getElementById("cpf").value = rowData.cpf;
+  document.getElementById("rg").value = rowData.rg;  // Corrigido para rowData.rg
+  document.getElementById("pis").value = rowData.pis;
+  document.getElementById("funcao").value = rowData.funcao;
+  document.getElementById("tipoSalario").value = rowData.tipoSalario;
+  document.getElementById("salario").value = rowData.salario;
+  document.getElementById("email").value = rowData.email;
+  document.getElementById("cep").value = rowData.cep;
+  document.getElementById("endereco").value = rowData.endereco;
+  document.getElementById("bairro").value = rowData.bairro;
+  document.getElementById("cidade").value = rowData.cidade;
+  document.getElementById("uf").value = rowData.uf;
+  document.getElementById("caixa").value = rowData.caixa;
+  document.getElementById("formapag").value = rowData.formapag;
+}
+
+    function muda_de_tela(url, event) {
+      window.location.href = url;
+      event.stopPropagation();
+    }
+  </script>
+</html>
