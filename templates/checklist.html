@@ -2,14 +2,12 @@
 <html lang="pt-br">
   {% include 'head.html' %}
   <body>
-    <!-- Ícone do menu e Menu lateral: Não alterado, mantive o seu código -->
-    <!-- Conteúdo Principal -->
     <div class="header">
       <img
         src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
         alt="Logo da Empresa"
       />
-      RELATORIO CHECKLIST - <span> NOTH CROMO</span>
+      RELATÓRIO CHECKLIST - <span>NOTH CROMO</span>
     </div>
 
     <link
@@ -19,15 +17,9 @@
     />
 
     <div class="container">
-      <!-- Campos de entrada -->
       <div class="row mt-3 mb-3">
-        <!-- Adicionei a classe mb-3 para margem inferior -->
-        <!-- Campo Número de Controle -->
         <div class="col-md-3">
-          <label for="numeroControle" class="custom-label"
-            >Número de Controle</label
-          >
-          <!-- Campo de entrada com lista suspensa -->
+          <label for="numeroControle" class="custom-label">Número de Controle</label>
           <input
             id="numeroControle"
             type="text"
@@ -37,9 +29,7 @@
           />
         </div>
       </div>
-      <!-- Fecha o primeiro div -->
 
-      <!-- Botão GERA PDFs e tabela -->
       <div class="row mt-2">
         <div class="col-md-4">
           <button
@@ -58,926 +48,982 @@
               width: 100%;
             "
           >
-            <span class="material-icons" style="margin-right: 8px"
-              >cloud_download</span
-            >
+            <span class="material-icons" style="margin-right: 8px">cloud_download</span>
             GERA PDFs
           </button>
         </div>
       </div>
     </div>
 
-    <!--Lista suspensa no campo  -->
-    <datalist id="numerosDeControle">
-      <!-- As opções serão adicionadas aqui pelo JavaScript -->
-    </datalist>
+    <datalist id="numerosDeControle"></datalist>
 
-    <!-- Tabela Tabular -->
     <div class="table-responsive myTable table-wrapper">
-      <div id="table" class="tabulator myTable"></div>
+      <div id="table_checklist" class="tabulator myTable"></div>
     </div>
 
-    <!-- TESTE VARIOS PDF -->
-
-    <!-- Contêiner para links PDF -->
     <div id="pdfLinksContainer"></div>
+    <div id="linksContainer" class="container"></div>
+  </body>
 
-    <div id="linksContainer"></div>
-
-    <!-- Botão PDF TESTE -->
-    <div class="container">
-      <div id="linksContainer" class="row"></div>
-    </div>
-</body>
   <script>
-    // Adicione um ouvinte de evento para o evento beforeunload
-    window.addEventListener('beforeunload', function (event) {
-        // Limpe a tabela antes de sair da página
-        if (table_funcionario) {
-            table_funcionario.destroy();
-        }
+// Verifique se a variável OPERATIONS_ORDER já foi declarada
+if (typeof OPERATIONS_ORDER === 'undefined') {
+  // Declare e inicialize a variável
+  const OPERATIONS_ORDER = [
+    "DES",
+    "COM",
+    "CRO",
+    "USI",
+    "DEC",
+    "FRE",
+    "SOL",
+    "BRU",
+    "PER",
+    "TES",
+    "MON",
+  ];
+}
+
+// Verifique se a variável today já foi declarada
+if (typeof today === 'undefined') {
+  // Declare e inicialize a variável
+  const today = new Date();
+  // Restante do código que utiliza a variável today
+  const formattedToday = getFormattedDate("DD/MM/YYYY", today);
+}
+
+
+// Função para destruir a tabela e limpar variáveis
+function limparTabela() {
+  if (table_checklist) {
+    table_checklist.destroy();
+  }
+
+  // Remova as variáveis se elas já foram declaradas
+  if (window.hasOwnProperty('isCheckboxClicked')) {
+    delete window.isCheckboxClicked;
+  }
+  if (window.hasOwnProperty('selectedIDs')) {
+    delete window.selectedIDs;
+  }
+  if (window.hasOwnProperty('selectedRowsData')) {
+    delete window.selectedRowsData;
+  }
+  if (window.hasOwnProperty('editedRows')) {
+    delete window.editedRows;
+  }
+  if (window.hasOwnProperty('numControleValue')) {
+    delete window.numControleValue;
+  }
+}
+
+// Função para inicializar a tabela e variáveis
+function inicializarTabela() {
+  // Declare e inicialize as variáveis novamente
+  window.isCheckboxClicked = false;
+  window.selectedIDs = [];
+  window.selectedRowsData = [];
+  window.editedRows = new Set();
+  today = new Date();
+ formattedToday = formatDateToDDMMYYYY(today);
+}
+
+let numControleValue
+
+$(window).on('beforeunload', function() {
+  limparTabela();
+});
+
+
+    var minhaUrl =
+      'https://script.google.com/macros/s/AKfycbwrPy3engcd4RuekmJbFLtnH6n-Rz0rOpnl8_CPysdaee7nd_8261m93ZfcRR1Ohe-a/exec';
+
+    var numeroControleElement = document.getElementById("numeroControle");
+    if (numeroControleElement) {
+      var numeroControle = numeroControleElement.value.trim().replace(/"/g, "");
+      // Restante do seu código
+    } else {
+      console.error("Elemento 'numeroControle' não encontrado.");
+    }
+
+    var dateFilterDropdownElement = document.getElementById("dateFilterDropdown");
+    if (dateFilterDropdownElement) {
+      var dateFilterDropdown = dateFilterDropdownElement.value;
+      // Restante do seu código
+    } else {
+      console.error("Elemento 'dateFilterDropdown' não encontrado.");
+    }
+
+
+
+    Object.defineProperty(window, "selectedIDs", {
+      set: function (value) {
+        console.trace("selectedIDs foi alterado: ", value);
+        this._selectedIDs = value;
+      },
+      get: function () {
+        return this._selectedIDs;
+      },
+      configurable: true,
     });
-  </script>
 
-  {% include 'funcoes_comuns.html' %}
-  
-  <script>
+    function formatarData(data) {
+      const [ano, mes, dia] = data.split("-");
+      return `${dia}/${mes}/${ano}`;
+    }
 
-var minhaUrl =
-       'https://script.google.com/macros/s/AKfycbwrPy3engcd4RuekmJbFLtnH6n-Rz0rOpnl8_CPysdaee7nd_8261m93ZfcRR1Ohe-a/exec'
-    
-      // REMOVE ESPAÇO E ASPA
-       var numeroControle = document.getElementById("numeroControle");
-        if (numeroControle) {
-          var numeroControle = numeroControle.value.trim().replace(/"/g, "");
-          // Restante do seu código
-        } else {
-          console.error("Elemento 'numeroControle' não encontrado.");
+    function updateSelectedIDs() {
+      console.trace("updateSelectedIDs foi chamada de:");
+
+      selectedIDs = [];
+      selectedRowsData = [];
+
+      table_checklist.getRows("active").forEach((row) => {
+        if (row.isSelected()) {
+          const rowData = row.getData();
+
+          selectedIDs.push(rowData.idPCP);
+
+          selectedRowsData.push({
+            id: rowData.idPCP,
+            row: row,
+          });
         }
-
-      var dateFilterDropdownElement = document.getElementById("dateFilterDropdown");
-      if (dateFilterDropdownElement) {
-        var dateFilterDropdown = dateFilterDropdownElement.value;
-        // Restante do seu código
-      } else {
-        console.error("Elemento 'dateFilterDropdown' não encontrado.");
-      }
-
-
-
-      let isCheckboxClicked = false;
-
-      let selectedIDs = []; // Reinicie a lista de IDs selecionados
-      let selectedRowsData = []; // Reinicie a lista de IDs selecionados
-
-      //window.handleTabPress = handleTabPress;
-
-      Object.defineProperty(window, "selectedIDs", {
-        set: function (value) {
-          console.trace("selectedIDs foi alterado: ", value);
-          this._selectedIDs = value;
-        },
-        get: function () {
-          return this._selectedIDs;
-        },
-        configurable: true,
       });
 
-      function formatarData(data) {
-        const [ano, mes, dia] = data.split("-");
-        return `${dia}/${mes}/${ano}`;
-      }
+      selectedIDs = [...new Set(selectedIDs)];
+      selectedRowsData = [...new Set(selectedRowsData)];
 
-      function updateSelectedIDs() {
-        console.trace("updateSelectedIDs foi chamada de:");
-
-        selectedIDs = [];
-        selectedRowsData = [];
-
-        table.getRows("active").forEach((row) => {
-          if (row.isSelected()) {
-            const rowData = row.getData();
-
-            // Mantendo sua estrutura original
-            selectedIDs.push(rowData.idPCP);
-
-            // Adicionando à nossa nova estrutura
-            selectedRowsData.push({
-              id: rowData.idPCP,
-              row: row,
-            });
-          }
-        });
-
-        // Remove duplicatas transformando em Set e depois de volta em Array
-        selectedIDs = [...new Set(selectedIDs)];
-        selectedRowsData = [...new Set(selectedRowsData)];
-
-        console.log("IDs selecionados:", selectedIDs);
-        console.log("Dados de linhas selecionadas:", selectedRowsData);
-      }
+      console.log("IDs selecionados:", selectedIDs);
+      console.log("Dados de linhas selecionadas:", selectedRowsData);
+    }
 
     $(document).ready(function () {
-        // Mostrar animação de carregamento assim que a página começar a carregar
-        onPaginaCarregada();
-        setupEventListeners();
-        console.log("Documento carregado e pronto!");
-        
-      //carregarDadosFuncionario();
-      //initializeTable();
-      console.log("Colocar a função da tabela ou tabela toda aqui");
+      inicializarTabela();
+      initializeTable();
+      onPaginaCarregada();
+      setupEventListeners();
+      console.log("Documento carregado e pronto!");
     });
-    
-      function showAlert(message) {
-        Swal.fire({
-          title: "Atenção!",
-          text: message,
-          icon: "warning",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Entendi!",
-        });
+
+    function showAlert(message) {
+      Swal.fire({
+        title: "Atenção!",
+        text: message,
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Entendi!",
+      });
+    }
+
+    function customDataFormatter(cell, formatterParams, onRendered) {
+      const value = cell.getValue();
+
+      if (value === "31/12/1969") {
+        return "";
       }
+    }
 
-      function customDataFormatter(cell, formatterParams, onRendered) {
-        const value = cell.getValue();
+    function getFormattedDate(format = "YYYY-MM-DD") {
+  // Verifique se a variável já foi declarada antes de redeclarar
+  if (typeof window.today === 'undefined') {
+    window.today = new Date();
+  }
+    // Verifique se a variável já foi declarada antes de redeclarar
+    if (typeof window.dd === 'undefined') {
+    window.dd = String(today.getDate()).padStart(2, "0");
+  }
 
-        if (value === "31/12/1969") {
-          return "";
-        }
+      // Verifique se a variável já foi declarada antes de redeclarar
+      if (typeof window.dd === 'undefined') {
+    window.dd = String(today.getDate()).padStart(2, "0");
+  }
 
-        //return highlightEditable(cell, formatterParams, onRendered);
+      // Verifique se a variável já foi declarada antes de redeclarar
+      if (typeof window.mm === 'undefined') {
+    window.mm =  String(today.getMonth() + 1).padStart(2, "0");
+  }
+        // Verifique se a variável já foi declarada antes de redeclarar
+        if (typeof window.yyyy === 'undefined') {
+    window.yyyy =  today.getFullYear();
+  }
+      switch (format) {
+        case "YYYY-MM-DD":
+          return yyyy + "-" + mm + "-" + dd;
+        case "DD/MM/YYYY":
+          return dd + "/" + mm + "/" + yyyy;
+        default:
+          return yyyy + "-" + mm + "-" + dd;
       }
+    }
 
-      function getFormattedDate(format = "YYYY-MM-DD") {
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0");
-        var yyyy = today.getFullYear();
+    function setDataLancamento() {
 
-        switch (format) {
-          case "YYYY-MM-DD":
-            return yyyy + "-" + mm + "-" + dd;
-          case "DD/MM/YYYY":
-            return dd + "/" + mm + "/" + yyyy;
-          default:
-            return yyyy + "-" + mm + "-" + dd;
-        }
-      }
+      if (typeof window.dd === 'undefined') {
+    window.dd = String(today.getDate()).padStart(2, "0");
+  }
+      // Verifique se a variável já foi declarada antes de redeclarar
+      if (typeof window.mm === 'undefined') {
+    window.mm =  String(today.getMonth() + 1).padStart(2, "0");
+  }
+        // Verifique se a variável já foi declarada antes de redeclarar
+        if (typeof window.yyyy === 'undefined') {
+    window.yyyy =  String(today.getMonth() + 1).padStart(2, "0");
+  }
 
-      // Data de Hoje para os inpunt
-      function setDataLancamento() {
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); // Janeiro é 0!
-        var yyyy = today.getFullYear();
+      today = yyyy + "-" + mm + "-" + dd;
 
-        today = yyyy + "-" + mm + "-" + dd;
+      document.getElementById("dataLancamento").value = today;
+    }
 
-        // Define a data de hoje para o campo dataLancamento
-        document.getElementById("dataLancamento").value = today;
-      }
+    function tabToNextRowEditor(cell, onRendered, success, cancel, editorParams) {
 
-      // Editar a coluna Desejada e com o TAb e proxima linha
-      function tabToNextRowEditor(
-        cell,
-        onRendered,
-        success,
-        cancel,
-        editorParams
+      if (typeof window.editor === 'undefined') {
+    window.editor = document.createElement("input");
+      editor.setAttribute("type", "text");
+
+      editor.style.textAlign = "left";
+  }
+
+  if (typeof window.cellValue === 'undefined') {
+    window.cellValue = cell.getValue();
+  } 
+
+      if (
+        cellValue === undefined ||
+        (typeof cellValue === "string" && cellValue.startsWith("undefined"))
       ) {
-        var editor = document.createElement("input");
-        editor.setAttribute("type", "text");
+        editor.value = "";
+        console.log("teste...", +cellValue);
+      } else {
+        editor.value = cellValue;
+        console.log("teste...", +editor.value);
+      }
 
-        editor.style.textAlign = "left"; // Ajustar o alinhamento do texto para a esquerda
+      onRendered(function () {
+        editor.focus();
+        editor.setSelectionRange(editor.value.length, editor.value.length);
+      });
 
-        // Defina o valor inicial do editor para o valor da célula
-        var cellValue = cell.getValue();
+      editor.addEventListener("keydown", function (e) {
+        if (e.key === "Tab" || e.keyCode === 13) {
+          e.preventDefault();
 
-        // Se o valor da célula começar com "undef", defina o valor do editor como vazio
-        if (
-          cellValue === undefined ||
-          (typeof cellValue === "string" && cellValue.startsWith("undefined"))
-        ) {
-          editor.value = "";
-          console.log("teste...", +cellValue);
-        } else {
-          editor.value = cellValue;
-          console.log("teste...", +editor.value);
-        }
+          success(editor.value);
 
-        // Definir o foco
-        onRendered(function () {
-          editor.focus();
-          editor.setSelectionRange(editor.value.length, editor.value.length);
-        });
+          const currentField = cell.getColumn().getField();
+          const nextRow = cell.getRow().getNextRow();
 
-        // Quando o input estiver focado, adicione o listener de keydown
-        editor.addEventListener("keydown", function (e) {
-          if (e.key === "Tab" || e.keyCode === 13) {
-            e.preventDefault();
-
-            success(editor.value); // Salve o valor atual da célula
-
-            const currentField = cell.getColumn().getField();
-            const nextRow = cell.getRow().getNextRow();
-
-            if (nextRow) {
-              console.log("Movendo para a próxima linha...");
-              setTimeout(() => {
-                nextRow.getCell(currentField).edit();
-              }, 10); // Adicione um pequeno atraso
-            } else {
-              console.log("Não existe próxima linha");
-            }
+          if (nextRow) {
+            console.log("Movendo para a próxima linha...");
+            setTimeout(() => {
+              nextRow.getCell(currentField).edit();
+            }, 10);
+          } else {
+            console.log("Não existe próxima linha");
           }
-        });
-
-        return editor;
-      }
-
-      // Função para carregar os dados e aplicar o filtro
-      function loadDataAndApplyFilter() {
-        // Supondo que você tenha uma função para obter seus dados...
-        const myData = fetchDataFromSomewhere();
-
-        // Defina os dados
-        table.setData(myData);
-
-        // Aplique o filtro
-        const formattedToday = getFormattedDate("DD/MM/YYYY");
-        table.setFilter("dataEntrada", "!=", formattedToday);
-      }
-
-      // CHAMAR A NOVA TABELA
-      function updateTableData(data) {
-        if (table) {
-          const transformedData = transformData(data); // transforma os dados
-          table.setData(transformedData); // atualiza a tabela com os dados transformados
-        } else {
-          console.error("Tabela não inicializada!");
         }
+      });
+
+      return editor;
+    }
+
+    function loadDataAndApplyFilter() {
+
+      // Inicialize today antes de qualquer referência a ele
+      if (typeof myData === 'undefined') {
+         myData = fetchDataFromSomewhere();
       }
 
-      function transformData(data) {
-        console.log("Dados de entrada para transformação:", data);
+      table_checklist.setData(myData);
 
-        if (!data || !Array.isArray(data)) {
-          console.error("Dados inválidos fornecidos para transformação:", data);
+      // Inicialize today antes de qualquer referência a ele
+      if (typeof formattedToday === 'undefined') {
+         formattedToday = getFormattedDate("DD/MM/YYYY");
+      }
+      table_checklist.setFilter("dataEntrada", "!=", formattedToday);
+    }
+
+    function updateTableData(data) {
+      if (table_checklist) {
+        const transformedData = transformData(data);
+        table_checklist.setData(transformedData);
+      } else {
+        console.error("Tabela não inicializada!");
+      }
+    }
+
+    function transformData(data) {
+      console.log("Dados de entrada para transformação:", data);
+
+          if (!data || !data.retorno) {
+        console.error("Dados inválidos fornecidos para transformação:", data);
+        return [];
+      }
+
+      let parsedData;
+      try {
+        // Analisa a string JSON contida em "retorno"
+        parsedData = JSON.parse(data.retorno);
+      } catch (error) {
+        console.error("Erro ao analisar os dados JSON:", error);
+        return [];
+      }
+
+        // Verifica se os dados são um array
+        if (!Array.isArray(parsedData)) {
+          console.error("Dados inválidos fornecidos para transformação:", parsedData);
           return [];
         }
 
-        // Se os dados forem apenas um único array, transformá-lo em um array de arrays
-        const isSingleRow = typeof data[0] !== "object";
-        const rows = isSingleRow ? [data] : data;
 
-        const transformed = rows
-          .map((row) => {
-            if (!Array.isArray(row)) {
-              return null;
-            }
+      const isSingleRow = typeof data[0] !== "object";
+      const rows = isSingleRow ? [data] : data;
 
-            return {
-              dataEntrada: row[0] ?? "",
-              numControle: row[1] ?? "",
-              cliente: row[2] ?? "",
-              descricao: row[3] ?? "",
-              nota: row[4] ?? "",
-              idPCP: row[5] ?? "",
-              referenciaProducao: row[6] ?? "",
-              qtd: row[7] ?? "",
-              op: row[8] ?? "",
-              cod: row[9] ?? "",
-              observacao: row[10] ?? "",
-            };
-          })
-          .filter((item) => item !== null); // Remove linhas nulas, se houver
+      const transformed = parsedData.map((row) => {
+    return {
+      dataEntrada: row.dataEntrada ?? "",
+      numControle: row.Recebimento ?? "",
+      cliente: row.Nome_cliente ?? "",
+      descricao: row.nome_produto ?? "",
+      nota: row.NotaInterna ?? "",
+      idPCP: row.id_Checklist ?? "", // Mudei o nome da propriedade para corresponder ao nome na tabela
+      referenciaProducao: row.Refencia_Produto ?? "",
+      qtd: row.Quantidade ?? "",
+      op: row.op ?? "",
+      cod: row.Cod_Produto ?? "",
+      observacao: row.QUEIXA_CLIENTE ?? "",
+    };
+  });
 
-        console.log("Dados transformados:", transformed);
-        return transformed;
-      }
+  console.log("Dados transformados:", transformed);
+  return transformed;
+}
+   
 
-      let editedRows = new Set(); // Este conjunto armazenará os IDs das linhas que foram editadas
+  // Vamos adicionar uma função para inicializar a tabela
+  function initializeTable() {
 
-      let table;
+  function highlightEditable(cell, formatterParams, onRendered) {
+    console.log("A função highlightEditable foi chamada");
 
-      // NOVA TABELA
-      document.addEventListener("DOMContentLoaded", function () {
-        function highlightEditable(cell, formatterParams, onRendered) {
-          console.log("A função highlightEditable foi chamada");
+    const element = cell.getElement();
 
-          const element = cell.getElement();
+    // Se a célula for editável, adicione a classe
+    if (cell.getColumn().getDefinition().editor) {
+      element.classList.add("editable-cell");
+    }
+    return cell.getValue();
+  }
 
-          // Se a célula for editável, adicione a classe
-          if (cell.getColumn().getDefinition().editor) {
-            element.classList.add("editable-cell");
-          }
-          return cell.getValue();
-        }
+  function onRowSelected(row) {
+    let rowData = row.getData();
+    if (!selectedIDs.includes(rowData.idPCP)) {
+      selectedIDs.push(rowData.idPCP);
+    }
+    console.log("IDs selecionados:", selectedIDs);
+    console.log("Número da linha:", row.getPosition(true)); // Número da linha
+    console.log("ID selecionado:", rowData.idNovasTarefas);
+  }
 
-        function onRowSelected(row) {
-          let rowData = row.getData();
-          if (!selectedIDs.includes(rowData.idPCP)) {
-            selectedIDs.push(rowData.idPCP);
-          }
-          console.log("IDs selecionados:", selectedIDs);
-          console.log("Número da linha:", row.getPosition(true)); // Número da linha
-          console.log("ID selecionado:", rowData.idNovasTarefas);
-        }
+  function onRowDeselected(row) {
+    let rowData = row.getData();
+    const index = selectedIDs.indexOf(rowData.idPCP);
+    if (index !== -1) {
+      selectedIDs.splice(index, 1);
+    }
+    console.log("IDs selecionados após desmarcar:", selectedIDs);
+    console.log("Número da linha:", row.getPosition(true)); // Número da linha
+    console.log("ID desmarcado:", rowData.idNovasTarefas);
+  }
 
-        function onRowDeselected(row) {
-          let rowData = row.getData();
-          const index = selectedIDs.indexOf(rowData.idPCP);
-          if (index !== -1) {
-            selectedIDs.splice(index, 1);
-          }
-          console.log("IDs selecionados após desmarcar:", selectedIDs);
-          console.log("Número da linha:", row.getPosition(true)); // Número da linha
-          console.log("ID desmarcado:", rowData.idNovasTarefas);
-        }
+    // Adicione a parte fornecida no início da tabela
+    table_checklist = new Tabulator("#table_checklist", {
+      name: "table_checklist",
+      data: [],
+      deferRender: true,
+      scrollCollapse: true,
+      scroller: true,
+      scrollY: 200,
+      // Classificação inicial
+      initialSort: [
+        { column: "dtProducao", dir: "asc" },
+        { column: "SEQ", dir: "asc" },
+        { column: "op", dir: "asc" },
+      ],
 
-        table = new Tabulator("#table", {
-          data: [],
+      columns: [
+        // Colunas da sua tabela
+        {
+          title: "Nº Controle",
+          field: "numControle",
+          hozAlign: "center",
+        },
+        {
+          title: "Cliente",
+          field: "cliente",
+          hozAlign: "left",
+        },
+        {
+          title: "Cód",
+          field: "cod",
+          hozAlign: "center",
+        },
+        {
+          title: "Qtda",
+          field: "qtd",
+          hozAlign: "center",
+        },
+        {
+          title: "Desc Serviço/ Produto / Tarefa",
+          field: "descricao",
+          hozAlign: "left",
+          editor: tabToNextRowEditor,
+          formatter: highlightEditable,
+        },
+        {
+          title: "Nota",
+          field: "nota",
+          hozAlign: "center",
+        },
+        {
+          title: "Referência Produto",
+          field: "referenciaProducao",
+          hozAlign: "center",
+        },
+        {
+          title: "Op",
+          field: "op",
+          hozAlign: "center",
+          visible: false,
+        },
+        {
+          title: "Observação",
+          field: "observacao",
+          hozAlign: "left",
+          editor: tabToNextRowEditor,
+          formatter: highlightEditable,
+        },
+        {
+          title: "Id PCP",
+          field: "idPCP",
+          hozAlign: "center",
+          visible: false,
+        },
+        {
+          title: "",
+          field: "select",
+          cssClass: "white-bg",
+          hozAlign: "center",
+          headerSort: false,
+          headerClick: function (e, column) {
+            try {
+              const headerCheckbox = column
+                .getElement()
+                .querySelector("#selectAllCheckbox");
+              if (headerCheckbox) {
+                // Obtenha todas as linhas ativas
+                const activeRows = table_checklist.getRows("active");
+                selectedIDs = []; // Limpe o array de IDs selecionados
 
-          // Classificação inicial
-          initialSort: [
-            { column: "dtProducao", dir: "asc" },
-            { column: "SEQ", dir: "asc" },
-            { column: "op", dir: "asc" },
-          ],
-
-          columns: [
-            // Colunas da sua tabela
-            {
-              title: "Nº Controle",
-              field: "numControle",
-              hozAlign: "center",
-            },
-
-            {
-              title: "Cliente",
-              field: "cliente",
-              hozAlign: "left",
-            },
-            {
-              title: "Cód",
-              field: "cod",
-              hozAlign: "center",
-            },
-            {
-              title: "Qtda",
-              field: "qtd",
-              hozAlign: "center",
-            },
-
-            {
-              title: "Desc Serviço/ Produto / Tarefa",
-              field: "descricao",
-              hozAlign: "left",
-              editor: tabToNextRowEditor,
-              formatter: highlightEditable,
-            },
-
-            {
-              title: "Nota",
-              field: "nota",
-              hozAlign: "center",
-            },
-            {
-              title: "Referência Produto",
-              field: "referenciaProducao",
-              hozAlign: "center",
-            },
-
-            {
-              title: "Op",
-              field: "op",
-              hozAlign: "center",
-              visible: false,
-            },
-            {
-              title: "Observação",
-              field: "observacao",
-              hozAlign: "left",
-              editor: tabToNextRowEditor,
-              formatter: highlightEditable,
-            },
-            {
-              title: "Id PCP",
-              field: "idPCP",
-              hozAlign: "center",
-              visible: false,
-            },
-
-            {
-              title: "",
-              field: "select",
-              cssClass: "white-bg",
-              hozAlign: "center",
-              headerSort: false,
-
-              headerClick: function (e, column) {
-                try {
-                  const headerCheckbox = column
-                    .getElement()
-                    .querySelector("#selectAllCheckbox");
-                  if (headerCheckbox) {
-                    // Obtenha todas as linhas ativas
-                    const activeRows = table.getRows("active");
-                    selectedIDs = []; // Limpe o array de IDs selecionados
-
-                    if (headerCheckbox.checked) {
-                      // Desmarcar todas as linhas ativas
-                      activeRows.forEach((row) => row.deselect());
-                      headerCheckbox.checked = false;
-                    } else {
-                      // Seleccionar todas as linhas ativas e adicionar seus IDs ao array selectedIDs
-                      activeRows.forEach((row) => {
-                        const rowData = row.getData();
-                        selectedIDs.push(rowData.idPCP);
-                        row.select();
-                      });
-                      headerCheckbox.checked = true;
-                    }
-                    updateSelectedIDs(); // Atualize selectedIDs após mudança
-                    console.log("IDs selecionados via cabeçalho:", selectedIDs);
-                  }
-                } catch (error) {
-                  console.error("Erro em headerClick:", error);
-                }
-              },
-              titleFormatter: function () {
-                const labelElement = document.createElement("label");
-                labelElement.className = "checkbox-material";
-
-                const checkboxElement = document.createElement("input");
-                checkboxElement.type = "checkbox";
-                checkboxElement.id = "selectAllCheckbox";
-
-                checkboxElement.addEventListener("change", function (e) {
-                  if (this.checked) {
-                    table.getRows("active").forEach((row) => row.select());
-                  } else {
-                    table.getRows("active").forEach((row) => row.deselect());
-                  }
-
-                  document.querySelectorAll(".row-checkbox").forEach((cb) => {
-                    cb.checked = this.checked;
+                if (headerCheckbox.checked) {
+                  // Desmarcar todas as linhas ativas
+                  activeRows.forEach((row) => row.deselect());
+                  headerCheckbox.checked = false;
+                } else {
+                  // Seleccionar todas as linhas ativas e adicionar seus IDs ao array selectedIDs
+                  activeRows.forEach((row) => {
+                    const rowData = row.getData();
+                    selectedIDs.push(rowData.idPCP);
+                    row.select();
                   });
-
-                  // Atualiza o array selectedIDs
-                  updateSelectedIDs();
-
-                  e.stopPropagation();
-                });
-
-                const spanElement = document.createElement("span");
-                spanElement.className = "checkmark";
-
-                labelElement.appendChild(checkboxElement);
-                labelElement.appendChild(spanElement);
-
-                return labelElement;
-              },
-
-              formatter: function (cell, formatterParams, onRendered) {
-                const labelElement = document.createElement("label");
-                labelElement.className = "checkbox-material";
-
-                const checkboxElement = document.createElement("input");
-                checkboxElement.type = "checkbox";
-                checkboxElement.className = "row-checkbox";
-
-                checkboxElement.addEventListener("change", function () {
-                  const rowData = cell.getRow().getData();
-                  const id = rowData.idPCP;
-
-                  if (this.checked) {
-                    cell.getRow().select();
-                  } else {
-                    cell.getRow().deselect();
-                  }
-
-                  // Atualiza o array selectedIDs
-                  updateSelectedIDs();
-                });
-
-                const spanElement = document.createElement("span");
-                spanElement.className = "checkmark";
-
-                labelElement.appendChild(checkboxElement);
-                labelElement.appendChild(spanElement);
-
-                return labelElement;
-              },
-            },
-          ],
-
-          rowSelected: onRowSelected, // Adicionando a função de linha selecionada
-          rowDeselected: onRowDeselected, // Adicionando a função de linha desmarcada
-
-          rowFormatter: function (row) {
-            const data = row.getData();
-            if (data.dataEntrada !== "-") {
-              row.getElement().classList.add("highlighted-row"); // Aplica o destaque na linha
-              row.getCells().forEach((cell) => {
-                if (cell.getColumn().getField() !== "select") {
-                  cell.getElement().style.backgroundColor = "white";
-                  cell.getElement().style.color = "Black";
+                  headerCheckbox.checked = true;
                 }
+                updateSelectedIDs(); // Atualize selectedIDs após mudança
+                console.log(
+                  "IDs selecionados via cabeçalho:",
+                  selectedIDs
+                );
+              }
+            } catch (error) {
+              console.error("Erro em headerClick:", error);
+            }
+          },
+          titleFormatter: function () {
+            const labelElement = document.createElement("label");
+            labelElement.className = "checkbox-material";
+
+            const checkboxElement = document.createElement("input");
+            checkboxElement.type = "checkbox";
+            checkboxElement.id = "selectAllCheckbox";
+
+            checkboxElement.addEventListener("change", function (e) {
+              if (this.checked) {
+                table_checklist.getRows("active").forEach((row) => row.select());
+              } else {
+                table_checklist.getRows("active").forEach((row) => row.deselect());
+              }
+
+              document.querySelectorAll(".row-checkbox").forEach((cb) => {
+                cb.checked = this.checked;
               });
+
+              // Atualiza o array selectedIDs
+              updateSelectedIDs();
+
+              e.stopPropagation();
+            });
+
+            const spanElement = document.createElement("span");
+            spanElement.className = "checkmark";
+
+            labelElement.appendChild(checkboxElement);
+            labelElement.appendChild(spanElement);
+
+            return labelElement;
+          },
+
+          formatter: function (cell, formatterParams, onRendered) {
+            const labelElement = document.createElement("label");
+            labelElement.className = "checkbox-material";
+
+            const checkboxElement = document.createElement("input");
+            checkboxElement.type = "checkbox";
+            checkboxElement.className = "row-checkbox";
+
+            checkboxElement.addEventListener("change", function () {
+              const rowData = cell.getRow().getData();
+              const id = rowData.idPCP;
+
+              if (this.checked) {
+                cell.getRow().select();
+              } else {
+                cell.getRow().deselect();
+              }
+
+              // Atualiza o array selectedIDs
+              updateSelectedIDs();
+            });
+
+            const spanElement = document.createElement("span");
+            spanElement.className = "checkmark";
+
+            labelElement.appendChild(checkboxElement);
+            labelElement.appendChild(spanElement);
+
+            return labelElement;
+          },
+        },
+      ],
+
+      rowSelected: onRowSelected, // Adicionando a função de linha selecionada
+      rowDeselected: onRowDeselected, // Adicionando a função de linha desmarcada
+
+      rowFormatter: function (row) {
+        const data = row.getData();
+        if (data.dataEntrada !== "-") {
+          row.getElement().classList.add("highlighted-row"); // Aplica o destaque na linha
+          row.getCells().forEach((cell) => {
+            if (cell.getColumn().getField() !== "select") {
+              cell.getElement().style.backgroundColor = "white";
+              cell.getElement().style.color = "Black";
             }
-          },
-          cellEdited: function (cell) {
-            const value = cell.getValue();
-            const oldValue = cell.getOldValue();
-
-            // Se o novo valor está vazio, o valor antigo não estava vazio, ou o novo valor é "undefined", restaure o valor antigo
-            if (
-              (value.trim() === "" && oldValue.trim() !== "") ||
-              value === "undefined"
-            ) {
-              cell.restoreOldValue();
-            }
-
-            cell.getElement().style.color = "red";
-          },
-
-          dataChanged: function (data) {
-            // Atualiza as contagens no rodapé
-            //updateFooterCounts();
-          },
-
-          selectable: "highlight",
-        });
-
-        // Aplicar o filtro imediatamente após a inicialização da tabela
-        const formattedToday = getFormattedDate("DD/MM/YYYY");
-        table.setFilter("dataEntrada", "!=", formattedToday);
-
-        // Agora, defina a função renderTable
-        window.renderTable = function (data) {
-          // Atualiza os dados na tabela Tabulator
-          table.setData(data);
-        };
-
-        setupEventListeners();
-      });
-
-      function handleTabPress(event) {
-        if (event.keyCode === 13) {
-          // Se a tecla pressionada for 'tab'
-          event.preventDefault(); // Prevenir o comportamento padrão
-
-          // Obtenha a célula atual que está sendo editada
-          const currentCell = event.target._cell;
-
-          // Obtenha a próxima linha
-          const nextRow = currentCell.getRow().getNextRow();
-
-          if (nextRow) {
-            // Se existir uma próxima linha, defina a célula da mesma coluna nessa linha para ser editada
-            nextRow.getCell(currentCell.getColumn().getField()).edit();
-          }
+          });
         }
-      }
-      function openDialog() {
-        // Atualizar a lista de IDs selecionados antes de fazer qualquer coisa
-        updateSelectedIDs();
+      },
+      cellEdited: function (cell) {
+        const value = cell.getValue();
+        const oldValue = cell.getOldValue();
 
-        // Exibe os IDs coletados no console
-        console.log("IDs selecionadosTONY:", selectedIDs);
+        // Se o novo valor está vazio, o valor antigo não estava vazio, ou o novo valor é "undefined", restaure o valor antigo
+        if (
+          (value.trim() === "" && oldValue.trim() !== "") ||
+          value === "undefined"
+        ) {
+          cell.restoreOldValue();
+        }
 
-        if (selectedIDs.length > 0) {
-          var dialog = document.querySelector("#myDialog");
-          if (!dialog.showModal) {
-            dialogPolyfill.registerDialog(dialog);
+        cell.getElement().style.color = "red";
+      },
+
+      dataChanged: function (data) {
+        // Atualiza as contagens no rodapé
+        //updateFooterCounts();
+      },
+
+      selectable: "highlight",
+    });
+
+    // Aplicar o filtro imediatamente após a inicialização da tabela
+
+        // Inicialize today antes de qualquer referência a ele
+    if (typeof formattedToday === 'undefined') {
+      formattedToday = getFormattedDate("DD/MM/YYYY");
+    }
+    table_checklist.setFilter("dataEntrada", "!=", formattedToday);
+
+    // Agora, defina a função renderTable
+    window.renderTable = function (data) {
+      // Atualiza os dados na tabela Tabulator
+      table_checklist.setData(data);
+    };
+    setupEventListeners();
+  }
+function handleTabPress(event) {
+  if (event.keyCode === 13) {
+    // Se a tecla pressionada for 'tab'
+    event.preventDefault(); // Prevenir o comportamento padrão
+
+    // Obtenha a célula atual que está sendo editada
+    const currentCell = event.target._cell;
+
+    // Obtenha a próxima linha
+    const nextRow = currentCell.getRow().getNextRow();
+
+    if (nextRow) {
+      // Se existir uma próxima linha, defina a célula da mesma coluna nessa linha para ser editada
+      nextRow.getCell(currentCell.getColumn().getField()).edit();
+    }
+  }
+}
+function openDialog() {
+  // Atualizar a lista de IDs selecionados antes de fazer qualquer coisa
+  updateSelectedIDs();
+
+  // Exibe os IDs coletados no console
+  console.log("IDs selecionadosTONY:", selectedIDs);
+
+  if (selectedIDs.length > 0) {
+    var dialog = document.querySelector("#myDialog");
+    if (!dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    dialog.showModal();
+    // preencherModalComDadosDaPagina();  // Copia os dados para o modal
+  } else {
+    Swal.fire({
+      title: "Atenção!",
+      html: "Por favor, selecione pelo menos uma linha para editar. <strong style='font-size: 20px;'>✅</strong>",
+      icon: "warning",
+      confirmButtonColor: "#28a745", // Verde
+      confirmButtonText: "Entendi!",
+    });
+  }
+}
+
+// SELEÇÃO DO MODAL (sem alterações)
+function getSelectedSEQ() {
+  var radios = document.getElementsByName("SEQOption");
+
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) {
+      return radios[i].value;
+    }
+  }
+
+  return null; // Se nenhum valor for selecionado
+}
+
+function saveEditedSEQ() {
+  var newSEQ = document.getElementById("newSEQ").value;
+
+  // Chamada ao GAS para atualizar os valores na folha
+  updateSheetAJAX(selectedIDs, newSEQ);
+
+  // Limpe a caixa de input
+  document.getElementById("newSEQ").value = "";
+  closeEditModal();
+}
+
+function sendToServer(ids, option) {
+  try {
+    console.log("Enviando dados:", ids, option);
+
+    $.ajax({
+      type: "POST",
+      data: {
+        qualFuncao: "updateSheet",
+        selectedIDs: JSON.stringify(ids),
+        selectedOption: option,
+      },
+      url: minhaUrl, // Certifique-se de definir esta variável corretamente
+    })
+      .done(function (response) {
+        try {
+          var data = JSON.parse(response);
+          if (data.success) {
+            onPaginaCarregada(); // Atualizar a página
+            console.log("Atualização bem-sucedida.");
+            Swal.fire({
+              title: "Sucesso!",
+              text: data.message,
+              icon: "success",
+              confirmButtonColor: "#28a745", // Verde
+              confirmButtonText: "Entendi!",
+            });
+          } else {
+            console.error("Erro ao atualizar a folha:", data.message);
+            Swal.fire({
+              title: "Erro!",
+              text: data.message,
+              icon: "error",
+              confirmButtonColor: "#d33",
+              confirmButtonText: "Entendi!",
+            });
           }
-          dialog.showModal();
-          // preencherModalComDadosDaPagina();  // Copia os dados para o modal
-        } else {
+        } catch (internalError) {
+          console.error(
+            "Erro ao processar a resposta do servidor:",
+            internalError
+          );
           Swal.fire({
-            title: "Atenção!",
-            html: "Por favor, selecione pelo menos uma linha para editar. <strong style='font-size: 20px;'>✅</strong>",
-            icon: "warning",
-            confirmButtonColor: "#28a745", // Verde
+            title: "Erro!",
+            text: "Houve um erro na resposta do servidor.",
+            icon: "error",
+            confirmButtonColor: "#d33",
             confirmButtonText: "Entendi!",
           });
         }
-      }
-
-      // SELEÇÃO DO MODAL (sem alterações)
-      function getSelectedSEQ() {
-        var radios = document.getElementsByName("SEQOption");
-
-        for (var i = 0; i < radios.length; i++) {
-          if (radios[i].checked) {
-            return radios[i].value;
-          }
-        }
-
-        return null; // Se nenhum valor for selecionado
-      }
-
-      function saveEditedSEQ() {
-        var newSEQ = document.getElementById("newSEQ").value;
-
-        // Chamada ao GAS para atualizar os valores na folha
-        updateSheetAJAX(selectedIDs, newSEQ);
-
-        // Limpe a caixa de input
-        document.getElementById("newSEQ").value = "";
-        closeEditModal();
-      }
-
-      function sendToServer(ids, option) {
-        try {
-          console.log("Enviando dados:", ids, option);
-
-          $.ajax({
-            type: "POST",
-            data: {
-              qualFuncao: "updateSheet",
-              selectedIDs: JSON.stringify(ids),
-              selectedOption: option,
-            },
-            url: minhaUrl, // Certifique-se de definir esta variável corretamente
-          })
-            .done(function (response) {
-              try {
-                var data = JSON.parse(response);
-                if (data.success) {
-                  onPaginaCarregada(); // Atualizar a página
-                  console.log("Atualização bem-sucedida.");
-                  Swal.fire({
-                    title: "Sucesso!",
-                    text: data.message,
-                    icon: "success",
-                    confirmButtonColor: "#28a745", // Verde
-                    confirmButtonText: "Entendi!",
-                  });
-                } else {
-                  console.error("Erro ao atualizar a folha:", data.message);
-                  Swal.fire({
-                    title: "Erro!",
-                    text: data.message,
-                    icon: "error",
-                    confirmButtonColor: "#d33",
-                    confirmButtonText: "Entendi!",
-                  });
-                }
-              } catch (internalError) {
-                console.error(
-                  "Erro ao processar a resposta do servidor:",
-                  internalError
-                );
-                Swal.fire({
-                  title: "Erro!",
-                  text: "Houve um erro na resposta do servidor.",
-                  icon: "error",
-                  confirmButtonColor: "#d33",
-                  confirmButtonText: "Entendi!",
-                });
-              }
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-              console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-              Swal.fire({
-                title: "Erro!",
-                text: "Erro na chamada AJAX.",
-                icon: "error",
-                confirmButtonColor: "#d33",
-                confirmButtonText: "Entendi!",
-              });
-            });
-        } catch (error) {
-          console.error("Erro ao enviar dados para o servidor:", error);
-        }
-      }
-
-      function updateSheetAJAX(selectedIDs, newSEQ) {
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "updateSheet",
-            selectedIDs: selectedIDs,
-            newSEQ: newSEQ,
-          },
-          url: minhaUrl, // Certifique-se de que 'minhaUrl' é a URL do seu web app do GAS
-        })
-          .done(function (response) {
-            try {
-              var data = JSON.parse(response);
-              console.log(data);
-              onUpdateSuccess(data); // Você pode tratar a resposta como desejar
-            } catch (e) {
-              console.error("Erro ao analisar os dados:", e);
-            }
-          })
-          .fail(function (error) {
-            console.error("Erro ao atualizar a planilha:", error);
-            onUpdateFailure(error); // Se você tiver uma função de tratamento de erro
-          });
-      }
-
-      // Fechando o modal
-      function closeEditModal() {
-        var modal = document.getElementById("myDialog");
-        modal.close(); // Fecha o modal estilo MDL
-      }
-
-      // FILTRA A TABELA
-      function filterTable() {
-        var filter = document.getElementById("filterInput").value;
-
-        table.setFilter([
-          [
-            { field: "dataEntrada", type: "like", value: filter },
-            { field: "pedido", type: "like", value: filter },
-            // Adicione todos os outros campos que você deseja filtrar
-            // ...
-            { field: "orc", type: "like", value: filter },
-          ],
-        ]);
-      }
-
-      function getSelectedRowsDataPDF() {
-        // Pegar todas as linhas selecionadas
-        const allSelectedRows = table.getSelectedRows();
-
-        // Pegar índices das linhas atualmente visíveis
-        const activeRowIndexes = table
-          .getRows("active")
-          .map((row) => row.getIndex());
-
-        // Filtrar as linhas selecionadas que também estão visíveis
-        const visibleSelectedRows = allSelectedRows.filter((row) =>
-          activeRowIndexes.includes(row.getIndex())
-        );
-
-        // Mapear as linhas filtradas para seus dados
-        return visibleSelectedRows.map((row) => {
-          const rowData = row.getData();
-          return {
-            // ... (o resto do mapeamento que você já fez para cada campo)
-          };
-        });
-      }
-
-      function getSelectedRowsData() {
-        // Atualiza a lista de IDs selecionados
-        updateSelectedIDs();
-
-        console.log("generatePDFsForSelectedOperations:", selectedIDs);
-
-        const allSelectedRows = table.getSelectedRows();
-        const activeRowIndexes = table
-          .getRows("active")
-          .map((row) => row.getIndex());
-        const visibleSelectedRows = allSelectedRows.filter((row) =>
-          activeRowIndexes.includes(row.getIndex())
-        );
-
-        return visibleSelectedRows.map((row) => {
-          const rowData = row.getData();
-          return {
-            dataEntrada:
-              rowData.dataEntrada !== undefined &&
-              rowData.dataEntrada !== "31/12/1969" &&
-              rowData.dataEntrada !== "-"
-                ? rowData.dataEntrada
-                : "",
-            Orç:
-              rowData.Orç !== undefined && rowData.Orç !== "-"
-                ? rowData.Orç
-                : "",
-            pedido:
-              rowData.pedido !== undefined && rowData.pedido !== "-"
-                ? rowData.pedido
-                : "",
-            numControle:
-              rowData.numControle !== undefined && rowData.numControle !== "-"
-                ? rowData.numControle
-                : "",
-            SEQ:
-              rowData.SEQ !== undefined && rowData.SEQ !== "-"
-                ? rowData.SEQ
-                : "",
-            cliente:
-              rowData.cliente !== undefined && rowData.cliente !== "-"
-                ? rowData.cliente
-                : "",
-            cod:
-              rowData.cod !== undefined && rowData.cod !== "-"
-                ? rowData.cod
-                : "",
-            qtd:
-              rowData.qtd !== undefined && rowData.qtd !== "-"
-                ? rowData.qtd
-                : "",
-            op:
-              rowData.op !== undefined && rowData.op !== "-" ? rowData.op : "",
-            descricao:
-              rowData.descricao !== undefined && rowData.descricao !== "-"
-                ? rowData.descricao
-                : "",
-            observacao:
-              rowData.observacao !== undefined && rowData.observacao !== "-"
-                ? rowData.observacao
-                : "",
-            nota:
-              rowData.nota !== undefined && rowData.nota !== "-"
-                ? rowData.nota
-                : "",
-            dtProducao:
-              rowData.dtProducao !== undefined && rowData.dtProducao !== "-"
-                ? rowData.dtProducao
-                : "",
-            prazoEntrega:
-              rowData.prazoEntrega !== undefined && rowData.prazoEntrega !== "-"
-                ? rowData.prazoEntrega
-                : "",
-            idNovasTarefas:
-              rowData.idNovasTarefas !== undefined &&
-              rowData.idNovasTarefas !== "-"
-                ? rowData.idNovasTarefas
-                : "",
-            idPCP:
-              rowData.idPCP !== undefined && rowData.idPCP !== "-"
-                ? rowData.idPCP
-                : "",
-          };
-        });
-      }
-
-      function filterUniqueByIdChecklist(data) {
-        const uniqueMap = new Map();
-        data.forEach((entry) => uniqueMap.set(entry.idchecklist, entry));
-        return Array.from(uniqueMap.values());
-      }
-
-      function getSelectedDataFromIDs(allData, selectedIDs) {
-        if (!selectedIDs) {
-          console.error("selectedIDs is undefined or null!");
-          return [];
-        }
-        const idsSet = new Set(selectedIDs); // Para uma pesquisa mais eficiente
-        return allData.filter((item) => idsSet.has(item.idPCP));
-      }
-
-      function showOperationsSummary(selectedData, callback) {
-        const groupedByOperation = selectedData.reduce((acc, row) => {
-          (acc[row.op] = acc[row.op] || []).push(row);
-          return acc;
-        }, {});
-
-        let summaryMessage = "<strong>Resumo:</strong><br><br>";
-        for (let op in groupedByOperation) {
-          const rowsWithEmptySEQ = groupedByOperation[op].filter(
-            (row) => !row.SEQ
-          );
-          summaryMessage += `
-                  <strong>Operação:</strong> ${op}<br>
-                  Total de registros: ${groupedByOperation[op].length}<br>
-                  Registros sem SEQ: ${rowsWithEmptySEQ.length}<br><br>
-              `;
-        }
-
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("Erro na chamada AJAX:", textStatus, errorThrown);
         Swal.fire({
-          title: "Resumo das Operações",
-          html: summaryMessage,
-          icon: "info",
-          confirmButtonColor: "#3085d6",
+          title: "Erro!",
+          text: "Erro na chamada AJAX.",
+          icon: "error",
+          confirmButtonColor: "#d33",
           confirmButtonText: "Entendi!",
-        }).then(() => confirmIncludingEmptySEQ(selectedData, callback));
-      }
-
-      function confirmIncludingEmptySEQ(selectedData, callback) {
-        const rowsWithEmptySEQ = selectedData.filter((row) => !row.SEQ);
-
-        if (!rowsWithEmptySEQ.length) {
-          callback(selectedData);
-          return;
-        }
-
-        Swal.fire({
-          title: "Incluir linhas sem SEQ?",
-          text: "Você deseja imprimir todas as linhas, incluindo aquelas com SEQ vazia?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Sim, incluir tudo",
-          cancelButtonText: "Não, somente com SEQ",
-        }).then((result) => {
-          callback(
-            result.isConfirmed
-              ? selectedData
-              : selectedData.filter((row) => row.SEQ)
-          );
         });
-      }
+      });
+  } catch (error) {
+    console.error("Erro ao enviar dados para o servidor:", error);
+  }
+}
 
-      function generatePDFsForSelectedOperations() {
+function updateSheetAJAX(selectedIDs, newSEQ) {
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "updateSheet",
+      selectedIDs: selectedIDs,
+      newSEQ: newSEQ,
+    },
+    url: minhaUrl, // Certifique-se de que 'minhaUrl' é a URL do seu web app do GAS
+  })
+    .done(function (response) {
+      try {
+        var data = JSON.parse(response);
+        console.log(data);
+        onUpdateSuccess(data); // Você pode tratar a resposta como desejar
+      } catch (e) {
+        console.error("Erro ao analisar os dados:", e);
+      }
+    })
+    .fail(function (error) {
+      console.error("Erro ao atualizar a planilha:", error);
+      onUpdateFailure(error); // Se você tiver uma função de tratamento de erro
+    });
+}
+
+// Fechando o modal
+function closeEditModal() {
+  var modal = document.getElementById("myDialog");
+  modal.close(); // Fecha o modal estilo MDL
+}
+
+// FILTRA A TABELA
+function filterTable() {
+  var filter = document.getElementById("filterInput").value;
+
+  table_checklist.setFilter([
+    [
+      { field: "dataEntrada", type: "like", value: filter },
+      { field: "pedido", type: "like", value: filter },
+      // Adicione todos os outros campos que você deseja filtrar
+      // ...
+      { field: "orc", type: "like", value: filter },
+    ],
+  ]);
+}
+
+function getSelectedRowsDataPDF() {
+  // Pegar todas as linhas selecionadas
+  const allSelectedRows = tabletable_checklist.getSelectedRows();
+
+  // Pegar índices das linhas atualmente visíveis
+  const activeRowIndexes = table_checklist
+    .getRows("active")
+    .map((row) => row.getIndex());
+
+  // Filtrar as linhas selecionadas que também estão visíveis
+  const visibleSelectedRows = allSelectedRows.filter((row) =>
+    activeRowIndexes.includes(row.getIndex())
+  );
+
+  // Mapear as linhas filtradas para seus dados
+  return visibleSelectedRows.map((row) => {
+    const rowData = row.getData();
+    return {
+      // ... (o resto do mapeamento que você já fez para cada campo)
+    };
+  });
+}
+
+function getSelectedRowsData() {
+  // Atualiza a lista de IDs selecionados
+  updateSelectedIDs();
+
+  console.log("generatePDFsForSelectedOperations:", selectedIDs);
+
+  const allSelectedRows = table_checklist.getSelectedRows();
+  const activeRowIndexes = table_checklist
+    .getRows("active")
+    .map((row) => row.getIndex());
+  const visibleSelectedRows = allSelectedRows.filter((row) =>
+    activeRowIndexes.includes(row.getIndex())
+  );
+
+  return visibleSelectedRows.map((row) => {
+    const rowData = row.getData();
+    return {
+      dataEntrada:
+        rowData.dataEntrada !== undefined &&
+        rowData.dataEntrada !== "31/12/1969" &&
+        rowData.dataEntrada !== "-"
+          ? rowData.dataEntrada
+          : "",
+      Orç:
+        rowData.Orç !== undefined && rowData.Orç !== "-"
+          ? rowData.Orç
+          : "",
+      pedido:
+        rowData.pedido !== undefined && rowData.pedido !== "-"
+          ? rowData.pedido
+          : "",
+      numControle:
+        rowData.numControle !== undefined && rowData.numControle !== "-"
+          ? rowData.numControle
+          : "",
+      SEQ:
+        rowData.SEQ !== undefined && rowData.SEQ !== "-"
+          ? rowData.SEQ
+          : "",
+      cliente:
+        rowData.cliente !== undefined && rowData.cliente !== "-"
+          ? rowData.cliente
+          : "",
+      cod:
+        rowData.cod !== undefined && rowData.cod !== "-"
+          ? rowData.cod
+          : "",
+      qtd:
+        rowData.qtd !== undefined && rowData.qtd !== "-"
+          ? rowData.qtd
+          : "",
+      op:
+        rowData.op !== undefined && rowData.op !== "-" ? rowData.op : "",
+      descricao:
+        rowData.descricao !== undefined && rowData.descricao !== "-"
+          ? rowData.descricao
+          : "",
+      observacao:
+        rowData.observacao !== undefined && rowData.observacao !== "-"
+          ? rowData.observacao
+          : "",
+      nota:
+        rowData.nota !== undefined && rowData.nota !== "-"
+          ? rowData.nota
+          : "",
+      dtProducao:
+        rowData.dtProducao !== undefined && rowData.dtProducao !== "-"
+          ? rowData.dtProducao
+          : "",
+      prazoEntrega:
+        rowData.prazoEntrega !== undefined && rowData.prazoEntrega !== "-"
+          ? rowData.prazoEntrega
+          : "",
+      idNovasTarefas:
+        rowData.idNovasTarefas !== undefined &&
+        rowData.idNovasTarefas !== "-"
+          ? rowData.idNovasTarefas
+          : "",
+      idPCP:
+        rowData.idPCP !== undefined && rowData.idPCP !== "-"
+          ? rowData.idPCP
+          : "",
+    };
+  });
+}
+
+function filterUniqueByIdChecklist(data) {
+  const uniqueMap = new Map();
+  data.forEach((entry) => uniqueMap.set(entry.idchecklist, entry));
+  return Array.from(uniqueMap.values());
+}
+
+function getSelectedDataFromIDs(allData, selectedIDs) {
+  if (!selectedIDs) {
+    console.error("selectedIDs is undefined or null!");
+    return [];
+  }
+  const idsSet = new Set(selectedIDs); // Para uma pesquisa mais eficiente
+  return allData.filter((item) => idsSet.has(item.idPCP));
+}
+
+function showOperationsSummary(selectedData, callback) {
+  const groupedByOperation = selectedData.reduce((acc, row) => {
+    (acc[row.op] = acc[row.op] || []).push(row);
+    return acc;
+  }, {});
+
+  let summaryMessage = "<strong>Resumo:</strong><br><br>";
+  for (let op in groupedByOperation) {
+    const rowsWithEmptySEQ = groupedByOperation[op].filter(
+      (row) => !row.SEQ
+    );
+    summaryMessage += `
+            <strong>Operação:</strong> ${op}<br>
+            Total de registros: ${groupedByOperation[op].length}<br>
+            Registros sem SEQ: ${rowsWithEmptySEQ.length}<br><br>
+        `;
+  }
+
+  Swal.fire({
+    title: "Resumo das Operações",
+    html: summaryMessage,
+    icon: "info",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Entendi!",
+  }).then(() => confirmIncludingEmptySEQ(selectedData, callback));
+}
+
+function confirmIncludingEmptySEQ(selectedData, callback) {
+  const rowsWithEmptySEQ = selectedData.filter((row) => !row.SEQ);
+
+  if (!rowsWithEmptySEQ.length) {
+    callback(selectedData);
+    return;
+  }
+
+  Swal.fire({
+    title: "Incluir linhas sem SEQ?",
+    text: "Você deseja imprimir todas as linhas, incluindo aquelas com SEQ vazia?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sim, incluir tudo",
+    cancelButtonText: "Não, somente com SEQ",
+  }).then((result) => {
+    callback(
+      result.isConfirmed
+        ? selectedData
+        : selectedData.filter((row) => row.SEQ)
+    );
+  });
+}
+
+function generatePDFsForSelectedOperations() {
         const selectedData = getSelectedRowsData();
         if (!selectedData.length) {
           showWarning(
@@ -1011,1397 +1057,1394 @@ var minhaUrl =
         });
       }
 
-      function showSuccessAlert(message) {
-        Swal.fire({
-          title: "Sucesso!",
-          text: message,
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Entendi!",
-        });
-      }
+function showSuccessAlert(message) {
+  Swal.fire({
+    title: "Sucesso!",
+    text: message,
+    icon: "success",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Entendi!",
+  });
+}
 
-      function responseHandler(data) {
-        console.log(data);
-        if (data.status === "success") {
-          showSuccessAlert("Os PDFs estão prontos para ser impressos!");
-          onSuccessGeneratePDFs(data);
-          notifyCompletion(); // Notifique o usuário aqui
-        } else {
-          console.error("Erro: Resposta inesperada do servidor.");
-          handleError("Erro: Resposta inesperada do servidor.");
+function responseHandler(data) {
+  console.log(data);
+  if (data.status === "success") {
+    showSuccessAlert("Os PDFs estão prontos para ser impressos!");
+    onSuccessGeneratePDFs(data);
+    notifyCompletion(); // Notifique o usuário aqui
+  } else {
+    console.error("Erro: Resposta inesperada do servidor.");
+    handleError("Erro: Resposta inesperada do servidor.");
+  }
+}
+
+function errorHandler(jqXHR, textStatus, errorThrown) {
+  handleError("Erro ao gerar os PDFs.");
+  console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+  console.log(jqXHR.responseText);
+}
+
+function showWarning(message) {
+  Swal.fire({
+    title: "Atenção!",
+    html: `Por favor, selecione pelo menos uma linha para gerar o PDF. <strong style='font-size: 20px;'>✅</strong>`,
+    icon: "warning",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Entendi!",
+  });
+}
+
+function handleError(message) {
+  Swal.fire({
+    title: "Erro!",
+    text: message,
+    icon: "error",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Entendi!",
+  });
+}
+
+// ALETAR DE ESPERAR
+function showLoadingAlert(message) {
+  Swal.fire({
+    title: message,
+    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
+    showConfirmButton: false,
+    allowOutsideClick: false,
+  });
+}
+
+function hideLoadingAlert() {
+  Swal.close();
+}
+
+function onSuccessGeneratePDFs(data) {
+
+  console.log("Resposta recebida:", data);
+  console.log("Tipo da resposta:", typeof data);
+
+  const urlsArray = data.pdfLinks;
+
+  // Verificação se urlsArray é um array e possui algum conteúdo
+  if (!urlsArray || !Array.isArray(urlsArray) || !urlsArray.length) {
+    console.error("Não foi possível extrair URLs da resposta!");
+    alert("Erro: Resposta inesperada do servidor.");
+    return;
+  }
+
+  const linksContainer = document.getElementById("linksContainer");
+  if (!linksContainer) {
+    console.error("Elemento 'linksContainer' não encontrado!");
+    return;
+  }
+
+  let row;
+
+  urlsArray.forEach((currentURL, index) => {
+    // Cria uma nova linha para cada 2 links
+    if (index % 2 === 0) {
+      row = document.createElement("div");
+      row.className = "row mt-2";
+      linksContainer.appendChild(row);
+    }
+
+    const col = document.createElement("div");
+    col.className = "col-md-6";
+
+    const linkElem = document.createElement("a");
+    linkElem.href = currentURL;
+    linkElem.target = "_blank";
+    linkElem.innerHTML = '<i class="fas fa-file-pdf"></i> Abrir PDF';
+    linkElem.className = "pdfLink d-block mb-2";
+
+    col.appendChild(linkElem);
+    row.appendChild(col);
+  });
+
+  // Após mostrar os links do PDF, faça a segunda chamada AJAX
+ callGeneratePDFsForOperations2(selectedItems);
+}
+
+// PDF POR OPERAÇÃO VARIOS
+function gerarPDF(data, operacao) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // Aqui, adicione o código para inserir os dados no PDF...
+  // Por exemplo:
+  doc.text("Dados para a operação: " + operacao, 10, 10);
+
+  // Adicione mais detalhes conforme necessário
+
+  return doc.output("blob");
+}
+
+// PDF POR OPERAÇÃO VARIOS
+function imprimirPDF(pdfLinksFromServer) {
+  const linksContainer = document.getElementById("pdfLinksContainer");
+
+  if (!linksContainer) {
+    console.error(
+      "Erro: O elemento #pdfLinksContainer não foi encontrado!"
+    );
+    return;
+  }
+
+  linksContainer.innerHTML = "";
+
+  let rowDiv;
+
+  pdfLinksFromServer.forEach((pdfLink, index) => {
+    if (index % 3 === 0) {
+      rowDiv = document.createElement("div");
+      rowDiv.className = "pdf-row";
+      linksContainer.appendChild(rowDiv);
+    }
+
+    const link = document.createElement("a");
+    link.href = pdfLink;
+    link.target = "_blank";
+    link.innerHTML =
+      '<i class="fas fa-file-pdf"></i> Download PDF #' + (index + 1);
+    link.className = "pdf-link";
+
+    rowDiv.appendChild(link);
+  });
+
+  const pdfLinks = document.querySelectorAll(".pdf-link");
+
+  pdfLinks.forEach((link) => {
+    link.addEventListener("click", function () {
+      this.style.display = "none";
+      let allHidden = true;
+      pdfLinks.forEach((checkLink) => {
+        if (checkLink.style.display !== "none") {
+          allHidden = false;
         }
+      });
+
+      if (allHidden) {
+        setTimeout(function () {
+          window.location.reload();
+        }, 5000);
       }
+    });
+  });
+}
 
-      function errorHandler(jqXHR, textStatus, errorThrown) {
-        handleError("Erro ao gerar os PDFs.");
-        console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-        console.log(jqXHR.responseText);
-      }
+function notifyCompletion() {
+  Swal.fire({
+    title: "Concluído!",
+    text: "O PDF referente ao Checklist está pronto para impressão.",
+    icon: "success",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Entendi!",
+  });
+}
 
-      function showWarning(message) {
-        Swal.fire({
-          title: "Atenção!",
-          html: `Por favor, selecione pelo menos uma linha para gerar o PDF. <strong style='font-size: 20px;'>✅</strong>`,
-          icon: "warning",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Entendi!",
-        });
-      }
+function callGeneratePDFsForOperations2(finalData) {
 
-      function handleError(message) {
-        Swal.fire({
-          title: "Erro!",
-          text: message,
-          icon: "error",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Entendi!",
-        });
-      }
+const idPCPData = selectedItems.map(item => item.idPCP);
 
-      // ALETAR DE ESPERAR
-      function showLoadingAlert(message) {
-        Swal.fire({
-          title: message,
-          html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-        });
-      }
+console.log("Dados enviados para a segunda chamada:", finalData);
+$.ajax({
+  type: "POST",
+  data: {
+      qualFuncao: "generatePDFsForOperations2",
+      selectedItems: JSON.stringify( idPCPData),
+  },
+  url: minhaUrl,
+  dataType: "json",
+})
+.done(function(response) {
+  // Você pode tratar a resposta da segunda chamada aqui, se necessário
+  console.log("Resposta da segunda chamada:", response);
+})
+.fail(function() {
+  console.error("Erro ao fazer a segunda chamada para generatePDFsForOperations2");
+});
+}
 
-      function hideLoadingAlert() {
-        Swal.close();
-      }
+// -------------------
+// Funções de AJAX
+// -------------------
 
-      function onSuccessGeneratePDFs(data) {
-
-        console.log("Resposta recebida:", data);
-        console.log("Tipo da resposta:", typeof data);
-
-        const urlsArray = data.pdfLinks;
-
-        // Verificação se urlsArray é um array e possui algum conteúdo
-        if (!urlsArray || !Array.isArray(urlsArray) || !urlsArray.length) {
-          console.error("Não foi possível extrair URLs da resposta!");
-          alert("Erro: Resposta inesperada do servidor.");
-          return;
-        }
-
-        const linksContainer = document.getElementById("linksContainer");
-        if (!linksContainer) {
-          console.error("Elemento 'linksContainer' não encontrado!");
-          return;
-        }
-
-        let row;
-
-        urlsArray.forEach((currentURL, index) => {
-          // Cria uma nova linha para cada 2 links
-          if (index % 2 === 0) {
-            row = document.createElement("div");
-            row.className = "row mt-2";
-            linksContainer.appendChild(row);
-          }
-
-          const col = document.createElement("div");
-          col.className = "col-md-6";
-
-          const linkElem = document.createElement("a");
-          linkElem.href = currentURL;
-          linkElem.target = "_blank";
-          linkElem.innerHTML = '<i class="fas fa-file-pdf"></i> Abrir PDF';
-          linkElem.className = "pdfLink d-block mb-2";
-
-          col.appendChild(linkElem);
-          row.appendChild(col);
-        });
-
-        // Após mostrar os links do PDF, faça a segunda chamada AJAX
-       callGeneratePDFsForOperations2(selectedItems);
-      }
-
-      // PDF POR OPERAÇÃO VARIOS
-      function gerarPDF(data, operacao) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Aqui, adicione o código para inserir os dados no PDF...
-        // Por exemplo:
-        doc.text("Dados para a operação: " + operacao, 10, 10);
-
-        // Adicione mais detalhes conforme necessário
-
-        return doc.output("blob");
-      }
-
-      // PDF POR OPERAÇÃO VARIOS
-      function imprimirPDF(pdfLinksFromServer) {
-        const linksContainer = document.getElementById("pdfLinksContainer");
-
-        if (!linksContainer) {
-          console.error(
-            "Erro: O elemento #pdfLinksContainer não foi encontrado!"
-          );
-          return;
-        }
-
-        linksContainer.innerHTML = "";
-
-        let rowDiv;
-
-        pdfLinksFromServer.forEach((pdfLink, index) => {
-          if (index % 3 === 0) {
-            rowDiv = document.createElement("div");
-            rowDiv.className = "pdf-row";
-            linksContainer.appendChild(rowDiv);
-          }
-
-          const link = document.createElement("a");
-          link.href = pdfLink;
-          link.target = "_blank";
-          link.innerHTML =
-            '<i class="fas fa-file-pdf"></i> Download PDF #' + (index + 1);
-          link.className = "pdf-link";
-
-          rowDiv.appendChild(link);
-        });
-
-        const pdfLinks = document.querySelectorAll(".pdf-link");
-
-        pdfLinks.forEach((link) => {
-          link.addEventListener("click", function () {
-            this.style.display = "none";
-            let allHidden = true;
-            pdfLinks.forEach((checkLink) => {
-              if (checkLink.style.display !== "none") {
-                allHidden = false;
-              }
-            });
-
-            if (allHidden) {
-              setTimeout(function () {
-                window.location.reload();
-              }, 5000);
-            }
-          });
-        });
-      }
-
-      function notifyCompletion() {
-        Swal.fire({
-          title: "Concluído!",
-          text: "O PDF referente ao Checklist está pronto para impressão.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Entendi!",
-        });
-      }
-
-    function callGeneratePDFsForOperations2(finalData) {
-      
-    const idPCPData = selectedItems.map(item => item.idPCP);
-
-    console.log("Dados enviados para a segunda chamada:", finalData);
+// CAPTURA OS DADOS DOS INPUTS
+function coletarDadosDaInterface() {
+  var numeroControle = document.getElementById(
+    "numeroControle"
+    ).value;
+    
+    var all_data = {
+      numeroControle: numeroControle,
+    };
+    console.log(all_data)
     $.ajax({
-        type: "POST",
-        data: {
-            qualFuncao: "generatePDFsForOperations2",
-            selectedItems: JSON.stringify( idPCPData),
-        },
-        url: minhaUrl,
-        dataType: "json",
+      url: my_url() + "consultar_numero_controle_Checklist",
+      data: JSON.stringify(all_data),
+      contentType: 'application/json',
+      type: 'POST',
+    }).done(function (data) {
+  try {
+      let dados = data.retorno;
+      console.log("Dados recebidos do servidor:", dados);
+      updateTableData(data);
+  } catch (e) {
+      console.error("Erro ao analisar os dados:", e);
+  }
+})
+.fail(function (jqXHR, textStatus, errorThrown) {
+   console.error("Erro na solicitação AJAX: " + errorThrown);
+   console.error("Status da solicitação: " + textStatus);
+   mostrarErro();
+});
+}
+
+// Função que será chamada quando o botão "Gerar Relatórios" for pressionado
+function iniciarProcesso() {
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "main",
+    },
+    url: minhaUrl,
+    success: function (data) {
+      console.log("Dados recebidos:", data);
+      updateTableData(data);
+    },
+    error: function (err) {
+      console.error("Erro:", err);
+    },
+  });
+}
+
+// REALIZAR O FILTRO COM AJAX
+function populainpuntControlNumbers() {
+
+  var dateFilterDropdownElement = document.getElementById("dateFilterDropdown");
+
+  if (dateFilterDropdownElement) {
+    var dateFilterDropdown = dateFilterDropdownElement.value;
+    // Restante do seu código
+  } else {
+    console.error("Elemento 'dateFilterDropdown' não encontrado.");
+  }
+
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "matchedValues",
+      filtro: dateFilterDropdown,
+    },
+    url: minhaUrl,
+  }).done(function (data) {
+    // RESULTADO FRONT
+    try {
+      var data = JSON.parse(data);
+    } catch (error) {
+      console.error("Erro ao analisar JSON:", error);
+    }
+  }).fail(function (jqXHR, textStatus, errorThrown) {
+    console.error("Erro na requisição AJAX:", textStatus, errorThrown);
+  });
+}
+
+function myEditor(cell, onRendered, success, cancel) {
+  var editor = document.createElement("input");
+
+  // Se o valor da célula for "undefined", defina o valor do editor como vazio.
+  // Caso contrário, use o valor atual da célula.
+  editor.value = cell.getValue() === "undefined" ? "" : cell.getValue();
+
+  onRendered(function () {
+    editor.focus();
+    editor.style.width = "100%";
+  });
+
+  // Quando o editor perder o foco (quando o usuário clica fora dele),
+  // retorne o valor do editor para a célula.
+  editor.addEventListener("blur", function (e) {
+    success(editor.value);
+  });
+
+  return editor;
+}
+
+// CONTINUAR ENVIANDO DADOS PARA CHAT A PARTE DAQUI 28.08
+function popularTabela(data) {
+  // Converte o array 2D em um array de objetos para o Tabulator
+  const formattedData = data.map((row) => {
+    return {
+      dataEntrada: row[0],
+      numControle: row[1],
+      cliente: row[2],
+      descricao: row[3],
+      nota: row[4],
+      idPCP: row[5],
+      referenciaProducao: row[6],
+      qtd: row[7],
+      op: row[8],
+      cod: row[9],
+      observacao: row[row.length - 1],
+    };
+  });
+
+  table_checklist.setData(formattedData);
+}
+
+function filterUniqueByIdPCP(data) {
+  const uniqueEntries = {};
+
+  data.forEach((entry) => {
+    if (!uniqueEntries[entry.idPCP]) {
+      uniqueEntries[entry.idPCP] = entry;
+    }
+  });
+
+  return Object.values(uniqueEntries);
+}
+
+if (table_checklist && typeof table_checklist.setSort === 'function') {
+  table_checklist.setSort([
+    { column: "dtProducao", dir: "asc" },
+    { column: "SEQ", dir: "asc" },
+    { column: "OP", dir: "asc" }
+  ]);
+} else {
+  console.error("O objeto table_checklist não está corretamente inicializado ou a função setSort não é suportada.");
+}
+
+
+// CLASSIFICAÇÃO DA TABELA
+// Função para comparar a coluna Dt Produção
+function compareDtProducao(a, b) {
+  const cellA = a.children[12].textContent.trim();
+  const cellB = b.children[12].textContent.trim();
+
+  // Colocar "-" primeiro
+  if (cellA === "-" && cellB !== "-") return -1;
+  if (cellA !== "-" && cellB === "-") return 1;
+
+  // Se ambas são "-", não há diferença
+  if (cellA === "-" && cellB === "-") return 0;
+
+  const dateA = new Date(cellA);
+  const dateB = new Date(cellB);
+
+  return dateA - dateB;
+}
+
+function customSEQSorter(a, b) {
+  //function compareSeq(a, b) {
+  // Se ambos os valores são vazios ou "undefined", considere-os iguais
+  if ((!a && !b) || (a === "undefined" && b === "undefined")) return 0;
+
+  // Se 'a' é vazio ou "undefined", 'a' é considerado maior (para que fique no final)
+  if (!a || a === "undefined") return 1;
+
+  // Se 'b' é vazio ou "undefined", 'b' é considerado maior (para que fique no final)
+  if (!b || b === "undefined") return -1;
+
+  // Finalmente, retorne a comparação dos dois números
+  return parseInt(a, 10) - parseInt(b, 10);
+}
+
+function compareOp(a, b) {
+  const cellA = a.children[8].textContent.trim();
+  const cellB = b.children[8].textContent.trim();
+
+  // Se forem iguais, retorne 0
+  if (cellA === cellB) return 0;
+
+  // Compare com base na ordem definida em OPERATIONS_ORDER
+  const indexA = OPERATIONS_ORDER.indexOf(cellA);
+  const indexB = OPERATIONS_ORDER.indexOf(cellB);
+
+  // Caso algum valor não seja encontrado na lista, considere-o como de menor prioridade
+  if (indexA === -1) return 1;
+  if (indexB === -1) return -1;
+
+  return indexA - indexB;
+}
+
+// FINAL DA CLASSIFICAÇÃO DA TABELA
+function populateFilterDropdown(dropdownId, values) {
+  const dropdown = document.getElementById(dropdownId);
+  if (dropdown) {
+    dropdown.innerHTML = "";
+    values.forEach((value) => {
+      let option = document.createElement("option");
+      option.value = value;
+      option.textContent = value;
+      dropdown.appendChild(option);
+    });
+  } else {
+    console.error("Dropdown não encontrado:", dropdownId);
+  }
+}
+
+function sendDataToServer(id, action) {
+  $.ajax({
+    type: "POST",
+    data: {
+      url: minhaUrl,
+      qualFuncao: "getDadosPorNumeroControles",
+      id: id,
+      action: action,
+    },
+  })
+    .done(function (data) {
+      // RESULTADO FRONT
+      try {
+        var data = JSON.parse(data);
+      } catch (error) {
+        console.error("Erro ao analisar JSON:", error);
+      }
+      console.log("Depois da função coletarDadosDaInterface");
     })
-    .done(function(response) {
-        // Você pode tratar a resposta da segunda chamada aqui, se necessário
-        console.log("Resposta da segunda chamada:", response);
-    })
-    .fail(function() {
-        console.error("Erro ao fazer a segunda chamada para generatePDFsForOperations2");
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na chamada AJAX:", textStatus, errorThrown);
     });
 }
 
-      // -------------------
-      // Funções de AJAX
-      // -------------------
+// CHAMADO LADO DO GAS
+function fetchDataAndPopulate() {
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "getDataForTable",
+    },
+    url: minhaUrl,
+    success: function (responseData) {
+      try {
+        var data = JSON.parse(responseData);
+      } catch (e) {
+        console.error("Erro ao analisar a resposta JSON:", e);
+      }
+    },
+    error: function (err) {
+      console.error(err);
+    },
+  });
+}
 
-      // CAPTURA OS DADOS DOS INPUTS
-      function coletarDadosDaInterface() {
-        var numeroControle = document.getElementById("numeroControle").value;
+// SALVA OS DADOS INPUNTS
+function salvarDadosNaFolha() {
+  var dadosInterface = coletarDadosDaInterface();
 
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "getDadosPorNumeroControles",
-            numeroControle: numeroControle,
-          },
-          url: minhaUrl,
-        }).done(function (responseData) {
-          // RESULTADO FRONT
-          try {
-            var data = JSON.parse(responseData);
-            console.log("Dados antes da transformação:", data);
-            updateTableData(data);
-          } catch (error) {
-            console.error("Erro ao analisar JSON:", error);
-          }
-          console.log("Depois da função coletarDadosDaInterface");
+  console.log(dadosInterface);
+
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "salvarDadosProgramacaoPCP",
+      dados: dadosInterface,
+    },
+    url: minhaUrl,
+    success: function () {
+      alert("Dados salvos com sucesso!");
+    },
+    error: function (err) {
+      alert("Erro ao salvar dados: " + err.statusText);
+    },
+  });
+}
+
+// Callbacks para lidar com a resposta do GAS
+function onUpdateSuccess(response) {
+  alert("Atualizado com sucesso!");
+  // Aqui, você pode adicionar código para atualizar sua tabela no lado do cliente se necessário.
+}
+
+function onUpdateFailure(error) {
+  alert("Erro ao atualizar: " + error);
+}
+
+function closeEditModal() {
+  var modal = document.getElementById("editModal");
+  modal.style.display = "none";
+}
+
+// DATA
+function formatDate(dateObj) {
+  var day = String(dateObj.getDate()).padStart(2, "0");
+  var month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Os meses são de 0 a 11, então adicionamos 1
+  var year = dateObj.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+function formatDateProducao(inputDate) {
+  const parts = inputDate.split("-");
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function clientTestFunction() {
+  var testNumeroControle = "0009-23"; // Use o mesmo valor que funcionou no teste do servidor
+
+  console.log("Testando com número de controle:", testNumeroControle);
+
+  google.script.run
+    .withSuccessHandler(function (data) {
+      console.log("Data recebida:", data);
+    })
+    .withFailureHandler(function (error) {
+      console.error("Erro:", JSON.stringify(error));
+    })
+    .getDadosPorNumeroControle(testNumeroControle);
+}
+
+function openPDF(url) {
+  window.open(url, "_blank");
+}
+
+function generatePDF(dataUsuario) {
+  google.script.run
+    .withSuccessHandler(function (data) {
+      if (data.link) {
+        window.open(data.link, "_blank");
+      } else if (data.error) {
+        alert("Erro: " + data.error);
+      }
+    })
+    .withFailureHandler(function (error) {
+      console.error("Erro ao fazer requisição:", error);
+    })
+    .generatePDF(dataUsuario);
+}
+
+function generateMultiplePDFs(operations) {
+  google.script.run
+    .withSuccessHandler(function (data) {
+      if (data.links && Array.isArray(data.links)) {
+        data.links.forEach((link) => {
+          window.open(link, "_blank");
         });
+      } else if (data.error) {
+        alert("Erro: " + data.error);
       }
-
-
-
-      // Função que será chamada quando o botão "Gerar Relatórios" for pressionado
-      function iniciarProcesso() {
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "main",
-          },
-          url: minhaUrl,
-          success: function (data) {
-            console.log("Dados recebidos:", data);
-            updateTableData(data);
-          },
-          error: function (err) {
-            console.error("Erro:", err);
-          },
-        });
-      }
-
-      // REALIZAR O FILTRO COM AJAX
-      function populainpuntControlNumbers() {
-
-        var dateFilterDropdownElement = document.getElementById("dateFilterDropdown");
-
-        if (dateFilterDropdownElement) {
-          var dateFilterDropdown = dateFilterDropdownElement.value;
-          // Restante do seu código
-        } else {
-          console.error("Elemento 'dateFilterDropdown' não encontrado.");
-        }
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "matchedValues",
-            filtro: dateFilterDropdown,
-          },
-          url: minhaUrl,
-        }).done(function (data) {
-          // RESULTADO FRONT
-          try {
-            var data = JSON.parse(data);
-          } catch (error) {
-            console.error("Erro ao analisar JSON:", error);
-          }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-          console.error("Erro na requisição AJAX:", textStatus, errorThrown);
-        });
-      }
-
-      function myEditor(cell, onRendered, success, cancel) {
-        var editor = document.createElement("input");
-
-        // Se o valor da célula for "undefined", defina o valor do editor como vazio.
-        // Caso contrário, use o valor atual da célula.
-        editor.value = cell.getValue() === "undefined" ? "" : cell.getValue();
-
-        onRendered(function () {
-          editor.focus();
-          editor.style.width = "100%";
-        });
-
-        // Quando o editor perder o foco (quando o usuário clica fora dele),
-        // retorne o valor do editor para a célula.
-        editor.addEventListener("blur", function (e) {
-          success(editor.value);
-        });
-
-        return editor;
-      }
-
-      // CONTINUAR ENVIANDO DADOS PARA CHAT A PARTE DAQUI 28.08
-      function popularTabela(data) {
-        // Converte o array 2D em um array de objetos para o Tabulator
-        const formattedData = data.map((row) => {
-          return {
-            dataEntrada: row[0],
-            numControle: row[1],
-            cliente: row[2],
-            descricao: row[3],
-            nota: row[4],
-            idPCP: row[5],
-            referenciaProducao: row[6],
-            qtd: row[7],
-            op: row[8],
-            cod: row[9],
-            observacao: row[row.length - 1],
-          };
-        });
-
-        table.setData(formattedData);
-      }
-
-      function filterUniqueByIdPCP(data) {
-        const uniqueEntries = {};
-
-        data.forEach((entry) => {
-          if (!uniqueEntries[entry.idPCP]) {
-            uniqueEntries[entry.idPCP] = entry;
-          }
-        });
-
-        return Object.values(uniqueEntries);
-      }
-
-      function getSelectedRowIds() {
-        // Limpe a lista de IDs selecionados
-        selectedIDs = [];
-        const selectedRows = table.getSelectedRows();
-        selectedIDs = selectedRows.map((row) => row.getData().idPCP);
-        return selectedIDs;
-      }
-
-      table.setSort([
-        { column: "dtProducao", dir: "asc" }, // Primeiro ordena por dtProducao
-        { column: "SEQ", dir: "asc" }, // Depois por seq
-        { column: "OP", dir: "asc" }, // E finalmente por op
-      ]);
-
-      // CLASSIFICAÇÃO DA TABELA
-      // Função para comparar a coluna Dt Produção
-      function compareDtProducao(a, b) {
-        const cellA = a.children[12].textContent.trim();
-        const cellB = b.children[12].textContent.trim();
-
-        // Colocar "-" primeiro
-        if (cellA === "-" && cellB !== "-") return -1;
-        if (cellA !== "-" && cellB === "-") return 1;
-
-        // Se ambas são "-", não há diferença
-        if (cellA === "-" && cellB === "-") return 0;
-
-        const dateA = new Date(cellA);
-        const dateB = new Date(cellB);
-
-        return dateA - dateB;
-      }
-
-      function customSEQSorter(a, b) {
-        //function compareSeq(a, b) {
-        // Se ambos os valores são vazios ou "undefined", considere-os iguais
-        if ((!a && !b) || (a === "undefined" && b === "undefined")) return 0;
-
-        // Se 'a' é vazio ou "undefined", 'a' é considerado maior (para que fique no final)
-        if (!a || a === "undefined") return 1;
-
-        // Se 'b' é vazio ou "undefined", 'b' é considerado maior (para que fique no final)
-        if (!b || b === "undefined") return -1;
-
-        // Finalmente, retorne a comparação dos dois números
-        return parseInt(a, 10) - parseInt(b, 10);
-
-        //const cellA = a.children[4].textContent.trim();
-        //const cellB = b.children[4].textContent.trim();
-
-        // Verificar se são números válidos
-        //const isNumberA = !isNaN(cellA) && cellA !== "";
-        //const isNumberB = !isNaN(cellB) && cellB !== "";
-
-        /*
-          // Colocar vazio no final
-          if (cellA === "" && cellB !== "") return 1;
-          if (cellA !== "" && cellB === "") return -1;
-          if (cellA === "" && cellB === "") return 0;
-
-          // Se ambos são números, compara os números
-          if (isNumberA && isNumberB) {
-              return parseInt(cellA, 10) - parseInt(cellB, 10);
-          }
-
-          // Se A é um número e B não é, A vem primeiro
-          if (isNumberA && !isNumberB) return -1;
-
-          // Se B é um número e A não é, B vem primeiro
-          if (!isNumberA && isNumberB) return 1;
-
-          // Se nenhum deles é um número, considera-os como iguais
-          return 0;
-
-             */
-      }
-
-      // VARIVAVEL PARA CLASSIFICAR A TIPO DE OPERAÇÃO
-      const OPERATIONS_ORDER = [
-        "DES",
-        "COM",
-        "CRO",
-        "USI",
-        "DEC",
-        "FRE",
-        "SOL",
-        "BRU",
-        "PER",
-        "TES",
-        "MON",
-      ];
-
-      function compareOp(a, b) {
-        const cellA = a.children[8].textContent.trim();
-        const cellB = b.children[8].textContent.trim();
-
-        // Se forem iguais, retorne 0
-        if (cellA === cellB) return 0;
-
-        // Compare com base na ordem definida em OPERATIONS_ORDER
-        const indexA = OPERATIONS_ORDER.indexOf(cellA);
-        const indexB = OPERATIONS_ORDER.indexOf(cellB);
-
-        // Caso algum valor não seja encontrado na lista, considere-o como de menor prioridade
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-
-        return indexA - indexB;
-      }
-
-      // FINAL DA CLASSIFICAÇÃO DA TABELA
-      function populateFilterDropdown(dropdownId, values) {
-        const dropdown = document.getElementById(dropdownId);
-        if (dropdown) {
-          dropdown.innerHTML = "";
-          values.forEach((value) => {
-            let option = document.createElement("option");
-            option.value = value;
-            option.textContent = value;
-            dropdown.appendChild(option);
-          });
-        } else {
-          console.error("Dropdown não encontrado:", dropdownId);
-        }
-      }
-
-      function sendDataToServer(id, action) {
-        $.ajax({
-          type: "POST",
-          data: {
-            url: minhaUrl,
-            qualFuncao: "getDadosPorNumeroControles",
-            id: id,
-            action: action,
-          },
-        })
-          .done(function (data) {
-            // RESULTADO FRONT
-            try {
-              var data = JSON.parse(data);
-            } catch (error) {
-              console.error("Erro ao analisar JSON:", error);
-            }
-            console.log("Depois da função coletarDadosDaInterface");
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-          });
-      }
-
-      // CHAMADO LADO DO GAS
-      function fetchDataAndPopulate() {
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "getDataForTable",
-          },
-          url: minhaUrl,
-          success: function (responseData) {
-            try {
-              var data = JSON.parse(responseData);
-            } catch (e) {
-              console.error("Erro ao analisar a resposta JSON:", e);
-            }
-          },
-          error: function (err) {
-            console.error(err);
-          },
-        });
-      }
-
-      // SALVA OS DADOS INPUNTS
-      function salvarDadosNaFolha() {
-        var dadosInterface = coletarDadosDaInterface();
-
-        console.log(dadosInterface);
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "salvarDadosProgramacaoPCP",
-            dados: dadosInterface,
-          },
-          url: minhaUrl,
-          success: function () {
-            alert("Dados salvos com sucesso!");
-          },
-          error: function (err) {
-            alert("Erro ao salvar dados: " + err.statusText);
-          },
-        });
-      }
-
-      // Callbacks para lidar com a resposta do GAS
-      function onUpdateSuccess(response) {
-        alert("Atualizado com sucesso!");
-        // Aqui, você pode adicionar código para atualizar sua tabela no lado do cliente se necessário.
-      }
-
-      function onUpdateFailure(error) {
-        alert("Erro ao atualizar: " + error);
-      }
-
-      function closeEditModal() {
-        var modal = document.getElementById("editModal");
-        modal.style.display = "none";
-      }
-
-      // DATA
-      function formatDate(dateObj) {
-        var day = String(dateObj.getDate()).padStart(2, "0");
-        var month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Os meses são de 0 a 11, então adicionamos 1
-        var year = dateObj.getFullYear();
-
-        return `${day}/${month}/${year}`;
-      }
-
-      function formatDateProducao(inputDate) {
-        const parts = inputDate.split("-");
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
-      }
-
-      function clientTestFunction() {
-        var testNumeroControle = "0009-23"; // Use o mesmo valor que funcionou no teste do servidor
-
-        console.log("Testando com número de controle:", testNumeroControle);
-
-        google.script.run
-          .withSuccessHandler(function (data) {
-            console.log("Data recebida:", data);
-          })
-          .withFailureHandler(function (error) {
-            console.error("Erro:", JSON.stringify(error));
-          })
-          .getDadosPorNumeroControle(testNumeroControle);
-      }
-
-      function openPDF(url) {
-        window.open(url, "_blank");
-      }
-
-      function generatePDF(dataUsuario) {
-        google.script.run
-          .withSuccessHandler(function (data) {
-            if (data.link) {
-              window.open(data.link, "_blank");
-            } else if (data.error) {
-              alert("Erro: " + data.error);
-            }
-          })
-          .withFailureHandler(function (error) {
-            console.error("Erro ao fazer requisição:", error);
-          })
-          .generatePDF(dataUsuario);
-      }
-
-      function generateMultiplePDFs(operations) {
-        google.script.run
-          .withSuccessHandler(function (data) {
-            if (data.links && Array.isArray(data.links)) {
-              data.links.forEach((link) => {
-                window.open(link, "_blank");
-              });
-            } else if (data.error) {
-              alert("Erro: " + data.error);
-            }
-          })
-          .withFailureHandler(function (error) {
-            console.error("Erro ao fazer requisição:", error);
-          })
-          .generateMultiplePDFs(operations);
-      }
-
-      // AMOSTRAR OS PDF GERADOS LADO DO CLIENTE
-      function extractURLs(text) {
-        const regex = /(https:\/\/drive\.google\.com\/[^, ]+)/g;
-        const urls = [];
-        let match;
-
-        while ((match = regex.exec(text))) {
-          urls.push(match[1]);
-        }
-
-        return urls;
-      }
-
-      // ---------- Funções de inicialização ----------
-
-      function onPaginaCarregada() {
-        fetchAndPopulateControlNumbers(); // Iniciar numero controle
-        buscarDadosIniciaisConferenciaProgramacao();
-        populainpuntControlNumbers(); // PopularControles
-      }
-
-      function formatDateToDDMMYYYY(date) {
-        const day = String(date.getDate()).padStart(2, "0"); // Garante que o dia tenha dois dígitos
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // Garante que o mês tenha dois dígitos
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-      }
-
-      const today = new Date();
-      const formattedToday = formatDateToDDMMYYYY(today);
-
-      function setupEventListeners() {
-        console.log("Configurando ouvintes de eventos...");
-
-        // Adiciona o evento de mudança ao checkbox de seleção total
-        document.querySelector("#selectAllCheckbox");
-
-        // Adiciona evento de input para filtrar a tabela de acordo com os campos de entrada
-        document
-          .querySelector("#numeroControle")
-          .addEventListener("input", filterTableByInput);
-      }
-
-      function filterTableByInput(event) {
-        console.log("filterTableByInput");
-
-        let filters = [];
-        const numControleValue = document
-          .querySelector("#numeroControle")
-          .value.trim();
-
-        if (numControleValue) {
-          // Se numControle tem valor, filtre apenas por numControle
-          filters.push({
-            field: "numControle",
-            type: "like",
-            value: numControleValue,
-          });
-
-          // Aplica os filtros ao Tabulator
-          table.setFilter(filters);
-
-          // Se não houver registros na tabela após filtrar e o numControleValue não estiver vazio, busque no GAS
-          if (!tableHasRecords()) {
-            buscarNoGAS(numControleValue);
-          }
-        } else {
-          // Se o numControle estiver vazio, traga de volta a lista original
-          buscarDadosIniciaisConferenciaProgramacao();
-          table.clearFilter(); // Certifique-se de remover todos os filtros para exibir todos os registros
-        }
-      }
-
-      function tableHasRecords() {
-        const data = table.getData();
-        return data.length > 0;
-      }
-
-      function buscarNoGAS(valor) {
-        // Mostra a mensagem de carregamento antes de iniciar a chamada AJAX
-        showLoadingMessage();
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "fetchNumeroControle",
-            numero: valor,
-          },
-          url: minhaUrl,
-          dataType: "text", // Garante que o retorno seja interpretado como texto
-        })
-          .done(function (response) {
-            // Verifica se a resposta é um JSON válido
-            if (
-              typeof response === "string" &&
-              (response.trim().startsWith("{") ||
-                response.trim().startsWith("["))
-            ) {
-              var data = JSON.parse(response);
-              console.log(
-                "Dados recebidos do GAS para o número de controle:",
-                data
-              );
-
-              if (data && data.length) {
-                // Atualiza a tabela com os dados retornados
-                updateTableData(data);
-              } else {
-                console.warn(
-                  "Nenhum dado encontrado para o número de controle:",
-                  valor
-                );
-              }
-            } else {
-              console.error("Resposta inválida (não é JSON):", response);
-            }
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Erro ao buscar dados:", textStatus, errorThrown);
-          })
-          .always(function () {
-            hideLoadingMessage(); // Esconde a mensagem de carregamento quando a chamada AJAX terminar, independentemente de ter sucesso ou falhar
-          });
-      }
-
-      function showLoadingMessage() {
-        Swal.fire({
-          title: "Aguarde...",
-          text: "Buscando dados. Por favor, não feche esta janela.",
-          icon: "info",
-          showConfirmButton: false,
-          allowOutsideClick: false,
-        });
-      }
-
-      function hideLoadingMessage() {
-        Swal.close();
-      }
-
-      // ---------- Funções relacionadas a AJAX e manipulação de respostas ----------
-
-      // ALIMENTAR LISTA NUMERO CONTROLE
-      function processarDadosConferencia(dados) {
-        // Aqui, você pode processar os dados conforme necessário. Por exemplo:
-        dados.forEach(function (item) {
-          // Fazer algo com cada item, como adicionar a um elemento da página, etc.
-          console.log("Processando item:", item);
-
-          // Se você quiser adicionar ao datalist "numerosDeControle":
-          var option = document.createElement("option");
-          option.value = item;
-          document.getElementById("numerosDeControle").appendChild(option);
-        });
-      }
-
-      function fetchAndPopulateControlNumbers() {
-        console.log("Buscando números de controle...");
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "matchedValues",
-          },
-          url: minhaUrl,
-          success: function (response) {
-            try {
-              populateControlNumbers(response);
-            } catch (e) {
-              console.error("Erro ao popular números de controle:", e.message);
-            }
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            console.error(
-              "Erro ao buscar números únicos de controle:",
-              errorThrown
-            );
-          },
-          beforeSend: function () {
-            console.log(
-              "Enviando requisição para buscar números de controle..."
-            );
-          },
-          complete: function () {
-            console.log(
-              "Requisição para buscar números de controle completada."
-            );
-          },
-        });
-      }
-
-      /**
-       * Popula os números de controle em um datalist.
-       */
-      function populateControlNumbers(data) {
-        // Tentativa de analisar como JSON se os dados são uma string
-        if (typeof data === "string") {
-          try {
-            data = JSON.parse(data);
-          } catch (e) {
-            console.error("Erro ao analisar os dados:", e);
-            return;
-          }
-        }
-
-        // Verifique se os dados são uma instância de um Array
-        if (!Array.isArray(data)) {
-          console.error(
-            "Dados recebidos na função populateControlNumbers não são uma instância de Array:",
-            data
-          );
-          return;
-        }
-
-        console.log("Populando datalist com números de controle...");
-        console.log(data);
-
-        var datalist = document.getElementById("numerosDeControle");
-        datalist.innerHTML = ""; // Limpa qualquer opção anterior
-
-        // Agora, usando a variável 'data' em vez de 'numbers'
-        data.forEach(function (num) {
-          var option = document.createElement("option");
-          option.value = num;
-          datalist.appendChild(option);
-        });
-      }
-
-      function fetchAndpopulatePedidoNumbers() {
-        console.log("Buscando números de controle...");
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "controlePedidos",
-          },
-          url: minhaUrl,
-          success: function (response) {
-            try {
-              populatePedidoNumbers(response);
-            } catch (e) {
-              console.error("Erro ao popular números de controle:", e.message);
-            }
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            console.error(
-              "Erro ao buscar números únicos de controle:",
-              errorThrown
-            );
-          },
-          beforeSend: function () {
-            console.log(
-              "Enviando requisição para buscar números de controle..."
-            );
-          },
-          complete: function () {
-            console.log(
-              "Requisição para buscar números de controle completada."
-            );
-          },
-        });
-      }
-
-      /**
-       * Manipula erros das chamadas AJAX.
-       */
-      function handleAjaxError(jqXHR, textStatus, errorThrown) {
-        console.error("Erro AJAX:", textStatus, errorThrown);
-      }
-
-      /**
-       * Manipula a resposta da chamada AJAX para os números de controle.
-       */
-      function handleControlNumbersResponse(data) {
-        console.log("Dados recebidos em handleControlNumbersResponse:", data);
-
-        if (Array.isArray(data)) {
-          console.log("Os dados são uma array.");
-          if (data.every((item) => typeof item === "string")) {
-            console.log("Todos os itens na lista são strings.");
-            // Chame a função para processar os dados aqui.
-          } else {
-            console.warn("Nem todos os itens na lista são strings.");
-          }
-        } else {
-          console.warn("Os dados não são uma array.");
-        }
-      }
-
-      /**
-       * Faz uma chamada AJAX para buscar dados iniciais de conferência de programação.
-       */
-      function buscarDadosIniciaisConferenciaProgramacao() {
-          $.ajax({
-            url: my_url() + "conferencia_programacao_dados_iniciais_Checklist",
-          })
-          .done(function (data) {
-          try {
-            var parsedData = JSON.parse(data);
-            console.log("dadosTabela");
-            console.log(parsedData);
-            updateTableData(parsedData);
-          } catch (e) {
-            console.error("Erro ao analisar os dados:", e);
-          }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-          console.error("Erro na solicitação AJAX: " + errorThrown);
-          console.error("Status da solicitação: " + textStatus);
-          mostrarErro();
-        });
+    })
+    .withFailureHandler(function (error) {
+      console.error("Erro ao fazer requisição:", error);
+    })
+    .generateMultiplePDFs(operations);
+}
+
+// AMOSTRAR OS PDF GERADOS LADO DO CLIENTE
+function extractURLs(text) {
+  const regex = /(https:\/\/drive\.google\.com\/[^, ]+)/g;
+  const urls = [];
+  let match;
+
+  while ((match = regex.exec(text))) {
+    urls.push(match[1]);
+  }
+
+  return urls;
+}
+
+// ---------- Funções de inicialização ----------
+
+function onPaginaCarregada() {
+  fetchAndPopulateControlNumbers(); // Iniciar numero controle
+  buscarDadosIniciaisConferenciaProgramacao();
+  //populainpuntControlNumbers(); // PopularControles
+}
+
+function formatDateToDDMMYYYY(date) {
+  const day = String(date.getDate()).padStart(2, "0"); // Garante que o dia tenha dois dígitos
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Garante que o mês tenha dois dígitos
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+
+function setupEventListeners() {
+  console.log("Configurando ouvintes de eventos...");
+  // Adiciona o evento de mudança ao checkbox de seleção total
+  document.querySelector("#selectAllCheckbox");
+
+  // Adiciona evento de input para filtrar a tabela de acordo com os campos de entrada
+  document
+    .querySelector("#numeroControle")
+    .addEventListener("input", filterTableByInput);
+}
+
+function filterTableByInput(event) {
+  console.log("filterTableByInput");
+
+  let filters = [];
+     numControleValue = document
+    .querySelector("#numeroControle")
+    .value.trim();
+
+  if (numControleValue) {
+    // Se numControle tem valor, filtre apenas por numControle
+    filters.push({
+      field: "numControle",
+      type: "like",
+      value: numControleValue,
+    });
+    
+    // Aplica os filtros ao Tabulator
+    table_checklist.setFilter(filters);
+    console.log("Filtros aplicados:", filters);
+
+    // Se não houver registros na tabela após filtrar e o numControleValue não estiver vazio, busque no GAS
+    if (!tableHasRecords()) {
+      console.log('teste')
+      buscarNoGAS(numControleValue);
+    }
+  } else {
+    // Se o numControle estiver vazio, traga de volta a lista original
+    buscarDadosIniciaisConferenciaProgramacao();
+    table_checklist.clearFilter(); // Certifique-se de remover todos os filtros para exibir todos os registros
+  }
+}
+
+function tableHasRecords() {
+  // Obter todas as linhas
+  const allRows = table_checklist.getRows();
+
+  // Verificar se há algum filtro aplicado
+  const isFilterActive = table_checklist.getFilters().length > 0;
+
+  if (isFilterActive) {
+    // Se há filtro, verificar se pelo menos uma linha é visível
+    const hasVisibleRows = allRows.some(row => row.getData().visible);
+
+    if (!hasVisibleRows) {
+      console.log('Nenhum registro visível na tabela. Buscando no GAS...');
+      buscarNoGAS(numControleValue);
     }
 
-      // ---------- Funções de manipulação DOM ----------
+    return hasVisibleRows;
+  } else {
+    // Se não há filtro, verificar se há pelo menos uma linha na tabela
+    const hasRows = allRows.length > 0;
 
-      /**
+    if (!hasRows) {
+      console.log('Nenhum registro visível na tabela. Buscando no GAS...');
+      buscarNoGAS(numControleValue);
+    }
 
-      /**
-       * Popula o dropdown com operações.
-       */
-      function populateOperations() {
-        console.log("Populando operações...");
-        const operationsSelect = $("#operacaoSelect");
-        const OPERATIONS_ORDER = [
-          "DES",
-          "COM",
-          "CRO",
-          "USI",
-          "DEC",
-          "FRE",
-          "SOL",
-          "BRU",
-          "PER",
-          "TES",
-          "MON",
-        ];
+    return hasRows;
+  }
+}
 
-        OPERATIONS_ORDER.forEach((op) => {
-          let option = $("<option>").val(op).text(op);
-          operationsSelect.append(option);
-        });
-      }
+function buscarNoGAS(numControleValue) {
+  console.log("a")
+  // Mostra a mensagem de carregamento antes de iniciar a chamada AJAX
+  showLoadingMessage();
 
-      /**
-       * Filtra as linhas da tabela com base nos valores dos inputs.
-       */
+  var all_data = {
+    numControleValue:numControleValue,
+    };
+    console.log(all_data)
+    $.ajax({
+      url: my_url() + "consultar_numero_controle_Checklist",
+      data: JSON.stringify(all_data),
+      contentType: 'application/json',
+      type: 'POST',
+    }).done(function (response) {
+      // Verifica se a resposta é um JSON válido
+      if (
+        typeof response === "string" &&
+        (response.trim().startsWith("{") ||
+          response.trim().startsWith("["))
+      ) {
+        var data = JSON.parse(response);
+        console.log(
+          "Dados recebidos do GAS para o número de controle:",
+          data
+        );
 
-      function updateHeaderCheckboxState() {
-        const selectedRows = table.getSelectedRows();
-        const allRows = table.getRows();
-        const headerCheckbox = document.querySelector("#selectAllCheckbox");
-
-        if (selectedRows.length === allRows.length) {
-          // Todos selecionados
-          headerCheckbox.checked = true;
-          headerCheckbox.indeterminate = false;
-        } else if (selectedRows.length > 0) {
-          // Alguns selecionados
-          headerCheckbox.checked = false;
-          headerCheckbox.indeterminate = true;
+        if (data && data.length) {
+          // Atualiza a tabela com os dados retornados
+          updateTableData(data);
         } else {
-          // Nenhum selecionado
-          headerCheckbox.checked = false;
-          headerCheckbox.indeterminate = false;
+          console.warn(
+            "Nenhum dado encontrado para o número de controle:",
+            valor
+          );
         }
+      } else {
+        console.error("Resposta inválida (não é JSON):", response);
       }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro ao buscar dados:", textStatus, errorThrown);
+    })
+    .always(function () {
+      hideLoadingMessage(); // Esconde a mensagem de carregamento quando a chamada AJAX terminar, independentemente de ter sucesso ou falhar
+    });
+}
 
-      function iniciarLoader() {
+function showLoadingMessage() {
+  Swal.fire({
+    title: "Aguarde...",
+    text: "Buscando dados. Por favor, não feche esta janela.",
+    icon: "info",
+    showConfirmButton: false,
+    allowOutsideClick: false,
+  });
+}
+
+function hideLoadingMessage() {
+  Swal.close();
+}
+
+// ---------- Funções relacionadas a AJAX e manipulação de respostas ----------
+
+// ALIMENTAR LISTA NUMERO CONTROLE
+function processarDadosConferencia(dados) {
+  // Aqui, você pode processar os dados conforme necessário. Por exemplo:
+  dados.forEach(function (item) {
+    // Fazer algo com cada item, como adicionar a um elemento da página, etc.
+    console.log("Processando item:", item);
+
+    // Se você quiser adicionar ao datalist "numerosDeControle":
+    var option = document.createElement("option");
+    option.value = item;
+    document.getElementById("numerosDeControle").appendChild(option);
+  });
+}
+
+function teste() {
+  console.log("Buscando teste...");
+
+  $.ajax({
+    url: my_url() + "dados_checklist_por_id",
+    type: "POST",
+    success: function (response) {
+      try {
+        let dados = response.retorno;
+        console.log("carregarDadosPopulateControlNumbers:", dados);
+      } catch (e) {
+        console.error("Erro ao analisar os dados:", e);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na solicitação AJAX: " + errorThrown);
+      console.error("Status da solicitação: " + textStatus);
+      mostrarErro();
+    },
+    beforeSend: function () {
+      console.log("Enviando requisição para buscar números de controle...");
+    },
+    complete: function () {
+      console.log("Requisição para buscar números de controle completada.");
+    },
+  });
+}
+
+function fetchAndPopulateControlNumbers() {
+  console.log("Buscando números de controle...");
+
+  $.ajax({
+    url: my_url() + "recebimento_linhas_unicas_checklist",
+    type: "POST",
+    success: function (response) {
+      try {
+        let dados = response.retorno;
+        console.log("carregarDadosPopulateControlNumbers:", dados);
+        populateControlNumbers(dados); // Alteração aqui: passando 'dados' em vez de 'response'
+      } catch (e) {
+        console.error("Erro ao analisar os dados:", e);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na solicitação AJAX: " + errorThrown);
+      console.error("Status da solicitação: " + textStatus);
+      mostrarErro();
+    },
+    beforeSend: function () {
+      console.log("Enviando requisição para buscar números de controle...");
+    },
+    complete: function () {
+      console.log("Requisição para buscar números de controle completada.");
+    },
+  });
+}
+
+/**
+ * Popula os números de controle em um datalist.
+ */
+ function populateControlNumbers(data) {
+  // Tentativa de analisar como JSON se os dados são uma string
+  if (typeof data === "string") {
+    try {
+      data = JSON.parse(data);
+    } catch (e) {
+      console.error("Erro ao analisar os dados:", e);
+      return;
+    }
+  }
+
+  // Verifique se os dados são uma instância de um Array
+  if (!Array.isArray(data)) {
+    console.error(
+      "Dados recebidos na função populateControlNumbers não são uma instância de Array:",
+      data
+    );
+    return;
+  }
+
+  console.log("Populando datalist com números de controle...");
+  console.log(data);
+
+  var datalist = document.getElementById("numerosDeControle");
+  datalist.innerHTML = ""; // Limpa qualquer opção anterior
+
+  // Agora, usando a variável 'data' em vez de 'numbers'
+  data.forEach(function (item) {
+    var option = document.createElement("option");
+    option.value = item.Recebimento; // Assumindo que 'Recebimento' é a propriedade desejada
+    datalist.appendChild(option);
+  });
+}
+
+function fetchAndpopulatePedidoNumbers() {
+  console.log("Buscando números de controle...");
+
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "controlePedidos",
+    },
+    url: minhaUrl,
+    success: function (response) {
+      try {
+        populatePedidoNumbers(response);
+      } catch (e) {
+        console.error("Erro ao popular números de controle:", e.message);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error(
+        "Erro ao buscar números únicos de controle:",
+        errorThrown
+      );
+    },
+    beforeSend: function () {
+      console.log(
+        "Enviando requisição para buscar números de controle..."
+      );
+    },
+    complete: function () {
+      console.log(
+        "Requisição para buscar números de controle completada."
+      );
+    },
+  });
+}
+
+/**
+ * Manipula erros das chamadas AJAX.
+ */
+function handleAjaxError(jqXHR, textStatus, errorThrown) {
+  console.error("Erro AJAX:", textStatus, errorThrown);
+}
+
+/**
+ * Manipula a resposta da chamada AJAX para os números de controle.
+ */
+function handleControlNumbersResponse(data) {
+  console.log("Dados recebidos em handleControlNumbersResponse:", data);
+
+  if (Array.isArray(data)) {
+    console.log("Os dados são uma array.");
+    if (data.every((item) => typeof item === "string")) {
+      console.log("Todos os itens na lista são strings.");
+      // Chame a função para processar os dados aqui.
+    } else {
+      console.warn("Nem todos os itens na lista são strings.");
+    }
+  } else {
+    console.warn("Os dados não são uma array.");
+  }
+}
+
+/**
+ * Faz uma chamada AJAX para buscar dados iniciais de conferência de programação.
+ */
+ function buscarDadosIniciaisConferenciaProgramacao() {
+$.ajax({
+  url: my_url() + "conferencia_programacao_dados_iniciais_Checklist",
+})
+.done(function (data) {
+  try {
+      let dados = data.retorno;
+      console.log("carregarDadosFuncionario:", dados);
+      updateTableData(data);
+  } catch (e) {
+      console.error("Erro ao analisar os dados:", e);
+  }
+})
+.fail(function (jqXHR, textStatus, errorThrown) {
+  console.error("Erro na solicitação AJAX: " + errorThrown);
+  console.error("Status da solicitação: " + textStatus);
+  mostrarErro();
+});
+}
+
+
+// ---------- Funções de manipulação DOM ----------
+
+/**
+
+/**
+ * Popula o dropdown com operações.
+ */
+function populateOperations() {
+  console.log("Populando operações...");
+  const operationsSelect = $("#operacaoSelect");
+
+  OPERATIONS_ORDER.forEach((op) => {
+    let option = $("<option>").val(op).text(op);
+    operationsSelect.append(option);
+  });
+}
+
+/**
+ * Filtra as linhas da tabela com base nos valores dos inputs.
+ */
+
+function updateHeaderCheckboxState() {
+  const selectedRows = table_checklist.getSelectedRows();
+  const allRows = table_checklist.getRows();
+  const headerCheckbox = document.querySelector("#selectAllCheckbox");
+
+  if (selectedRows.length === allRows.length) {
+    // Todos selecionados
+    headerCheckbox.checked = true;
+    headerCheckbox.indeterminate = false;
+  } else if (selectedRows.length > 0) {
+    // Alguns selecionados
+    headerCheckbox.checked = false;
+    headerCheckbox.indeterminate = true;
+  } else {
+    // Nenhum selecionado
+    headerCheckbox.checked = false;
+    headerCheckbox.indeterminate = false;
+  }
+}
+
+function iniciarLoader() {
+  Swal.fire({
+    title: "Carregando...",
+    html: "Por favor, aguarde enquanto os dados estão sendo processados.",
+    allowOutsideClick: false,
+    onBeforeOpen: () => {
+      Swal.showLoading();
+    },
+  });
+}
+
+function encerrarLoader() {
+  Swal.close();
+}
+
+function errorFunction(jqXHR, textStatus, errorThrown) {
+  console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+  console.log("HTTP Status:", jqXHR.status);
+  console.log("Resposta do Servidor:", jqXHR.responseText);
+}
+
+// ALERTA PERSONALIZADO
+function mostrarAlerta() {
+  // Primeira pergunta: "Deseja realmente salvar as alterações?"
+  Swal.fire({
+    title: "Você tem certeza?",
+    text: "Deseja realmente salvar as alterações?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sim, salvar!",
+    cancelButtonText: "Não, cancelar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Se o usuário clicar em "Sim, salvar!"
+
+      const idsToDelete = updateSelectedIDs(); // Pega os IDs das linhas selecionadas
+
+      console.log("IDs a serem deletados:", idsToDelete);
+
+      if (idsToDelete.length > 0) {
+        // Segunda pergunta: "Deseja deletar as linhas selecionadas antes de salvar?"
         Swal.fire({
-          title: "Carregando...",
-          html: "Por favor, aguarde enquanto os dados estão sendo processados.",
-          allowOutsideClick: false,
-          onBeforeOpen: () => {
-            Swal.showLoading();
-          },
-        });
-      }
-
-      function encerrarLoader() {
-        Swal.close();
-      }
-
-      function errorFunction(jqXHR, textStatus, errorThrown) {
-        console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-        console.log("HTTP Status:", jqXHR.status);
-        console.log("Resposta do Servidor:", jqXHR.responseText);
-      }
-
-      // ALERTA PERSONALIZADO
-      function mostrarAlerta() {
-        // Primeira pergunta: "Deseja realmente salvar as alterações?"
-        Swal.fire({
-          title: "Você tem certeza?",
-          text: "Deseja realmente salvar as alterações?",
-          icon: "warning",
+          title: "Deletar Linha?",
+          text: "Deseja deletar as linhas selecionadas antes de salvar?",
+          icon: "question",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Sim, salvar!",
-          cancelButtonText: "Não, cancelar!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Se o usuário clicar em "Sim, salvar!"
-
-            const idsToDelete = updateSelectedIDs(); // Pega os IDs das linhas selecionadas
-
-            console.log("IDs a serem deletados:", idsToDelete);
-
-            if (idsToDelete.length > 0) {
-              // Segunda pergunta: "Deseja deletar as linhas selecionadas antes de salvar?"
-              Swal.fire({
-                title: "Deletar Linha?",
-                text: "Deseja deletar as linhas selecionadas antes de salvar?",
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sim, deletar!",
-                cancelButtonText: "Não, continuar!",
-              }).then((deleteResult) => {
-                if (deleteResult.isConfirmed) {
-                  // Se o usuário clicar em "Sim, deletar!"
-                  deletarLinhas(idsToDelete);
-                }
-                salvarAlterarSeguenciaProducao();
-
-                // Alerta informando que os dados foram atualizados com sucesso
-                Swal.fire({
-                  title: "Sucesso!",
-                  text: "Os dados foram atualizados com sucesso.",
-                  icon: "success",
-                });
-              });
-            } else {
-              salvarAlterarSeguenciaProducao();
-
-              // Alerta informando que os dados foram atualizados com sucesso
-              Swal.fire({
-                title: "Sucesso!",
-                text: "Os dados foram atualizados com sucesso.",
-                icon: "success",
-              });
-            }
+          confirmButtonText: "Sim, deletar!",
+          cancelButtonText: "Não, continuar!",
+        }).then((deleteResult) => {
+          if (deleteResult.isConfirmed) {
+            // Se o usuário clicar em "Sim, deletar!"
+            deletarLinhas(idsToDelete);
           }
-        });
-      }
+          salvarAlterarSeguenciaProducao();
 
-      // Função para pegar os IDs das linhas selecionadas
-      function getselectedIDs() {
-        const selectedRows = table.getSelectedRows(); // Pega todas as linhas selecionadas na tabela Tabulator
-
-        selectedRows.forEach((row) => {
-          const rowData = row.getData();
-          selectedIDs.push(rowData.idPCP); // Assumindo que 'idPCP' é o nome do campo que contém o ID
-        });
-
-        return selectedIDs;
-      }
-
-      // Modificamos a função deletarLinhas para aceitar os IDs como um argumento
-      function deletarLinhas() {
-        const idsToDelete = getselectedIDs();
-
-        // Verifique se o array 'idsToDelete' contém algum ID. Se estiver vazio, interrompa a função.
-        if (!idsToDelete.length) {
-          console.warn("Nenhum ID fornecido para exclusão.");
-          return;
-        }
-
-        console.log("IDs a serem deletados:", idsToDelete);
-
-        // Use o AJAX para enviar os dados
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "deletarLinhasNovasTarefas",
-            ids: JSON.stringify(idsToDelete), // Envie os IDs como JSON
-          },
-          url: minhaUrl,
-        })
-          .done(function (response) {
-            try {
-              var data = JSON.parse(response);
-              if (data.success) {
-                console.log("Linhas deletadas com sucesso:", data);
-              } else {
-                console.warn("Erro ao deletar linhas:", data.message);
-              }
-            } catch (error) {
-              console.error("Erro ao analisar a resposta JSON:", error);
-            }
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-          });
-      }
-
-      // SALVAR ALTERAÇÕES NA TABELA
-      function salvarAlterarSeguenciaProducao() {
-        // Pegar todas as linhas de dados da tabela Tabulator
-        const rows = table.getData();
-        // Capturar e formatar o valor do input dataLancamento
-        const dataLancamentoValue = formatarData(
-          document.querySelector("#dataLancamento").value
-        );
-
-        // Array para armazenar as informações capturadas
-        let dataToSave = [];
-
-        rows.forEach((row) => {
-          const rowData = [];
-
-          // Adicionar o ID como primeiro elemento no array de dados
-          rowData.push(row.idPCP);
-
-          // Colunas específicas que você listou
-          const colunasEspecificas = [
-            "Orç",
-            "pedido",
-            "SEQ",
-            "descricao",
-            "dtProducao",
-            "prazoEntrega",
-            "observacao",
-          ];
-
-          colunasEspecificas.forEach((coluna) => {
-            rowData.push(row[coluna]);
-          });
-
-          // Adicionar o valor de dataLancamento ao final do rowData
-          rowData.push(dataLancamentoValue);
-
-          // Adicionar os dados da linha ao array principal
-          dataToSave.push(rowData);
-        });
-
-        dataToSave = dataToSave.map((row) => {
-          return row.map((cellValue) => {
-            return cellValue === undefined ? "" : cellValue;
-          });
-        });
-
-        console.log("Dados a serem enviados para o GAS:", dataToSave);
-
-        // Use o AJAX para enviar os dados
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "salvarAlterarSeguenciaProducao",
-            dataToSave: JSON.stringify(dataToSave), // Envie os dados como JSON
-          },
-          url: minhaUrl,
-        })
-          .done(function (data) {
-            // RESULTADO FRONT
-            try {
-              var data = JSON.parse(data);
-              console.log("Dados enviados com sucesso:", data);
-              onPaginaCarregada(); // Atualizar a página
-            } catch (error) {
-              console.error("Erro ao analisar JSON:", error);
-            }
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-          });
-      }
-
-      function enviarDadosParaServidor() {
-        //var dadosModal = coletarDadosDoModal();
-
-        console.log("Resposta do Servidor:", dadosModal);
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "atualizarFolhas",
-            dados: JSON.stringify(dadosModal),
-          },
-          url: minhaUrl,
-        })
-          .done(function (response) {
-            // Verifique a resposta do servidor e decida se deseja fechar o modal
-            if (response.success) {
-              // Feche o modal e recarregue a página
-              dialog.close();
-              location.reload();
-            } else {
-              console.error("Erro ao atualizar folhas:", response.message);
-            }
-          })
-          .fail(errorHandlingFunction);
-      }
-
-      function errorHandlingFunction(jqXHR, textStatus, errorThrown) {
-        console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-      }
-
-      document.querySelector(".close").addEventListener("click", function () {
-        const modal = document.querySelector(".mdl-dialog");
-        modal.close();
-      });
-
-      function updateCheckboxVisualState(checkboxElement) {
-        const spanElement = checkboxElement.nextElementSibling; // Pega o <span> após o checkbox
-
-        if (checkboxElement.checked) {
-          spanElement.style.backgroundColor = "#2196F3"; // A cor quando o checkbox estiver marcado
-          spanElement.textContent = "✅"; // Unicode para o sinal de visto
-        } else {
-          spanElement.style.backgroundColor = "white"; // A cor padrão do checkbox
-          spanElement.textContent = "☐"; // Unicode para uma caixa vazia
-        }
-      }
-
-      function sendDataToBackend(ids, date) {
-        // Convertendo todos os IDs para números:
-        ids = ids.map((id) => Number(id));
-
-        console.log("Enviando dadosSS: ", { ids: ids, date: date });
-
-        $.ajax({
-          type: "POST",
-          data: {
-            qualFuncao: "lancamentoProducao",
-            selectedData: JSON.stringify({ ids: ids, date: date }),
-          },
-          url: minhaUrl,
-        })
-          .done(function (response) {
-            console.log("TONUY: ", response);
-            try {
-              var data = JSON.parse(response);
-              if (data.success) {
-                /*Swal.fire({
-                        title: "Sucesso!",
-                        text: "Baixa Serviços realizada com Sucesso.",
-                        icon: "success",
-                        confirmButtonColor: "#3085d6",
-                        confirmButtonText: "Entendi!",
-                      }); */
-              } else {
-                handleError(
-                  "Ocorreu um erro ao atualizar a data: " + data.message
-                );
-              }
-            } catch (error) {
-              console.error("Erro ao analisar a resposta JSON:", error);
-            }
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            handleError(
-              "Ocorreu um erro ao se comunicar com o servidor: " + textStatus
-            );
-            console.error("Erro na chamada AJAX:", textStatus, errorThrown);
-          });
-      }
-
-      function lancamentoProducao() {
-        updateSelectedIDs();
-
-        if (!selectedIDs.length) {
+          // Alerta informando que os dados foram atualizados com sucesso
           Swal.fire({
-            title: "Atenção!",
-            text: "Selecione ao menos uma linha antes de realizar o Baixa da Produção.",
-            icon: "warning",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "Entendi!",
+            title: "Sucesso!",
+            text: "Os dados foram atualizados com sucesso.",
+            icon: "success",
           });
-          return;
-        }
+        });
+      } else {
+        salvarAlterarSeguenciaProducao();
 
-        let summaryHTML = buildSummaryHTML(selectedRowsData);
-
-        // Solicitando a data de produção através de um modal
+        // Alerta informando que os dados foram atualizados com sucesso
         Swal.fire({
-          title: "Baixa da Produção",
-          html: `
-                  <div style="text-align: left; margin-bottom: 15px;">
-                      ${summaryHTML}
-                  </div>
-                  <strong>Data de Lançamento:</strong>
-                  <input type="date" id="swal-input-date" class="swal2-input" value="${
-                    new Date().toISOString().split("T")[0]
-                  }">
-              `,
-          showCancelButton: true,
-          confirmButtonText: "Confirmar",
-          cancelButtonText: "Cancelar",
-          focusConfirm: false,
-          preConfirm: () => {
-            let date = document.getElementById("swal-input-date").value;
-            if (!date) {
-              Swal.showValidationMessage("Por favor, selecione uma data!");
-            }
-            let formattedDate = formatDateProducao(date); // Formatação da data
-            return formattedDate;
-          },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            try {
-              updateTableWithDate(selectedRowsData, result.value);
-              sendDataToBackend(selectedIDs, result.value);
-            } catch (error) {
-              console.error("Erro ao processar a data de lançamento:", error);
-            }
-          }
+          title: "Sucesso!",
+          text: "Os dados foram atualizados com sucesso.",
+          icon: "success",
         });
       }
+    }
+  });
+}
 
-      function updateTableWithDate(selectedRowsData, date) {
-        try {
-          selectedRowsData.forEach((data) => {
-            let row = data.row;
-            let rowData = row.getData();
-            rowData.dtProducao = date;
-            row.update(rowData);
-          });
-          console.log("Tabela atualizada com a data de lançamento");
-        } catch (error) {
-          console.error("Erro ao atualizar a tabela com a data:", error);
+// Função para pegar os IDs das linhas selecionadas
+function getselectedIDs() {
+  const selectedRows = table.getSelectedRows(); // Pega todas as linhas selecionadas na tabela Tabulator
+
+  selectedRows.forEach((row) => {
+    const rowData = row.getData();
+    selectedIDs.push(rowData.idPCP); // Assumindo que 'idPCP' é o nome do campo que contém o ID
+  });
+
+  return selectedIDs;
+}
+
+// Modificamos a função deletarLinhas para aceitar os IDs como um argumento
+function deletarLinhas() {
+  const idsToDelete = getselectedIDs();
+
+  // Verifique se o array 'idsToDelete' contém algum ID. Se estiver vazio, interrompa a função.
+  if (!idsToDelete.length) {
+    console.warn("Nenhum ID fornecido para exclusão.");
+    return;
+  }
+
+  console.log("IDs a serem deletados:", idsToDelete);
+
+  // Use o AJAX para enviar os dados
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "deletarLinhasNovasTarefas",
+      ids: JSON.stringify(idsToDelete), // Envie os IDs como JSON
+    },
+    url: minhaUrl,
+  })
+    .done(function (response) {
+      try {
+        var data = JSON.parse(response);
+        if (data.success) {
+          console.log("Linhas deletadas com sucesso:", data);
+        } else {
+          console.warn("Erro ao deletar linhas:", data.message);
         }
+      } catch (error) {
+        console.error("Erro ao analisar a resposta JSON:", error);
       }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+    });
+}
 
-      function buildSummaryHTML(selectedRowsData) {
-        // Primeiro, agrupamos os dados
-        const groupedData = {};
+// SALVAR ALTERAÇÕES NA TABELA
+function salvarAlterarSeguenciaProducao() {
+  // Pegar todas as linhas de dados da tabela Tabulator
+  const rows = table_checklist.getData();
+  // Capturar e formatar o valor do input dataLancamento
+  const dataLancamentoValue = formatarData(
+    document.querySelector("#dataLancamento").value
+  );
 
-        selectedRowsData.forEach((data) => {
-          let rowData = data.row.getData();
-          let controlNum = rowData.numControle || "N/A";
-          let operation = rowData.op || "N/A";
+  // Array para armazenar as informações capturadas
+  let dataToSave = [];
 
-          if (!groupedData[controlNum]) {
-            groupedData[controlNum] = {};
-          }
+  rows.forEach((row) => {
+    const rowData = [];
 
-          if (!groupedData[controlNum][operation]) {
-            groupedData[controlNum][operation] = [];
-          }
+    // Adicionar o ID como primeiro elemento no array de dados
+    rowData.push(row.idPCP);
 
-          groupedData[controlNum][operation].push(rowData);
-        });
+    // Colunas específicas que você listou
+    const colunasEspecificas = [
+      "Orç",
+      "pedido",
+      "SEQ",
+      "descricao",
+      "dtProducao",
+      "prazoEntrega",
+      "observacao",
+    ];
 
-        // Agora, criamos o HTML usando os dados agrupados
-        let summaryHTML = '<div style="font-size: 16px;">';
+    colunasEspecificas.forEach((coluna) => {
+      rowData.push(row[coluna]);
+    });
 
-        Object.keys(groupedData).forEach((controlNum) => {
-          summaryHTML += `<div style="font-weight: bold; font-size: 18px; margin-top: 15px;">Número de Controle: ${controlNum}</div>`;
+    // Adicionar o valor de dataLancamento ao final do rowData
+    rowData.push(dataLancamentoValue);
 
-          Object.keys(groupedData[controlNum]).forEach((operation) => {
-            summaryHTML += `
-                      <div style="margin-left: 15px;">
-                          <div style="font-weight: bold; font-size: 17px; margin-top: 10px;">Operação: ${operation}</div>
-                          ${groupedData[controlNum][operation]
-                            .map(
-                              (data) => `
-                              <div style="border: 1px solid #e1e1e1; margin: 5px 0; padding: 5px; border-radius: 5px; background-color: white;">
-                                  <div><strong>Código:</strong> ${
-                                    data.cod || "N/A"
-                                  }</div>
-                                  <div><strong>Descrição:</strong> ${
-                                    data.descricao || "N/A"
-                                  }</div>
-                              </div>
-                          `
-                            )
-                            .join("")}
-                      </div>
-                  `;
-          });
-        });
+    // Adicionar os dados da linha ao array principal
+    dataToSave.push(rowData);
+  });
 
-        summaryHTML += "</div>";
+  dataToSave = dataToSave.map((row) => {
+    return row.map((cellValue) => {
+      return cellValue === undefined ? "" : cellValue;
+    });
+  });
 
-        return summaryHTML;
+  console.log("Dados a serem enviados para o GAS:", dataToSave);
+
+  // Use o AJAX para enviar os dados
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "salvarAlterarSeguenciaProducao",
+      dataToSave: JSON.stringify(dataToSave), // Envie os dados como JSON
+    },
+    url: minhaUrl,
+  })
+    .done(function (data) {
+      // RESULTADO FRONT
+      try {
+        var data = JSON.parse(data);
+        console.log("Dados enviados com sucesso:", data);
+        onPaginaCarregada(); // Atualizar a página
+      } catch (error) {
+        console.error("Erro ao analisar JSON:", error);
       }
-    </script>
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+    });
+}
+
+function enviarDadosParaServidor() {
+  //var dadosModal = coletarDadosDoModal();
+
+  console.log("Resposta do Servidor:", dadosModal);
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "atualizarFolhas",
+      dados: JSON.stringify(dadosModal),
+    },
+    url: minhaUrl,
+  })
+    .done(function (response) {
+      // Verifique a resposta do servidor e decida se deseja fechar o modal
+      if (response.success) {
+        // Feche o modal e recarregue a página
+        dialog.close();
+        location.reload();
+      } else {
+        console.error("Erro ao atualizar folhas:", response.message);
+      }
+    })
+    .fail(errorHandlingFunction);
+}
+
+function errorHandlingFunction(jqXHR, textStatus, errorThrown) {
+  console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+}
+
+document.querySelector(".close").addEventListener("click", function () {
+  const modal = document.querySelector(".mdl-dialog");
+  modal.close();
+});
+
+function updateCheckboxVisualState(checkboxElement) {
+  const spanElement = checkboxElement.nextElementSibling; // Pega o <span> após o checkbox
+
+  if (checkboxElement.checked) {
+    spanElement.style.backgroundColor = "#2196F3"; // A cor quando o checkbox estiver marcado
+    spanElement.textContent = "✅"; // Unicode para o sinal de visto
+  } else {
+    spanElement.style.backgroundColor = "white"; // A cor padrão do checkbox
+    spanElement.textContent = "☐"; // Unicode para uma caixa vazia
+  }
+}
+
+function sendDataToBackend(ids, date) {
+  // Convertendo todos os IDs para números:
+  ids = ids.map((id) => Number(id));
+
+  console.log("Enviando dadosSS: ", { ids: ids, date: date });
+
+  $.ajax({
+    type: "POST",
+    data: {
+      qualFuncao: "lancamentoProducao",
+      selectedData: JSON.stringify({ ids: ids, date: date }),
+    },
+    url: minhaUrl,
+  })
+    .done(function (response) {
+      console.log("TONUY: ", response);
+      try {
+        var data = JSON.parse(response);
+        if (data.success) {
+          /*Swal.fire({
+                  title: "Sucesso!",
+                  text: "Baixa Serviços realizada com Sucesso.",
+                  icon: "success",
+                  confirmButtonColor: "#3085d6",
+                  confirmButtonText: "Entendi!",
+                }); */
+        } else {
+          handleError(
+            "Ocorreu um erro ao atualizar a data: " + data.message
+          );
+        }
+      } catch (error) {
+        console.error("Erro ao analisar a resposta JSON:", error);
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      handleError(
+        "Ocorreu um erro ao se comunicar com o servidor: " + textStatus
+      );
+      console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+    });
+}
+
+function lancamentoProducao() {
+  updateSelectedIDs();
+
+  if (!selectedIDs.length) {
+    Swal.fire({
+      title: "Atenção!",
+      text: "Selecione ao menos uma linha antes de realizar o Baixa da Produção.",
+      icon: "warning",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Entendi!",
+    });
+    return;
+  }
+
+  let summaryHTML = buildSummaryHTML(selectedRowsData);
+
+  // Solicitando a data de produção através de um modal
+  Swal.fire({
+    title: "Baixa da Produção",
+    html: `
+            <div style="text-align: left; margin-bottom: 15px;">
+                ${summaryHTML}
+            </div>
+            <strong>Data de Lançamento:</strong>
+            <input type="date" id="swal-input-date" class="swal2-input" value="${
+              new Date().toISOString().split("T")[0]
+            }">
+        `,
+    showCancelButton: true,
+    confirmButtonText: "Confirmar",
+    cancelButtonText: "Cancelar",
+    focusConfirm: false,
+    preConfirm: () => {
+      let date = document.getElementById("swal-input-date").value;
+      if (!date) {
+        Swal.showValidationMessage("Por favor, selecione uma data!");
+      }
+      let formattedDate = formatDateProducao(date); // Formatação da data
+      return formattedDate;
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        updateTableWithDate(selectedRowsData, result.value);
+        sendDataToBackend(selectedIDs, result.value);
+      } catch (error) {
+        console.error("Erro ao processar a data de lançamento:", error);
+      }
+    }
+  });
+}
+
+function updateTableWithDate(selectedRowsData, date) {
+  try {
+    selectedRowsData.forEach((data) => {
+      let row = data.row;
+      let rowData = row.getData();
+      rowData.dtProducao = date;
+      row.update(rowData);
+    });
+    console.log("Tabela atualizada com a data de lançamento");
+  } catch (error) {
+    console.error("Erro ao atualizar a tabela com a data:", error);
+  }
+}
+
+function buildSummaryHTML(selectedRowsData) {
+  // Primeiro, agrupamos os dados
+  const groupedData = {};
+
+  selectedRowsData.forEach((data) => {
+    let rowData = data.row.getData();
+    let controlNum = rowData.numControle || "N/A";
+    let operation = rowData.op || "N/A";
+
+    if (!groupedData[controlNum]) {
+      groupedData[controlNum] = {};
+    }
+
+    if (!groupedData[controlNum][operation]) {
+      groupedData[controlNum][operation] = [];
+    }
+
+    groupedData[controlNum][operation].push(rowData);
+  });
+
+  // Agora, criamos o HTML usando os dados agrupados
+  let summaryHTML = '<div style="font-size: 16px;">';
+
+  Object.keys(groupedData).forEach((controlNum) => {
+    summaryHTML += `<div style="font-weight: bold; font-size: 18px; margin-top: 15px;">Número de Controle: ${controlNum}</div>`;
+
+    Object.keys(groupedData[controlNum]).forEach((operation) => {
+      summaryHTML += `
+                <div style="margin-left: 15px;">
+                    <div style="font-weight: bold; font-size: 17px; margin-top: 10px;">Operação: ${operation}</div>
+                    ${groupedData[controlNum][operation]
+                      .map(
+                        (data) => `
+                        <div style="border: 1px solid #e1e1e1; margin: 5px 0; padding: 5px; border-radius: 5px; background-color: white;">
+                            <div><strong>Código:</strong> ${
+                              data.cod || "N/A"
+                            }</div>
+                            <div><strong>Descrição:</strong> ${
+                              data.descricao || "N/A"
+                            }</div>
+                        </div>
+                    `
+                      )
+                      .join("")}
+                </div>
+            `;
+    });
+  });
+
+  summaryHTML += "</div>";
+
+  return summaryHTML;
+}
+
+function muda_de_tela(url, event) {
+      window.location.href = url;
+      event.stopPropagation();
+    }
+</script>
 </html>

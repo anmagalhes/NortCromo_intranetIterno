@@ -1,0 +1,105 @@
+body {
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.divisor {
+  margin: 1em;
+  display: grid;
+  grid-template-columns: 4fr 2fr 4fr;
+}
+
+#meus_inputs {
+  display: grid;
+}
+
+#meus_inputs > input[type='text'] {
+  margin-bottom: 1em;
+}
+
+#meus_inputs_escolher_cliente {
+  display: grid;
+}
+
+#meus_inputs_escolher_cliente > input[type='text'] {
+  margin-bottom: 1em;
+}
+
+.campo_pesquisa {
+  margin: 1em;
+}
+
+#tabela_cliente_filter {
+  display: none;
+}
+
+#tabela_produto_filter {
+  display: none;
+}
+
+#tabela_produto_escolher_filter {
+  display: none;
+}
+
+#tabela_cliente_escolher_filter {
+  display: none;
+}
+
+.seg {
+  display: grid;
+  border-radius: 5px; /* Curvinha nos cantos */
+  padding: 2em;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 0.5em;
+}
+
+.seg > button {
+  margin-top: 1em;
+}
+
+.seg > label {
+  margin-top: 1em;
+}
+
+.seg > h3 {
+  text-align: center;
+}
+
+input[type='text'] {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+}
+
+input[type='text']:hover {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+  background-color: #f3f8f4;
+}
+
+button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+button:hover {
+  background-color: #a0daa2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
