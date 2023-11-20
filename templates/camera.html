@@ -1,85 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    {% include 'head.html' %}
-  </head>
+  {% include 'head.html' %}
   <body>
-    <div class="seg">
-      <h3>Capturar Foto</h3>
+    <div class="header">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
+        alt="Logo da Empresa"
+      />
+      RECEBIMENTO - <span>NOTH CROMO</span>
+    </div>
+
+    <link
+      rel="icon"
+      href="https://drive.google.com/uc?export=view&id=SEU_ID_DA_IMAGEM"
+      type="image/x-icon"
+    />
+
+    <div class="container">
+      <div class="row mt-3 mb-3">
+        <div class="col-md-3">
+          <label for="numeroControle" class="custom-label">Número de Controrole</label>
+          <input
+            id="numeroControle"
+            type="text"
+            class="form-control highlight-input"
+            placeholder="Controle"
+            list="numerosDeControle"
+          />
+        </div>
+        <!-- Campo Data de Recebimento -->
+        <div class="col-md-6 mb-3">
+          <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
+          <input
+            id="dataRecebimento"
+            type="date"
+            class="form-control"
+            placeholder="Data de Recebimento"
+          />
+        </div>
+      </div>
+
       <div class="container">
         <div id="camera-container">
           <video id="camera-feed" autoplay></video>
           <button id="capturar-foto">Capturar Foto</button>
           <button id="capturar-camera">Capturar da Câmera</button>
           <input type="file" id="fileInput" accept="image/*" />
-
-          <!-- Botão para capturar da câmera -->
         </div>
         <canvas id="foto-capturada" style="display: none"></canvas>
         <button id="salvar-foto" onclick="uploadFile()">Salvar Foto</button>
-        <script>
-          function my_url() {
-            if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
-              return 'http://127.0.0.1:5000/';
-            } else {
-              return 'https://www.northcromocontrole.com.br/';
-            }
-          }
-          function uploadFile() {
-            var fileInput = document.getElementById('fileInput');
-            var file = fileInput.files[0];
-
-            if (file) {
-              var formData = new FormData();
-              formData.append('file', file);
-
-              $.ajax({
-                type: 'POST',
-                url: my_url() + 'upload', // Replace with your server endpoint
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                  console.log('File uploaded successfully:', response);
-                },
-                error: function (error) {
-                  console.error('Error uploading file:', error);
-                },
-              });
-            } else {
-              console.error('No file selected');
-            }
-          }
-        </script>
-
         <img id="imagem-foto" style="display: none" />
-        <input
-          type="file"
-          accept="image/*"
-          capture="camera"
-          id="photo-input"
-          style="display: none"
-        />
+        <input type="file" accept="image/*" capture="camera" id="photo-input" style="display: none" />
         <button id="upload-button">Upload Photo</button>
       </div>
     </div>
+
     {% include 'funcoes_comuns.html' %}
     <script src="capturar_foto.js"></script>
+    <script>
+      function my_url() {
+        if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+          return 'http://127.0.0.1:5000/';
+        } else {
+          return 'https://www.northcromocontrole.com.br/';
+        }
+      }
+
+      function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+          var formData = new FormData();
+          formData.append('file', file);
+
+          $.ajax({
+            type: 'POST',
+            url: my_url() + 'upload',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              console.log('File uploaded successfully:', response);
+            },
+            error: function (error) {
+              console.error('Error uploading file:', error);
+            },
+          });
+        } else {
+          console.error('No file selected');
+        }
+      }
+    </script>
+    
     <script>
       const video = document.getElementById('camera-feed');
       const capturarBotao = document.getElementById('capturar-foto');
       const canvas = document.getElementById('foto-capturada');
 
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
-        })
-        .catch(function (error) {
-          console.log('Erro ao acessar a câmera: ' + error);
-        });
+      function startCamera() {
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then(function (stream) {
+            video.srcObject = stream;
+          })
+          .catch(function (error) {
+            console.log('Erro ao acessar a câmera: ' + error);
+          });
+      }
 
-      capturarBotao.addEventListener('click', function () {
+      function capturePhoto() {
         canvas.style.display = 'block';
         video.style.display = 'none';
         canvas.width = video.videoWidth;
@@ -88,10 +118,8 @@
           .getContext('2d')
           .drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Converter a imagem em um formato que pode ser enviado
         const dataURL = canvas.toDataURL('image/jpeg');
 
-        // Enviar a imagem capturada para a rota de upload
         fetch('/upload', {
           method: 'POST',
           body: JSON.stringify({ photo: dataURL }),
@@ -102,34 +130,31 @@
           .then((response) => response.text())
           .then((result) => alert(result))
           .catch((error) => console.error(error));
-      });
+      }
 
-      const cameraButton = document.getElementById('capturar-camera');
-
-      cameraButton.addEventListener('click', function () {
-        if (
-          'mediaDevices' in navigator &&
-          'getUserMedia' in navigator.mediaDevices
-        ) {
+      function startCameraCapture() {
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
           navigator.mediaDevices
             .getUserMedia({ video: true })
             .then(function (stream) {
-              // Exibir o fluxo da câmera em um elemento de vídeo
               video.srcObject = stream;
               video.style.display = 'block';
-
-              // Adicionar lógica para capturar a imagem
-              // Isso pode ser semelhante à lógica que você já tem para capturar fotos
             })
             .catch(function (error) {
               console.log('Erro ao acessar a câmera: ' + error);
             });
         } else {
-          console.log(
-            'A API de captura de câmera não é suportada neste navegador.'
-          );
+          console.log('A API de captura de câmera não é suportada neste navegador.');
         }
-      });
+      }
+
+      startCamera();
+
+      capturarBotao.addEventListener('click', capturePhoto);
+
+      const cameraButton = document.getElementById('capturar-camera');
+
+      cameraButton.addEventListener('click', startCameraCapture);
     </script>
   </body>
 </html>
