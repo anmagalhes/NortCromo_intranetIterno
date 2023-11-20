@@ -12,7 +12,6 @@ import hashlib
 # Configurar o logging para imprimir mensagens de depuração
 logging.basicConfig(level=logging.DEBUG)
 
-
 conferencia_dados_inicias_checklist = Blueprint(
     "conferencia_programacao_dados_iniciais_Checklist",
     __name__,
@@ -58,111 +57,168 @@ def carregar_dados_gs(aba):
 # Função para obter dados da folha "Recebimento" com caching
 @cached(cache=TTLCache(maxsize=500, ttl=600))  # Cache válido por 10 minutos  maxsize = Número de linhas ttl= tempo 
 def obter_dados_recebimento():
+    global cache_dados  # Certifique-se de que a variável global seja acessada
     sheet_recebimento = arquivo().worksheet_by_title("Recebimento")
-    dados_recebimento = sheet_recebimento.get_all_values()
-    df_recebimento = pd.DataFrame(dados_recebimento[1:], columns=dados_recebimento[0])
     
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_recebimento.to_json().encode()).hexdigest()
-    
-    # Verificar se os dados mudaram
-    if cache_dados.hash_dados_recebimento == hash_dados:
-        return cache_dados.dados_em_cache_recebimento
-    else:
-       #  logging.debug("Atualizando cache para obter_dados_recebimento.")
-        # Atualizar o cache
-        cache_dados.hash_dados_recebimento = hash_dados
-        cache_dados.dados_em_cache_recebimento = df_recebimento
-    return df_recebimento
+    try:
+        # Tente obter os dados da planilha
+        dados_recebimento = sheet_recebimento.get_all_values()
+        
+        # Crie o DataFrame a partir dos dados
+        df_recebimento = pd.DataFrame(dados_recebimento[1:], columns=dados_recebimento[0])
 
+        # Calcular o hash dos dados
+        hash_dados = hashlib.md5(df_recebimento.to_json().encode()).hexdigest()
+
+        # Verificar se os dados estão em cache
+        if hasattr(cache_dados, 'hash_dados_recebimento') and cache_dados.hash_dados_recebimento == hash_dados:
+            print("Dados obtidos do cache para Recebimento.")
+            return cache_dados.dados_em_cache_recebimento
+        else:
+            # Atualizar o cache
+            cache_dados.hash_dados_recebimento = hash_dados
+            cache_dados.dados_em_cache_recebimento = df_recebimento
+        
+        print("Dados obtidos diretamente do Google Sheets API para Recebimento.")
+        return df_recebimento
+    
+    except Exception as e:
+        # Se ocorrer uma exceção, você pode escolher logá-la ou levantar novamente, dependendo do seu caso de uso.
+        # Aqui, estamos registrando a exceção no console.
+        print(f"Erro ao obter dados da ChecklistRecebimento: {str(e)}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
+    
 # Função para obter dados da folha "Cliente" com caching
 @cached(cache=TTLCache(maxsize=500, ttl=3600))  # Cache válido por 1 Hora
 def obter_dados_cliente():
+    global cache_dados  # Certifique-se de que a variável global seja acessada
     sheet_cliente = arquivo().worksheet_by_title("Cliente")
-    dados_cliente = sheet_cliente.get_all_values()
-    df_cliente = pd.DataFrame(dados_cliente[1:], columns=dados_cliente[0])
-    
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_cliente.to_json().encode()).hexdigest()
-    
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_cliente.to_json().encode()).hexdigest()
-    
-    # Verificar se os dados mudaram
-    if cache_dados.hash_dados_cliente == hash_dados:
-        return cache_dados.dados_em_cache_cliente
-    else:
-        # Atualizar o cache
-        cache_dados.hash_dados_cliente = hash_dados
-        cache_dados.dados_em_cache_cliente = df_cliente
-    return df_cliente
 
+    try:
+        # Tente obter os dados da planilha
+        dados_cliente = sheet_cliente.get_all_values()
+        
+        # Crie o DataFrame a partir dos dados
+        df_cliente = pd.DataFrame(dados_cliente[1:], columns=dados_cliente[0])
+
+        # Calcular o hash dos dados
+        hash_dados = hashlib.md5(df_cliente.to_json().encode()).hexdigest()
+
+        # Verificar se os dados estão em cache
+        if hasattr(cache_dados, 'hash_dados_cliente') and cache_dados.hash_dados_cliente == hash_dados:
+            print("Dados obtidos do cache para cliente.")
+            return cache_dados.dados_em_cache_cliente
+        else:
+            # Atualizar o cache
+            cache_dados.hash_dados_cliente = hash_dados
+            cache_dados.dados_em_cache_cliente = df_cliente
+        print("Dados obtidos diretamente do Google Sheets API para cliente.")
+        return df_cliente
+    
+    except Exception as e:
+        # Se ocorrer uma exceção, você pode escolher logá-la ou levantar novamente, dependendo do seu caso de uso.
+        # Aqui, estamos registrando a exceção no console.
+        print(f"Erro ao obter dados da ChecklistRecebimento: {str(e)}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
+    
 # Função para obter dados da folha "Produto" com caching
 @cached(cache=TTLCache(maxsize=9000, ttl=3600))  # Cache válido por 1 Hora
 def obter_dados_produto():
+    global cache_dados  # Certifique-se de que a variável global seja acessada
     sheet_produto = arquivo().worksheet_by_title("Produto")
-    dados_produto = sheet_produto.get_all_values()
-    df_produto = pd.DataFrame(dados_produto[1:], columns=dados_produto[0])
     
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_produto.to_json().encode()).hexdigest()
+    try:
+        # Tente obter os dados da planilha
+        dados_produto = sheet_produto.get_all_values()
+        
+        # Crie o DataFrame a partir dos dados
+        df_produto = pd.DataFrame(dados_produto[1:], columns=dados_produto[0])
+
+        # Calcular o hash dos dados
+        hash_dados = hashlib.md5(df_produto.to_json().encode()).hexdigest()
+
+        # Verificar se os dados estão em cache
+        if hasattr(cache_dados, 'hash_dados_produto') and cache_dados.hash_dados_produto == hash_dados:
+            print("Dados obtidos do cache para produto.")
+            return cache_dados.dados_em_cache_produto
+        else:
+            # Atualizar o cache
+            cache_dados.hash_dados_produto = hash_dados
+            cache_dados.dados_em_cache_produto = df_produto
+        print("Dados obtidos diretamente do Google Sheets API para produto.")
+        return df_produto
     
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_produto.to_json().encode()).hexdigest()
-    
-    # Verificar se os dados mudaram
-    if cache_dados.hash_dados_produto == hash_dados:
-        return cache_dados.dados_em_cache_produto
-    else:
-        # Atualizar o cache
-        cache_dados.hash_dados_produto = hash_dados
-        cache_dados.dados_em_cache_produto = df_produto
-    return df_produto
+    except Exception as e:
+        # Se ocorrer uma exceção, você pode escolher logá-la ou levantar novamente, dependendo do seu caso de uso.
+        # Aqui, estamos registrando a exceção no console.
+        print(f"Erro ao obter dados da ChecklistRecebimento: {str(e)}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
 
 # Função para obter dados da folha "Operacao" com caching
 @cached(cache=TTLCache(maxsize=100, ttl=3600))  # Cache válido por 1 Hora
 def obter_dados_operacao():
+    global cache_dados  # Certifique-se de que a variável global seja acessada
     sheet_operacao = arquivo().worksheet_by_title("Operacao")
-    dados_operacao = sheet_operacao.get_all_values()
-    df_operacao = pd.DataFrame(dados_operacao[1:], columns=dados_operacao[0])
     
-      # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_operacao.to_json().encode()).hexdigest()
-    
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_operacao.to_json().encode()).hexdigest()
-    
-    # Verificar se os dados mudaram
-    if cache_dados.hash_dados_operacao == hash_dados:
-        return cache_dados.dados_em_cache_operacao
-    else:
-        # Atualizar o cache
-        cache_dados.hash_dados_operacao = hash_dados
-        cache_dados.dados_em_cache_operacao = df_operacao
-    return df_operacao
+    try:
+        # Tente obter os dados da planilha
+        dados_operacao = sheet_operacao.get_all_values()
+        
+        # Crie o DataFrame a partir dos dados
+        df_operacao = pd.DataFrame(dados_operacao[1:], columns=dados_operacao[0])
 
+        # Calcular o hash dos dados
+        hash_dados = hashlib.md5(df_operacao.to_json().encode()).hexdigest()
+
+        # Verificar se os dados estão em cache
+        if hasattr(cache_dados, 'hash_dados_operacao') and cache_dados.hash_dados_operacao == hash_dados:
+            return cache_dados.dados_em_cache_operacao
+        else:
+            # Atualizar o cache
+            cache_dados.hash_dados_operacao = hash_dados
+            cache_dados.dados_em_cache_produto = df_operacao
+        
+        print("Dados obtidos diretamente do Google Sheets API para operacao.")
+        return df_operacao
+    
+    except Exception as e:
+        # Se ocorrer uma exceção, você pode escolher logá-la ou levantar novamente, dependendo do seu caso de uso.
+        # Aqui, estamos registrando a exceção no console.
+        print(f"Erro ao obter dados da ChecklistRecebimento: {str(e)}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
 # Função para obter dados da folha "ChecklistRecebimento" com caching
 @cached(cache=TTLCache(maxsize=900, ttl=600))  # Cache válido por 10 minutos
 def obter_dados_ChecklistRecebimento():
     global cache_dados  # Certifique-se de que a variável global seja acessada
     sheet_ChecklistRecebimento = arquivo().worksheet_by_title("ChecklistRecebimento")
-    dados_ChecklistRecebimento = sheet_ChecklistRecebimento.get_all_values()
-    df_ChecklistRecebimento = pd.DataFrame(dados_ChecklistRecebimento[1:], columns=dados_ChecklistRecebimento[0])
-      
-      # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_ChecklistRecebimento.to_json().encode()).hexdigest()
     
-     # Calcular o hash dos dados
-    hash_dados = hashlib.md5(df_ChecklistRecebimento.to_json().encode()).hexdigest()
+    try:
+        # Tente obter os dados da planilha
+        dados_ChecklistRecebimento = sheet_ChecklistRecebimento.get_all_values()
+        
+        # Crie o DataFrame a partir dos dados
+        df_ChecklistRecebimento = pd.DataFrame(dados_ChecklistRecebimento[1:], columns=dados_ChecklistRecebimento[0])
+
+        # Calcular o hash dos dados
+        hash_dados = hashlib.md5(df_ChecklistRecebimento.to_json().encode()).hexdigest()
+
+        # Verificar se os dados estão em cache
+        if hasattr(cache_dados, 'hash_dados_ChecklistRecebimento') and cache_dados.hash_dados_ChecklistRecebimento == hash_dados:
+            print("Dados obtidos do cache para ChecklistRecebimento.")
+            return cache_dados.dados_em_cache_ChecklistRecebimento
+        else:
+            # Atualizar o cache
+            cache_dados.hash_dados_ChecklistRecebimento = hash_dados
+            cache_dados.dados_em_cache_ChecklistRecebimento = df_ChecklistRecebimento
+        
+        print("Dados obtidos diretamente do Google Sheets API para ChecklistRecebimento.")
+        return df_ChecklistRecebimento
     
-    # Verificar se os dados mudaram
-    if cache_dados.hash_dados_ChecklistRecebimento == hash_dados:
-        return cache_dados.dados_em_cache_ChecklistRecebimento
-    else:
-        # Atualizar o cache
-        cache_dados.hash_dados_ChecklistRecebimento = hash_dados
-        cache_dados.dados_em_cache_ChecklistRecebimento = df_ChecklistRecebimento
-    return df_ChecklistRecebimento
+    except Exception as e:
+        # Se ocorrer uma exceção, você pode escolher logá-la ou levantar novamente, dependendo do seu caso de uso.
+        # Aqui, estamos registrando a exceção no console.
+        print(f"Erro ao obter dados da ChecklistRecebimento: {str(e)}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
 
 # Função para formatar a data
 def formatar_data(raw_date):
@@ -325,83 +381,96 @@ def limpar_cache():
 def limpar_cache_rota():
     limpar_cache()
     return jsonify(retorno="Cache limpo com sucesso.")
-
+    
 # Função para obter dados da folha "ChecklistRecebimento" com caching
-@cached(cache=TTLCache(maxsize=10, ttl=20))
 @conferencia_dados_inicias_checklist.route("/consultar_numero_controle_Checklist", methods=["GET", "POST"])
 def consultar_numero_controle_Checklist():
     try:
-        # Carregar dados da folha "ChecklistRecebimento" e outros DataFrames
+
+         # Carregar dados da folha "ChecklistRecebimento" e outros DataFrames
         df_ChecklistRecebimento = obter_dados_ChecklistRecebimento()
+        df_ChecklistRecebimento['ID_Ordem'] = pd.to_numeric(df_ChecklistRecebimento['ID_Ordem'], errors='coerce')
+       
         df_recebimento = obter_dados_recebimento()
+        df_recebimento['ID_Ordem'] = pd.to_numeric(df_recebimento['ID_Ordem'], errors='coerce')
+        
         df_cliente = obter_dados_cliente()
         df_produto = obter_dados_produto()
-
-        # Remover espaços em branco nas colunas 'ID_Ordem' dos DataFrames
-        for df in [df_ChecklistRecebimento, df_recebimento]:
-            if pd.api.types.is_string_dtype(df['ID_Ordem']):
-                df['ID_Ordem'] = df['ID_Ordem'].str.strip()
-
+        
         # Obter o valor do frontend (substitua 'valor_do_frontend' pelo valor real recebido do frontend)
         numerocontrole = request.json.get('numControleValue')
+        
+        # print("numerocontrole:", numerocontrole)
 
         # Filtrar os dados com base no valor recebido do frontend
         df_recebimento_filtrado = df_recebimento[df_recebimento['Recebimento'] == numerocontrole]
-
+        
+         #print("df_recebimento_filtrado:", df_recebimento_filtrado)
+        
         # Verificar se há linhas correspondentes no DataFrame filtrado
-        if not df_recebimento_filtrado.empty:
-
+        if not df_recebimento_filtrado.empty: 
             # Obter o valor de 'ID_Ordem' correspondente ao primeiro registro
             id_ordem_correspondente = df_recebimento_filtrado['ID_Ordem'].values[0]
-
-            # Filtrar df_ChecklistRecebimento para incluir apenas as linhas com o mesmo ID_Ordem
+            
+            # Carregar dados da folha "ChecklistRecebimento" e outros DataFrames
+            df_ChecklistRecebimento = obter_dados_ChecklistRecebimento()
+            
+             #print("id_ordem_correspondente:", id_ordem_correspondente)
+             #print("df_ChecklistRecebimento:",df_ChecklistRecebimento)
+             #print(df_ChecklistRecebimento.dtypes)
+             #print(df_ChecklistRecebimento.head())
+            
+            # Filtrar os dados com base no valor recebido do frontend
             df_ChecklistRecebimento_filtrado = df_ChecklistRecebimento[df_ChecklistRecebimento['ID_Ordem'] == id_ordem_correspondente]
 
+
+             #print("df_ChecklistRecebimento_filtrado:")
+             #print(df_ChecklistRecebimento_filtrado)
+             #print(df_ChecklistRecebimento_filtrado.dtypes)
+             #print(df_ChecklistRecebimento_filtrado.head())
+            
             # Convertendo colunas em df_cliente
             df_produto['Cod_Produto'] = pd.to_numeric(df_produto['Cod_Produto'], errors='coerce')
             df_produto['idGrupo'] = pd.to_numeric(df_produto['idGrupo'], errors='coerce')
             df_produto['idoperacaoServico'] = pd.to_numeric(df_produto['idoperacaoServico'], errors='coerce')
             df_produto['Cod_Produto'] = pd.to_numeric(df_produto['Cod_Produto'], errors='coerce')
          
-            df_recebimento['ID_Ordem'] = pd.to_numeric(df_recebimento['ID_Ordem'], errors='coerce')
-            df_ChecklistRecebimento_filtrado['ID_Ordem'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['ID_Ordem'], errors='coerce')
-            df_recebimento_filtrado['ID_Ordem'] = pd.to_numeric(df_recebimento_filtrado['ID_Ordem'], errors='coerce')
-        
+         
             # Convertendo colunas em df_recebimento
-            df_ChecklistRecebimento['ID_Ordem'] = pd.to_numeric(df_ChecklistRecebimento['ID_Ordem'], errors='coerce')
-            df_ChecklistRecebimento['ID_cliente'] = pd.to_numeric(df_ChecklistRecebimento['ID_cliente'], errors='coerce')
-            df_ChecklistRecebimento['Cod_Produto'] = pd.to_numeric(df_ChecklistRecebimento['Cod_Produto'], errors='coerce')
-            df_ChecklistRecebimento['Quantidade'] = pd.to_numeric(df_ChecklistRecebimento['Quantidade'], errors='coerce')
-            df_ChecklistRecebimento['id_Checklist'] = pd.to_numeric(df_ChecklistRecebimento['id_Checklist'], errors='coerce')
+            df_ChecklistRecebimento_filtrado['ID_Ordem'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['ID_Ordem'], errors='coerce')
+            df_ChecklistRecebimento_filtrado['ID_cliente'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['ID_cliente'], errors='coerce')
+            df_ChecklistRecebimento_filtrado['Cod_Produto'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['Cod_Produto'], errors='coerce')
+            df_ChecklistRecebimento_filtrado['Quantidade'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['Quantidade'], errors='coerce')
+            df_ChecklistRecebimento_filtrado['id_Checklist'] = pd.to_numeric(df_ChecklistRecebimento_filtrado['id_Checklist'], errors='coerce')
 
             # Certifique-se de que os nomes das colunas estejam corretos
-            df_ChecklistRecebimento['DataRec_OrdemServiços_Recebimento'] = df_ChecklistRecebimento['ID_Ordem'].map(
-                df_recebimento.set_index('ID_Ordem')['DataRec_OrdemServiços'])
-            df_ChecklistRecebimento['HoraInicial_Ordem_Recebimento'] = df_ChecklistRecebimento['ID_Ordem'].map(
-                df_recebimento.set_index('ID_Ordem')['HoraInicial_Ordem'])
-            df_ChecklistRecebimento['ID_Vendedor_Recebimento'] = df_ChecklistRecebimento['ID_Ordem'].map(
-                df_recebimento.set_index('ID_Ordem')['ID_Vendedor'])
-            df_ChecklistRecebimento['Nome_cliente'] = df_ChecklistRecebimento['ID_cliente'].map(
+            df_ChecklistRecebimento_filtrado['DataRec_OrdemServiços_Recebimento'] = df_ChecklistRecebimento_filtrado['ID_Ordem'].map(
+                df_recebimento_filtrado.set_index('ID_Ordem')['DataRec_OrdemServiços'])
+            df_ChecklistRecebimento_filtrado['HoraInicial_Ordem_Recebimento'] = df_ChecklistRecebimento_filtrado['ID_Ordem'].map(
+                df_recebimento_filtrado.set_index('ID_Ordem')['HoraInicial_Ordem'])
+            df_ChecklistRecebimento_filtrado['ID_Vendedor_Recebimento'] = df_ChecklistRecebimento_filtrado['ID_Ordem'].map(
+                df_recebimento_filtrado.set_index('ID_Ordem')['ID_Vendedor'])
+            df_ChecklistRecebimento_filtrado['Nome_cliente'] = df_ChecklistRecebimento_filtrado['ID_cliente'].map(
                 df_cliente.set_index('ID_Cliente')['Nome_cliente'])
 
             colunas_produto = ['Cod_Produto', 'nome_produto', 'idGrupo', 'idoperacaoServico', 'ID_Componente',
                                'ID_PostoTrabalho']
-            df_ChecklistRecebimento = pd.merge(df_ChecklistRecebimento, df_produto[colunas_produto], how='left',
+            df_ChecklistRecebimento_filtrado = pd.merge(df_ChecklistRecebimento_filtrado, df_produto[colunas_produto], how='left',
                                                on='Cod_Produto')
 
             colunas_recebimento = ['ID_Ordem', 'Recebimento', 'QUEIXA_CLIENTE']
-            df_ChecklistRecebimento = pd.merge(df_ChecklistRecebimento, df_recebimento[colunas_recebimento], how='left',
+            df_ChecklistRecebimento_filtrado = pd.merge(df_ChecklistRecebimento_filtrado, df_recebimento_filtrado[colunas_recebimento], how='left',
                                                on='ID_Ordem')
 
             # Selecione apenas as colunas desejadas
             colunas_desejadas = ['id_Checklist', 'Recebimento', 'Nome_cliente', 'Cod_Produto', 'nome_produto',
                                  'Refencia_Produto', 'Quantidade', 'NotaInterna', 'QUEIXA_CLIENTE']
-            df_checklist_selecionado = df_ChecklistRecebimento[colunas_desejadas].head(1)
-
+            df_checklist_selecionado = df_ChecklistRecebimento_filtrado[colunas_desejadas]
+            
             # Converta o DataFrame diretamente para JSON usando jsonify
             result_json = df_checklist_selecionado.to_json(orient='records')
-
-            print("TONY result_json_tabela_teste:", result_json)
+            
+             #print("TONY AGORA :", df_ChecklistRecebimento_filtrado)
 
             # Retorne os dados mapeados como JSON
             return jsonify(retorno=result_json)
@@ -409,3 +478,4 @@ def consultar_numero_controle_Checklist():
     except Exception as error:
         print("Erro: ", str(error))
         return jsonify(retorno="Algo deu errado: " + str(error)), 500
+

@@ -19,7 +19,7 @@
     <div class="container">
       <div class="row mt-3 mb-3">
         <div class="col-md-3">
-          <label for="numeroControle" class="custom-label">Número de Controle</label>
+          <label for="numeroControle" class="custom-label">Número de Controrole</label>
           <input
             id="numeroControle"
             type="text"
@@ -1272,11 +1272,11 @@ $.ajax({
 
 // CAPTURA OS DADOS DOS INPUTS
 function coletarDadosDaInterface() {
-  var numeroControle = document.getElementById(
+     numeroControle = document.getElementById(
     "numeroControle"
     ).value;
     
-    var all_data = {
+     all_data = {
       numeroControle: numeroControle,
     };
     console.log(all_data)
@@ -1300,6 +1300,7 @@ function coletarDadosDaInterface() {
    mostrarErro();
 });
 }
+
 
 // Função que será chamada quando o botão "Gerar Relatórios" for pressionado
 function iniciarProcesso() {
@@ -1669,6 +1670,25 @@ function setupEventListeners() {
   document
     .querySelector("#numeroControle")
     .addEventListener("input", filterTableByInput);
+
+   // Adiciona evento de clique ao select
+  document
+    .querySelector("#numeroControle")  // Substitua "seuSelectId" pelo ID real do seu elemento select
+    .addEventListener("click", handleSelectClick);
+}
+function handleSelectClick() {
+  // Verifica se o valor do campo de entrada está vazio
+  const numControleValue = document.querySelector("#numeroControle").value.trim();
+
+  // Verifica se o usuário clicou em uma opção específica ou apagou todos os dados
+  if (numControleValue) {
+    // Se numControle tem valor, limpe o campo de entrada
+    document.querySelector("#numeroControle").value = "";
+  } else {
+    // Se o numControle estiver vazio, traga de volta a lista original
+    buscarDadosIniciaisConferenciaProgramacao();
+    table_checklist.clearFilter(); // Certifique-se de remover todos os filtros para exibir todos os registros
+  }
 }
 
 function filterTableByInput(event) {
@@ -1734,51 +1754,44 @@ function tableHasRecords() {
 }
 
 function buscarNoGAS(numControleValue) {
-  console.log("a")
+  console.log("a");
+
   // Mostra a mensagem de carregamento antes de iniciar a chamada AJAX
   showLoadingMessage();
 
   var all_data = {
-    numControleValue:numControleValue,
-    };
-    console.log(all_data)
-    $.ajax({
-      url: my_url() + "consultar_numero_controle_Checklist",
-      data: JSON.stringify(all_data),
-      contentType: 'application/json',
-      type: 'POST',
-    }).done(function (response) {
-      // Verifica se a resposta é um JSON válido
-      if (
-        typeof response === "string" &&
-        (response.trim().startsWith("{") ||
-          response.trim().startsWith("["))
-      ) {
-        var data = JSON.parse(response);
-        console.log(
-          "Dados recebidos do GAS para o número de controle:",
-          data
-        );
+    numControleValue: numControleValue,
+  };
 
-        if (data && data.length) {
-          // Atualiza a tabela com os dados retornados
-          updateTableData(data);
-        } else {
-          console.warn(
-            "Nenhum dado encontrado para o número de controle:",
-            valor
-          );
-        }
-      } else {
-        console.error("Resposta inválida (não é JSON):", response);
-      }
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      console.error("Erro ao buscar dados:", textStatus, errorThrown);
-    })
-    .always(function () {
-      hideLoadingMessage(); // Esconde a mensagem de carregamento quando a chamada AJAX terminar, independentemente de ter sucesso ou falhar
-    });
+  console.log(all_data);
+
+  $.ajax({
+    url: my_url() + "consultar_numero_controle_Checklist",
+    data: JSON.stringify(all_data),
+    contentType: 'application/json',
+    type: 'POST',
+  })
+  .done(function (data) {
+    try {
+      let dados = data.retorno;
+      console.log("buscarNoGAS:", dados);
+      updateTableData(data);
+    } catch (e) {
+      console.error("Erro ao analisar os dados:", e);
+    }
+  })
+  .fail(function (jqXHR, textStatus, errorThrown) {
+    console.error("Erro na solicitação AJAX: " + errorThrown);
+    console.error("Status da solicitação: " + textStatus);
+    mostrarErro();
+  })
+  .always(function () {
+    hideLoadingMessage(); // Esconde a mensagem de carregamento quando a chamada AJAX terminar, independentemente de ter sucesso ou falhar
+  })
+  .catch(function (error) {
+  console.error("Erro inesperado:", error);
+  mostrarErro();
+});
 }
 
 function showLoadingMessage() {

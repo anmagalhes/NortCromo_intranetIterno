@@ -15,6 +15,7 @@ from threading import Lock
 import pandas as pd
 from routes.funcoesGerais import *
 
+
 credencias = pygsheets.authorize(
     service_file=os.getcwd() + "/sistemasuelopro_googleConsole.json"
 )
