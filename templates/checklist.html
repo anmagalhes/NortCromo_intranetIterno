@@ -66,6 +66,12 @@
   </body>
 
   <script>
+
+// Verifique se a variável NumControleValue já foi declarada
+if (typeof numControleValue === 'undefined') {
+     let numControleValue;
+}
+
 // Verifique se a variável OPERATIONS_ORDER já foi declarada
 if (typeof OPERATIONS_ORDER === 'undefined') {
   // Declare e inicialize a variável
@@ -93,6 +99,7 @@ if (typeof today === 'undefined') {
 }
 
 
+
 // Função para destruir a tabela e limpar variáveis
 function limparTabela() {
   if (table_checklist) {
@@ -112,9 +119,6 @@ function limparTabela() {
   if (window.hasOwnProperty('editedRows')) {
     delete window.editedRows;
   }
-  if (window.hasOwnProperty('numControleValue')) {
-    delete window.numControleValue;
-  }
 }
 
 // Função para inicializar a tabela e variáveis
@@ -127,8 +131,6 @@ function inicializarTabela() {
   today = new Date();
  formattedToday = formatDateToDDMMYYYY(today);
 }
-
-let numControleValue
 
 $(window).on('beforeunload', function() {
   limparTabela();
