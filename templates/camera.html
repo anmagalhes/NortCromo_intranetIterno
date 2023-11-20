@@ -19,7 +19,7 @@
     <div class="container">
       <div class="row mt-3 mb-3">
         <div class="col-md-3">
-          <label for="numeroControle" class="custom-label">Número de Controrole</label>
+          <label for="numeroControle" class="custom-label">Número de Controle</label>
           <input
             id="numeroControle"
             type="text"
@@ -44,7 +44,9 @@
         <div id="camera-container">
           <video id="camera-feed" autoplay></video>
           <button id="capturar-foto">Capturar Foto</button>
-          <button id="capturar-camera">Capturar da Câmera</button>
+          <button id="capturar-camera-frente">Câmera Frontal</button>
+          <button id="capturar-camera-trans">Câmera Traseira</button>
+          <button id="desativar-camera">Desativar Câmera</button>
           <input type="file" id="fileInput" accept="image/*" />
         </div>
         <canvas id="foto-capturada" style="display: none"></canvas>
@@ -92,21 +94,35 @@
         }
       }
     </script>
-    
+
     <script>
       const video = document.getElementById('camera-feed');
       const capturarBotao = document.getElementById('capturar-foto');
+      const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
+      const cameraTransBotao = document.getElementById('capturar-camera-trans');
+      const desativarCameraBotao = document.getElementById('desativar-camera');
       const canvas = document.getElementById('foto-capturada');
 
-      function startCamera() {
+      let currentStream;
+
+      function startCamera(streamOptions) {
         navigator.mediaDevices
-          .getUserMedia({ video: true })
+          .getUserMedia(streamOptions)
           .then(function (stream) {
             video.srcObject = stream;
+            currentStream = stream;
           })
           .catch(function (error) {
             console.log('Erro ao acessar a câmera: ' + error);
           });
+      }
+
+      function stopCamera() {
+        if (currentStream) {
+          const tracks = currentStream.getTracks();
+          tracks.forEach(track => track.stop());
+          video.srcObject = null;
+        }
       }
 
       function capturePhoto() {
@@ -132,29 +148,22 @@
           .catch((error) => console.error(error));
       }
 
-      function startCameraCapture() {
-        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-          navigator.mediaDevices
-            .getUserMedia({ video: true })
-            .then(function (stream) {
-              video.srcObject = stream;
-              video.style.display = 'block';
-            })
-            .catch(function (error) {
-              console.log('Erro ao acessar a câmera: ' + error);
-            });
-        } else {
-          console.log('A API de captura de câmera não é suportada neste navegador.');
-        }
-      }
-
-      startCamera();
-
       capturarBotao.addEventListener('click', capturePhoto);
 
-      const cameraButton = document.getElementById('capturar-camera');
+      cameraFrenteBotao.addEventListener('click', function () {
+        stopCamera();
+        startCamera({ video: { facingMode: 'user' } });
+      });
 
-      cameraButton.addEventListener('click', startCameraCapture);
+      cameraTransBotao.addEventListener('click', function () {
+        stopCamera();
+        startCamera({ video: { facingMode: { exact: 'environment' } } });
+      });
+
+      desativarCameraBotao.addEventListener('click', function () {
+        stopCamera();
+        video.style.display = 'none';
+      });
     </script>
   </body>
 </html>

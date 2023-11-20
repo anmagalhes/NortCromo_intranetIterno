@@ -478,4 +478,3 @@ def consultar_numero_controle_Checklist():
     except Exception as error:
         print("Erro: ", str(error))
         return jsonify(retorno="Algo deu errado: " + str(error)), 500
-
