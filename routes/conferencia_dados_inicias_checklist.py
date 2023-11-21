@@ -54,6 +54,98 @@ def carregar_dados_gs(aba):
     df = pd.DataFrame(dados_da_planilha[1:], columns=dados_da_planilha[0])
     return df
 
+def adicionar_ou_atualizar_linha_novas_tarefas(aba, id_ordem, df_checklist_selecionado, chave):
+    try:
+        # Carregar todos os valores da folha NovasTarefas
+        valores_sheet = aba.get_all_values()
+
+        # Criar um DataFrame a partir dos valores da folha
+        df_sheet = pd.DataFrame(valores_sheet[1:], columns=valores_sheet[0])
+
+        # Verificar se o ID_ORDEM já existe no DataFrame
+        if id_ordem in df_sheet[chave].astype(float).values:
+            # Atualizar as colunas correspondentes para a linha existente
+            df_sheet.loc[df_sheet[chave].astype(float) == id_ordem, df_checklist_selecionado.columns] = df_checklist_selecionado.values
+        else:
+            # Adicionar uma nova linha ao DataFrame
+            nova_linha = pd.concat([pd.Series([id_ordem]), df_checklist_selecionado], axis=1)
+            nova_linha.columns = df_sheet.columns
+            df_sheet = pd.concat([df_sheet, nova_linha], ignore_index=True)
+
+        # Atualizar apenas as linhas necessárias na folha do Google Sheets
+        atualizar_linhas_na_aba(aba, df_sheet)
+
+        return jsonify(retorno="Deu certo!")
+    except Exception as e:
+        return jsonify(retorno="Algo deu errado: " + str(e))
+    
+def atualizar_linhas_na_aba(aba, df_sheet):
+    try:
+        # Atualizar apenas as linhas necessárias na folha do Google Sheets
+        for i, row in df_sheet.iterrows():
+            # Verificar se a linha já existe na folha
+            if row['ID_Ordem'] in aba.get_col(2, include_tailing_empty=False):
+                # Atualizar a linha existente
+                aba.update_values(
+                    start=(i + 2, 1),
+                    end=(i + 2, len(df_sheet.columns)),
+                    values=[row.values.tolist()],
+                )
+            else:
+                # Adicionar uma nova linha
+                aba.append_table(
+                    values=[row.values.tolist()],
+                    start=None,
+                    end=None,
+                    dimension="ROWS",
+                    overwrite=False,
+                )
+
+    except Exception as e:
+        print(f"Erro ao atualizar linhas na aba: {str(e)}")
+    
+    
+def verificar_e_atualizar_novas_tarefas(id_ordem, df_ChecklistRecebimento_filtrado):
+    try:
+        # Nome da guia para atualização
+        nome_guia = "NovasTarefas"
+        # Carregar dados da folha "NovasTarefas"
+        sheet_novas_tarefas = arquivo().worksheet_by_title(nome_guia)
+
+        # Selecione apenas as colunas desejadas
+        colunas_desejadas = ['ID_Ordem', 'DataRec_OrdemServiços', 'ID_cliente', 'Cod_Produto', 'nome_produto',
+                             'Refencia_Produto', 'Quantidade', 'NotaInterna', 'QUEIXA_CLIENTE']
+        df_checklist_selecionado = df_ChecklistRecebimento_filtrado[colunas_desejadas]
+        
+        
+
+        # Verificar se o ID_ORDEM já existe na folha "NovasTarefas"
+        valores_sheet = sheet_novas_tarefas.get_all_values()
+    
+        df_sheet = pd.DataFrame(valores_sheet[1:], columns=valores_sheet[0])
+        print("df_sheet", df_sheet)
+        print("valores_sheet", valores_sheet)
+        
+        if id_ordem in df_sheet['ID_Ordem'].astype(float).values:
+            # Atualizar as colunas correspondentes para a linha existente
+            df_sheet.loc[df_sheet['ID_Ordem'].astype(float) == id_ordem, df_checklist_selecionado.columns] = df_checklist_selecionado.values
+        else:
+            # Adicionar uma nova linha ao DataFrame
+            nova_linha = pd.concat([pd.Series([id_ordem]), df_checklist_selecionado], axis=1)
+            nova_linha.columns = df_sheet.columns
+            df_sheet = pd.concat([df_sheet, nova_linha], ignore_index=True)
+            
+
+        return jsonify(retorno="Deu certo!")
+    except Exception as e:
+        return jsonify(retorno="Algo deu errado: " + str(e))
+    
+# Função auxiliar para mapear colunas
+def mapear_colunas(destino, origem, colunas):
+    for coluna in colunas:
+        destino[coluna] = origem[coluna].map(origem.set_index(coluna))
+    return destino
+
 # Função para obter dados da folha "Recebimento" com caching
 @cached(cache=TTLCache(maxsize=500, ttl=600))  # Cache válido por 10 minutos  maxsize = Número de linhas ttl= tempo 
 def obter_dados_recebimento():
@@ -423,12 +515,6 @@ def consultar_numero_controle_Checklist():
             # Filtrar os dados com base no valor recebido do frontend
             df_ChecklistRecebimento_filtrado = df_ChecklistRecebimento[df_ChecklistRecebimento['ID_Ordem'] == id_ordem_correspondente]
 
-
-             #print("df_ChecklistRecebimento_filtrado:")
-             #print(df_ChecklistRecebimento_filtrado)
-             #print(df_ChecklistRecebimento_filtrado.dtypes)
-             #print(df_ChecklistRecebimento_filtrado.head())
-            
             # Convertendo colunas em df_cliente
             df_produto['Cod_Produto'] = pd.to_numeric(df_produto['Cod_Produto'], errors='coerce')
             df_produto['idGrupo'] = pd.to_numeric(df_produto['idGrupo'], errors='coerce')
@@ -467,11 +553,18 @@ def consultar_numero_controle_Checklist():
                                  'Refencia_Produto', 'Quantidade', 'NotaInterna', 'QUEIXA_CLIENTE']
             df_checklist_selecionado = df_ChecklistRecebimento_filtrado[colunas_desejadas]
             
-            # Converta o DataFrame diretamente para JSON usando jsonify
-            result_json = df_checklist_selecionado.to_json(orient='records')
+            verificar_e_atualizar_novas_tarefas(id_ordem_correspondente, df_ChecklistRecebimento_filtrado)
             
-             #print("TONY AGORA :", df_ChecklistRecebimento_filtrado)
+             #print("df_ChecklistRecebimento_filtrado")
+            #print(df_ChecklistRecebimento_filtrado)
+            #print(df_ChecklistRecebimento_filtrado.dtypes)
+            #print( df_ChecklistRecebimento_filtrado.head())
 
+            # Converta o DataFrame diretamente para JSON usando jsonify
+            result_json = df_checklist_selecionado.to_json(orient='records')# Atualizar a folha do Google com os dados
+    
+             #print("TONY AGORA :", df_ChecklistRecebimento_filtrado)
+             
             # Retorne os dados mapeados como JSON
             return jsonify(retorno=result_json)
 

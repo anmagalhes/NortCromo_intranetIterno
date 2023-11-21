@@ -17,17 +17,28 @@
     />
 
     <div class="container">
-      <div class="row mt-3 mb-3">
-        <div class="col-md-3">
-          <label for="numeroControle" class="custom-label">Número de Controle</label>
-          <input
-            id="numeroControle"
-            type="text"
-            class="form-control highlight-input"
-            placeholder="Controle"
-            list="numerosDeControle"
-          />
+          <!-- Botões de opção para "Sim" ou "Não" -->
+        <div class="col-md-3 mb-3">
+          <label for="marcaNovo" class="custom-label">Nº de Controle</label>
+          <div class="btn-group" role="group" aria-label="Marque Novo ou Não">
+            <button type="button" class="btn btn-outline-primary" data-value="Sim">Novo</button>
+            <button type="button" class="btn btn-outline-primary" data-value="Não">Existente</button>
+            <input type="hidden" id="marcaNovo" name="marcaNovo" value="">
+          </div>
         </div>
+
+        <div class="row mt-3 mb-3">
+          <div class="col-md-3">
+            <label for="numeroControle" class="custom-label">Número de Controle</label>
+            <input
+              id="numeroControle"
+              type="text"
+              class="form-control highlight-input"
+              placeholder="Controle"
+              list="numerosDeControle"
+            />
+          </div>
+
         <!-- Campo Data de Recebimento -->
         <div class="col-md-6 mb-3">
           <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
@@ -38,6 +49,17 @@
             placeholder="Data de Recebimento"
           />
         </div>
+      </div>
+
+       <!-- Campo para a hora atual -->
+       <div class="col-md-3 mb-3">
+        <label for="horaAtual" class="custom-label">Hora Atual</label>
+        <input
+          id="horaAtual"
+          type="time"
+          class="form-control"
+          readonly
+        />
       </div>
 
       <div class="container">
@@ -96,6 +118,72 @@
     </script>
 
     <script>
+
+$(document).ready(function () {
+    // Chamar a função horaSistema para definir a hora atual
+    horaSistema();
+
+    // Formatar campo de telefone
+    $("#telefone").keyup(function () {
+        var val = this.value.replace(/\D/g, "");
+        var newVal = "";
+        while (val.length > 0) {
+            newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
+            val = val.substr(2);
+        }
+        this.value = newVal.trim();
+    });
+
+    // Adicionar estilo ao campo quando preenchido
+    $("input").blur(function () {
+        if ($(this).val()) {
+            $(this).addClass("filled");
+        } else {
+            $(this).removeClass("filled");
+        }
+    });
+});
+
+// Função para definir a hora atual no campo
+function horaSistema() {
+    const horaAtualInput = document.getElementById('horaAtual');
+    const agora = new Date();
+
+    // Formatar a hora atual para hh:mm
+    const horaAtual = agora.getHours().toString().padStart(2, '0');
+    const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+    const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+    horaAtualInput.value = horaFormatada;
+}
+
+       document.addEventListener("DOMContentLoaded", function() {
+        const btnGroup = document.querySelector('.btn-group');
+        const hiddenInput = document.getElementById('marcaNovo');
+        
+        btnGroup.addEventListener('click', function(event) {
+          const target = event.target;
+          if (target.tagName === 'BUTTON') {
+            const value = target.getAttribute('data-value');
+            hiddenInput.value = value;
+          }
+        });
+      });
+
+        // Script para definir a hora atual no campo
+        document.addEventListener("DOMContentLoaded", function() {
+        const horaAtualInput = document.getElementById('horaAtual');
+        const agora = new Date();
+
+        // Formatar a hora atual para hh:mm
+        const horaAtual = agora.getHours().toString().padStart(2, '0');
+        const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+        const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+        horaAtualInput.value = horaFormatada;
+      });
+
+
       const video = document.getElementById('camera-feed');
       const capturarBotao = document.getElementById('capturar-foto');
       const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
