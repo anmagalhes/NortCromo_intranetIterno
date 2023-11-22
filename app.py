@@ -34,7 +34,9 @@ from routes.consulta_pedreiros import consulta_pedreiros
 from routes.salvar_dados_presencas import salvar_dados_presencas
 from routes.usuarios import verifica_usuario
 
-from routes.conferencia_dados_inicias_checklist import conferencia_dados_inicias_checklist
+from routes.conferencia_dados_inicias_checklist import (
+    conferencia_dados_inicias_checklist,
+)
 
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
@@ -82,17 +84,19 @@ def confere_token(userName, token):
 
 @app.route("/", methods=["GET"])
 def index_1():
-    userName = request.cookies.get("userName")
-    token = request.cookies.get("token")
+    return render_template("camera.html")
 
-    if userName and token and confere_token(userName, token):
-        # O usuário já está autenticado, redirecione para outra página (por
-        # exemplo, 'estrutura.html').
-        return render_template("estrutura.html")
-    else:
-        # O usuário não está autenticado, então redirecione para a página de
-        # login.
-        return render_template("tela_de_login.html")
+    # userName = request.cookies.get("userName")
+    # token = request.cookies.get("token")
+
+    # if userName and token and confere_token(userName, token):
+    #     # O usuário já está autenticado, redirecione para outra página (por
+    #     # exemplo, 'estrutura.html').
+    #     return render_template("estrutura.html")
+    # else:
+    #     # O usuário não está autenticado, então redirecione para a página de
+    #     # login.
+    #     return render_template("tela_de_login.html")
 
 
 @app.route("/verificador_inicial", methods=["POST"])

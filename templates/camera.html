@@ -1,35 +1,367 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  {% include 'head.html' %}
-  <body>
-    <div class="header">
-      <img
-        src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
-        alt="Logo da Empresa"
-      />
-      RECEBIMENTO - <span>NOTH CROMO</span>
-    </div>
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>jQuery UI Tabs - Default functionality</title>
     <link
-      rel="icon"
-      href="https://drive.google.com/uc?export=view&id=SEU_ID_DA_IMAGEM"
-      type="image/x-icon"
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
     />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+      $(function () {
+        $('#tabs').tabs();
+      });
+    </script>
+  </head>
+  <body>
+    <div id="superBody">
+      <div class="header">
+        <img
+          src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
+          alt="Logo da Empresa"
+        />
+        RECEBIMENTO - <span>NOTH CROMO</span>
+      </div>
 
-    <div class="container">
-          <!-- Botões de opção para "Sim" ou "Não" -->
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">Controle</a></li>
+          <li><a href="#tabs-2">Câmera</a></li>
+          <li><a href="#tabs-3">Outros</a></li>
+          <li><a href="#tabs-4">Cliente</a></li>
+        </ul>
+        <div id="tabs-1">
+          <div id="meio">
+            <div
+              style="
+                grid-column: 1 / 4;
+                display: grid;
+                grid-template-columns: 4fr 1fr 4fr;
+                grid-template-rows: auto auto;
+              "
+            >
+              <label>Nº Controle</label>
+              <input
+                type="text"
+                style="grid-column: 1 / 5; margin-bottom: 0.5em"
+              />
+              <button
+                class="ui-button ui-widget ui-corner-all"
+                style="grid-column: 1 / 2"
+              >
+                Novo
+              </button>
+              <button
+                class="ui-button ui-widget ui-corner-all"
+                style="grid-column: 3 / 4"
+              >
+                Existente
+              </button>
+            </div>
+            <div
+              style="border-bottom: 1px solid #ccc; grid-column: 1 / 13"
+            ></div>
+            <div style="display: grid; grid-column: 1 / 4">
+              <label>Número do Controle</label>
+              <input type="text" />
+            </div>
+            <div style="display: grid; grid-column: 4 / 9">
+              <label>Data de Recebimento</label>
+              <input type="date" />
+            </div>
+            <div style="display: grid; grid-column: 9 / 13">
+              <label>Hora Atual</label>
+              <input type="time" />
+            </div>
+            <div
+              style="border-bottom: 1px solid #ccc; grid-column: 1 / 13"
+            ></div>
+
+            <div
+              style="border-bottom: 1px solid #ccc; grid-column: 1 / 13"
+            ></div>
+          </div>
+        </div>
+        <div id="tabs-2" style="display: grid">
+          <div style="display: grid; grid-column: 1 / 4">
+            <button class="ui-button ui-widget ui-corner-all">
+              Capturar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 4 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Frontal
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 10">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Traseira
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 10 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Desativar Câmera
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 1 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Salvar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Upload Photo
+            </button>
+          </div>
+        </div>
+        <div id="tabs-3" style="display: grid">
+          <div>
+            <label>ID_Ordem</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>TipoOrdem</label>
+            <input type="text" />
+          </div>
+          <div>
+            <label>Recebimento</label>
+            <input type="text" />
+          </div>
+          <div>
+            <label>DataRec_OrdemServiços</label>
+            <input type="date" />
+          </div>
+          <div>
+            <label>DataFinal_OrdemServiços</label>
+            <input type="date" />
+          </div>
+          <div>
+            <label>HoraFinal_Ordem</label>
+            <input type="time" />
+          </div>
+        </div>
+        <div id="tabs-4" style="display: grid">
+          <div>
+            <label>ID_cliente</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Qtd_Produto</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Cod_Produto</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Referencia_Produto</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Num_Orcamento</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>NotaInterna</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>ID_Vendedor</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>QUEIXA_CLIENTE</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Img1_Ordem</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Img2_Ordem</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Img3_Ordem</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Img4_Ordem</label>
+            <input type="text" />
+          </div>
+
+          <div>
+            <label>Status_Ordem</label>
+            <input type="text" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script></script>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      #superBody {
+        height: 9%;
+        padding: 1em;
+        display: grid;
+        grid-template-rows: 1fr 9fr;
+      }
+
+      #tabs {
+        grid-column: 1 / -1;
+        margin-bottom: 1em;
+        height: 80vh;
+        overflow-y: auto;
+      }
+
+      #tabs-2 > div {
+        margin-bottom: 1em;
+      }
+
+      #tabs-4 > div {
+        margin-bottom: 1em;
+        display: grid;
+      }
+
+      #tabs-3 > div {
+        display: grid;
+        margin-bottom: 1em;
+      }
+
+      .header img {
+        width: 35px;
+        height: auto;
+        border-radius: 5px;
+        margin-right: 10px;
+      }
+      .header {
+        background-color: #43a04d;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .header span {
+        color: #fff8e1;
+        font-weight: 700;
+      }
+
+      #cameraStuff {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, min-content);
+      }
+
+      #meio {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, min-content);
+      }
+      #meio > div {
+        margin: 0.5em;
+      }
+
+      .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input[type='text'] {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        border: 0.2px solid #ccc;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      input[type='date'] {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        border: 0.2px solid #ccc;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      input[type='time'] {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        border: 0.2px solid #ccc;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+    </style>
+    <div style="display: none">
+      <div class="header">
+        <img
+          src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
+          alt="Logo da Empresa"
+        />
+        RECEBIMENTO - <span>NOTH CROMO</span>
+      </div>
+      <link
+        rel="icon"
+        href="https://drive.google.com/uc?export=view&id=SEU_ID_DA_IMAGEM"
+        type="image/x-icon"
+      />
+
+      <div class="container">
+        <!-- Botões de opção para "Sim" ou "Não" -->
         <div class="col-md-3 mb-3">
           <label for="marcaNovo" class="custom-label">Nº de Controle</label>
           <div class="btn-group" role="group" aria-label="Marque Novo ou Não">
-            <button type="button" class="btn btn-outline-primary" data-value="Sim">Novo</button>
-            <button type="button" class="btn btn-outline-primary" data-value="Não">Existente</button>
-            <input type="hidden" id="marcaNovo" name="marcaNovo" value="">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              data-value="Sim"
+            >
+              Novo
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              data-value="Não"
+            >
+              Existente
+            </button>
+            <input type="hidden" id="marcaNovo" name="marcaNovo" value="" />
           </div>
         </div>
-
         <div class="row mt-3 mb-3">
           <div class="col-md-3">
-            <label for="numeroControle" class="custom-label">Número de Controle</label>
+            <label for="numeroControle" class="custom-label"
+              >Número de Controle</label
+            >
             <input
               id="numeroControle"
               type="text"
@@ -39,219 +371,226 @@
             />
           </div>
 
-        <!-- Campo Data de Recebimento -->
-        <div class="col-md-6 mb-3">
-          <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
+          <!-- Campo Data de Recebimento -->
+          <div class="col-md-6 mb-3">
+            <label for="dataRecebimento" class="custom-label"
+              >Data de Recebimento</label
+            >
+            <input
+              id="dataRecebimento"
+              type="date"
+              class="form-control"
+              placeholder="Data de Recebimento"
+            />
+          </div>
+        </div>
+
+        <!-- Campo para a hora atual -->
+        <div class="col-md-3 mb-3">
+          <label for="horaAtual" class="custom-label">Hora Atual</label>
+          <input id="horaAtual" type="time" class="form-control" readonly />
+        </div>
+
+        <div class="container">
+          <div id="camera-container">
+            <video id="camera-feed" autoplay></video>
+            <button id="capturar-foto">Capturar Foto</button>
+            <button id="capturar-camera-frente">Câmera Frontal</button>
+            <button id="capturar-camera-trans">Câmera Traseira</button>
+            <button id="desativar-camera">Desativar Câmera</button>
+            <input type="file" id="fileInput" accept="image/*" />
+          </div>
+          <canvas id="foto-capturada" style="display: none"></canvas>
+          <button id="salvar-foto" onclick="uploadFile()">Salvar Foto</button>
+          <img id="imagem-foto" style="display: none" />
           <input
-            id="dataRecebimento"
-            type="date"
-            class="form-control"
-            placeholder="Data de Recebimento"
+            type="file"
+            accept="image/*"
+            capture="camera"
+            id="photo-input"
+            style="display: none"
           />
+          <button id="upload-button">Upload Photo</button>
         </div>
       </div>
 
-       <!-- Campo para a hora atual -->
-       <div class="col-md-3 mb-3">
-        <label for="horaAtual" class="custom-label">Hora Atual</label>
-        <input
-          id="horaAtual"
-          type="time"
-          class="form-control"
-          readonly
-        />
-      </div>
-
-      <div class="container">
-        <div id="camera-container">
-          <video id="camera-feed" autoplay></video>
-          <button id="capturar-foto">Capturar Foto</button>
-          <button id="capturar-camera-frente">Câmera Frontal</button>
-          <button id="capturar-camera-trans">Câmera Traseira</button>
-          <button id="desativar-camera">Desativar Câmera</button>
-          <input type="file" id="fileInput" accept="image/*" />
-        </div>
-        <canvas id="foto-capturada" style="display: none"></canvas>
-        <button id="salvar-foto" onclick="uploadFile()">Salvar Foto</button>
-        <img id="imagem-foto" style="display: none" />
-        <input type="file" accept="image/*" capture="camera" id="photo-input" style="display: none" />
-        <button id="upload-button">Upload Photo</button>
-      </div>
-    </div>
-
-    {% include 'funcoes_comuns.html' %}
-    <script src="capturar_foto.js"></script>
-    <script>
-      function my_url() {
-        if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
-          return 'http://127.0.0.1:5000/';
-        } else {
-          return 'https://www.northcromocontrole.com.br/';
-        }
-      }
-
-      function uploadFile() {
-        var fileInput = document.getElementById('fileInput');
-        var file = fileInput.files[0];
-
-        if (file) {
-          var formData = new FormData();
-          formData.append('file', file);
-
-          $.ajax({
-            type: 'POST',
-            url: my_url() + 'upload',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-              console.log('File uploaded successfully:', response);
-            },
-            error: function (error) {
-              console.error('Error uploading file:', error);
-            },
-          });
-        } else {
-          console.error('No file selected');
-        }
-      }
-    </script>
-
-    <script>
-
-$(document).ready(function () {
-    // Chamar a função horaSistema para definir a hora atual
-    horaSistema();
-
-    // Formatar campo de telefone
-    $("#telefone").keyup(function () {
-        var val = this.value.replace(/\D/g, "");
-        var newVal = "";
-        while (val.length > 0) {
-            newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
-            val = val.substr(2);
-        }
-        this.value = newVal.trim();
-    });
-
-    // Adicionar estilo ao campo quando preenchido
-    $("input").blur(function () {
-        if ($(this).val()) {
-            $(this).addClass("filled");
-        } else {
-            $(this).removeClass("filled");
-        }
-    });
-});
-
-// Função para definir a hora atual no campo
-function horaSistema() {
-    const horaAtualInput = document.getElementById('horaAtual');
-    const agora = new Date();
-
-    // Formatar a hora atual para hh:mm
-    const horaAtual = agora.getHours().toString().padStart(2, '0');
-    const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-    const horaFormatada = `${horaAtual}:${minutoAtual}`;
-
-    horaAtualInput.value = horaFormatada;
-}
-
-       document.addEventListener("DOMContentLoaded", function() {
-        const btnGroup = document.querySelector('.btn-group');
-        const hiddenInput = document.getElementById('marcaNovo');
-        
-        btnGroup.addEventListener('click', function(event) {
-          const target = event.target;
-          if (target.tagName === 'BUTTON') {
-            const value = target.getAttribute('data-value');
-            hiddenInput.value = value;
+      {% include 'funcoes_comuns.html' %}
+      <script src="capturar_foto.js"></script>
+      <script>
+        function my_url() {
+          if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+            return 'http://127.0.0.1:5000/';
+          } else {
+            return 'https://www.northcromocontrole.com.br/';
           }
+        }
+
+        function uploadFile() {
+          var fileInput = document.getElementById('fileInput');
+          var file = fileInput.files[0];
+
+          if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+              type: 'POST',
+              url: my_url() + 'upload',
+              data: formData,
+              contentType: false,
+              processData: false,
+              success: function (response) {
+                console.log('File uploaded successfully:', response);
+              },
+              error: function (error) {
+                console.error('Error uploading file:', error);
+              },
+            });
+          } else {
+            console.error('No file selected');
+          }
+        }
+      </script>
+
+      <script>
+        $(document).ready(function () {
+          // Chamar a função horaSistema para definir a hora atual
+          horaSistema();
+
+          // Formatar campo de telefone
+          $('#telefone').keyup(function () {
+            var val = this.value.replace(/\D/g, '');
+            var newVal = '';
+            while (val.length > 0) {
+              newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+              val = val.substr(2);
+            }
+            this.value = newVal.trim();
+          });
+
+          // Adicionar estilo ao campo quando preenchido
+          $('input').blur(function () {
+            if ($(this).val()) {
+              $(this).addClass('filled');
+            } else {
+              $(this).removeClass('filled');
+            }
+          });
         });
-      });
+
+        // Função para definir a hora atual no campo
+        function horaSistema() {
+          const horaAtualInput = document.getElementById('horaAtual');
+          const agora = new Date();
+
+          // Formatar a hora atual para hh:mm
+          const horaAtual = agora.getHours().toString().padStart(2, '0');
+          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+          const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+          horaAtualInput.value = horaFormatada;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const btnGroup = document.querySelector('.btn-group');
+          const hiddenInput = document.getElementById('marcaNovo');
+
+          btnGroup.addEventListener('click', function (event) {
+            const target = event.target;
+            if (target.tagName === 'BUTTON') {
+              const value = target.getAttribute('data-value');
+              hiddenInput.value = value;
+            }
+          });
+        });
 
         // Script para definir a hora atual no campo
-        document.addEventListener("DOMContentLoaded", function() {
-        const horaAtualInput = document.getElementById('horaAtual');
-        const agora = new Date();
+        document.addEventListener('DOMContentLoaded', function () {
+          const horaAtualInput = document.getElementById('horaAtual');
+          const agora = new Date();
 
-        // Formatar a hora atual para hh:mm
-        const horaAtual = agora.getHours().toString().padStart(2, '0');
-        const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-        const horaFormatada = `${horaAtual}:${minutoAtual}`;
+          // Formatar a hora atual para hh:mm
+          const horaAtual = agora.getHours().toString().padStart(2, '0');
+          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+          const horaFormatada = `${horaAtual}:${minutoAtual}`;
 
-        horaAtualInput.value = horaFormatada;
-      });
+          horaAtualInput.value = horaFormatada;
+        });
 
+        const video = document.getElementById('camera-feed');
+        const capturarBotao = document.getElementById('capturar-foto');
+        const cameraFrenteBotao = document.getElementById(
+          'capturar-camera-frente'
+        );
+        const cameraTransBotao = document.getElementById(
+          'capturar-camera-trans'
+        );
+        const desativarCameraBotao =
+          document.getElementById('desativar-camera');
+        const canvas = document.getElementById('foto-capturada');
 
-      const video = document.getElementById('camera-feed');
-      const capturarBotao = document.getElementById('capturar-foto');
-      const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
-      const cameraTransBotao = document.getElementById('capturar-camera-trans');
-      const desativarCameraBotao = document.getElementById('desativar-camera');
-      const canvas = document.getElementById('foto-capturada');
+        let currentStream;
 
-      let currentStream;
-
-      function startCamera(streamOptions) {
-        navigator.mediaDevices
-          .getUserMedia(streamOptions)
-          .then(function (stream) {
-            video.srcObject = stream;
-            currentStream = stream;
-          })
-          .catch(function (error) {
-            console.log('Erro ao acessar a câmera: ' + error);
-          });
-      }
-
-      function stopCamera() {
-        if (currentStream) {
-          const tracks = currentStream.getTracks();
-          tracks.forEach(track => track.stop());
-          video.srcObject = null;
+        function startCamera(streamOptions) {
+          navigator.mediaDevices
+            .getUserMedia(streamOptions)
+            .then(function (stream) {
+              video.srcObject = stream;
+              currentStream = stream;
+            })
+            .catch(function (error) {
+              console.log('Erro ao acessar a câmera: ' + error);
+            });
         }
-      }
 
-      function capturePhoto() {
-        canvas.style.display = 'block';
-        video.style.display = 'none';
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas
-          .getContext('2d')
-          .drawImage(video, 0, 0, canvas.width, canvas.height);
+        function stopCamera() {
+          if (currentStream) {
+            const tracks = currentStream.getTracks();
+            tracks.forEach((track) => track.stop());
+            video.srcObject = null;
+          }
+        }
 
-        const dataURL = canvas.toDataURL('image/jpeg');
+        function capturePhoto() {
+          canvas.style.display = 'block';
+          video.style.display = 'none';
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas
+            .getContext('2d')
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        fetch('/upload', {
-          method: 'POST',
-          body: JSON.stringify({ photo: dataURL }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((response) => response.text())
-          .then((result) => alert(result))
-          .catch((error) => console.error(error));
-      }
+          const dataURL = canvas.toDataURL('image/jpeg');
 
-      capturarBotao.addEventListener('click', capturePhoto);
+          fetch('/upload', {
+            method: 'POST',
+            body: JSON.stringify({ photo: dataURL }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.text())
+            .then((result) => alert(result))
+            .catch((error) => console.error(error));
+        }
 
-      cameraFrenteBotao.addEventListener('click', function () {
-        stopCamera();
-        startCamera({ video: { facingMode: 'user' } });
-      });
+        capturarBotao.addEventListener('click', capturePhoto);
 
-      cameraTransBotao.addEventListener('click', function () {
-        stopCamera();
-        startCamera({ video: { facingMode: { exact: 'environment' } } });
-      });
+        cameraFrenteBotao.addEventListener('click', function () {
+          stopCamera();
+          startCamera({ video: { facingMode: 'user' } });
+        });
 
-      desativarCameraBotao.addEventListener('click', function () {
-        stopCamera();
-        video.style.display = 'none';
-      });
-    </script>
+        cameraTransBotao.addEventListener('click', function () {
+          stopCamera();
+          startCamera({ video: { facingMode: { exact: 'environment' } } });
+        });
+
+        desativarCameraBotao.addEventListener('click', function () {
+          stopCamera();
+          video.style.display = 'none';
+        });
+      </script>
+    </div>
   </body>
 </html>
