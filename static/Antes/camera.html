@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% include 'head.html' %}
+  <body>
+    <div class="header">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
+        alt="Logo da Empresa"
+      />
+      RECEBIMENTO - <span>NOTH CROMO</span>
+    </div>
+
+    <link
+      rel="icon"
+      href="https://drive.google.com/uc?export=view&id=SEU_ID_DA_IMAGEM"
+      type="image/x-icon"
+    />
+
+    <div class="container">
+          <!-- Botões de opção para "Sim" ou "Não" -->
+        <div class="col-md-3 mb-3">
+          <label for="marcaNovo" class="custom-label">Nº de Controle</label>
+          <div class="btn-group" role="group" aria-label="Marque Novo ou Não">
+            <button type="button" class="btn btn-outline-primary" data-value="Sim">Novo</button>
+            <button type="button" class="btn btn-outline-primary" data-value="Não">Existente</button>
+            <input type="hidden" id="marcaNovo" name="marcaNovo" value="">
+          </div>
+        </div>
+
+        <div class="row mt-3 mb-3">
+          <div class="col-md-3">
+            <label for="numeroControle" class="custom-label">Número de Controle</label>
+            <input
+              id="numeroControle"
+              type="text"
+              class="form-control highlight-input"
+              placeholder="Controle"
+              list="numerosDeControle"
+            />
+          </div>
+
+        <!-- Campo Data de Recebimento -->
+        <div class="col-md-6 mb-3">
+          <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
+          <input
+            id="dataRecebimento"
+            type="date"
+            class="form-control"
+            placeholder="Data de Recebimento"
+          />
+        </div>
+      </div>
+
+       <!-- Campo para a hora atual -->
+       <div class="col-md-3 mb-3">
+        <label for="horaAtual" class="custom-label">Hora Atual</label>
+        <input
+          id="horaAtual"
+          type="time"
+          class="form-control"
+          readonly
+        />
+      </div>
+
+      <div class="container">
+        <div id="camera-container">
+          <video id="camera-feed" autoplay></video>
+          <button id="capturar-foto">Capturar Foto</button>
+          <button id="capturar-camera-frente">Câmera Frontal</button>
+          <button id="capturar-camera-trans">Câmera Traseira</button>
+          <button id="desativar-camera">Desativar Câmera</button>
+          <input type="file" id="fileInput" accept="image/*" />
+        </div>
+        <canvas id="foto-capturada" style="display: none"></canvas>
+        <button id="salvar-foto" onclick="uploadFile()">Salvar Foto</button>
+        <img id="imagem-foto" style="display: none" />
+        <input type="file" accept="image/*" capture="camera" id="photo-input" style="display: none" />
+        <button id="upload-button">Upload Photo</button>
+      </div>
+    </div>
+
+    {% include 'funcoes_comuns.html' %}
+    <script src="capturar_foto.js"></script>
+    <script>
+      function my_url() {
+        if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+          return 'http://127.0.0.1:5000/';
+        } else {
+          return 'https://www.northcromocontrole.com.br/';
+        }
+      }
+
+      function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        if (file) {
+          var formData = new FormData();
+          formData.append('file', file);
+
+          $.ajax({
+            type: 'POST',
+            url: my_url() + 'upload',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              console.log('File uploaded successfully:', response);
+            },
+            error: function (error) {
+              console.error('Error uploading file:', error);
+            },
+          });
+        } else {
+          console.error('No file selected');
+        }
+      }
+    </script>
+
+    <script>
+
+$(document).ready(function () {
+    // Chamar a função horaSistema para definir a hora atual
+    horaSistema();
+
+    // Formatar campo de telefone
+    $("#telefone").keyup(function () {
+        var val = this.value.replace(/\D/g, "");
+        var newVal = "";
+        while (val.length > 0) {
+            newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
+            val = val.substr(2);
+        }
+        this.value = newVal.trim();
+    });
+
+    // Adicionar estilo ao campo quando preenchido
+    $("input").blur(function () {
+        if ($(this).val()) {
+            $(this).addClass("filled");
+        } else {
+            $(this).removeClass("filled");
+        }
+    });
+});
+
+// Função para definir a hora atual no campo
+function horaSistema() {
+    const horaAtualInput = document.getElementById('horaAtual');
+    const agora = new Date();
+
+    // Formatar a hora atual para hh:mm
+    const horaAtual = agora.getHours().toString().padStart(2, '0');
+    const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+    const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+    horaAtualInput.value = horaFormatada;
+}
+
+       document.addEventListener("DOMContentLoaded", function() {
+        const btnGroup = document.querySelector('.btn-group');
+        const hiddenInput = document.getElementById('marcaNovo');
+        
+        btnGroup.addEventListener('click', function(event) {
+          const target = event.target;
+          if (target.tagName === 'BUTTON') {
+            const value = target.getAttribute('data-value');
+            hiddenInput.value = value;
+          }
+        });
+      });
+
+        // Script para definir a hora atual no campo
+        document.addEventListener("DOMContentLoaded", function() {
+        const horaAtualInput = document.getElementById('horaAtual');
+        const agora = new Date();
+
+        // Formatar a hora atual para hh:mm
+        const horaAtual = agora.getHours().toString().padStart(2, '0');
+        const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+        const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+        horaAtualInput.value = horaFormatada;
+      });
+
+
+      const video = document.getElementById('camera-feed');
+      const capturarBotao = document.getElementById('capturar-foto');
+      const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
+      const cameraTransBotao = document.getElementById('capturar-camera-trans');
+      const desativarCameraBotao = document.getElementById('desativar-camera');
+      const canvas = document.getElementById('foto-capturada');
+
+      let currentStream;
+
+      function startCamera(streamOptions) {
+        navigator.mediaDevices
+          .getUserMedia(streamOptions)
+          .then(function (stream) {
+            video.srcObject = stream;
+            currentStream = stream;
+          })
+          .catch(function (error) {
+            console.log('Erro ao acessar a câmera: ' + error);
+          });
+      }
+
+      function stopCamera() {
+        if (currentStream) {
+          const tracks = currentStream.getTracks();
+          tracks.forEach(track => track.stop());
+          video.srcObject = null;
+        }
+      }
+
+      function capturePhoto() {
+        canvas.style.display = 'block';
+        video.style.display = 'none';
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas
+          .getContext('2d')
+          .drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataURL = canvas.toDataURL('image/jpeg');
+
+        fetch('/upload', {
+          method: 'POST',
+          body: JSON.stringify({ photo: dataURL }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => response.text())
+          .then((result) => alert(result))
+          .catch((error) => console.error(error));
+      }
+
+      capturarBotao.addEventListener('click', capturePhoto);
+
+      cameraFrenteBotao.addEventListener('click', function () {
+        stopCamera();
+        startCamera({ video: { facingMode: 'user' } });
+      });
+
+      cameraTransBotao.addEventListener('click', function () {
+        stopCamera();
+        startCamera({ video: { facingMode: { exact: 'environment' } } });
+      });
+
+      desativarCameraBotao.addEventListener('click', function () {
+        stopCamera();
+        video.style.display = 'none';
+      });
+    </script>
+  </body>
+</html>

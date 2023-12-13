@@ -205,38 +205,49 @@
     var motivo; 
 
     function fazLogin() {
-      $.ajax({
+    console.log('fazLogin')
+    console.log(document.getElementById("userName").value,)
+    console.log(document.getElementById("password").value,)
+
+    $.ajax({
         url: my_url() + "verifica_usuario",
         type: "POST",
         data: {
-          userName: document.getElementById("userName").value,
-          password: document.getElementById("password").value,
+            userName: document.getElementById("userName").value,
+            password: document.getElementById("password").value,
         },
         success: function (response) {
-          alert(response)
-          if (response.retorno === "Usuário Válido!") {
-            setCookie("userName", response.userName, 365);
-            setCookie("token", response.token, 365);
-            location.reload();
-          } else {
-            if (motivo === "Senha incorreta") {
-              mostraMensagemDeErro(
-                "A senha informada está incorreta. Por favor, tente novamente."
-              );
-            } else if (motivo === "Usuário não encontrado") {
-              mostraMensagemDeErro(
-                "Usuário não encontrado. Verifique o nome de usuário."
-              );
+            console.log('Resposta do servidor:', response);
+
+            if (response.retorno === "Usuário Válido!") {
+                setCookie("userName", response.userName, 365);
+                setCookie("token", response.token, 365);
+
+                console.log('Cookies definidos:', document.cookie);
+
+                console.log('Redirecionando...');
+
+                location.reload();
             } else {
-              // Se nenhum motivo específico for fornecido, exiba uma mensagem genérica
-              mostraMensagemDeErro(
-                "Ocorreu um erro no login. Por favor, tente novamente."
-              );
+                if (motivo === "Senha incorreta") {
+                    mostraMensagemDeErro(
+                        "A senha informada está incorreta. Por favor, tente novamente."
+                    );
+                } else if (motivo === "Usuário não encontrado") {
+                    mostraMensagemDeErro(
+                        "Usuário não encontrado. Verifique o nome de usuário."
+                    );
+                } else {
+                    // Se nenhum motivo específico for fornecido, exiba uma mensagem genérica
+                    mostraMensagemDeErro(
+                        "Ocorreu um erro no login. Por favor, tente novamente."
+                    );
+                }
             }
-          }
         },
-      });
-    }
+    });
+}
+
 
     function mostraMensagemDeErro(motivo) {
       const errorMessage = document.getElementById("error-message");

@@ -15,6 +15,7 @@ verifica_usuario = Blueprint(
 
 @verifica_usuario.route("/verifica_usuario", methods=["POST"])
 def verifica_usuario_f():
+    print("Chamada à rota /verifica_usuario")
     userName = request.form["userName"]
     password = request.form["password"]
     aba = arquivo().worksheet_by_title("usuarios")
@@ -25,11 +26,13 @@ def verifica_usuario_f():
             if dados[i][1] == password:
                 token = gera_token()
                 aba.update_value((i + 1, 3), token)
+                print("Usuário Válido!")
                 return jsonify(
                     retorno="Usuário Válido!", token=token, userName=dados[i][0]
                 )
-    return jsonify(retorno="Usuário Inválido!")
 
+    print("Usuário Inválido!")
+    return jsonify(retorno="Usuário Inválido!")
 
 @verifica_usuario.route("/cadastrar_usuario_v2", methods=["POST"])
 def cadastrar_usuario():

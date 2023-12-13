@@ -82,21 +82,24 @@ def confere_token(userName, token):
     return False
 
 
-@app.route("/", methods=["GET"])
-def index_1():
+@app.route("/ss", methods=["GET"])
+def index_12():
     return render_template("camera.html")
 
-    # userName = request.cookies.get("userName")
-    # token = request.cookies.get("token")
 
-    # if userName and token and confere_token(userName, token):
-    #     # O usuário já está autenticado, redirecione para outra página (por
-    #     # exemplo, 'estrutura.html').
-    #     return render_template("estrutura.html")
-    # else:
-    #     # O usuário não está autenticado, então redirecione para a página de
-    #     # login.
-    #     return render_template("tela_de_login.html")
+@app.route("/", methods=["GET"])
+def index_1():
+    userName = request.cookies.get("userName")
+    token = request.cookies.get("token")
+
+    if userName and token and confere_token(userName, token):
+        # O usuário já está autenticado, redirecione para outra página (por
+        # exemplo, 'estrutura.html').
+        return render_template("estrutura.html")
+    else:
+        # O usuário não está autenticado, então redirecione para a página de
+        # login.
+        return render_template("tela_de_login.html")
 
 
 @app.route("/verificador_inicial", methods=["POST"])

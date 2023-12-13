@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   {% include 'head.html' %}
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <body>
     <div id="cabecalho_NorthCromo">
       <div>NORTHCROMO SISTEMA CONTROLES</div>
     </div>
+    {% include 'funcoes_comuns.html' %}
     <div id="divide_em_dois">
       <div id="lado_esquerdo">
+        <div class="logo-container">
+          <!-- Adicione sua logo aqui -->
+        </div>
         <div class="content">
           <button
             class="mui-btn mui-btn--raised open-menu-btn"
@@ -37,7 +42,7 @@
           </button>
           <ul>
             <li class="expandable hide-text"></li>
-             <div class="menu-header">
+            <li class="expandable hide-text">
               <i class="material-icons">folder</i>
               <!-- ícone de pasta para Cadastro -->
               <span class="menu-text" id="cadastroText"> Cadastro</span>
@@ -49,7 +54,6 @@
                 "
                 >arrow_drop_down</i
               >
-            </div>
               <ul class="submenu">
                 <li>
                   <i
@@ -73,234 +77,183 @@
                     Funcionários</span
                   >
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('produto.html',event)"
-                    >shopping_basket</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('produto.html',event)"
-                  >
-                    Produtos</span
-                  >
+                  <i class="material-icons">account_balance</i>
+                  <span class="menu-text">Centro de Custo</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                    >store</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('clientes.html',event)"
-                  >
-                    Clientes</span
-                  >
+                  <i class="material-icons">build</i
+                  ><span class="menu-text">Obras</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('usuarios.html',event)"
-                    >account_circle</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('usuarios.html',event)"
-                  >
-                    Usuários</span
-                  >
+                  <i class="material-icons">account_circle</i>
+                  <span class="menu-text">Usuários</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('vendedor.html',event)"
-                    >shopping_cart</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('vendedor.html',event)"
-                  >
-                    Vendedor</span
-                  >
+                  <i class="material-icons">shopping_basket</i>
+                  <span class="menu-text">Produto</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('servico.html',event)"
-                    >build</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('servico.html',event)"
-                  >
-                    Serviço</span
-                  >
+                  <i class="material-icons">label</i>
+                  <span class="menu-text">Categoria</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('componente.html',event)"
-                    >label</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('componente.html',event)"
-                  >
-                   Componente</span
-                  >
+                  <i class="material-icons">dashboard</i>
+                  <span class="menu-text">Área</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('operacao.html',event)"
-                    >dashboard</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('operacao.html',event)"
-                  >
-                   Operação</span
-                  >
+                  <i class="material-icons">store</i>
+                  <span class="menu-text">Cliente</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('setor.html',event)"
-                    >business</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('setor.html',event)"
-                  >
-                   Setor</span
-                  >
+                  <i class="material-icons">construction</i>
+                  <span class="menu-text">Mestre de Obras</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('defeito.html',event)"
-                    >report_problem</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('defeito.html',event)"
-                  >
-                    Defeito</span
-                  >
+                  <i class="material-icons">business</i>
+                  <span class="menu-text">Setor</span>
                 </li>
-
+              </ul>
+            </li>
+            <li class="expandable desktop-menu-item" data-template="recebimento.html">
+              <div class="menu-header">
+                <i class="material-icons">input</i>
+                <span class="menu-text"> Recebimento</span>
+                <i class="material-icons toggle-submenu invisible-icon"
+                  >arrow_drop_down</i
+                >
+              </div>
+            </li>
+            <li class="expandable hide-text">
+              <i class="material-icons">build</i>
+              <span class="menu-text"> Desmontagem</span>
+              <i
+                class="material-icons toggle-submenu"
+                style="
+                  transition: transform 0.3s;
+                  font-family: 'Material Icons';
+                "
+                >arrow_drop_down</i
+              >
+              <ul class="submenu">
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('posto_trabalho.html',event)"
-                    >store</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('posto_trabalho.html',event)"
-                  >
-                  Posto de Trabalho</span
-                  >
+                  <i class="material-icons">playlist_add_check</i>
+                  <span class="menu-text"> checklist</span>
                 </li>
               </ul>
             </li>
 
-          <li class="expandable" onclick="muda_de_tela('camera.html')">
-            <!-- <li class="expandable" onclick="muda_de_tela('index_1.html')"> -->
-            <div class="menu-header">
-              <i class="material-icons">input</i>
-              <span class="menu-text"> Recebimento</span>
-              <!-- Um ícone invisível para alinhar corretamente o texto -->
-              <i class="material-icons invisible-icon">arrow_drop_down</i>
-            </div>
+            <li class="expandable hide-text">
+              <div class="menu-header">
+                  <i class="material-icons">code</i>
+                  <span class="menu-text"> Programação</span>
+                  <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+              </div>
+              <ul class="submenu">
+                  <li>
+                      <i class="material-icons">playlist_add</i>
+                      <span class="menu-text"> Apontamento de Tarefas</span>
+                  </li>
+                  <li>
+                      <i class="material-icons">send</i>
+                      <span class="menu-text"> Lançamento p/ Produção</span>
+                  </li>
+                  <li>
+                      <i class="material-icons">update</i>
+                      <span class="menu-text"> Andamento na Produção</span>
+                  </li>
+              </ul>
           </li>
           
             <li class="expandable hide-text">
-            <div class="menu-header">
-                <i class="material-icons">build</i>
-                <span class="menu-text"> Desmontagem</span>
-                <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
-            </div>
-              <ul class="submenu">
-                <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('checklist.html',event)"
-                    >checklist</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('checklist.html',event)"
-                  >
-                    Checklist</span
-                  >
-                </li>
-              </ul>
-          </li>
-            <li class="expandable hide-text">
               <div class="menu-header">
-                  <i class="material-icons">build</i>
-                  <span class="menu-text"> Programação</span>
-                  <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
+                <i class="material-icons">shopping_cart</i>
+                <span class="menu-text"> Compras</span>
+                <i
+                  class="material-icons toggle-submenu"
+                  style="
+                    transition: transform 0.3s;
+                    font-family: 'Material Icons';
+                  "
+                  >arrow_drop_down</i
+                >
               </div>
               <ul class="submenu">
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('apontamento_tarefas.html',event)"
-                    >assignment_turned_in</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('apontamento_tarefas.html',event)"
-                  >
-                    Apontamento de Tarefas</span
-                  >
+                  <i class="material-icons">note_add</i>
+                  <span class="menu-text"> Nova Compra</span>
                 </li>
-
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('lancamento_producao.html',event)"
-                    >settings</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('lancamento_producao.html',event)"
-                  >
-                    Lançamento p/ Produção</span
-                  >
+                  <i class="material-icons">history</i>
+                  <span class="menu-text"> Histórico de Compras</span>
                 </li>
-
                 <li>
-                  <i
-                    class="material-icons"
-                    onclick="submenu_muda_de_tela('andamento_producao.html',event)"
-                    >timelapse</i
-                  >
-                  <span
-                    class="menu-text"
-                    onclick="submenu_muda_de_tela('andamento_producao.html',event)"
-                  >
-                    Andamento na Produção</span
-                  >
+                  <i class="material-icons">group</i>
+                  <span class="menu-text"> Fornecedores</span>
                 </li>
               </ul>
-          </li>
-          <li class="expandable" onclick="logout()">
+            </li>
+
+            <li class="expandable" onclick="muda_de_tela('index_1.html')">
+              <div class="menu-header">
+                <i class="material-icons">store</i>
+                <span class="menu-text"> Clientes</span>
+                <!-- Um ícone invisível para alinhar corretamente o texto -->
+                <i class="material-icons invisible-icon">arrow_drop_down</i>
+              </div>
+            </li>
+            <li class="expandable hide-text">
+              <i class="material-icons">store</i>
+              <span class="menu-text"> Almoxarifado</span>
+              <i
+                class="material-icons toggle-submenu"
+                style="
+                  transition: transform 0.3s;
+                  font-family: 'Material Icons';
+                "
+                >arrow_drop_down</i
+              >
+              <ul class="submenu">
+                <li>
+                  <i class="material-icons">input</i>
+                  <span class="menu-text"> Entrada de Materiais</span>
+                </li>
+                <li>
+                  <i class="material-icons">output</i>
+                  <span class="menu-text"> Saída de Materiais</span>
+                </li>
+                <li>
+                  <i class="material-icons">report_problem</i>
+                  <span class="menu-text"> Controle</span>
+                </li>
+                <li>
+                  <i class="material-icons">swap_horiz</i>
+                  <span class="menu-text"> Transferências</span>
+                </li>
+                <li>
+                  <i class="material-icons">assessment</i>
+                  <span class="menu-text"> Relatórios</span>
+                </li>
+                <li>
+                  <i class="material-icons">construction</i>
+                  <span class="menu-text"> Estoque Obras</span>
+                </li>
+                <li>
+                  <i class="material-icons">home_work</i>
+                  <span class="menu-text"> Estoque Depósitos</span>
+                </li>
+              </ul>
+            </li>
+            <li class="expandable" onclick="muda_de_tela('index_3.html')">
+              <div class="menu-header">
+                <i class="material-icons">account_balance_wallet</i>
+                <span class="menu-text"> Vendas</span>
+                <i class="material-icons toggle-submenu invisible-icon"
+                  >arrow_drop_down</i
+                >
+              </div>
+            </li>
+            <li class="expandable" onclick="logout()">
               <i class="material-icons">exit_to_app</i>
               <span class="menu-text"> Sair</span>
             </li>
@@ -314,49 +267,94 @@
     <!-- Fim da div #divide_em_dois -->
     {% include 'funcoes_comuns.html' %}
 
-    <div class="menu-mobile">
+    <div id="menu-flutuante" onclick="toggleMenuLateralFlutuante()">
+      <i class="material-icons">menu</i>
+  </div>
+
+  <!-- Overlay do Menu Mobile -->
+  <div id="menu-overlay"></div>
+
+<!-- Menu Flutuante Lateral -->
+<div id="lado-esquerdo-flutuante">
+
+  <!-- Menu Mobile -->
+  <div class="menu-mobile">
       <!-- Conteúdo do menu móvel -->
+      <ul>
+          <li class="expandable desktop-menu-item" data-template="controle_presenca.html">
+              <div class="menu-header">
+                  <i class="material-icons">check_circle</i>
+                  Presenças
+                  <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
+              </div>
+          </li>
 
-        <li class="expandable desktop-menu-item" 
-        data-template="controle_presenca.html"
-        >
-        <div class="menu-header">
-          <i class="material-icons">check_circle</i>
-          Presenças
-          <i class="material-icons toggle-submenu invisible-icon"
-            >arrow_drop_down</i
-          >
-        </div>
-      </li>
+          <li class="expandable desktop-menu-item" data-template="lista_obras.html">
+              <div class="menu-header">
+                  <i class="material-icons">build</i>
+                  Obras
+                  <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
+              </div>
+          </li>
 
-      <li class="expandable" onclick="logout()">
-        <i class="material-icons">exit_to_app</i>
-        Sair
-      </li>
-      <!-- Fim da div #divide_em_dois -->
-      {% include 'funcoes_comuns.html' %}
-    </div>
+          <li class="expandable desktop-menu-item" onclick="logout()">
+              <div class="menu-header">
+                  <i class="material-icons">exit_to_app</i>
+                  Sair
+                  <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
+              </div>
+          </li>
+      </ul>
+  </div>
+  <!-- Fim da div .menu-mobile -->
+{% include 'funcoes_comuns.html' %}
     <script>
       try {
         $(document).ready(function () {
+
+          const menuOverlay = document.getElementById("menu-overlay");
+          const menuMobile = document.querySelector(".menu-mobile");
+
+          const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
+          const toggleMenuBtn = document.getElementById("toggleMenuBtn");
+
+          const menuFlutuanteBtn = document.getElementById("menu-flutuante");
+
+          if (menuFlutuanteBtn) {
+                menuFlutuanteBtn.addEventListener("click", function () {
+                    toggleMobileMenu();
+                });
+            }
+
+          if (openMenuFloatingBtnMobile) {
+            openMenuFloatingBtnMobile.addEventListener("click", function () {
+              toggleMobileMenu();
+            });
+          }
+        if (toggleMenuBtn) {
+        toggleMenuBtn.addEventListener("click", function () {
+          toggleMobileMenu();
+        });
+      }
+
+      function toggleMenuMobile() {
+      menuOverlay.style.display = menuMobile.style.display === "block" ? "none" : "block";
+      menuMobile.style.display = menuMobile.style.display === "block" ? "none" : "block";
+    }
+      function abrirMenu() {
+            // Adicione aqui a lógica para abrir o menu
+            $("#menu-lateral").toggleClass("open-menu");
+           
+        }
+      function toggleMobileMenu() {
+    $("#lado_esquerdo").toggleClass("open");
+  }
           const isMobile = window.innerWidth <= 768;
-  
           if (isMobile) {
             $("#openMenuBtn").on("click", toggleMobileMenu);
             $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
           }
-  
-          function toggleMobileMenu() {
-            $("#lado_esquerdo").toggleClass("open");
-          }
-  
-          function openMobileMenu() {
-            $("#lado_esquerdo").addClass("open");
-          }
-  
-          function closeMobileMenu() {
-            $("#lado_esquerdo").removeClass("open");
-          }
+
   
           $(".expandable").click(function () {
             try {
@@ -616,18 +614,32 @@
           console.error("Error in DOMContentLoaded event:", error);
         }
       });
+
+      $(".mobile-menu-item").click(function () {
+        abrirMenu();
+    });
+
+    function toggleMenuLateralFlutuante() {
+        $("#lado-esquerdo-flutuante").toggleClass("open-menu");
+        $("#menu-overlay").toggleClass("menu-open");
+    }
+
+    // Adicione a lógica para fechar o menu lateral flutuante quando um item é clicado
+    $("#lado-esquerdo-flutuante ul li").click(function () {
+        toggleMenuLateralFlutuante();
+    });
     </script>
     <style>
       body {
         font-size: 16px;
       }
     
-      .logo-northcromo {
+      .logo-suelopro {
         width: 130px;
         height: auto;
       }
     
-      #cabecalho_NorthCromo {
+      #cabecalho_SueloPro {
         background-color: #5ec864;
         color: #fff;
         font-weight: bold;
@@ -716,34 +728,177 @@
       .swal-text {
         font-size: 18px;
       }
+
+ /* ADICIONAR PARA CELULAR MENU LATERAL  */
+   #lado-esquerdo-flutuante {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background-color:#f0f0f0;  /* Cor de fundo do menu lateral */
+    color: #333; /* Cor do texto do menu lateral */
+    z-index: 1000;
+    display: none; /* Inicialmente oculto */
+    font-size: 16px; /* Tamanho da fonte semelhante ao menu desktop */
+    transition: width 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito mais profissional */
+}
+
+#lado-esquerdo-flutuante.open-menu {
+    display: block; /* Exibido quando a classe open-menu é aplicada */
+    width: 60%; /* Largura expandida semelhante ao menu desktop */
+}
+
+#lado-esquerdo-flutuante #cabecalho_SueloPro {
+    background-color: #5ec864;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.5em;
+}
+
+#lado-esquerdo-flutuante .menu {
+    text-align: left;
+}
+
+#lado-esquerdo-flutuante .expandable {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 10px;
+}
+
+#lado-esquerdo-flutuante .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px 5px;
+}
+
+#lado-esquerdo-flutuante .submenu {
+    display: none;
+    list-style-type: none;
+    padding-left: 15px;
+    max-width: 100%;
+}
+
+#lado-esquerdo-flutuante .submenu li {
+    padding: 5px 0;
+}
+
+#lado-esquerdo-flutuante .expandable:hover {
+    background-color: #eaeaea;
+}
+
+#lado-esquerdo-flutuante [data-selected="true"] {
+    background-color: #4da752;
+    color: white;
+    font-weight: bold;
+}
+
+#lado-esquerdo-flutuante .menu ul li,
+#lado-esquerdo-flutuante .submenu li {
+    color: black;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+#lado-esquerdo-flutuante .swal-title {
+    font-size: 24px;
+}
+
+#lado-esquerdo-flutuante .swal-text {
+    font-size: 18px;
+}
+
     
-      @media screen and (max-width: 768px) {
-        body {
-          font-size: 16px;
-        }
-    
-        #divide_em_dois {
-          grid-template-columns: 1fr;
-          height: auto;
-        }
-    
-        #lado_esquerdo {
-          display: none;
-        }
-    
-        #lado_direito {
-          width: 100%;
-          overflow: scroll;
-          overflow-x: hidden;
-        }
-    
-        .swal-title {
-          font-size: 18px;
-        }
-        .swal-text {
-          font-size: 16px;
-        }
+    @media screen and (max-width: 768px) {
+      
+      #menu-flutuante {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 999;
+          cursor: pointer;
+          background-color: #5ec864; /* Cor de destaque */
+          color: #fff; /* Cor do texto */
+          border: none;
+          border-radius: 50%;
+          padding: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          transition: background-color 0.3s ease;
       }
-    </style>
+
+      #menu-flutuante:hover {
+          background-color: #4da752; /* Cor de destaque ao passar o mouse */
+      }
+
+      #menu-flutuante i {
+          font-size: 24px;
+      }
+
+          body {
+          font-size: 14px;
+        }
+
+       #menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo com transparência */
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .menu-open #menu-overlay {
+            display: block;
+        }
+
+        #lado_esquerdo {
+            display: none;
+          }
+
+          .menu-toggle-btn {
+          display: block;
+        }
+
+        #divide_em_dois {
+            position: relative;
+            z-index: 2;
+        }
+      
+          #divide_em_dois {
+            grid-template-columns: 1fr;
+            height: auto;
+          }
+      
+  
+          #lado_direito {
+            width: 100%;
+            overflow: scroll;
+            overflow-x: hidden;
+          }
+      
+          .swal-title {
+            font-size: 18px;
+          }
+          .swal-text {
+            font-size: 16px;
+          }
+
+          #menu-flutuante.open-menu {
+                width: 60px;
+            }
+
+            
+        }
+      </style>
     </body>
 </html>
+          

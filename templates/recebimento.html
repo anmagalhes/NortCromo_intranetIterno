@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include 'head.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sistema de Controle</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+
+    <!-- Adicione os ícones de PWA aqui -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Adicione o link para a biblioteca Perfect Scrollbar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/css/perfect-scrollbar.min.css">
+
+    <style>
+
+        body {
+                    font-family: Arial, sans-serif;
+                }
+        
+            #superBody {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #tabs {
+            margin-top: 20px;
+        }
+
+        .tab-content {
+            padding: 20px;
+        }
+
+        .table-wrapper {
+            margin-top: 20px;
+        }
+
+        /* Adicione estilos CSS aqui para tornar o layout responsivo */
+        .custom-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .row {
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .mb-3 {
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 20px; /* Tamanho do título ainda menor para dispositivos móveis */
+            margin-top: 8px; /* Ajuste conforme necessário */
+        }
+
+        /* Adicione estilos para o scroll em dispositivos móveis */
+        @media (max-width: 767px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .scrollable-content {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch; /* Adicione esta propriedade para melhorar o desempenho no iOS */
+                max-height: calc(100vh - 120px); /* Ajuste conforme necessário */
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            /* Ajuste o tamanho do botão para dispositivos móveis */
+            .btn {
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+
+            /* Estilos para os botões flutuantes na lateral direita */
+            .floating-buttons {
+                position: fixed;
+                top: 40px;
+                right: 10px; /* Ajuste conforme necessário */
+                width: 80px; /* Ajuste conforme necessário */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .floating-buttons .btn {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+
+    <title>Recebimento de Ordens</title>
+</head>
+<body>
+    <div class="seg">
+        <h3>Recebimento de Ordens</h3>
+
+        <!-- Abas/TABs -->
+        <ul class="nav nav-tabs" id="myTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="entrada-tab" data-toggle="tab" href="#entrada" role="tab" aria-controls="entrada" aria-selected="true">Entrada</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="camera-tab" data-toggle="tab" href="#camera" role="tab" aria-controls="camera" aria-selected="false">Câmera</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="relatorio-tab" data-toggle="tab" href="#relatorio" role="tab" aria-controls="relatorio" aria-selected="false">Relatório</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Entrada -->
+            <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
+                <div class="container">
+                    <!-- Campos de entrada -->
+                    <div class="row mt-3 scrollable-content">
+                        <!-- Seus campos aqui -->
+                        <!-- Outros campos continuam aqui -->
+
+                        <!-- Campo adicional Cliente (ID do Cliente) -->
+                        <div class="col-md-6 mb-3">
+                            <label for="idCliente" class="custom-label">Cliente</label>
+                            <select id="idCliente" class="form-control">
+                                <!-- Preencha com os clientes disponíveis -->
+                            </select>
+                        </div>
+
+                        <!-- Campo adicional Quantidade -->
+                        <div class="col-md-6 mb-3">
+                            <label for="quantidade" class="custom-label">Quantidade</label>
+                            <input
+                                id="quantidade"
+                                type="number"
+                                class="form-control"
+                                placeholder="Quantidade"
+                            />
+                        </div>
+
+                        <!-- Campo adicional Produto (Código do Produto) -->
+                        <div class="col-md-6 mb-3">
+                            <label for="codigoProduto" class="custom-label">Produto</label>
+                            <select id="codigoProduto" class="form-control">
+                                <!-- Preencha com os produtos disponíveis -->
+                            </select>
+                        </div>
+
+                        <!-- Campo adicional Número de Referência -->
+                        <div class="col-md-6 mb-3">
+                            <label for="numeroReferencia" class="custom-label">Número de Referência</label>
+                            <input
+                                id="numeroReferencia"
+                                type="text"
+                                class="form-control"
+                                placeholder="Número de Referência"
+                            />
+                        </div>
+
+                        <!-- Campo adicional Nota Interna -->
+                        <div class="col-md-6 mb-3">
+                            <label for="notaInterna" class="custom-label">Nota Interna</label>
+                            <input
+                                id="notaInterna"
+                                type="text"
+                                class="form-control"
+                                placeholder="N/A"
+                            />
+                        </div>
+
+                        <!-- Campo adicional Vendedor (ID do Vendedor) -->
+                        <div class="col-md-6 mb-3">
+                            <label for="idVendedor" class="custom-label">Vendedor</label>
+                            <select id="idVendedor" class="form-control">
+                                <!-- Preencha com os vendedores disponíveis -->
+                            </select>
+                        </div>
+
+                        <!-- Campo adicional Queixa do Cliente -->
+                        <div class="col-md-12 mb-3">
+                            <label for="queixaCliente" class="custom-label">Queixa do Cliente</label>
+                            <textarea
+                                id="queixaCliente"
+                                class="form-control"
+                                rows="1" <!-- Começa com uma linha -->
+                                placeholder="Digite a queixa do cliente..."
+                                oninput="autoResize(this)"
+                            ></textarea>
+                        </div>
+
+                        <!-- Outros campos adicionais continuarão aqui -->
+                    </div>
+                    <!-- Fechando a div 'row mt-3 scrollable-content' -->
+                </div>
+                <!-- Fechando a div 'container' -->
+
+                <!-- Tabela Tabular -->
+                <div class="table-responsive myTable table-wrapper scrollable-content">
+                    <div id="table_funcionario" class="tabulator myTable"></div>
+                </div>
+
+                <!-- Botões flutuantes -->
+                <div class="floating-buttons">
+                    <button
+                        id="btn_adiciona_funcionario"
+                        onclick="Adicionar_funcionarios_mostrarAlerta()"
+                        class="btn"
+                        style="background-color: #4caf50; color: white;"
+                    >
+                        <span class="material-icons" style="margin-right: 8px">save</span>
+                        Salvar Dados
+                    </button>
+
+                    <button
+                        id="btn_excluir_funcioario"
+                        onclick="excluir_funcioario()"
+                        class="btn"
+                        style="background-color: #f44336; color: white;"
+                    >
+                        <span class="material-icons" style="margin-right: 8px">delete</span>
+                        Excluir Dados
+                    </button>
+
+                    <button
+                        id="btn_editar_dados"
+                        onclick="editar_funcionario()"
+                        class="btn"
+                        style="background-color: #2196f3; color: white;"
+                    >
+                        <span class="material-icons" style="margin-right: 8px">edit</span>
+                        Editar Dados
+                    </button>
+                </div>
+            </div>
+            <!-- Fechando a tab-pane 'entrada' -->
+
+            <!-- Câmera -->
+            <div class="tab-pane fade" id="camera" role="tabpanel" aria-labelledby="camera-tab">
+                <!-- Conteúdo da guia da câmera -->
+                <!-- Inclua aqui o código para a câmera -->
+            </div>
+            <!-- Fechando a tab-pane 'camera' -->
+
+            <!-- Relatório -->
+            <div class="tab-pane fade" id="relatorio" role="tabpanel" aria-labelledby="relatorio-tab">
+                <!-- Conteúdo da guia do relatório -->
+                <!-- Inclua aqui o código para o relatório -->
+            </div>
+            <!-- Fechando a tab-pane 'relatorio' -->
+        </div>
+
+        <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/js/perfect-scrollbar.jquery.min.js"></script>
+        <script>
+            // Inicialize a Perfect Scrollbar na área de rolagem
+            $(document).ready(function () {
+              $(".scrollable-content").perfectScrollbar();
+            });
+
+            function autoResize(element) {
+                element.style.height = 'auto';
+                element.style.height = (element.scrollHeight) + 'px';
+            }
+        </script>
+    </body>
+</html>
