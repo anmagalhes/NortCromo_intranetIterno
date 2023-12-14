@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<head>
   {% include 'head.html' %}
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Sua descrição aqui">
 
-  <!-- Adicione os ícones de PWA aqui -->
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <meta name="theme-color" content="#ffffff">
-
-  <!-- Adicione o link para a biblioteca Perfect Scrollbar -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/css/perfect-scrollbar.min.css">
-
-    <link
+<head>
+<link
       rel="stylesheet"
       href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
     />
-    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <link rel="stylesheet" href="/static/css/meu_estilo.css" />
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+    
     <script>
       $(function () {
         $('#tabs').tabs();
       });
     </script>
-  </head>
   <style>
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
     .custom-label {
@@ -213,7 +204,7 @@
 
         <!-- Tabela Tabular -->
         <div class="table-responsive myTable table-wrapper scrollable-content">
-          <div id="table_funcionario" class="tabulator myTable"></div>
+          <div id="table_Recebimento" class="tabulator myTable"></div>
         </div>
 
         <!-- Botões flutuantes -->
@@ -254,7 +245,7 @@
     <!-- Fechando a div 'tabs' -->
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
         {% include 'funcoes_comuns.html' %}
-        <script src="capturar_foto.js"></script>
+        <!-- <script src="capturar_foto.js"></script> -->
         <script>
           function my_url() {
             if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
@@ -292,152 +283,175 @@
         </script>
 
       <script>
-        $(document).ready(function () {
-          // Chamar a função horaSistema para definir a hora atual
-          horaSistema();
-          $(".scrollable-content").perfectScrollbar();
+ // Varivavel para o ApiScript
 
-          // Formatar campo de telefone
-          $('#telefone').keyup(function () {
-            var val = this.value.replace(/\D/g, '');
-            var newVal = '';
-            while (val.length > 0) {
-              newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
-              val = val.substr(2);
-            }
-            this.value = newVal.trim();
-          });
+ var minhaUrl =
+       'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
+       
+function formatarData(data) {
+    const partes = data.split('-');
+    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+    return dataFormatada;
+  
+  }
+  $(document).ready(function () {
+  // Chamar a função horaSistema para definir a hora atual
+  horaSistema();
 
-          // Adicionar estilo ao campo quando preenchido
-          $('input').blur(function () {
-            if ($(this).val()) {
-              $(this).addClass('filled');
-            } else {
-              $(this).removeClass('filled');
-            }
-          });
-        });
+  // Formatar campo de telefone
+  $('#telefone').keyup(function () {
+    var val = this.value.replace(/\D/g, '');
+    var newVal = '';
+    while (val.length > 0) {
+      newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+      val = val.substr(2);
+    }
+    this.value = newVal.trim();
+  });
 
-        function autoResize(element) {
-        element.style.height = 'auto';
-        element.style.height = (element.scrollHeight) + 'px';   
+  // Adicionar estilo ao campo quando preenchido
+  $('input').blur(function () {
+    if ($(this).val()) {
+      $(this).addClass('filled');
+    } else {
+      $(this).removeClass('filled');
+    }
+  });
+
+  $(".scrollable-content").perfectScrollbar();
+
+});
+
+function autoResize(element) {
+  element.style.height = 'auto';
+  element.style.height = (element.scrollHeight) + 'px';
 };
 
-        // Função para definir a hora atual no campo
-        function horaSistema() {
-          const horaAtualInput = document.getElementById('horaAtual');
-          const agora = new Date();
+// Função para definir a hora atual no campo
+function horaSistema() {
+  const horaAtualInput = document.getElementById('horaAtual');
+  if (horaAtualInput !== null) {
+    // Continue com a manipulação apenas se o elemento existir
+    horaAtualInput.value = "Nova hora";
 
-          // Formatar a hora atual para hh:mm
-          const horaAtual = agora.getHours().toString().padStart(2, '0');
-          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-          const horaFormatada = `${horaAtual}:${minutoAtual}`;
+    const agora = new Date();
+    // Formatar a hora atual para hh:mm
+    const horaAtual = agora.getHours().toString().padStart(2, '0');
+    const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+    const horaFormatada = `${horaAtual}:${minutoAtual}`;
 
-          horaAtualInput.value = horaFormatada;
-        }
+    // Atribuir a hora formatada ao input
+    horaAtualInput.value = horaFormatada;
+  }
+}
 
-        document.addEventListener('DOMContentLoaded', function () {
-          const btnGroup = document.querySelector('.btn-group');
-          const hiddenInput = document.getElementById('marcaNovo');
 
-          btnGroup.addEventListener('click', function (event) {
-            const target = event.target;
-            if (target.tagName === 'BUTTON') {
-              const value = target.getAttribute('data-value');
-              hiddenInput.value = value;
-            }
-          });
-        });
+document.addEventListener('DOMContentLoaded', function () {
+  const btnGroup = document.querySelector('.btn-group');
+  const hiddenInput = document.getElementById('marcaNovo');
 
-        // Script para definir a hora atual no campo
-        document.addEventListener('DOMContentLoaded', function () {
-          const horaAtualInput = document.getElementById('horaAtual');
-          const agora = new Date();
+  btnGroup.addEventListener('click', function (event) {
+    const target = event.target;
+    if (target.tagName === 'BUTTON') {
+      const value = target.getAttribute('data-value');
+      hiddenInput.value = value;
+    }
+  });
+});
 
-          // Formatar a hora atual para hh:mm
-          const horaAtual = agora.getHours().toString().padStart(2, '0');
-          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-          const horaFormatada = `${horaAtual}:${minutoAtual}`;
+// Script para definir a hora atual no campo
+document.addEventListener('DOMContentLoaded', function () {
+  const horaAtualInput = document.getElementById('horaAtual');
+  const agora = new Date();
 
-          horaAtualInput.value = horaFormatada;
-        });
+  // Formatar a hora atual para hh:mm
+  const horaAtual = agora.getHours().toString().padStart(2, '0');
+  const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+  const horaFormatada = `${horaAtual}:${minutoAtual}`;
 
-        const video = document.getElementById('camera-feed');
-        const capturarBotao = document.getElementById('capturar-foto');
-        const cameraFrenteBotao = document.getElementById(
-          'capturar-camera-frente'
-        );
-        const cameraTransBotao = document.getElementById(
-          'capturar-camera-trans'
-        );
-        const desativarCameraBotao =
-          document.getElementById('desativar-camera');
-        const canvas = document.getElementById('foto-capturada');
+  horaAtualInput.value = horaFormatada;
+});
 
-        let currentStream;
+const video = document.getElementById('camera-feed');
+const capturarBotao = document.getElementById('capturar-foto');
+const cameraFrenteBotao = document.getElementById(
+  'capturar-camera-frente'
+);
+const cameraTransBotao = document.getElementById(
+  'capturar-camera-trans'
+);
+const desativarCameraBotao =
+  document.getElementById('desativar-camera');
+const canvas = document.getElementById('foto-capturada');
 
-        function startCamera(streamOptions) {
-          navigator.mediaDevices
-            .getUserMedia(streamOptions)
-            .then(function (stream) {
-              video.srcObject = stream;
-              currentStream = stream;
-            })
-            .catch(function (error) {
-              console.log('Erro ao acessar a câmera: ' + error);
-            });
-        }
+let currentStream;
 
-        function stopCamera() {
-          if (currentStream) {
-            const tracks = currentStream.getTracks();
-            tracks.forEach((track) => track.stop());
-            video.srcObject = null;
-          }
-        }
+function startCamera(streamOptions) {
+  navigator.mediaDevices
+    .getUserMedia(streamOptions)
+    .then(function (stream) {
+      video.srcObject = stream;
+      currentStream = stream;
+    })
+    .catch(function (error) {
+      console.log('Erro ao acessar a câmera: ' + error);
+    });
+}
 
-        function capturePhoto() {
-          canvas.style.display = 'block';
-          video.style.display = 'none';
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          canvas
-            .getContext('2d')
-            .drawImage(video, 0, 0, canvas.width, canvas.height);
+function stopCamera() {
+  if (currentStream) {
+    const tracks = currentStream.getTracks();
+    tracks.forEach((track) => track.stop());
+    video.srcObject = null;
+  }
+}
 
-          const dataURL = canvas.toDataURL('image/jpeg');
+function capturePhoto() {
+  canvas.style.display = 'block';
+  video.style.display = 'none';
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas
+    .getContext('2d')
+    .drawImage(video, 0, 0, canvas.width, canvas.height);
 
-          fetch('/upload', {
-            method: 'POST',
-            body: JSON.stringify({ photo: dataURL }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-            .then((response) => response.text())
-            .then((result) => alert(result))
-            .catch((error) => console.error(error));
-        }
+  const dataURL = canvas.toDataURL('image/jpeg');
 
-        capturarBotao.addEventListener('click', capturePhoto);
+  fetch('/upload', {
+    method: 'POST',
+    body: JSON.stringify({ photo: dataURL }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.text())
+    .then((result) => alert(result))
+    .catch((error) => console.error(error));
+}
 
-        cameraFrenteBotao.addEventListener('click', function () {
-          stopCamera();
-          startCamera({ video: { facingMode: 'user' } });
-        });
+capturarBotao.addEventListener('click', capturePhoto);
 
-        cameraTransBotao.addEventListener('click', function () {
-          stopCamera();
-          startCamera({ video: { facingMode: { exact: 'environment' } } });
-        });
+cameraFrenteBotao.addEventListener('click', function () {
+  stopCamera();
+  startCamera({ video: { facingMode: 'user' } });
+});
 
-        desativarCameraBotao.addEventListener('click', function () {
-          stopCamera();
-          video.style.display = 'none';
-        });
-      </script>
-    </div>
+cameraTransBotao.addEventListener('click', function () {
+  stopCamera();
+  startCamera({ video: { facingMode: { exact: 'environment' } } });
+});
+
+desativarCameraBotao.addEventListener('click', function () {
+  stopCamera();
+  video.style.display = 'none';
+});
+
+</script>
+
+<!-- Adicione este script no final do body da sua página -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha512-GLbCKLNBXVnDYbWEQaQ3Q2jA2j//b6ZFYyyxvIqxUpn8Oy4z8JUODf60gqV7zvPe7ME1aGrg5ZLysl1mg1yDAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+
+  </div>
   </body>
 </html>
-
-

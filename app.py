@@ -38,6 +38,8 @@ from routes.conferencia_dados_inicias_checklist import (
     conferencia_dados_inicias_checklist,
 )
 
+from routes.clientes import clientes
+
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
 app.register_blueprint(buscar_funcionarios_presenca, url_prefix="")
@@ -48,6 +50,7 @@ app.register_blueprint(ler_dadosFuncionarios, url_prefix="")
 app.register_blueprint(consulta_pedreiros, url_prefix="")
 app.register_blueprint(salvar_dados_presencas, url_prefix="")
 app.register_blueprint(verifica_usuario, url_prefix="")
+app.register_blueprint(clientes, url_prefix="")
 
 app.register_blueprint(conferencia_dados_inicias_checklist, url_prefix="")
 
