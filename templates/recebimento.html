@@ -138,12 +138,13 @@
 
             <!-- Campo Cliente (ID do Cliente) -->
             <div class="col-md-4 mb-3">
-                <label for="idCliente" class="custom-label">Cliente</label>
-                <select id="idCliente" class="form-control">
+                <label for="idCliente_Select_Tab2" class="custom-label">Cliente</label>
+                <select id="idCliente_Select_Tab2" class="form-control">
+                  <option value="">Selecione a Opção..</option>
                     <!-- Preencha com os clientes disponíveis -->
                 </select>
             </div>
-    
+
             <!-- Campo Quantidade -->
             <div class="col-md-4 mb-3">
                 <label for="quantidade" class="custom-label">Quantidade</label>
@@ -292,11 +293,14 @@ function formatarData(data) {
     const partes = data.split('-');
     const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
     return dataFormatada;
-  
+
   }
+
+
   $(document).ready(function () {
-  // Chamar a função horaSistema para definir a hora atual
-  horaSistema();
+    // Chamar a função horaSistema para definir a hora atual
+    horaSistema();
+    selecionar_clientes();
 
   // Formatar campo de telefone
   $('#telefone').keyup(function () {
@@ -445,6 +449,82 @@ desativarCameraBotao.addEventListener('click', function () {
   stopCamera();
   video.style.display = 'none';
 });
+
+            function selecionar_clientes() {
+                console.log("selecionar_clientea");
+                $.ajax({
+                    url: my_url() + "selecionar_clientes",
+                    type: "POST",
+                })
+                .done(function (response) {
+                    try {
+                        let dados = response.retorno; // Ajuste aqui para pegar a propriedade 'retorno'
+                        console.log("selecionar_clientes:", dados);
+
+                        // Verifique se os dados têm as propriedades esperadas
+                        if (Array.isArray(dados) && dados.length > 0 && "Nome_cliente" in dados[0]) {
+
+                            // Atualize o campo de seleção com as opções recebidas
+                            const select = document.getElementById('idCliente_Select_Tab2');
+
+                            // Limpe as opções existentes
+                            select.innerHTML = '<option value="">Selecione a Opção..</option>';
+
+                            // Adicione as novas opções
+                            dados.forEach(cliente => {
+                            const option = document.createElement('option');
+                            option.value = cliente.ID;  // Use a propriedade 'ID' para o valor da opção
+                            option.text = cliente.Nome_cliente;  // Use a propriedade 'Nome_cliente' para o texto da opção
+                            select.appendChild(option);
+                        });
+
+                            // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
+                        } else {
+                            console.error("Dados inválidos recebidos:", dados);
+                        }
+                    } catch (e) {
+                        console.error("Erro ao analisar os dados:", e);
+                    }
+                })
+                .fail(function (error) {
+                    console.error("Erro ao buscar dados iniciais de conferência:", error);
+                });
+            }
+
+
+              // Função para carregar a lista de obras
+              function ListaCliente() {
+                $.ajax({
+                    url: my_url() + "lista_clientes",
+                    type: "GET",
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    const  clientes = data.clientes;
+                    clientesContainer.innerHTML = "";
+    
+                    obras.forEach(obra => {
+                        const obraItem = document.createElement('li');
+                        clientesItem.classList.add('obra-item');
+                        clientesItem.setAttribute('data-id',  clientes['id_Obra']);
+                        clientesItem.textContent = clientes['obra_nome'];
+    
+                        clientesItem.addEventListener('click', function() {
+                            const obraId = this.getAttribute('data-id');
+                            console.log(obraId)
+    
+                            carregarDetalhesObra(obraId);
+                        });
+    
+                        obrasContainer.appendChild(obraItem);
+                    });
+                })
+                .fail(function (error) {
+                    console.error("Erro ao carregar obras:", error);
+                });
+            }
+    
+
 
 </script>
 
