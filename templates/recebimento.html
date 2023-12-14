@@ -15,6 +15,19 @@
   <!-- Adicione o link para a biblioteca Perfect Scrollbar -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/css/perfect-scrollbar.min.css">
 
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+      $(function () {
+        $('#tabs').tabs();
+      });
+    </script>
+  </head>
   <style>
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
     .custom-label {
@@ -96,7 +109,6 @@
         <li><a href="#tabs-2">Câmera</a></li>
         <li><a href="#tabs-3">Relatório</a></li>
       </ul>
-
        <div id="tabs-1" class="container">
         <!-- Campos de entrada -->
         <div class="row mt-3 scrollable-content">
@@ -230,14 +242,42 @@
       <!-- Fechando a div 'tab-pane' -->
 
       <!-- Câmera -->
-      <div id="tabs-2"class="container">
-        <button class="ui-button ui-widget ui-corner-all">Capturar Foto</button>
-        <button class="ui-button ui-widget ui-corner-all">Câmera Frontal</button>
-        <button class="ui-button ui-widget ui-corner-all">Câmera Traseira</button>
-        <button class="ui-button ui-widget ui-corner-all">Desativar Câmera</button>
-        <button class="ui-button ui-widget ui-corner-all">Salvar Foto</button>
-        <button class="ui-button ui-widget ui-corner-all">Upload Photo</button>
+      <!-- Câmera -->
+      <div id="tabs-2">
+        <div style="display: grid; grid-column: 1 / 4">
+            <button class="ui-button ui-widget ui-corner-all">
+              Capturar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 4 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Frontal
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 10">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Traseira
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 10 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Desativar Câmera
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 1 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Salvar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Upload Photo
+            </button>
+          </div>
         </div>
+
+      </div>
+      <!-- Fechando a div 'tab-pane' -->
 
       <!-- Relatório -->
       <div id="tabs-3" class="container">
@@ -248,50 +288,192 @@
     </div>
     <!-- Fechando a div 'tabs' -->
 
-     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
-     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/js/perfect-scrollbar.jquery.min.js"></script>
- 
-     <!-- Adicione a biblioteca Bootstrap JS -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
- 
-     <!-- Adicione o script para a biblioteca Tabulator -->
-     <script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
- 
-     <!-- Adicione o script para a biblioteca jQuery UI -->
-     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
- 
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
-    <script>
-      // Inicialize a Perfect Scrollbar na área de rolagem
-      $(document).ready(function () {
-        $(".scrollable-content").perfectScrollbar();
-      });
-
-      function autoResize(element) {
-        element.style.height = 'auto';
-        element.style.height = (element.scrollHeight) + 'px';
-
-        $('#tabs').tabs({
-    activate: function(event, ui) {
-      // Lógica a ser executada quando uma aba é ativada
-      console.log(ui.newTab.context); // Verifique se o novo contexto está sendo logado corretamente
-    }
-});
-};
-       // Inicialize a biblioteca jQuery UI para as abas
-       $(function () {
-        $('#tabs').tabs({
-          beforeActivate: function (event, ui) {
-            // Impede a mudança na URL ao clicar nas abas
-            event.preventDefault();
+{% include 'funcoes_comuns.html' %}
+        <script src="capturar_foto.js"></script>
+        <script>
+          function my_url() {
+            if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+              return 'http://127.0.0.1:5000/';
+            } else {
+              return 'https://www.northcromocontrole.com.br/';
+            }
           }
-        });
-      });
-    </script>
-  </div>
-  <!-- Fechando a div 'superBody' -->
-</body>
+  
+          function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+  
+            if (file) {
+              var formData = new FormData();
+              formData.append('file', file);
+  
+              $.ajax({
+                type: 'POST',
+                url: my_url() + 'upload',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                  console.log('File uploaded successfully:', response);
+                },
+                error: function (error) {
+                  console.error('Error uploading file:', error);
+                },
+              });
+            } else {
+              console.error('No file selected');
+            }
+          }
+        </script>
 
+<script>
+        $(document).ready(function () {
+          // Chamar a função horaSistema para definir a hora atual
+          horaSistema();
+          $(".scrollable-content").perfectScrollbar();
+
+          // Formatar campo de telefone
+          $('#telefone').keyup(function () {
+            var val = this.value.replace(/\D/g, '');
+            var newVal = '';
+            while (val.length > 0) {
+              newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+              val = val.substr(2);
+            }
+            this.value = newVal.trim();
+          });
+
+          // Adicionar estilo ao campo quando preenchido
+          $('input').blur(function () {
+            if ($(this).val()) {
+              $(this).addClass('filled');
+            } else {
+              $(this).removeClass('filled');
+            }
+          });
+        });
+
+        function autoResize(element) {
+        element.style.height = 'auto';
+        element.style.height = (element.scrollHeight) + 'px';   
+};
+
+        // Função para definir a hora atual no campo
+        function horaSistema() {
+          const horaAtualInput = document.getElementById('horaAtual');
+          const agora = new Date();
+
+          // Formatar a hora atual para hh:mm
+          const horaAtual = agora.getHours().toString().padStart(2, '0');
+          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+          const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+          horaAtualInput.value = horaFormatada;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const btnGroup = document.querySelector('.btn-group');
+          const hiddenInput = document.getElementById('marcaNovo');
+
+          btnGroup.addEventListener('click', function (event) {
+            const target = event.target;
+            if (target.tagName === 'BUTTON') {
+              const value = target.getAttribute('data-value');
+              hiddenInput.value = value;
+            }
+          });
+        });
+
+        // Script para definir a hora atual no campo
+        document.addEventListener('DOMContentLoaded', function () {
+          const horaAtualInput = document.getElementById('horaAtual');
+          const agora = new Date();
+
+          // Formatar a hora atual para hh:mm
+          const horaAtual = agora.getHours().toString().padStart(2, '0');
+          const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+          const horaFormatada = `${horaAtual}:${minutoAtual}`;
+
+          horaAtualInput.value = horaFormatada;
+        });
+
+        const video = document.getElementById('camera-feed');
+        const capturarBotao = document.getElementById('capturar-foto');
+        const cameraFrenteBotao = document.getElementById(
+          'capturar-camera-frente'
+        );
+        const cameraTransBotao = document.getElementById(
+          'capturar-camera-trans'
+        );
+        const desativarCameraBotao =
+          document.getElementById('desativar-camera');
+        const canvas = document.getElementById('foto-capturada');
+
+        let currentStream;
+
+        function startCamera(streamOptions) {
+          navigator.mediaDevices
+            .getUserMedia(streamOptions)
+            .then(function (stream) {
+              video.srcObject = stream;
+              currentStream = stream;
+            })
+            .catch(function (error) {
+              console.log('Erro ao acessar a câmera: ' + error);
+            });
+        }
+
+        function stopCamera() {
+          if (currentStream) {
+            const tracks = currentStream.getTracks();
+            tracks.forEach((track) => track.stop());
+            video.srcObject = null;
+          }
+        }
+
+        function capturePhoto() {
+          canvas.style.display = 'block';
+          video.style.display = 'none';
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas
+            .getContext('2d')
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          const dataURL = canvas.toDataURL('image/jpeg');
+
+          fetch('/upload', {
+            method: 'POST',
+            body: JSON.stringify({ photo: dataURL }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.text())
+            .then((result) => alert(result))
+            .catch((error) => console.error(error));
+        }
+
+        capturarBotao.addEventListener('click', capturePhoto);
+
+        cameraFrenteBotao.addEventListener('click', function () {
+          stopCamera();
+          startCamera({ video: { facingMode: 'user' } });
+        });
+
+        cameraTransBotao.addEventListener('click', function () {
+          stopCamera();
+          startCamera({ video: { facingMode: { exact: 'environment' } } });
+        });
+
+        desativarCameraBotao.addEventListener('click', function () {
+          stopCamera();
+          video.style.display = 'none';
+        });
+      </script>
+    </div>
+  </body>
 </html>
+
+
