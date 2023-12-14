@@ -45,7 +45,7 @@
       .scrollable-content {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        max-height: calc(100vh - 120px);
+        max-height: calc(100vh - 180px); /* Ajuste de altura máxima para rolagem */
       }
 
       .table-wrapper {
@@ -53,22 +53,26 @@
       }
 
       .btn {
-        padding: 12px 16px;
-        font-size: 16px;
+        padding: 10px 14px;
+        font-size: 14px;
       }
 
       .floating-buttons {
         position: fixed;
         top: 40px;
         right: 10px;
-        width: 80px;
+        width: 60px;
         display: flex;
         flex-direction: column;
         align-items: center;
       }
 
       .floating-buttons .btn {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+      }
+
+      .header span {
+        display: block; /* Para colocar o texto "NOTH CROMO" abaixo de "RECEBIMENTO" */
       }
     }
   </style>
@@ -77,84 +81,128 @@
 </head>
 
 <body>
-  <div class="seg">
-    <h3>Recebimento de Ordens</h3>
+  <div id="superBody">
+    <div class="header">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
+        alt="Logo da Empresa"
+      />
+      <span>RECEBIMENTO - NOTH CROMO</span>
+    </div>
 
-    <!-- Abas/TABs -->
-    <ul class="nav nav-tabs" id="myTabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="entrada-tab" data-toggle="tab" href="#entrada" role="tab" aria-controls="entrada" aria-selected="true">Entrada</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="camera-tab" data-toggle="tab" href="#camera" role="tab" aria-controls="camera" aria-selected="false">Câmera</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="relatorio-tab" data-toggle="tab" href="#relatorio" role="tab" aria-controls="relatorio" aria-selected="false">Relatório</a>
-      </li>
-    </ul>
+    <div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Entrada</a></li>
+        <li><a href="#tabs-2">Câmera</a></li>
+        <li><a href="#tabs-3">Relatório</a></li>
+      </ul>
 
-    <div class="tab-content">
-      <!-- Entrada -->
-      <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
-        <div class="container">
-          <!-- Campos de entrada -->
-          <div class="row mt-3 scrollable-content">
-            <!-- Seus campos aqui -->
-            <!-- Outros campos continuam aqui -->
-
-            <!-- Campo adicional Cliente (ID do Cliente) -->
-            <div class="col-md-6 mb-3">
-              <label for="idCliente" class="custom-label">Cliente</label>
-              <select id="idCliente" class="form-control">
-                <!-- Preencha com os clientes disponíveis -->
-              </select>
+      <div class="container">
+        <!-- Campos de entrada -->
+        <div class="row mt-3 scrollable-content">
+            <!-- Campo Tipo de Ordem -->
+            <div class="col-md-4 mb-3">
+                <label for="tipoOrdem" class="custom-label">Tipo de Ordem</label>
+                <select id="tipoOrdem" class="form-control">
+                    <option value="novo">Novo</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
+    
+            <!-- Campo Número de Controle -->
+            <div class="col-md-4 mb-3">
+                <label for="numeroControle" class="custom-label">Número de Controle</label>
+                <input
+                    id="numeroControle"
+                    type="text"
+                    class="form-control"
+                    placeholder="Automático"
+                    disabled
+                />
+            </div>
+    
+            <!-- Campo Data de Recebimento -->
+            <div class="col-md-4 mb-3">
+                <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
+                <input
+                    id="dataRecebimento"
+                    type="date"
+                    class="form-control"
+                    placeholder="Automático"
+                    disabled
+                />
             </div>
 
-            <!-- Campo adicional Quantidade -->
-            <div class="col-md-6 mb-3">
-              <label for="quantidade" class="custom-label">Quantidade</label>
-              <input id="quantidade" type="number" class="form-control" placeholder="Quantidade" />
+            <!-- Campo Cliente (ID do Cliente) -->
+            <div class="col-md-4 mb-3">
+                <label for="idCliente" class="custom-label">Cliente</label>
+                <select id="idCliente" class="form-control">
+                    <!-- Preencha com os clientes disponíveis -->
+                </select>
             </div>
-
-            <!-- Campo adicional Produto (Código do Produto) -->
-            <div class="col-md-6 mb-3">
-              <label for="codigoProduto" class="custom-label">Produto</label>
-              <select id="codigoProduto" class="form-control">
-                <!-- Preencha com os produtos disponíveis -->
-              </select>
+    
+            <!-- Campo Quantidade -->
+            <div class="col-md-4 mb-3">
+                <label for="quantidade" class="custom-label">Quantidade</label>
+                <input
+                    id="quantidade"
+                    type="number"
+                    class="form-control"
+                    placeholder="Quantidade"
+                />
             </div>
-
-            <!-- Campo adicional Número de Referência -->
-            <div class="col-md-6 mb-3">
-              <label for="numeroReferencia" class="custom-label">Número de Referência</label>
-              <input id="numeroReferencia" type="text" class="form-control" placeholder="Número de Referência" />
+    
+            <!-- Campo Produto (Código do Produto) -->
+            <div class="col-md-4 mb-3">
+                <label for="codigoProduto" class="custom-label">Produto</label>
+                <select id="codigoProduto" class="form-control">
+                    <!-- Preencha com os produtos disponíveis -->
+                </select>
             </div>
 
             <!-- Campo adicional Nota Interna -->
-            <div class="col-md-6 mb-3">
-              <label for="notaInterna" class="custom-label">Nota Interna</label>
-              <input id="notaInterna" type="text" class="form-control" placeholder="N/A" />
+            <div class="col-md-4 mb-3">
+                <label for="notaInterna" class="custom-label">Nota Interna</label>
+                <input id="notaInterna" type="text" class="form-control" placeholder="N/A" />
             </div>
 
+             <!-- Campo Número de Referência -->
+             <div class="col-md-4 mb-3">
+                <label for="numeroReferencia" class="custom-label">Número de Referência</label>
+                <input
+                    id="numeroReferencia"
+                    type="text"
+                    class="form-control"
+                    placeholder="Número de Referência"
+                />
+            </div>
+    
             <!-- Campo adicional Vendedor (ID do Vendedor) -->
-            <div class="col-md-6 mb-3">
-              <label for="idVendedor" class="custom-label">Vendedor</label>
-              <select id="idVendedor" class="form-control">
-                <!-- Preencha com os vendedores disponíveis -->
-              </select>
+            <div class="col-md-4 mb-3">
+                <label for="idVendedor" class="custom-label">Vendedor</label>
+                <select id="idVendedor" class="form-control">
+                    <!-- Preencha com os vendedores disponíveis -->
+                </select>
             </div>
-
+    
             <!-- Campo adicional Queixa do Cliente -->
             <div class="col-md-12 mb-3">
-              <label for="queixaCliente" class="custom-label">Queixa do Cliente</label>
-              <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+                <label for="queixaCliente" class="custom-label">Obs:</label>
+                <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
             </div>
-
-            <!-- Outros campos adicionais continuarão aqui -->
+        </div>
+    </div>
+    
           </div>
           <!-- Fechando a div 'row mt-3 scrollable-content' -->
         </div>
         <!-- Fechando a div 'container' -->
+
+        <!-- Inputs ocultos para armazenar IDs únicos -->
+        <input type="hidden" id="id_Num_Orcamento" value="seu_valor_aqui_para_Num_Orcamento" />
+        <input type="hidden" id="id_ValorSeg_numero_Controle" value="seu_valor_aqui_para_ValorSeg_numero_Controle" />
+        <input type="hidden" id="id_NovoIDNovo_numero_Controle" value="seu_valor_aqui_para_NovoIDNovo_numero_Controle" />
+
 
         <!-- Tabela Tabular -->
         <div class="table-responsive myTable table-wrapper scrollable-content">
@@ -179,41 +227,68 @@
           </button>
         </div>
       </div>
-      <!-- Fechando a tab-pane 'entrada' -->
+      <!-- Fechando a div 'tab-pane' -->
 
       <!-- Câmera -->
-      <div class="tab-pane fade" id="camera" role="tabpanel" aria-labelledby="camera-tab">
-        <!-- Conteúdo da guia da câmera -->
-        <!-- Inclua aqui o código para a câmera -->
-        <div id="cameraStuff">
-          <!-- Seu código da câmera aqui -->
+      <div id="tabs-2">
+        <div style="display: grid; grid-column: 1 / 4">
+            <button class="ui-button ui-widget ui-corner-all">
+              Capturar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 4 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Frontal
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 10">
+            <button class="ui-button ui-widget ui-corner-all">
+              Câmera Traseira
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 10 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Desativar Câmera
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 1 / 7">
+            <button class="ui-button ui-widget ui-corner-all">
+              Salvar Foto
+            </button>
+          </div>
+          <div style="display: grid; grid-column: 7 / 13">
+            <button class="ui-button ui-widget ui-corner-all">
+              Upload Photo
+            </button>
+          </div>
         </div>
+
       </div>
-      <!-- Fechando a tab-pane 'camera' -->
+      <!-- Fechando a div 'tab-pane' -->
 
       <!-- Relatório -->
-      <div class="tab-pane fade" id="relatorio" role="tabpanel" aria-labelledby="relatorio-tab">
+      <div id="tabs-3">
         <!-- Conteúdo da guia do relatório -->
         <!-- Inclua aqui o código para o relatório -->
       </div>
-      <!-- Fechando a tab-pane 'relatorio' -->
+      <!-- Fechando a div 'tab-pane' -->
     </div>
-    <!-- Fechando a div 'tab-content' -->
+    <!-- Fechando a div 'tabs' -->
 
-    <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/js/perfect-scrollbar.jquery.min.js"></script>
-
-    <!-- Adicione a biblioteca Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <!-- Adicione o script para a biblioteca Tabulator -->
-    <script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
-
-    <!-- Adicione o script para a biblioteca jQuery UI -->
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
+     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
+     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/js/perfect-scrollbar.jquery.min.js"></script>
+ 
+     <!-- Adicione a biblioteca Bootstrap JS -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+ 
+     <!-- Adicione o script para a biblioteca Tabulator -->
+     <script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+ 
+     <!-- Adicione o script para a biblioteca jQuery UI -->
+     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+ 
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
     <script>
       // Inicialize a Perfect Scrollbar na área de rolagem
@@ -227,11 +302,11 @@
       }
 
       $(function () {
-        $('#myTabs').tabs();
+        $('#tabs').tabs();
       });
     </script>
   </div>
-  <!-- Fechando a div 'seg' -->
+  <!-- Fechando a div 'superBody' -->
 </body>
 
 </html>
