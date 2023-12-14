@@ -97,7 +97,7 @@
         <li><a href="#tabs-3">Relatório</a></li>
       </ul>
 
-      <div class="container">
+       <div id="tabs-1" class="container">
         <!-- Campos de entrada -->
         <div class="row mt-3 scrollable-content">
             <!-- Campo Tipo de Ordem -->
@@ -230,44 +230,17 @@
       <!-- Fechando a div 'tab-pane' -->
 
       <!-- Câmera -->
-      <div id="tabs-2">
-        <div style="display: grid; grid-column: 1 / 4">
-            <button class="ui-button ui-widget ui-corner-all">
-              Capturar Foto
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 4 / 7">
-            <button class="ui-button ui-widget ui-corner-all">
-              Câmera Frontal
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 7 / 10">
-            <button class="ui-button ui-widget ui-corner-all">
-              Câmera Traseira
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 10 / 13">
-            <button class="ui-button ui-widget ui-corner-all">
-              Desativar Câmera
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 1 / 7">
-            <button class="ui-button ui-widget ui-corner-all">
-              Salvar Foto
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 7 / 13">
-            <button class="ui-button ui-widget ui-corner-all">
-              Upload Photo
-            </button>
-          </div>
+      <div id="tabs-2"class="container">
+        <button class="ui-button ui-widget ui-corner-all">Capturar Foto</button>
+        <button class="ui-button ui-widget ui-corner-all">Câmera Frontal</button>
+        <button class="ui-button ui-widget ui-corner-all">Câmera Traseira</button>
+        <button class="ui-button ui-widget ui-corner-all">Desativar Câmera</button>
+        <button class="ui-button ui-widget ui-corner-all">Salvar Foto</button>
+        <button class="ui-button ui-widget ui-corner-all">Upload Photo</button>
         </div>
 
-      </div>
-      <!-- Fechando a div 'tab-pane' -->
-
       <!-- Relatório -->
-      <div id="tabs-3">
+      <div id="tabs-3" class="container">
         <!-- Conteúdo da guia do relatório -->
         <!-- Inclua aqui o código para o relatório -->
       </div>
@@ -299,10 +272,22 @@
       function autoResize(element) {
         element.style.height = 'auto';
         element.style.height = (element.scrollHeight) + 'px';
-      }
 
-      $(function () {
-        $('#tabs').tabs();
+        $('#tabs').tabs({
+    activate: function(event, ui) {
+      // Lógica a ser executada quando uma aba é ativada
+      console.log(ui.newTab.context); // Verifique se o novo contexto está sendo logado corretamente
+    }
+});
+};
+       // Inicialize a biblioteca jQuery UI para as abas
+       $(function () {
+        $('#tabs').tabs({
+          beforeActivate: function (event, ui) {
+            // Impede a mudança na URL ao clicar nas abas
+            event.preventDefault();
+          }
+        });
       });
     </script>
   </div>
