@@ -242,42 +242,12 @@
       <!-- Fechando a div 'tab-pane' -->
 
       <!-- Câmera -->
-      <!-- Câmera -->
-      <div id="tabs-2">
-        <div style="display: grid; grid-column: 1 / 4">
-            <button class="ui-button ui-widget ui-corner-all">
-              Capturar Foto
-            </button>
+            <div id="tabs-2" class="container">
+              <!-- Conteúdo da guia do relatório -->
+              <!-- Inclua aqui o código para o relatório -->
+            </div>
+            <!-- Fechando a div 'tab-pane' -->
           </div>
-          <div style="display: grid; grid-column: 4 / 7">
-            <button class="ui-button ui-widget ui-corner-all">
-              Câmera Frontal
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 7 / 10">
-            <button class="ui-button ui-widget ui-corner-all">
-              Câmera Traseira
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 10 / 13">
-            <button class="ui-button ui-widget ui-corner-all">
-              Desativar Câmera
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 1 / 7">
-            <button class="ui-button ui-widget ui-corner-all">
-              Salvar Foto
-            </button>
-          </div>
-          <div style="display: grid; grid-column: 7 / 13">
-            <button class="ui-button ui-widget ui-corner-all">
-              Upload Photo
-            </button>
-          </div>
-        </div>
-
-      </div>
-      <!-- Fechando a div 'tab-pane' -->
 
       <!-- Relatório -->
       <div id="tabs-3" class="container">
@@ -289,7 +259,7 @@
     <!-- Fechando a div 'tabs' -->
 
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
-{% include 'funcoes_comuns.html' %}
+        {% include 'funcoes_comuns.html' %}
         <script src="capturar_foto.js"></script>
         <script>
           function my_url() {
@@ -327,7 +297,7 @@
           }
         </script>
 
-<script>
+      <script>
         $(document).ready(function () {
           // Chamar a função horaSistema para definir a hora atual
           horaSistema();
