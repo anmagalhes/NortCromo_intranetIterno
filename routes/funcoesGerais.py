@@ -10,7 +10,6 @@ import json
 
 lock = threading.Lock()
 
-
 # credencias = pygsheets.authorize(
 #     service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
 # )
@@ -28,15 +27,22 @@ def gera_token():
 
 
 def arquivo():
-    credencias = pygsheets.authorize(
-        service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
-    )
+    # Construa o caminho absoluto para o arquivo de credenciais
+    caminho_credenciais = os.path.join(os.getcwd(), "sistemaNortrCromo_googleConsole.json")
 
-    arquivo = credencias.open_by_url(
+    # Verifique se o arquivo de credenciais existe
+    if not os.path.exists(caminho_credenciais):
+        raise FileNotFoundError(f"O arquivo de credenciais não foi encontrado em: {caminho_credenciais}")
+
+    # Autorize o acesso ao Google Sheets
+    credenciais = pygsheets.authorize(service_file=caminho_credenciais)
+
+    # Abra a planilha pelo URL (ou você pode usar o método `open` diretamente se tiver o ID da planilha)
+    arquivo = credenciais.open_by_url(
         "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
     )
+    
     return arquivo
-
 
 def carregar_dados_gs(aba):
     dados = aba.get_all_values()
