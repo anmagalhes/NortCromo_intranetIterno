@@ -146,7 +146,7 @@
             </div>
 
             <!-- Campo Quantidade -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <label for="quantidade" class="custom-label">Quantidade</label>
                 <input
                     id="quantidade"
@@ -157,9 +157,10 @@
             </div>
     
             <!-- Campo Produto (Código do Produto) -->
-            <div class="col-md-4 mb-3">
-                <label for="codigoProduto" class="custom-label">Produto</label>
-                <select id="codigoProduto" class="form-control">
+            <div class="col-md-5 mb-3">
+                <label for="codigoProduto_Select_Tab2" class="custom-label">Produto</label>
+                <select id="codigoProduto_Select_Tab2" class="form-control">
+                  <option value="">Selecione a Opção..</option>
                     <!-- Preencha com os produtos disponíveis -->
                 </select>
             </div>
@@ -197,11 +198,7 @@
         </div>
     </div>
     
-        <!-- Inputs ocultos para armazenar IDs únicos -->
-        <input type="hidden" id="id_Num_Orcamento" value="seu_valor_aqui_para_Num_Orcamento" />
-        <input type="hidden" id="id_ValorSeg_numero_Controle" value="seu_valor_aqui_para_ValorSeg_numero_Controle" />
-        <input type="hidden" id="id_NovoIDNovo_numero_Controle" value="seu_valor_aqui_para_NovoIDNovo_numero_Controle" />
-
+ 
 
         <!-- Tabela Tabular -->
         <div class="table-responsive myTable table-wrapper scrollable-content">
@@ -230,6 +227,28 @@
 
       <!-- Câmera -->
             <div id="tabs-2" class="container">
+
+
+               <!-- Campos de entrada para exibir os valores -->
+    <div>
+      <label for="maxId">Max ID:</label>
+      <input type="text" id="maxId" readonly>
+  </div>
+
+  <div>
+      <label for="valorSeg">Valor Seg:</label>
+      <input type="text" id="valorSeg" readonly>
+  </div>
+
+  <div>
+      <label for="numerocontroleNovo">Número Controle Novo:</label>
+      <input type="text" id="numerocontroleNovo" readonly>
+  </div>
+
+  <div>
+      <label for="maxIdFromSource">Max ID da Fonte:</label>
+      <input type="text" id="maxIdFromSource" readonly>
+  </div>
               <!-- Conteúdo da guia do relatório -->
               <!-- Inclua aqui o código para o relatório -->
             </div>
@@ -301,6 +320,10 @@ function formatarData(data) {
     // Chamar a função horaSistema para definir a hora atual
     horaSistema();
     selecionar_clientes();
+    selecionar_produtos();
+    
+     // carregarValorSeg();
+    Lista_recebimento();
 
   // Formatar campo de telefone
   $('#telefone').keyup(function () {
@@ -491,7 +514,46 @@ desativarCameraBotao.addEventListener('click', function () {
                 });
             }
 
+   function selecionar_produtos() {
+    console.log("selecionar_produtos");
+    $.ajax({
+        url: my_url() + "selecionar_produtos",
+        type: "POST",
+    })
+    .done(function (response) {
+        try {
+            let dados = response.retorno;
+            console.log("selecionar_produtos:", dados);
 
+            // Verifique se os dados têm as propriedades esperadas
+            if (Array.isArray(dados) && dados.length > 0) {
+
+                // Atualize o campo de seleção com as opções recebidas
+                const select_produtos = document.getElementById('codigoProduto_Select_Tab2');
+
+                // Limpe as opções existentes
+                select_produtos.innerHTML = '<option value="">Selecione a Opção..</option>';
+
+                // Adicione as novas opções
+                  dados.forEach(produto => {
+                      const option_produtos = document.createElement('option');
+                      option_produtos.value = produto.Cod_Produto;  // Use a propriedade 'Cod_Produto' para o valor da opção
+                      option_produtos.text = produto.nome_produto;  // Use a propriedade 'nome_produto' para o texto da opção
+                      select_produtos.appendChild(option_produtos);
+                  });
+
+                // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
+            } else {
+                console.error("Dados inválidos recebidos:", dados);
+            }
+        } catch (e) {
+            console.error("Erro ao analisar os dados:", e);
+        }
+    })
+    .fail(function (error) {
+        console.error("Erro ao buscar dados iniciais de conferência:", error);
+    });
+}
               // Função para carregar a lista de obras
               function ListaCliente() {
                 $.ajax({
@@ -523,8 +585,134 @@ desativarCameraBotao.addEventListener('click', function () {
                     console.error("Erro ao carregar obras:", error);
                 });
             }
-    
 
+            // Função para carregar a lista de obras
+            function Lista_recebimento() {
+                $.ajax({
+                    url: my_url() + "selecionar_recebimentos",
+                    type: "POST",
+                    dataType: "json",
+                })
+                .done(function (data) {
+                  console.log('Lista_recebimento', data)
+                                   
+                })
+                .fail(function (error) {
+                    console.error("Lista_recebimento:", error);
+                });
+            }
+   
+   
+  // Função para carregar valor_seg
+  function carregarValorSeg_original() {
+              $.ajax({
+                  url: my_url() + "get_valor_seg",
+                  type: "GET",
+                  dataType: "json",
+              })
+              .done(function (data) {
+                if (data.error) {
+              console.error("Erro ao obter valor_seg:", data.error);
+            } else {
+              console.log("carregarValorSeg data", data);
+              
+                  const maxId = data.max_id;
+                  const valorSeg = data.valor_seg;
+                  const numerocontroleNovo = data.numerocontrole_novo;
+                  const maxIdFromSource = data.max_id_from_source;
+
+                  // Preencha os campos de entrada com os valores obtidos
+                  $("#maxId").val(maxId);
+                  $("#valorSeg").val(valorSeg);
+                  $("#numerocontroleNovo").val(numerocontroleNovo);
+                  $("#maxIdFromSource").val(maxIdFromSource);
+
+                }
+              })
+      .fail(function (xhr, status, error) {
+      console.error("Erro ao carregar valor_seg:", status, error);
+      console.log(xhr.responseText); // Adicione esta linha para imprimir a resposta completa
+  });
+
+  }
+
+ // Função para adicionar um recebimento
+function adicionarRecebimento() {
+    $.ajax({
+        url: my_url() + "adicionar_recebimento",
+        type: "POST",
+    })
+    .done(function (response) {
+        try {
+            let dados = response.retorno;
+            console.log("Recebimento adicionado:", dados);
+
+            // Chame a função para processar os dados recebidos
+            processarDados(response);
+
+            // Opcional: Faça mais operações com os dados, se necessário
+        } catch (e) {
+            console.error("Erro ao adicionar recebimento:", e);
+        }
+    })
+    .fail(function (error) {
+        console.error("Erro ao adicionar recebimento:", error);
+    });
+}
+
+
+// Adicione uma função para calcular o ID_Ordem no frontend
+function calcularIDOrdem(tipoOrdem, novoIDNovo) {
+    if (tipoOrdem === "NÃO") {
+        return "";
+    } else if (novoIDNovo === 0) {
+        return "0001-" + new Date().getFullYear().toString().slice(-2);
+    } else if (novoIDNovo === 1) {
+        return "0002-" + new Date().getFullYear().toString().slice(-2);
+    } else {
+        return ("0000" + novoIDNovo).slice(-4) + "-" + new Date().getFullYear().toString().slice(-2);
+    }
+}
+
+// Atualize a função de processamento dos dados recebidos
+function processarDados(response) {
+    try {
+        let dados = response.retorno;
+        console.log("selecionar_recebimentos:", dados);
+
+        // Verifique se os dados têm as propriedades esperadas
+        if (Array.isArray(dados) && dados.length > 0) {
+
+            // Atualize o campo de seleção com as opções recebidas
+            const select_recebimentos = document.getElementById('seuCampoDeRecebimentos');
+
+            // Limpe as opções existentes
+            select_recebimentos.innerHTML = '<option value="">Selecione a Opção..</option>';
+
+            // Adicione as novas opções
+            dados.forEach(recebimento => {
+                const option_recebimento = document.createElement('option');
+                option_recebimento.value = recebimento.ID;  
+                option_recebimento.text = recebimento.nome_recebimento;
+                select_recebimentos.appendChild(option_recebimento);
+            });
+
+            // Exemplo de como calcular o ID_Ordem com base nos dados
+            const tipoOrdem = document.getElementById('TipoOrdem').value;
+            const novoIDNovo = document.getElementById('NovoIDNovo').value;
+            const idOrdemCalculado = calcularIDOrdem(tipoOrdem, novoIDNovo);
+
+            // Atualize o campo do ID_Ordem no formulário
+            document.getElementById('IDOrdem').value = idOrdemCalculado;
+
+            // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
+        } else {
+            console.error("Dados inválidos recebidos:", dados);
+        }
+    } catch (e) {
+        console.error("Erro ao analisar os dados:", e);
+    }
+}
 
 </script>
 

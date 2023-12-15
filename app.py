@@ -34,7 +34,8 @@ from routes.lista_obras import lista_obras
 from routes.consulta_pedreiros import consulta_pedreiros
 from routes.salvar_dados_presencas import salvar_dados_presencas
 from routes.usuarios import verifica_usuario
-
+from routes.produtos import produtos
+from routes.recebimentos import recebimentos
 from routes.conferencia_dados_inicias_checklist import (
     conferencia_dados_inicias_checklist,
 )
@@ -54,7 +55,8 @@ app.register_blueprint(verifica_usuario, url_prefix="")
 app.register_blueprint(clientes, url_prefix="")
 
 app.register_blueprint(conferencia_dados_inicias_checklist, url_prefix="")
-
+app.register_blueprint(produtos, url_prefix="")
+app.register_blueprint(recebimentos, url_prefix="")
 
 arquivo = credencias.open_by_url(
     "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"

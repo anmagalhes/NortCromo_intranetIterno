@@ -4,7 +4,6 @@ import os
 import pygsheets
 import datetime
 from routes.funcoesGerais import *
-from routes.cache_manager import obter_dados_clientes 
 
 import threading
 import traceback
@@ -43,19 +42,18 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 import io
 
-clientes = Blueprint(
-    "clientes",
+produtos = Blueprint(
+    "produtos",
     __name__,
     static_folder="static",
     template_folder="templates",
 )
 
-
 # Variáveis globais para armazenar os DataFrames  - BIBLIOTECA PANDAS X GOOGLESHEET
-df_cliente = None
+df_produto = None
 
-@clientes.route("/adiciona_cliente", methods=["POST"])
-def clientes_f():
+@produtos.route("/adiciona_produto", methods=["POST"])
+def produtos_f():
     try:
         o_que_escrever = request.form["o_que_escrever"]
 
@@ -113,82 +111,31 @@ def clientes_f():
 
     except Exception as e:
         return jsonify(retorno="Algo deu errado: " + str(e))
-    
-# Para selecionar as lista de clientes
-@clientes.route("/selecionar_clientes_cache", methods=["POST"])
-def selecionar_clientes_cache_f():
-    try:
-        dados_clientes = obter_dados_clientes()
-        return jsonify({"retorno": dados_clientes})
 
-    except Exception as e:
-        return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})
-    
 
-@clientes.route("/selecionar_clientes", methods=["POST"])
-def selecionar_clientes_f():
+@produtos.route("/selecionar_produtos", methods=["POST"])
+def selecionar_produtos_f():
     try:
-        clientes_aba = arquivo().worksheet_by_title("Cliente")
-        dados_clientes = clientes_aba.get_all_values()
-        df_clientes = pd.DataFrame(data=dados_clientes[1:], columns=dados_clientes[0])
+        produtos_aba = arquivo().worksheet_by_title("Produto")
+        dados_produtos = produtos_aba.get_all_values()
+        df_produtos = pd.DataFrame(data=dados_produtos[1:], columns=dados_produtos[0])
 
         # Seleciona apenas as colunas desejadas
-        colunas_desejadas = ["ID", "Nome_cliente"]
-        df_selecionado = df_clientes[colunas_desejadas]
+        colunas_desejadas_produtos = ["Cod_Produto", "nome_produto", "idGrupo", "idoperacaoServico", "ID_Componente", "ID_PostoTrabalho"]
+        df_selecionado_produtos = df_produtos[colunas_desejadas_produtos]
 
-        # Filtra os registros onde a coluna "Nome_cliente" é diferente de vazio ou nulo
-        clientes_ok = df_selecionado[df_selecionado["Nome_cliente"].notna()]
+        # Filtra os registros onde a coluna "Produto" é diferente de vazio ou nulo
+        produtos_ok = df_selecionado_produtos[df_selecionado_produtos["nome_produto"].notna()]
+
+        # Ordena os produtos pelo nome do produto
+        produtos_ok = produtos_ok.sort_values(by="nome_produto")
 
         # Converte o DataFrame resultante para um dicionário
-        clientes_lista = clientes_ok.to_dict(orient="records")
+        produtos_lista = produtos_ok.to_dict(orient="records")
 
-        # print("Clientes carregados com sucesso:", clientes_lista)
-        return jsonify({"retorno": clientes_lista})
+         #print("Produtos carregados com sucesso:", produtos_lista)
+        return jsonify({"retorno": produtos_lista})
 
     except Exception as e:
-        return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})
+        return jsonify({"error": f"Erro ao carregar produtos: {str(e)}"})    
     
-
-
-@clientes.route("/selecionar_clientes", methods=["POST"])
-def selecionar_clientes_teste_f():
-    try:
-        # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo.worksheet_by_title("Cliente")
-
-        # Obtenha todos os valores da planilha
-        dados_da_planilha = aba.get_all_values()
-
-        # A primeira linha contém os nomes das colunas, que serão usados para
-        # mapeamento
-        colunas = dados_da_planilha[0]
-
-        # Os dados começam da segunda linha em diante
-        dados = dados_da_planilha[1:]
-
-        # Mapeamento de colunas (mesmo mapeamento usado na função de adicionar
-        # funcionário)
-        mapeamento = {
-            "id_Obra": "id_Obra",
-            "obra_nome": "obra_nome",
-            "Status": "Status",
-        }
-
-        # Inicialize uma lista para armazenar os dados mapeados
-        dados_mapeados = []
-
-        # Itere pelas linhas da planilha
-        for linha in dados:
-            obra = {
-                mapeamento[coluna]: valor for coluna, valor in zip(mapeamento, linha)
-            }
-            if obra["Status"].upper() == "OK":  # Verifica se o status é "OK"
-                dados_mapeados.append(obra)
-
-        # print("tony", dados_mapeados)
-        # Retorne os dados mapeados como JSON
-        return jsonify(retorno=dados_mapeados)
-    except Exception as e:
-        return jsonify(retorno="Algo deu errado: " + str(e))
-
-
