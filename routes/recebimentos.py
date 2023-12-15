@@ -53,7 +53,6 @@ recebimentos = Blueprint(
 df_recebimentos = None
 
 
-
 @recebimentos.route("/selecionar_recebimentos", methods=["POST"])
 def selecionar_recebimentos_f():
     try:
@@ -78,16 +77,58 @@ def selecionar_recebimentos_f():
             else f"{contador_novo + 1:04d}-{str(datetime.now().year)[-2:]}"
         )
 
+        # Verifica se todos os valores na coluna "ID" são numéricos antes de calcular o máximo
+        if recebimentos_ok["ID"].str.isnumeric().all():
+            # Converte a coluna "ID" para numérica e calcula o último número na coluna "ID" e incrementa 1
+            ultimo_id = recebimentos_ok["ID"].astype(int).max()
+            novo_id_recebimento = ultimo_id + 1 if not pd.isnull(ultimo_id) else 1
+        else:
+            # Se houver valores não numéricos, define novo_id_recebimento como 1
+            novo_id_recebimento = 1
+
         # Ordena os produtos pelo nome do produto
         recebimentos_ok = recebimentos_ok.sort_values(by="ID_Ordem")
 
-        # Converte o DataFrame resultante e o contador para um dicionário
+        # Converte o DataFrame resultante, o contador, o valor_seg e o novo_id_recebimento para um dicionário
         recebimentos_lista = recebimentos_ok.to_dict(orient="records")
 
-        # Adiciona o contador e o valor_seg à resposta JSON
-        resposta_json = {"retorno": recebimentos_lista, "contador_novo": contador_novo, "valor_seg": valor_seg}
+        # Converte o novo_id_recebimento para um tipo Python nativo antes de retornar a resposta JSON
+        novo_id_recebimento = int(novo_id_recebimento)
+
+        # Adiciona o contador, o valor_seg e o novo_id_recebimento à resposta JSON
+        resposta_json = {"retorno": recebimentos_lista, "contador_novo": contador_novo, "valor_seg": valor_seg, "novo_id_recebimento": novo_id_recebimento}
 
         return jsonify(resposta_json)
 
     except Exception as e:
         return jsonify({"error": f"Erro ao carregar recebimentos: {str(e)}"})
+    
+    
+    
+@recebimentos.route("/selecionar_recebimentos_especificos", methods=["POST"])
+def selecionar_recebimentos_especificos_f():
+    try:
+        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = recebimentos_aba.get_all_values()
+        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+
+        # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
+        df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+
+        # Filtra os registros onde a coluna "DataRec_OrdemServiços" é maior que a data de hoje menos 15 dias
+        data_limite = datetime.now() - timedelta(days=15)
+        recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_limite) & (df_recebimentos["Status_Ordem"] != "finalizado")]
+
+        # Ordena os produtos pelo nome do produto
+        recebimentos_especificos = recebimentos_especificos.sort_values(by="ID_Ordem")
+
+        # Converte o DataFrame resultante para um dicionário
+        recebimentos_especificos_lista = recebimentos_especificos.to_dict(orient="records")
+
+        # Adiciona os resultados à resposta JSON
+        resposta_json = {"retorno_especifico": recebimentos_especificos_lista}
+
+        return jsonify(resposta_json)
+
+    except Exception as e:
+        return jsonify({"error": f"Erro ao carregar recebimentos específicos: {str(e)}"})

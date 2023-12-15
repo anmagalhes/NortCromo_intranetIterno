@@ -32,6 +32,11 @@ body {
   color: #fff;
 }
 
+/* Estilo para destacar campos alimentados pelo usuário */
+.input-destaque {
+  border: 2px solid #4CAF50; /* Cor de destaque (verde) */
+}
+
 .toggle-submenu {
   float: right; /* Para que a seta apareça à direita */
 }

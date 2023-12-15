@@ -20,6 +20,11 @@
       });
     </script>
   <style>
+
+.elemento-oculto {
+  display: none;
+}
+
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
     .custom-label {
       display: block;
@@ -40,8 +45,15 @@
       margin-top: 8px;
     }
 
+    /* Estilo para destacar campos alimentados pelo usuário */
+    .input-destaque {
+        border: 2px solid #4CAF50; /* Cor de destaque (verde) */
+    }
+
     /* Adicione estilos para o scroll em dispositivos móveis */
     @media (max-width: 767px) {
+
+
       body {
         overflow-x: hidden;
       }
@@ -78,9 +90,13 @@
       .header span {
         display: block; /* Para colocar o texto "NOTH CROMO" abaixo de "RECEBIMENTO" */
       }
+
+      /* Estilo para destacar campos alimentados pelo usuário */
+      .input-destaque {
+          border: 2px solid #4CAF50; /* Cor de destaque (verde) */
+    }
     }
   </style>
-
   <title>Recebimento de Ordens</title>
 </head>
 
@@ -119,7 +135,7 @@
                     id="numeroControle"
                     type="text"
                     class="form-control"
-                    placeholder="Automático"
+                    placeholder="NumeroControle"
                     disabled
                 />
             </div>
@@ -131,8 +147,6 @@
                     id="dataRecebimento"
                     type="date"
                     class="form-control"
-                    placeholder="Automático"
-                    disabled
                 />
             </div>
 
@@ -153,6 +167,8 @@
                     type="number"
                     class="form-control"
                     placeholder="Quantidade"
+                    value="1" 
+                    min="1" 
                 />
             </div>
     
@@ -168,18 +184,19 @@
             <!-- Campo adicional Nota Interna -->
             <div class="col-md-4 mb-3">
                 <label for="notaInterna" class="custom-label">Nota Interna</label>
-                <input id="notaInterna" type="text" class="form-control" placeholder="N/A" />
+                <input id="notaInterna" type="text" class="form-control" placeholder="N/A" oninput="converterParaMaiusculas(this)" />
             </div>
 
              <!-- Campo Número de Referência -->
              <div class="col-md-4 mb-3">
-                <label for="numeroReferencia" class="custom-label">Número de Referência</label>
+                <label for="numeroReferencia" class="custom-label">Referência</label>
                 <input
                     id="numeroReferencia"
                     type="text"
                     class="form-control"
-                    placeholder="Número de Referência"
-                />
+                    placeholder="Referência"
+                    oninput="converterParaMaiusculas(this)" 
+                    />
             </div>
     
             <!-- Campo adicional Vendedor (ID do Vendedor) -->
@@ -191,14 +208,20 @@
             </div>
     
             <!-- Campo adicional Queixa do Cliente -->
-            <div class="col-md-12 mb-3">
-                <label for="queixaCliente" class="custom-label">Obs:</label>
-                <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
-            </div>
+        <div class="col-md-12 mb-3">
+          <label for="queixaCliente" class="custom-label">Obs:</label>
+          <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+        </div>
+
         </div>
     </div>
-    
- 
+
+<!-- Div oculta para as informações do Flask -->
+<div class="elemento-oculto" id="divInfoFlask">
+  <input type="text" id="contador_novo" readonly>
+  <input type="text" id="valor_seg" readonly>
+  <input type="text" id="novo_id_recebimento" readonly>
+</div>
 
         <!-- Tabela Tabular -->
         <div class="table-responsive myTable table-wrapper scrollable-content">
@@ -227,28 +250,6 @@
 
       <!-- Câmera -->
             <div id="tabs-2" class="container">
-
-
-               <!-- Campos de entrada para exibir os valores -->
-    <div>
-      <label for="maxId">Max ID:</label>
-      <input type="text" id="maxId" readonly>
-  </div>
-
-  <div>
-      <label for="valorSeg">Valor Seg:</label>
-      <input type="text" id="valorSeg" readonly>
-  </div>
-
-  <div>
-      <label for="numerocontroleNovo">Número Controle Novo:</label>
-      <input type="text" id="numerocontroleNovo" readonly>
-  </div>
-
-  <div>
-      <label for="maxIdFromSource">Max ID da Fonte:</label>
-      <input type="text" id="maxIdFromSource" readonly>
-  </div>
               <!-- Conteúdo da guia do relatório -->
               <!-- Inclua aqui o código para o relatório -->
             </div>
@@ -300,8 +301,17 @@
               console.error('No file selected');
             }
           }
-        </script>
+        </script> 
 
+<script>
+
+ document.getElementById('mostrarInfoFlask').addEventListener('click', function() {
+  var divInfoFlask = document.getElementById('divInfoFlask');
+  divInfoFlask.style.display = 'block';
+});
+
+</script>
+        
       <script>
  // Varivavel para o ApiScript
 
@@ -314,7 +324,6 @@ function formatarData(data) {
     return dataFormatada;
 
   }
-
 
   $(document).ready(function () {
     // Chamar a função horaSistema para definir a hora atual
@@ -352,6 +361,10 @@ function formatarData(data) {
 function autoResize(element) {
   element.style.height = 'auto';
   element.style.height = (element.scrollHeight) + 'px';
+
+    // Converter para maiúsculas
+    elemento.value = elemento.value.toUpperCase();
+
 };
 
 // Função para definir a hora atual no campo
@@ -595,14 +608,38 @@ desativarCameraBotao.addEventListener('click', function () {
                 })
                 .done(function (data) {
                   console.log('Lista_recebimento', data)
-                                   
-                })
-                .fail(function (error) {
-                    console.error("Lista_recebimento:", error);
+
+                // Preencha os inputs com os dados recebidos
+                $("#contador_novo").val(data.contador_novo).show();
+                $("#valor_seg").val(data.valor_seg).show();
+                $("#novo_id_recebimento").val(data.novo_id_recebimento).show();
+
+              // Padrão: selecionar "Novo" por padrão
+              $("#tipoOrdem").val("novo");
+
+              // Preencher o Número de Controle automaticamente
+              $("#numeroControle").val(data.valor_seg).prop("disabled", true);
+
+
+                 // Manipulador de evento para o Tipo de Ordem
+                 $("#tipoOrdem").change(function() {
+                    var tipoOrdem = $(this).val();
+
+                    // Se o Tipo de Ordem for "Novo", preencha o Número de Controle automaticamente
+                    if (tipoOrdem === "novo") {
+                        $("#numeroControle").val(data.valor_seg).prop("disabled", true);
+                    } else {
+                        // Se o Tipo de Ordem for "Não", deixe o Número de Controle habilitado para digitação
+                        $("#numeroControle").val("").prop("disabled", false);
+                    }
                 });
-            }
-   
-   
+            })
+            .fail(function (error) {
+                console.error("Lista_recebimento:", error);
+            });
+        }
+
+
   // Função para carregar valor_seg
   function carregarValorSeg_original() {
               $.ajax({
@@ -712,6 +749,10 @@ function processarDados(response) {
     } catch (e) {
         console.error("Erro ao analisar os dados:", e);
     }
+}
+
+function converterParaMaiusculas(elemento) {
+    elemento.value = elemento.value.toUpperCase();
 }
 
 </script>
