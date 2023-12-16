@@ -119,3 +119,8 @@ def verificaSeOUsuarioTemPermissao(usuario, rota):
                 if rotas == rota:
                     return True
     return False
+
+# Função para converter a data do frontend para o mesmo formato do DataFrame
+def converter_data_frontend(data_frontend):
+    # Supondo que a data do frontend esteja em formato 'DD/MM/YYYY'
+    return pd.to_datetime(data_frontend, format="%d/%m/%Y")

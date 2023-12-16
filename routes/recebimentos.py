@@ -107,6 +107,14 @@ def selecionar_recebimentos_f():
 @recebimentos.route("/selecionar_recebimentos_especificos", methods=["POST"])
 def selecionar_recebimentos_especificos_f():
     try:
+        # Obter o período inicial e final do corpo da requisição
+        data_inicial_frontend = request.json["data_inicial"]
+        data_final_frontend = request.json["data_final"]
+ 
+        # Convertendo as datas do frontend
+        data_inicial = converter_data_frontend(data_inicial_frontend)
+        data_final = converter_data_frontend(data_final_frontend)
+
         recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
         dados_recebimentos = recebimentos_aba.get_all_values()
         df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
@@ -116,9 +124,11 @@ def selecionar_recebimentos_especificos_f():
         # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
         df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
 
+        # Filtra os registros com base no período fornecido
+        recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_inicial) & (df_recebimentos["DataRec_OrdemServiços"] <= data_final) & (df_recebimentos["Status_Ordem"] != "finalizado")]
         # Filtra os registros onde a coluna "DataRec_OrdemServiços" é maior que a data de hoje menos 15 dias
-        data_limite = datetime.now() - timedelta(days=215)
-        recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_limite) & (df_recebimentos["Status_Ordem"] != "finalizado")]
+         #data_limite = datetime.now() - timedelta(days=215)
+        # recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_limite) & (df_recebimentos["Status_Ordem"] != "finalizado")]
         # Ordena os produtos pelo nome do produto
         recebimentos_especificos = recebimentos_especificos.sort_values(by="ID_Ordem")
 

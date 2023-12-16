@@ -223,10 +223,11 @@
   <input type="text" id="novo_id_recebimento" readonly>
 </div>
 
-        <!-- Tabela Tabular -->
+        <!-- Tabela Tabular
         <div class="table-responsive myTable table-wrapper scrollable-content">
-          <div id="table_Recebimento" class="tabulator myTable"></div>
+          <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
         </div>
+      -->
 
         <!-- Botões flutuantes -->
         <div class="floating-buttons">
@@ -260,7 +261,6 @@
       <!-- Relatório -->
 <div id="tabs-3" class="container">
 
-  
   <!-- Conteúdo da guia do relatório -->
   <div class="row mt-3 scrollable-content">
       <!-- Data Inicial -->
@@ -284,6 +284,11 @@
               placeholder="Data Final"
           />
       </div>
+        <!-- Tabela Tabular -->
+        <div class="table-responsive myTable table-wrapper scrollable-content">
+          <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
+        </div>
+
   </div>
 </div>
 <!-- Fechando a div 'tab-pane' -->
@@ -354,8 +359,8 @@ function formatarData(data) {
     const partes = data.split('-');
     const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
     return dataFormatada;
+}
 
-  }
 
   $(document).ready(function () {
 
@@ -371,7 +376,7 @@ function formatarData(data) {
     
     // carregarValorSeg();
     Lista_recebimento();
-    Relatorio_Recebimento_pedentes();
+  
 
   // Formatar campo de telefone
   $('#telefone').keyup(function () {
@@ -396,13 +401,15 @@ function formatarData(data) {
                   $('#tabs a').on('click', function() {
                   // Obtenha o número da guia a partir do atributo href
                   var numeroTab = parseInt($(this).attr('href').split('-')[1]);
-                  // Chame as funções relevantes
-                  controleVisibilidadeCampoTab2(numeroTab);
-                  controleVisibilidadeCampoTab3(numeroTab);
-                      // Chame a função para mostrar a guia
+
+                    // Chame a função para mostrar a guia
                      mostrarTab(numeroTab);
                      getDataAtual(numeroTab);
                      setDataFinal(numeroTab);
+
+                  // Chame as funções relevantes
+                  controleVisibilidadeCampoTab2(numeroTab);
+                  controleVisibilidadeCampoTab3(numeroTab);
 
               });
 
@@ -481,7 +488,7 @@ function horaSistema() {
     // Função para retornar a data atual no formato DD/MM/AAAA
     function getDataAtual(numeroTab) {
     const hoje = new Date();
-    hoje.setDate(hoje.getDate() - 7); // Subtrai 7 dias da data de hoje
+    hoje.setDate(hoje.getDate() -300); // Subtrai 7 dias da data de hoje
     const ano = hoje.getFullYear();
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
     const dia = String(hoje.getDate()).padStart(2, '0');
@@ -557,266 +564,6 @@ function setDataFinal_Geral() {
     // Retorna a data formatada
     return dataFormatada_Final;
 }
-
-  
-
-function gerarRelatorioTab3(value, callback) {
-
-var funcionario_escolherObrasElement = document.getElementById("relatorioFuncionario_Obras_Select");
-var funcionario_escolherObras = funcionario_escolherObrasElement.options[funcionario_escolherObrasElement.selectedIndex].text;
-
-var data_inicial_formatada = document.getElementById("data_inicial_tab3").value;
-var data_final_formatada = document.getElementById("data_final_tab3").value;
-
-// Formatando as datas
-var data_inicial = formatarData(data_inicial_formatada);
-var data_final = formatarData(data_final_formatada);
-
-// Adicione este console.log para verificar o valor de funcionario_escolherObras
-console.log("funcionario_escolherObras:", funcionario_escolherObras);
-
-console.log("data_inicial:", data_inicial);
-console.log("data_final:", data_final);
-
-$.ajax({
-    url: my_url() + "relatorio_Obras_acumulado_por_periodo",
-    type: "POST",
-    contentType: "application/json",
-    data: JSON.stringify({ 
-      "data_inicial": data_inicial, 
-      "data_final": data_final,
-      "funcionario_escolherObras": funcionario_escolherObras 
-
-    }),
-})
-.done(function (data) {
-    try {
-        if (data && data.detalhado) {
-            let detalhado = data.detalhado;
-
-            console.log("Dados antes de chamar a função de atualização da tabela", detalhado);
-
-            // Transforme os dados uma vez e armazene em uma variável
-            const transformedData = transformedData_Presenca_FuncionarioDetalhamento(detalhado);
-
-            // Chame a função de atualização da tabela com os dados transformados
-            updateTableDetalhamento_Funcionario_Obras(transformedData);
-
-            console.log("Após chamar a função de atualização da tabela");
-
-            // Substitua este exemplo pela lógica real de sua função
-            setTimeout(function() {
-                // Supondo que a operação foi concluída com sucesso
-                console.log("Operação gerarRelatorioTab3 concluída com sucesso.");
-                
-                // Chame a função de retorno de chamada
-                callback();
-            }, 1000);
-
-             // Agora, chame a função para gerar os PDFs
-             gerar_pdf_recibo_funcionarios_Obras();
-        } else {
-            console.error("Dados inválidos retornados:", data);
-        }
-    } catch (error) {
-        console.error("Erro durante o processamento dos dados:", error);
-    }
-})
-.fail(function (xhr, status, error) {
-    console.error("Erro ao buscar dados consolidados:", error);
-    console.log("Status da requisição:", status);
-    console.log("Resposta do servidor:", xhr.responseText);
-});
-}
-
-function updateTableDetalhamento_Funcionario_Obras(detalhado) {
-console.log('Dados detalhados recebidos:', detalhado);
-
-if (!table_Presenca_FuncionarioDetalhamento) {
-    initializeTable_Presenca_FuncionarioDetalhamento();
-}
-
-// const transformedData = transformedData_Presenca_FuncionarioDetalhamento(detalhado);
-console.log('Dados transformados:', detalhado);
-
- // Adicione este log para verificar a existência da tabela
- console.log('Tabela existe:', table_Presenca_FuncionarioDetalhamento);
-
-table_Presenca_FuncionarioDetalhamento.setData(detalhado);
-}
-
-function transformedData_Presenca_FuncionarioDetalhamento(data) {
-console.log("Dados de entrada para transformação:", data);
-
-const mappedColumns = {
-    Id_presenca: "idPCP",
-    Nome_funcionario: "nomeCompleto",
-    Data_presenca_Obras: "dataPresencaObras",
-    id_Obra: "idObra",
-    Valor_servico: "valorServico",
-    Nome_Usuario: "nomeUsuario",
-    Data_salvamento: "dataSalvamento",
-    Id_funcionario: "idFuncionario",
-    Periodo_Presenca: "periodoPresenca",
-};
-
-const transformed_Presenca_FuncionarioDetalhamento = data.map((row) => {
-    const transformedRow_Presenca_FuncionarioDetalhamento = {};
-
-    for (const columnFrom in mappedColumns) {
-        if (mappedColumns.hasOwnProperty(columnFrom)) {
-            if (columnFrom in row) {
-                transformedRow_Presenca_FuncionarioDetalhamento[mappedColumns[columnFrom]] = row[columnFrom] ?? "";
-            } else {
-                console.warn(`A coluna "${columnFrom}" não está presente no objeto. Valor padrão será utilizado.`);
-                transformedRow_Presenca_FuncionarioDetalhamento[columnFrom] = "";
-            }
-        }
-    }
-
-    console.log('TONY COMO VAI ', transformedRow_Presenca_FuncionarioDetalhamento);
-    return transformedRow_Presenca_FuncionarioDetalhamento;
-});
-
-console.log("Dados transformados TESTE:", transformed_Presenca_FuncionarioDetalhamento);
-return transformed_Presenca_FuncionarioDetalhamento;
-}
-
-function initializeTable_Presenca_FuncionarioDetalhamento() {
-table_Presenca_FuncionarioDetalhamento = new Tabulator("#table_Presenca_FuncionarioDetalhamento", {
-    name: "table_Presenca_FuncionarioDetalhamento",
-    deferRender: true,
-    scrollCollapse: true,
-    scroller: true,
-    scrollY: 200,
-    data: [],
-    columns: [
-        {
-                title: "Linha",
-                formatter: "rownum", // Adiciona um contador de linha
-                hozAlign: "center",
-                responsive: 0,
-            },
-    {
-            title: "Id PCP",
-            field: "idPCP", // Certifique-se de que a chave corresponde ao objeto transformado
-            hozAlign: "center",
-            visible: false,
-            responsive: 0,
-        },
-        {
-            title: "Nome",
-            field: "nomeCompleto", // Certifique-se de que a chave corresponde ao objeto transformado
-            hozAlign: "left",
-            responsive: 0,
-        },
-        {
-          title: "Data Presença",
-          field: "dataPresencaObras", // Adicione outras colunas conforme necessário
-          hozAlign: "left",
-          responsive: 0,
-        },
-        {
-            title: "Prenseça",
-            field: "periodoPresenca", // Adicione outras colunas conforme necessário
-            hozAlign: "left",
-            responsive: 0,
-        },
-        {
-            title: "Centro Custo (Obra)",
-            field: "idObra",
-            hozAlign: "left",
-            responsive: 0,
-        },
-        
-        {
-            title: "Valor Serviço",
-            field: "valorServico",
-            visible: false,
-            hozAlign: "left",
-            responsive: 0,
-        },
-        // Adicione outras colunas conforme necessário
-    ],
-    rowClick: function (e, row) {
-        table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
-            r.getElement().classList.remove('selected');
-        });
-
-        row.getElement().classList.add('selected');
-        var rowData = row.getData();
-        preencherCamposDeEntrada(rowData);
-    },
-});
-}
-
-
-function destruirTabela_Presenca_FuncionarioDetalhamento() {
-if (table_Presenca_FuncionarioDetalhamento) {
-    table_Presenca_FuncionarioDetalhamento.destroy();
-    table_Presenca_FuncionarioDetalhamento = null;
-}
-}         
-        function preencherCamposDeEntrada(rowData) {
-        console.log("Preenchendo campos de entrada:", rowData);
-        // Defina o valor do campo idPCP usando JavaScript
-        document.getElementById("idPCP").value = rowData.idPCP;
-        document.getElementById("nomeCompleto").value = rowData.nomeCompleto;
-        /*document.getElementById("nomeCompleto").value = rowData.nome;
-        document.getElementById("dataNascimento").value = rowData.dataNascimento;
-        document.getElementById("cpf").value = rowData.cpf;
-        document.getElementById("rg").value = rowData.rg;  // Corrigido para rowData.rg
-        document.getElementById("pis").value = rowData.pis;
-        document.getElementById("funcao").value = rowData.funcao;
-        document.getElementById("tipoSalario").value = rowData.tipoSalario;
-        document.getElementById("salario").value = rowData.salario;
-        document.getElementById("email").value = rowData.email;
-        document.getElementById("cep").value = rowData.cep;
-        document.getElementById("endereco").value = rowData.endereco;
-        document.getElementById("bairro").value = rowData.bairro;
-        document.getElementById("cidade").value = rowData.cidade;
-        document.getElementById("uf").value = rowData.uf;
-        document.getElementById("caixa").value = rowData.caixa;
-        document.getElementById("formapag").value = rowData.formapag;
-        */
-      }
-      
-      
-// Adicione um evento de input ao campo de pesquisa
-$('#pesquisar_funcionario_Presenca_FuncionarioDetalhamento').on('input', function () {
-var valor_para_pesquisar = $(this).val().toLowerCase().trim();
-
-// Verifique se o valor de pesquisa não está vazio
-if (valor_para_pesquisar === "") {
-    // Se estiver vazio, remova o filtro
-    table_Presenca_FuncionarioDetalhamento.clearFilter();
-} else {
-    // Se não estiver vazio, aplique o filtro
-    table_Presenca_FuncionarioDetalhamento.setFilter(function (detalhado) {
-        return (
-             detalhado.idPCP.toLowerCase().includes(valor_para_pesquisar) ||
-            detalhado.nomeCompleto.toLowerCase().includes(valor_para_pesquisar) ||
-          /* data.cpf.toLowerCase().includes(valor_para_pesquisar) ||
-            data.pis.toLowerCase().includes(valor_para_pesquisar) ||
-            data.caixa.toLowerCase().includes(valor_para_pesquisar) ||
-            data.cnpj.toLowerCase().includes(valor_para_pesquisar) ||
-            data.endereco.toLowerCase().includes(valor_para_pesquisar) ||
-            data.bairro.toLowerCase().includes(valor_para_pesquisar) ||
-            data.cidade.toLowerCase().includes(valor_para_pesquisar) ||
-            data.uf.toLowerCase().includes(valor_para_pesquisar) ||
-            data.cep.toLowerCase().includes(valor_para_pesquisar) ||
-            data.email.toLowerCase().includes(valor_para_pesquisar) ||
-            data.tipoSalario.toLowerCase().includes(valor_para_pesquisar) ||
-            data.salario.toLowerCase().includes(valor_para_pesquisar) ||
-
-             */
-            data.formapag.toLowerCase().includes(valor_para_pesquisar)
-
-            // Adicione mais colunas conforme necessário
-        );
-    });
-}
-});
 
 document.addEventListener('DOMContentLoaded', function () {
   const btnGroup = document.querySelector('.btn-group');
@@ -1071,42 +818,277 @@ desativarCameraBotao.addEventListener('click', function () {
             });
         }
 
+    function transformedData_Recebimento_pedentes(data) {
+    console.log("Dados de entrada para transformação:", data);
 
-      // Função para carregar a lista de obras
-        function Relatorio_Recebimento_pedentes() {
-          console.log('Relatorio_Recebimento_pedentes')
-          try {
-              $.ajax({
-                  url: my_url() + "selecionar_recebimentos_especificos",
-                  type: "POST",
-                  dataType: "json",
-              })
-              .done(function (data) {
-                  console.log('Relatorio_Recebimento_pedentes', data);
+    const mappedColumns_Recebimento_pedentes = {
+        Cod_Produto: "codProduto",
+        DataCadastro: "dataCadastro",
+        DataRec_OrdemServiços: "dataRecOrdemServicos",
+        HoraInicial_Ordem: "horaInicialOrdem",
+        ID: "id",
+        ID_Componente: "idComponente",
+        ID_Ordem: "idOrdem",
+        ID_PostoTrabalho: "idPostoTrabalho",
+        ID_Vendedor: "idVendedor",
+        ID_cliente: "idCliente",
+        Id: "idGeral",
+        Nome_cliente: "nomeCliente",
+        NotaInterna: "notaInterna",
+        QUEIXA_CLIENTE: "queixaCliente",
+        Qtd_Produto: "qtdProduto",
+        Referencia_Produto: "referenciaProduto",
+        Status_Ordem: "statusOrdem",
+        TipoOrdem: "tipoOrdem",
+        Usuario_Cadastro: "usuarioCadastro",
+        idGrupo: "idGrupo",
+        idoperacaoServico: "idOperacaoServico",
+        nome: "nome",
+        nome_produto: "nomeProduto"
+        // Adicione ou remova colunas conforme necessário
+    };
 
-                  // Antes de processar os dados na resposta AJAX
-                if (data && data.retorno_especifico) {
-                    // Iterar sobre os dados e verificar valores nulos ou vazios
-                    data.retorno_especifico.forEach(function(item) {
-                        for (var key in item) {
-                            if (item.hasOwnProperty(key) && (item[key] === null || item[key] === undefined || item[key] === "NaN")) {
-                                item[key] = ""; // Ou atribua um valor padrão apropriado
-                            }
-                        }
-                    });
+    const transformed_Recebimento_pedentes = data.map((row) => {
+        const transformedRow_Recebimento_pedentes = {};
 
-                    // Seu código para processar os dados
-                } else {
-                    console.error("Resposta JSON inválida ou ausente");
-                }
-              })
-              .fail(function (jqXHR, textStatus, errorThrown) {
-                  console.error("Erro na requisição AJAX: " + textStatus, errorThrown);
-              });
-          } catch (error) {
-              console.error("Erro ao executar a função: " + error);
-          }
-      }
+        for (const columnFrom_Recebimento_pedentes in mappedColumns_Recebimento_pedentes) {
+            if (row.hasOwnProperty(columnFrom_Recebimento_pedentes)) {
+                transformedRow_Recebimento_pedentes[mappedColumns_Recebimento_pedentes[columnFrom_Recebimento_pedentes]] = row[columnFrom_Recebimento_pedentes] ?? "";
+            } else {
+                console.warn(`A coluna "${columnFrom_Recebimento_pedentes}" não está presente no objeto. Valor padrão será utilizado.`);
+                transformedRow_Recebimento_pedentes[columnFrom_Recebimento_pedentes] = "";
+            }
+        }
+
+        console.log('TONY COMO VAI ', transformedRow_Recebimento_pedentes);
+        return transformedRow_Recebimento_pedentes;
+    });
+
+    console.log("Dados transformados TESTE:", transformed_Recebimento_pedentes);
+    return transformed_Recebimento_pedentes;
+}
+
+// Função para carregar a lista de obras
+function Relatorio_Recebimento_pedentes() {
+    console.log('Relatorio_Recebimento_pedentes')
+
+    var data_inicial_formatada = document.getElementById("data_inicial_recebimento").value;
+    var data_final_formatada = document.getElementById("data_final_recebimento").value;
+
+    console.log("data_inicial_formatada:", data_inicial_formatada);
+    console.log("data_final_formatada:", data_final_formatada);
+
+    // Formatando as datas
+    var data_inicial = formatarData(data_inicial_formatada);
+    var data_final = formatarData(data_final_formatada);
+
+    console.log("Data Inicial:", data_inicial);
+    console.log("Data Final:", data_final);
+
+    try {
+        $.ajax({
+            url: my_url() + "selecionar_recebimentos_especificos",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "data_inicial": data_inicial,
+                "data_final": data_final,
+            }),
+        })
+        .done(function (data) {
+            console.log('Relatorio_Recebimento_pedentes', data);
+
+            // Antes de processar os dados na resposta AJAX
+            if (data && data.retorno_especifico) {
+                // Transforme os dados uma vez e armazene em uma variável
+                const transformedData = transformedData_Recebimento_pedentes(data.retorno_especifico);
+
+                // Chame a função de atualização da tabela com os dados transformados
+                updateTableRecebimento_pedentes(transformedData);
+
+                console.log("Após chamar a função de atualização da tabela");
+             } else {
+                console.error("Resposta JSON inválida ou ausente");
+            }
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Erro ao buscar dados consolidados:", error);
+            console.log("Status da requisição:", status);
+            console.log("Resposta do servidor:", xhr.responseText);
+        });
+    } catch (error) {
+        console.error("Erro ao executar a função: " + error);
+    }
+}
+
+function updateTableRecebimento_pedentes(retorno_especifico) {
+    console.log('Dados detalhados recebidos:', retorno_especifico);
+
+    if (!table_Recebimento_pedentes) {
+        console.log('Tabela não existe. Inicializando...');
+        initializeTable_Recebimento_pedentes();
+    }
+
+    // Adicione este log para verificar a existência da tabela
+    console.log('Tabela existe:', table_Recebimento_pedentes);
+
+    table_Recebimento_pedentes.setData(retorno_especifico);
+}
+
+
+
+  function initializeTable_Recebimento_pedentes() {
+  table_Recebimento_pedentes = new Tabulator("#table_Recebimento_pedentes", {
+      pagination:"local",
+      paginationSize:300,
+      paginationInitialPage: 1,
+      movableColumns:true,
+      paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
+      paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
+      name: "table_Recebimento_pedentes",
+      deferRender: true,
+      scrollCollapse: true,
+      scroller: true,
+      scrollY: 200,
+      data: [],
+      columns: [
+          {
+                  title: "Linha",
+                  formatter: "rownum", // Adiciona um contador de linha
+                  hozAlign: "center",
+                  responsive: 0,
+              },
+      {
+              title: "Id PCP",
+              field: "idPCP", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "center",
+              visible: false,
+              responsive: 0,
+          },
+          {
+              title: "Nome",
+              field: "nomeCompleto", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "left",
+              responsive: 0,
+          },
+          {
+            title: "Data Presença",
+            field: "dataPresencaObras", // Adicione outras colunas conforme necessário
+            hozAlign: "left",
+            responsive: 0,
+          },
+          {
+              title: "Prenseça",
+              field: "periodoPresenca", // Adicione outras colunas conforme necessário
+              hozAlign: "left",
+              responsive: 0,
+          },
+          {
+              title: "Centro Custo (Obra)",
+              field: "idObra",
+              hozAlign: "left",
+              responsive: 0,
+          },
+          
+          {
+              title: "Valor Serviço",
+              field: "valorServico",
+              visible: false,
+              hozAlign: "left",
+              responsive: 0,
+          },
+          // Adicione outras colunas conforme necessário
+      ],
+      rowClick: function (e, row) {
+          table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
+              r.getElement().classList.remove('selected');
+          });
+
+          row.getElement().classList.add('selected');
+          var rowData = row.getData();
+          preencherCamposDeEntrada(rowData);
+      },
+  });
+  }
+
+
+  function destruirTabela__Recebimento_pedentes() {
+  if (table_Recebimento_pedentes) {
+      table_Recebimento_pedentes.destroy();
+      table_Recebimento_pedentes = null;
+  }
+  }         
+          function preencherCamposDeEntrada(rowData) {
+          console.log("Preenchendo campos de entrada:", rowData);
+          // Defina o valor do campo idPCP usando JavaScript
+          document.getElementById("idPCP").value = rowData.idPCP;
+          document.getElementById("nomeCompleto").value = rowData.nomeCompleto;
+          /*document.getElementById("nomeCompleto").value = rowData.nome;
+          document.getElementById("dataNascimento").value = rowData.dataNascimento;
+          document.getElementById("cpf").value = rowData.cpf;
+          document.getElementById("rg").value = rowData.rg;  // Corrigido para rowData.rg
+          document.getElementById("pis").value = rowData.pis;
+          document.getElementById("funcao").value = rowData.funcao;
+          document.getElementById("tipoSalario").value = rowData.tipoSalario;
+          document.getElementById("salario").value = rowData.salario;
+          document.getElementById("email").value = rowData.email;
+          document.getElementById("cep").value = rowData.cep;
+          document.getElementById("endereco").value = rowData.endereco;
+          document.getElementById("bairro").value = rowData.bairro;
+          document.getElementById("cidade").value = rowData.cidade;
+          document.getElementById("uf").value = rowData.uf;
+          document.getElementById("caixa").value = rowData.caixa;
+          document.getElementById("formapag").value = rowData.formapag;
+          */
+        }
+        
+        
+  // Adicione um evento de input ao campo de pesquisa
+  $('#pesquisar_funcionario_Presenca_FuncionarioDetalhamento').on('input', function () {
+  var valor_para_pesquisar = $(this).val().toLowerCase().trim();
+
+  // Verifique se o valor de pesquisa não está vazio
+  if (valor_para_pesquisar === "") {
+      // Se estiver vazio, remova o filtro
+      table_Presenca_FuncionarioDetalhamento.clearFilter();
+  } else {
+      // Se não estiver vazio, aplique o filtro
+      table_Presenca_FuncionarioDetalhamento.setFilter(function (detalhado) {
+          return (
+              detalhado.idPCP.toLowerCase().includes(valor_para_pesquisar) ||
+              detalhado.nomeCompleto.toLowerCase().includes(valor_para_pesquisar) ||
+            /* data.cpf.toLowerCase().includes(valor_para_pesquisar) ||
+              data.pis.toLowerCase().includes(valor_para_pesquisar) ||
+              data.caixa.toLowerCase().includes(valor_para_pesquisar) ||
+              data.cnpj.toLowerCase().includes(valor_para_pesquisar) ||
+              data.endereco.toLowerCase().includes(valor_para_pesquisar) ||
+              data.bairro.toLowerCase().includes(valor_para_pesquisar) ||
+              data.cidade.toLowerCase().includes(valor_para_pesquisar) ||
+              data.uf.toLowerCase().includes(valor_para_pesquisar) ||
+              data.cep.toLowerCase().includes(valor_para_pesquisar) ||
+              data.email.toLowerCase().includes(valor_para_pesquisar) ||
+              data.tipoSalario.toLowerCase().includes(valor_para_pesquisar) ||
+              data.salario.toLowerCase().includes(valor_para_pesquisar) ||
+
+              */
+              data.formapag.toLowerCase().includes(valor_para_pesquisar)
+
+              // Adicione mais colunas conforme necessário
+          );
+      });
+  }
+  });
+
+
+
+
+
+
+
+
+
+
+
 
  // Função para adicionar um recebimento
 function adicionarRecebimento() {
@@ -1214,8 +1196,10 @@ if (numeroTab === 3) {
    $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').show();
   
    // Realiza as ações específicas da "Tab 3"
-     //gerarRelatorioTab3(this.value, recuperarDadosResumo); 
-    // initializeTable_Presenca_FuncionarioDetalhamento();
+
+     Relatorio_Recebimento_pedentes();
+     //gerarRelatorioTab3(this.value); 
+     initializeTable_Recebimento_pedentes();
     // initializeTable_Presenca_FuncionarioResumo();
     // console.log("Antes carregarDadosFuncionario")
     // carregarDadosFuncionario();
@@ -1227,7 +1211,7 @@ if (numeroTab === 3) {
     $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
   
      // Se não for a "Tab 2", limpe ou esconda a tabela
-     //  destruirTabela_Presenca_FuncionarioDetalhamento();
+       destruirTabela__Recebimento_pedentes();
 }
 }
 
