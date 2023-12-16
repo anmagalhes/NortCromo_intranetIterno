@@ -1429,3 +1429,8 @@ body {
 .input-destaque {
   border: 2px solid #4CAF50; /* Cor de destaque (verde) */
 }
+/* Adicione um estilo para a guia ativa (cor vermelha, por exemplo) */
+#tabs a.ativa {
+  background-color: red;
+  color: white;
+}

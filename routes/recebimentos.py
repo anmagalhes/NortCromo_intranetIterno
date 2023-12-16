@@ -133,8 +133,8 @@ def selecionar_recebimentos_especificos_f():
         # Filtra os clientes usando os IDs únicos
         clientes_selecionados = df_clientes[df_clientes["ID"].isin(ids_clientes_unicos)][["ID", "Nome_cliente"]]
 
-        print("Clientes Selecionados:")
-        print(clientes_selecionados)
+         #print("Clientes Selecionados:")
+         #print(clientes_selecionados)
 
         # Realiza o merge com os recebimentos
         recebimentos_especificos = pd.merge(recebimentos_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
@@ -152,10 +152,10 @@ def selecionar_recebimentos_especificos_f():
         df_produtos = pd.DataFrame(data=dados_produtos[1:], columns=dados_produtos[0])
 
         # Filtra os produtos usando os IDs únicos
-        produtos_selecionados = df_produtos[df_produtos["Cod_Produto"].isin(ids_produtos_unicos)][["Cod_Produto", "nome_produto", "idGrupo", "idoperacaoServico"]]
+        produtos_selecionados = df_produtos[df_produtos["Cod_Produto"].isin(ids_produtos_unicos)][["Cod_Produto", "nome_produto", "idGrupo", "idoperacaoServico", "ID_Componente", "ID_PostoTrabalho"]]
 
-        print("Produtos Selecionados:")
-        print(produtos_selecionados)
+         #print("Produtos Selecionados:")
+         #print(produtos_selecionados)
 
         # Realiza o merge com os recebimentos
         recebimentos_especificos = pd.merge(recebimentos_especificos, produtos_selecionados, on="Cod_Produto", how="left")
@@ -171,8 +171,8 @@ def selecionar_recebimentos_especificos_f():
         # Filtra os grupos usando os IDs únicos
         grupos_selecionados = df_grupos[df_grupos["Id"].isin(ids_grupos_unicos)][["Id", "nome"]]
 
-        print("Grupos Selecionados:")
-        print(grupos_selecionados)
+         #print("Grupos Selecionados:")
+         #print(grupos_selecionados)
 
          # Realiza o merge com os recebimentos
         recebimentos_especificos = pd.merge(recebimentos_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
@@ -187,16 +187,35 @@ def selecionar_recebimentos_especificos_f():
 
         # Filtra as operações usando os IDs únicos
         operacoes_selecionadas = df_operacoes[df_operacoes["Id"].isin(ids_operacoes_unicas)][["Id", "grupo_Processo", "nome"]]
+        
+        # Renomeia a coluna "nome" localmente para "nome_operacao"
+        operacoes_selecionadas = operacoes_selecionadas.rename(columns={"nome": "nome_operacao"})
 
-        print("Operações Selecionadas:")
-        print(operacoes_selecionadas)
+        # Preenche os valores nulos em "grupo_Processo" e "nome_operacao"
+        operacoes_selecionadas["grupo_Processo"] = operacoes_selecionadas["grupo_Processo"].fillna('')
+        operacoes_selecionadas["nome_operacao"] = operacoes_selecionadas["nome_operacao"].fillna('')
 
-        # Realiza o merge com os recebimentos
-        recebimentos_especificos = pd.merge(recebimentos_especificos, operacoes_selecionadas, left_on="idoperacaoServico", right_on="Id", how="left")
-  
-        # Pega os IDs dos grupos de processo únicos
-        ids_grupos_processo_unicos = operacoes_selecionadas["grupo_Processo"].unique()
+         #print("Operações Selecionadas:")
+         #print(operacoes_selecionadas)
+   
+        # Pega os IDs das componetes únicas
+        ids_componetes_unicas = recebimentos_especificos["ID_Componente"].unique()
 
+        # Carrega a folha Operacao
+        componetes_aba = arquivo().worksheet_by_title("Componente")
+        dados_componetes = componetes_aba.get_all_values()
+        df_componetes = pd.DataFrame(data=dados_componetes[1:], columns=dados_componetes[0])
+
+        # Filtra as operações usando os IDs únicos
+        componetes_selecionadas = df_componetes[df_componetes["ID"].isin(ids_componetes_unicas)][["ID", "nome_Componente"]]
+
+        # Preenche os valores nulos em "nome_operacao"
+        componetes_selecionadas["nome_Componente"] = componetes_selecionadas["nome_Componente"].fillna('')
+
+
+        # Imprime as colunas antes da conversão para dicionário
+        print("Colunas em recebimentos_especificos:")
+        print(recebimentos_especificos.columns)
         # Converte o DataFrame resultante para um dicionário
         recebimentos_especificos_lista = recebimentos_especificos.fillna('').to_dict(orient="records")
 

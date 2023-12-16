@@ -134,3 +134,8 @@ input.filled {
   background-color: #4CAF50; /* Cor de fundo quando marcado */
   border: 1px solid #4CAF50; /* Cor da borda quando marcado */
 }
+/* Adicione um estilo para a guia ativa (cor vermelha, por exemplo) */
+#tabs a.ativa {
+  background-color: red;
+  color: white;
+}
