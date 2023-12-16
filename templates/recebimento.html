@@ -333,6 +333,7 @@ function formatarData(data) {
     
      // carregarValorSeg();
     Lista_recebimento();
+    Relatorio_Recebimento_pedentes();
 
   // Formatar campo de telefone
   $('#telefone').keyup(function () {
@@ -640,38 +641,41 @@ desativarCameraBotao.addEventListener('click', function () {
         }
 
 
-  // Função para carregar valor_seg
-  function carregarValorSeg_original() {
+      // Função para carregar a lista de obras
+        function Relatorio_Recebimento_pedentes() {
+          console.log('Relatorio_Recebimento_pedentes')
+          try {
               $.ajax({
-                  url: my_url() + "get_valor_seg",
-                  type: "GET",
+                  url: my_url() + "selecionar_recebimentos_especificos",
+                  type: "POST",
                   dataType: "json",
               })
               .done(function (data) {
-                if (data.error) {
-              console.error("Erro ao obter valor_seg:", data.error);
-            } else {
-              console.log("carregarValorSeg data", data);
-              
-                  const maxId = data.max_id;
-                  const valorSeg = data.valor_seg;
-                  const numerocontroleNovo = data.numerocontrole_novo;
-                  const maxIdFromSource = data.max_id_from_source;
+                  console.log('Lista_recebimento', data);
 
-                  // Preencha os campos de entrada com os valores obtidos
-                  $("#maxId").val(maxId);
-                  $("#valorSeg").val(valorSeg);
-                  $("#numerocontroleNovo").val(numerocontroleNovo);
-                  $("#maxIdFromSource").val(maxIdFromSource);
+                  // Antes de processar os dados na resposta AJAX
+                if (data && data.retorno_especifico) {
+                    // Iterar sobre os dados e verificar valores nulos ou vazios
+                    data.retorno_especifico.forEach(function(item) {
+                        for (var key in item) {
+                            if (item.hasOwnProperty(key) && (item[key] === null || item[key] === undefined || item[key] === "NaN")) {
+                                item[key] = ""; // Ou atribua um valor padrão apropriado
+                            }
+                        }
+                    });
 
+                    // Seu código para processar os dados
+                } else {
+                    console.error("Resposta JSON inválida ou ausente");
                 }
               })
-      .fail(function (xhr, status, error) {
-      console.error("Erro ao carregar valor_seg:", status, error);
-      console.log(xhr.responseText); // Adicione esta linha para imprimir a resposta completa
-  });
-
-  }
+              .fail(function (jqXHR, textStatus, errorThrown) {
+                  console.error("Erro na requisição AJAX: " + textStatus, errorThrown);
+              });
+          } catch (error) {
+              console.error("Erro ao executar a função: " + error);
+          }
+      }
 
  // Função para adicionar um recebimento
 function adicionarRecebimento() {

@@ -104,7 +104,6 @@ def selecionar_recebimentos_f():
         return jsonify({"error": f"Erro ao carregar recebimentos: {str(e)}"})
     
     
-    
 @recebimentos.route("/selecionar_recebimentos_especificos", methods=["POST"])
 def selecionar_recebimentos_especificos_f():
     try:
@@ -114,16 +113,92 @@ def selecionar_recebimentos_especificos_f():
 
         # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
         df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+        # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
+        df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
 
         # Filtra os registros onde a coluna "DataRec_OrdemServiços" é maior que a data de hoje menos 15 dias
-        data_limite = datetime.now() - timedelta(days=15)
+        data_limite = datetime.now() - timedelta(days=215)
         recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_limite) & (df_recebimentos["Status_Ordem"] != "finalizado")]
-
         # Ordena os produtos pelo nome do produto
         recebimentos_especificos = recebimentos_especificos.sort_values(by="ID_Ordem")
 
+        # Pega os IDs dos clientes únicos
+        ids_clientes_unicos = recebimentos_especificos["ID"].unique()
+
+        # Carrega a folha Cliente
+        clientes_aba = arquivo().worksheet_by_title("Cliente")
+        dados_clientes = clientes_aba.get_all_values()
+        df_clientes = pd.DataFrame(data=dados_clientes[1:], columns=dados_clientes[0])
+
+        # Filtra os clientes usando os IDs únicos
+        clientes_selecionados = df_clientes[df_clientes["ID"].isin(ids_clientes_unicos)][["ID", "Nome_cliente"]]
+
+        print("Clientes Selecionados:")
+        print(clientes_selecionados)
+
+        # Realiza o merge com os recebimentos
+        recebimentos_especificos = pd.merge(recebimentos_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
+    
+        # Adiciona a coluna Nome_cliente ao DataFrame recebimentos_especificos
+        # após o merge
+        recebimentos_especificos["Nome_cliente"] = recebimentos_especificos["Nome_cliente"].fillna('')
+
+        # Pega os IDs dos produtos únicos
+        ids_produtos_unicos = recebimentos_especificos["Cod_Produto"].unique()
+
+        # Carrega a folha Produto
+        produtos_aba = arquivo().worksheet_by_title("Produto")
+        dados_produtos = produtos_aba.get_all_values()
+        df_produtos = pd.DataFrame(data=dados_produtos[1:], columns=dados_produtos[0])
+
+        # Filtra os produtos usando os IDs únicos
+        produtos_selecionados = df_produtos[df_produtos["Cod_Produto"].isin(ids_produtos_unicos)][["Cod_Produto", "nome_produto", "idGrupo", "idoperacaoServico"]]
+
+        print("Produtos Selecionados:")
+        print(produtos_selecionados)
+
+        # Realiza o merge com os recebimentos
+        recebimentos_especificos = pd.merge(recebimentos_especificos, produtos_selecionados, on="Cod_Produto", how="left")
+
+        # Pega os IDs dos grupos únicos
+        ids_grupos_unicos = recebimentos_especificos["idGrupo"].unique()
+
+        # Carrega a folha Grupo Produto
+        grupos_aba = arquivo().worksheet_by_title("Grupo Produto")
+        dados_grupos = grupos_aba.get_all_values()
+        df_grupos = pd.DataFrame(data=dados_grupos[1:], columns=dados_grupos[0])
+
+        # Filtra os grupos usando os IDs únicos
+        grupos_selecionados = df_grupos[df_grupos["Id"].isin(ids_grupos_unicos)][["Id", "nome"]]
+
+        print("Grupos Selecionados:")
+        print(grupos_selecionados)
+
+         # Realiza o merge com os recebimentos
+        recebimentos_especificos = pd.merge(recebimentos_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
+
+        # Pega os IDs das operações únicas
+        ids_operacoes_unicas = recebimentos_especificos["idoperacaoServico"].unique()
+
+        # Carrega a folha Operacao
+        operacoes_aba = arquivo().worksheet_by_title("Operacao")
+        dados_operacoes = operacoes_aba.get_all_values()
+        df_operacoes = pd.DataFrame(data=dados_operacoes[1:], columns=dados_operacoes[0])
+
+        # Filtra as operações usando os IDs únicos
+        operacoes_selecionadas = df_operacoes[df_operacoes["Id"].isin(ids_operacoes_unicas)][["Id", "grupo_Processo", "nome"]]
+
+        print("Operações Selecionadas:")
+        print(operacoes_selecionadas)
+
+        # Realiza o merge com os recebimentos
+        recebimentos_especificos = pd.merge(recebimentos_especificos, operacoes_selecionadas, left_on="idoperacaoServico", right_on="Id", how="left")
+  
+        # Pega os IDs dos grupos de processo únicos
+        ids_grupos_processo_unicos = operacoes_selecionadas["grupo_Processo"].unique()
+
         # Converte o DataFrame resultante para um dicionário
-        recebimentos_especificos_lista = recebimentos_especificos.to_dict(orient="records")
+        recebimentos_especificos_lista = recebimentos_especificos.fillna('').to_dict(orient="records")
 
         # Adiciona os resultados à resposta JSON
         resposta_json = {"retorno_especifico": recebimentos_especificos_lista}
@@ -131,4 +206,5 @@ def selecionar_recebimentos_especificos_f():
         return jsonify(resposta_json)
 
     except Exception as e:
-        return jsonify({"error": f"Erro ao carregar recebimentos específicos: {str(e)}"})
+        print(f"Erro ao carregar recebimentos específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar recebimentos específicos: {str(e)}", "traceback": traceback.format_exc()})
