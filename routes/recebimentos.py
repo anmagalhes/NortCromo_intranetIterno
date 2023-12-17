@@ -125,7 +125,7 @@ def selecionar_recebimentos_especificos_f():
         df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
 
         # Filtra os registros com base no período fornecido
-        recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_inicial) & (df_recebimentos["DataRec_OrdemServiços"] <= data_final) & (df_recebimentos["Status_Ordem"] != "finalizado")]
+        recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_inicial) & (df_recebimentos["DataRec_OrdemServiços"] <= data_final) & (df_recebimentos["Status_Ordem"] != "FINALIZADO")]
         # Filtra os registros onde a coluna "DataRec_OrdemServiços" é maior que a data de hoje menos 15 dias
          #data_limite = datetime.now() - timedelta(days=215)
         # recebimentos_especificos = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_limite) & (df_recebimentos["Status_Ordem"] != "finalizado")]

@@ -99,7 +99,6 @@ if (typeof today === 'undefined') {
 }
 
 
-
 // Função para destruir a tabela e limpar variáveis
 function limparTabela() {
   if (table_checklist) {
@@ -2460,5 +2459,287 @@ function muda_de_tela(url, event) {
       window.location.href = url;
       event.stopPropagation();
     }
+
+// ........................................//........................//...................
+
+// CARREGAR INFORMAÇÃO CHECKLIST VINDO DO FLASK
+
+    function transformedData_Recebimento_pedentes(data) {
+    console.log("Dados de entrada para transformação:", data);
+
+    const mappedColumns_Recebimento_pedentes = {
+        Cod_Produto: "codProduto",
+        DataCadastro: "dataCadastro",
+        DataRec_OrdemServiços: "dataRecOrdemServicos",
+        HoraInicial_Ordem: "horaInicialOrdem",
+        ID: "id",
+        ID_Componente: "idComponente",
+        ID_Ordem: "idOrdem",
+        ID_PostoTrabalho: "idPostoTrabalho",
+        ID_Vendedor: "idVendedor",
+        ID_cliente: "idCliente",
+        Id: "idGeral",
+        Nome_cliente: "nomeCliente",
+        NotaInterna: "notaInterna",
+        QUEIXA_CLIENTE: "queixaCliente",
+        Qtd_Produto: "qtdProduto",
+        Referencia_Produto: "referenciaProduto",
+        Status_Ordem: "statusOrdem",
+        TipoOrdem: "tipoOrdem",
+        Usuario_Cadastro: "usuarioCadastro",
+        idGrupo: "idGrupo",
+        idoperacaoServico: "idOperacaoServico",
+        nome: "nome",
+        nome_produto: "nomeProduto"
+        // Adicione ou remova colunas conforme necessário
+    };
+
+    if (!data || !Array.isArray(data)) {
+        console.error("Dados inválidos fornecidos para transformação:", data);
+        return [];
+    }
+      
+    const transformed_Recebimento_pedentes = data.map((row) => {
+        const transformedRow_Recebimento_pedentes = {};
+
+        for (const columnFrom_Recebimento_pedentes in mappedColumns_Recebimento_pedentes) {
+            const columnName = mappedColumns_Recebimento_pedentes[columnFrom_Recebimento_pedentes];
+            if (columnFrom_Recebimento_pedentes in row) {
+                transformedRow_Recebimento_pedentes[columnName] = row[columnFrom_Recebimento_pedentes];
+            } else {
+                // Mantém a propriedade, mas define como string vazia
+                transformedRow_Recebimento_pedentes[columnName] = "";
+            }
+        }
+
+        // Inclua a coluna "idPCP" com o valor original "id"
+        transformedRow_Recebimento_pedentes["idPCP"] = row["id"];
+
+        return transformedRow_Recebimento_pedentes;
+    });
+
+    console.log("Dados transformados:", transformed_Recebimento_pedentes);
+    return transformed_Recebimento_pedentes;
+}
+
+// Função para carregar a lista de obras
+function Relatorio_Recebimento_pedentes() {
+    console.log('Relatorio_Recebimento_pedentes')
+
+    //var data_inicial_formatada = document.getElementById("data_inicial_recebimento").value;
+    //var data_final_formatada = document.getElementById("data_final_recebimento").value;
+
+    //console.log("data_inicial_formatada:", data_inicial_formatada);
+    //console.log("data_final_formatada:", data_final_formatada);
+
+    // Formatando as datas
+    //var data_inicial = formatarData(data_inicial_formatada);
+    //var data_final = formatarData(data_final_formatada);
+
+    //console.log("Data Inicial:", data_inicial);
+    //console.log("Data Final:", data_final);
+
+    VAR = ID_Recebimento = '18'
+
+    try {
+        $.ajax({
+            url: my_url() + "selecionar_checklists_especificos_Recebimento",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              "ID_Recebimento":ID_Recebimento,
+
+                //"data_inicial": data_inicial,
+                //"data_final": data_final,
+            }),
+        })
+        .done(function (data) {
+            console.log('Relatorio_Recebimento_pedentes', data);
+
+            // Antes de processar os dados na resposta AJAX
+            if (data && data.retorno_especifico) {
+                // Transforme os dados uma vez e armazene em uma variável
+                const transformedData = transformedData_Recebimento_pedentes(data.retorno_especifico);
+
+                // Chame a função de atualização da tabela com os dados transformados
+                updateTableRecebimento_pedentes(transformedData);
+
+                console.log("Após chamar a função de atualização da tabela");
+             } else {
+                console.error("Resposta JSON inválida ou ausente");
+            }
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Erro ao buscar dados consolidados:", error);
+            console.log("Status da requisição:", status);
+            console.log("Resposta do servidor:", xhr.responseText);
+        });
+    } catch (error) {
+        console.error("Erro ao executar a função: " + error);
+    }
+}
+
+function updateTableRecebimento_pedentes(retorno_especifico) {
+    console.log('Dados detalhados recebidos:', retorno_especifico);
+
+    if (!table_Recebimento_pedentes) {
+        console.log('Tabela não existe. Inicializando...');
+        initializeTable_Recebimento_pedentes();
+    }
+
+    // Adicione este log para verificar a existência da tabela
+    console.log('Tabela existe:', table_Recebimento_pedentes);
+
+    table_Recebimento_pedentes.setData(retorno_especifico);
+}
+
+
+  function initializeTable_Recebimento_pedentes() {
+  table_Recebimento_pedentes = new Tabulator("#table_Recebimento_pedentes", {
+      pagination:"local",
+      paginationSize:300,
+      paginationInitialPage: 1,
+      movableColumns:true,
+      paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
+      paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
+      name: "table_Recebimento_pedentes",
+      deferRender: true,
+      scrollCollapse: true,
+      scroller: true,
+      scrollY: 200,
+      data: [],
+        // Classificação inicial
+        initialSort: [
+        { column: "dtProducao", dir: "asc" },
+        { column: "SEQ", dir: "asc" },
+        { column: "op", dir: "asc" },
+      ],
+      columns: [
+        {
+            title: "Nº Controle",
+            field: "idOrdem",
+            hozAlign: "center",
+            responsive: 0,
+            },
+
+            {
+            title: "Data Recebimento",
+            field: "dataCadastro", 
+            hozAlign: "center",
+            responsive: 0,
+          },
+            {
+            title: "Cliente",
+            field: "nomeCliente", 
+            hozAlign: "center",
+            responsive: 0,
+          },
+        {
+          title: "Cód",
+          field: "codProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Qtda",
+          field: "qtdProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Desc Serviço/ Produto / Tarefa",
+          field: "nomeProduto",
+          hozAlign: "left",
+          responsive: 0,
+        },
+        {
+          title: "Nota",
+          field: "notaInterna",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Referência Produto",
+          field: "referenciaProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Op",
+          field: "op",
+          hozAlign: "center",
+          visible: false,
+          responsive: 0,
+        },
+        {
+          title: "Observação",
+          field: "queixaCliente",
+          hozAlign: "left",
+          responsive: 0,
+        },
+         {
+              title: "Id PCP",
+              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "center",
+              visible: false,
+              responsive: 0,
+          },
+          {
+              title: "Id PCP",
+              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "center",
+              visible: false,
+              responsive: 0,
+          },
+      ],
+      rowClick: function (e, row) {
+          table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
+              r.getElement().classList.remove('selected');
+          });
+
+          row.getElement().classList.add('selected');
+          var rowData = row.getData();
+          preencherCamposDeEntrada(rowData);
+      },
+  });
+  }
+
+
+  function destruirTabela__Recebimento_pedentes() {
+  if (table_Recebimento_pedentes) {
+      table_Recebimento_pedentes.destroy();
+      table_Recebimento_pedentes = null;
+  }
+  }         
+          function preencherCamposDeEntrada(rowData) {
+          console.log("Preenchendo campos de entrada:", rowData);
+          // Defina o valor do campo idPCP usando JavaScript
+          document.getElementById("idPCP").value = rowData.idPCP;
+          document.getElementById("nomeCompleto").value = rowData.nomeCompleto;
+        }
+        
+        
+  // Adicione um evento de input ao campo de pesquisa
+  $('#pesquisar_funcionario_Presenca_FuncionarioDetalhamento').on('input', function () {
+  var valor_para_pesquisar = $(this).val().toLowerCase().trim();
+
+  // Verifique se o valor de pesquisa não está vazio
+  if (valor_para_pesquisar === "") {
+      // Se estiver vazio, remova o filtro
+      table_Presenca_FuncionarioDetalhamento.clearFilter();
+  } else {
+      // Se não estiver vazio, aplique o filtro
+      table_Presenca_FuncionarioDetalhamento.setFilter(function (detalhado) {
+          return (
+              detalhado.idPCP.toLowerCase().includes(valor_para_pesquisar) ||
+              detalhado.nomeCompleto.toLowerCase().includes(valor_para_pesquisar) ||
+            
+              data.formapag.toLowerCase().includes(valor_para_pesquisar)
+
+              // Adicione mais colunas conforme necessário
+          );
+      });
+  }
+  });
 </script>
 </html>

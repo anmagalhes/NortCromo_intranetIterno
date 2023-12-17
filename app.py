@@ -41,6 +41,7 @@ from routes.conferencia_dados_inicias_checklist import (
 )
 
 from routes.clientes import clientes
+from routes.checklists import checklists
 
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
@@ -57,6 +58,10 @@ app.register_blueprint(clientes, url_prefix="")
 app.register_blueprint(conferencia_dados_inicias_checklist, url_prefix="")
 app.register_blueprint(produtos, url_prefix="")
 app.register_blueprint(recebimentos, url_prefix="")
+
+app.register_blueprint(checklists, url_prefix="")
+
+
 
 arquivo = credencias.open_by_url(
     "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
