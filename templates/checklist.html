@@ -1,6 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
   {% include 'head.html' %}
+
+<head>
+  <style>
+
+    /* Adicione estilos CSS aqui para tornar o layout responsivo */
+    .custom-label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .row {
+      margin-right: -15px;
+      margin-left: -15px;
+    }
+
+    .mb-3 {
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-top: 8px;
+    }
+
+    /* Estilo para destacar campos alimentados pelo usuário */
+    .input-destaque {
+        border: 2px solid #4CAF50; /* Cor de destaque (verde) */
+    }
+
+  .elemento-oculto {
+  display: none;
+}
+
+    /* Adicione estilos para o scroll em dispositivos móveis */
+    @media (max-width: 767px) {
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .scrollable-content {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        max-height: calc(100vh - 180px); /* Ajuste de altura máxima para rolagem */
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+      }
+
+      .btn {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .floating-buttons {
+        position: fixed;
+        top: 40px;
+        right: 10px;
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .floating-buttons .btn {
+        margin-bottom: 8px;
+      }
+
+      .header span {
+        display: block; /* Para colocar o texto "NOTH CROMO" abaixo de "RECEBIMENTO" */
+      }
+
+      /* Estilo para destacar campos alimentados pelo usuário */
+      .input-destaque {
+          border: 2px solid #4CAF50; /* Cor de destaque (verde) */
+    }
+    }
+  </style>
+  <title>Checklist - Recebimento</title>
+</head>
   <body>
     <div class="header">
       <img
@@ -17,7 +99,7 @@
     />
 
     <div class="container">
-      <div class="row mt-3 mb-3">
+      <div class="row mt-3 mb-3 scrollable-content">
         <div class="col-md-3">
           <label for="numeroControle" class="custom-label">Número de Controrole</label>
           <input
@@ -57,15 +139,42 @@
 
     <datalist id="numerosDeControle"></datalist>
 
-    <div class="table-responsive myTable table-wrapper">
+
+    <!-- Tabela Tabular -->
+    <div class="table-responsive myTable table-wrapper scrollable-content">
       <div id="table_checklist" class="tabulator myTable"></div>
     </div>
+
+
+
+
+  <div class="table-responsive myTable table-wrapper scrollable-content">
+    <div id="Table_Checklist_pedentes" class="tabulator myTable"></div>
+  </div>
 
     <div id="pdfLinksContainer"></div>
     <div id="linksContainer" class="container"></div>
   </body>
 
   <script>
+
+     // Varivavel para o ApiScript
+
+ var minhaUrl =
+       'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
+       
+
+function formatarParaFormatoInput(dataFormatada) {
+    const partes = dataFormatada.split("/");
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+}
+
+
+function formatarData(data) {
+    const partes = data.split('-');
+    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+    return dataFormatada;
+}
 
 // Verifique se a variável NumControleValue já foi declarada
 if (typeof numControleValue === 'undefined') {
@@ -199,12 +308,59 @@ $(window).on('beforeunload', function() {
     }
 
     $(document).ready(function () {
+      //initializeTable_Checklist_pedentes();
+
       inicializarTabela();
       initializeTable();
       onPaginaCarregada();
       setupEventListeners();
       console.log("Documento carregado e pronto!");
+
+    // Ocultar informações específicas das TABs 2 e 3
+     // $('#data_inicial_recebimento, #data_final_recebimento').hide();
+    // Também oculte os rótulos, se necessário
+     // $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
+
+     //setDataFinal_Geral();
+     //horaSistema();
+     //selecionar_clientes();
+     //selecionar_produtos();
+
+    // carregarValorSeg();
+    //Lista_recebimento();
+
+    // Formatar campo de telefone
+    $('#telefone').keyup(function () {
+    var val = this.value.replace(/\D/g, '');
+    var newVal = '';
+    while (val.length > 0) {
+    newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+    val = val.substr(2);
+    }
+    this.value = newVal.trim();
     });
+
+    // Adicionar estilo ao campo quando preenchido
+    $('input').blur(function () {
+    if ($(this).val()) {
+    $(this).addClass('filled');
+    } else {
+    $(this).removeClass('filled');
+    }
+    });
+        
+            $(".scrollable-content").perfectScrollbar();
+              
+              });
+
+    function autoResize(element) {
+    element.style.height = 'auto';
+    element.style.height = (element.scrollHeight) + 'px';
+
+    // Converter para maiúsculas
+    elemento.value = elemento.value.toUpperCase();
+
+    };
 
     function showAlert(message) {
       Swal.fire({
@@ -344,62 +500,59 @@ $(window).on('beforeunload', function() {
       table_checklist.setFilter("dataEntrada", "!=", formattedToday);
     }
 
-    function updateTableData(data) {
-      if (table_checklist) {
-        const transformedData = transformData(data);
-        table_checklist.setData(transformedData);
-      } else {
-        console.error("Tabela não inicializada!");
-      }
-    }
+  function transformData(data) {
+  console.log("Dados de entrada para transformação:", data);
 
-    function transformData(data) {
-      console.log("Dados de entrada para transformação:", data);
+  if (!data || !data.retorno_especifico) {
+    console.error("Dados inválidos fornecidos para transformação:", data);
+    return [];
+  }
 
-          if (!data || !data.retorno) {
-        console.error("Dados inválidos fornecidos para transformação:", data);
-        return [];
-      }
+  let parsedData;
+  try {
+  // Verifica se os dados já são um array
+  if (Array.isArray(data.retorno_especifico)) {
+    parsedData = data.retorno_especifico;
+  } else {
+    console.error("Dados inválidos fornecidos para transformação:", data.retorno_especifico);
+    return [];
+  }
+} catch (error) {
+  console.error("Erro ao analisar os dados JSON:", error);
+  return [];
+}
 
-      let parsedData;
-      try {
-        // Analisa a string JSON contida em "retorno"
-        parsedData = JSON.parse(data.retorno);
-      } catch (error) {
-        console.error("Erro ao analisar os dados JSON:", error);
-        return [];
-      }
-
-        // Verifica se os dados são um array
-        if (!Array.isArray(parsedData)) {
-          console.error("Dados inválidos fornecidos para transformação:", parsedData);
-          return [];
-        }
-
-
-      const isSingleRow = typeof data[0] !== "object";
-      const rows = isSingleRow ? [data] : data;
-
-      const transformed = parsedData.map((row) => {
+  const transformed = parsedData.map((row) => {
     return {
-      dataEntrada: row.dataEntrada ?? "",
+      dataEntrada: row.DataRec_OrdemServiços ?? "", // Adicionado
       numControle: row.Recebimento ?? "",
       cliente: row.Nome_cliente ?? "",
       descricao: row.nome_produto ?? "",
       nota: row.NotaInterna ?? "",
-      idPCP: row.id_Checklist ?? "", // Mudei o nome da propriedade para corresponder ao nome na tabela
-      referenciaProducao: row.Refencia_Produto ?? "",
-      qtd: row.Quantidade ?? "",
-      op: row.op ?? "",
+      idPCP: row.ID_Checklist ?? "", // Mudei o nome da propriedade para corresponder ao nome na tabela
+      referenciaProducao: row.Referencia_Produto ?? "",
+      qtd: row.Qtd_Produto ?? "", // Adicionado
+      op: row.ID_Ordem ?? "", // Adicionado
       cod: row.Cod_Produto ?? "",
       observacao: row.QUEIXA_CLIENTE ?? "",
+      linkPDF: row.LINK_PDF_CHECKLIST ?? "", // Adicionado
+      nomeCliente: row.nome ?? "", // Adicionado
+      idOrdem: row.ID_Ordem ?? "", // Adicionado
+      idRecebimento: row.ID_Recebimento ?? "", // Adicionado
+      idCliente: row.ID_cliente ?? "", // Adicionado
+      idGrupo: row.idGrupo ?? "", // Adicionado
+      idOperacaoServico: row.idoperacaoServico ?? "", // Adicionado
+      statusChecklist: row.Status_Checklist ?? "", // Adicionado
+      usuarioCadastro: row.Usuario_Cadastro ?? "", // Adicionado
+      idComponente: row.ID_Componente ?? "", // Adicionado
+      idPostoTrabalho: row.ID_PostoTrabalho ?? "", // Adicionado
+      dataChecklistOrdemServicos: row.DataChecklist_OrdemServiços ?? "", // Adicionado
     };
   });
 
   console.log("Dados transformados:", transformed);
   return transformed;
 }
-   
 
   // Vamos adicionar uma função para inicializar a tabela
   function initializeTable() {
@@ -417,6 +570,7 @@ $(window).on('beforeunload', function() {
   }
 
   function onRowSelected(row) {
+
     let rowData = row.getData();
     if (!selectedIDs.includes(rowData.idPCP)) {
       selectedIDs.push(rowData.idPCP);
@@ -439,6 +593,12 @@ $(window).on('beforeunload', function() {
 
     // Adicione a parte fornecida no início da tabela
     table_checklist = new Tabulator("#table_checklist", {
+      pagination:"local",
+      paginationSize:300,
+      paginationInitialPage: 1,
+      movableColumns:true,
+      paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
+      paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
       name: "table_checklist",
       data: [],
       deferRender: true,
@@ -656,7 +816,7 @@ $(window).on('beforeunload', function() {
 
     // Aplicar o filtro imediatamente após a inicialização da tabela
 
-        // Inicialize today antes de qualquer referência a ele
+    // Inicialize today antes de qualquer referência a ele
     if (typeof formattedToday === 'undefined') {
       formattedToday = getFormattedDate("DD/MM/YYYY");
     }
@@ -1648,8 +1808,10 @@ function extractURLs(text) {
 // ---------- Funções de inicialização ----------
 
 function onPaginaCarregada() {
-  fetchAndPopulateControlNumbers(); // Iniciar numero controle
-  buscarDadosIniciaisConferenciaProgramacao();
+  //fetchAndPopulateControlNumbers(); // Iniciar numero controle
+  //buscarDadosIniciaisConferenciaProgramacao();
+  selecionar_numeroControle(); // Iniciar numero controle
+  Relatorio_Checklits_pedentes_Inicial();
   //populainpuntControlNumbers(); // PopularControles
 }
 
@@ -1686,7 +1848,7 @@ function handleSelectClick() {
     document.querySelector("#numeroControle").value = "";
   } else {
     // Se o numControle estiver vazio, traga de volta a lista original
-    buscarDadosIniciaisConferenciaProgramacao();
+    Relatorio_Checklits_pedentes_Inicial();
     table_checklist.clearFilter(); // Certifique-se de remover todos os filtros para exibir todos os registros
   }
 }
@@ -1718,7 +1880,7 @@ function filterTableByInput(event) {
     }
   } else {
     // Se o numControle estiver vazio, traga de volta a lista original
-    buscarDadosIniciaisConferenciaProgramacao();
+    Relatorio_Checklits_pedentes_Inicial();
     table_checklist.clearFilter(); // Certifique-se de remover todos os filtros para exibir todos os registros
   }
 }
@@ -1852,11 +2014,42 @@ function teste() {
   });
 }
 
+
+function selecionar_numeroControle() {
+console.log("selecionar__numeroControle");
+$.ajax({
+    url: my_url() + "numeroControles_Unicos",
+    type: "POST",
+    success: function (data) {
+      console.log("carregarDadosPopulateControlNumbers:",data);
+
+      try {
+        let dados = data.retorno_especifico;
+        console.log("carregarDadosPopulateControlNumbers:", dados);
+        populateControlNumbers(dados); // Alteração aqui: passando 'dados' em vez de 'response'
+      } catch (e) {
+        console.error("Erro ao analisar os dados:", e);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.error("Erro na solicitação AJAX: " + errorThrown);
+      console.error("Status da solicitação: " + textStatus);
+      mostrarErro();
+    },
+    beforeSend: function () {
+      console.log("Enviando requisição para buscar números de controle...");
+    },
+    complete: function () {
+      console.log("Requisição para buscar números de controle completada.");
+    },
+  });
+}
+
 function fetchAndPopulateControlNumbers() {
   console.log("Buscando números de controle...");
 
   $.ajax({
-    url: my_url() + "recebimento_linhas_unicas_checklist",
+    url: my_url() + "numeroControles_Unicos",
     type: "POST",
     success: function (response) {
       try {
@@ -1913,7 +2106,8 @@ function fetchAndPopulateControlNumbers() {
   // Agora, usando a variável 'data' em vez de 'numbers'
   data.forEach(function (item) {
     var option = document.createElement("option");
-    option.value = item.Recebimento; // Assumindo que 'Recebimento' é a propriedade desejada
+    option.value = item.ID_Ordem; // Assumindo que 'ID' é a propriedade desejada
+    option.setAttribute("data-id-ordem", item.ID_Ordem); // Adicionando atributo de dados para ID_Ordem
     datalist.appendChild(option);
   });
 }
@@ -2462,6 +2656,21 @@ function muda_de_tela(url, event) {
 
 // ........................................//........................//...................
 
+// CHAMAR A NOVA TABELA
+function updateTableData(data) {
+  if (table_checklist) {
+    const transformedData = transformData(data);
+    const currentData = table_checklist.getData();
+    const newData = transformedData.map(transformedRow => {
+      const matchingRow = currentData.find(row => row.Id_funcionario === transformedRow.Id_funcionario);
+      return matchingRow ? { ...matchingRow, ...transformedRow } : transformedRow;
+    });
+    table_checklist.setData(newData);
+  } else {
+    console.error("Tabela não inicializada!");
+  }
+}
+
 // CARREGAR INFORMAÇÃO CHECKLIST VINDO DO FLASK
 
     function transformedData_Recebimento_pedentes(data) {
@@ -2523,23 +2732,39 @@ function muda_de_tela(url, event) {
 }
 
 // Função para carregar a lista de obras
-function Relatorio_Recebimento_pedentes() {
-    console.log('Relatorio_Recebimento_pedentes')
+function Relatorio_Checklits_pedentes_Inicial() {
+console.log('Relatorio_Checklits_pedentes')
 
-    //var data_inicial_formatada = document.getElementById("data_inicial_recebimento").value;
-    //var data_final_formatada = document.getElementById("data_final_recebimento").value;
+try {
+    $.ajax({
+        url: my_url() + "selecionar_checklists_especificos",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+        }),
+    })
+    .done(function (data) {
+      let dados = data.retorno;
+      console.log("carregarDados Checklists_especificos:", dados);
+      updateTableData(data);
+    })
+    .fail(function (xhr, status, error) {
+        console.error("Erro ao buscar dados consolidados:", error);
+        console.log("Status da requisição:", status);
+        console.log("Resposta do servidor:", xhr.responseText);
+    });
+} catch (error) {
+    console.error("Erro ao executar a função: " + error);
+}
+}
 
-    //console.log("data_inicial_formatada:", data_inicial_formatada);
-    //console.log("data_final_formatada:", data_final_formatada);
-
-    // Formatando as datas
-    //var data_inicial = formatarData(data_inicial_formatada);
-    //var data_final = formatarData(data_final_formatada);
-
-    //console.log("Data Inicial:", data_inicial);
-    //console.log("Data Final:", data_final);
+// Função para carregar a lista de obras
+function Relatorio_Checklits_pedentes() {
+    console.log('Relatorio_Checklits_pedentes')
 
     VAR = ID_Recebimento = '18'
+    
+    console.log("ID_Recebimento:", ID_Recebimento);
 
     try {
         $.ajax({
@@ -2548,21 +2773,17 @@ function Relatorio_Recebimento_pedentes() {
             contentType: "application/json",
             data: JSON.stringify({
               "ID_Recebimento":ID_Recebimento,
-
-                //"data_inicial": data_inicial,
-                //"data_final": data_final,
             }),
         })
         .done(function (data) {
-            console.log('Relatorio_Recebimento_pedentes', data);
-
+            console.log('Relatorio_Checklits_pedentes', data);
             // Antes de processar os dados na resposta AJAX
             if (data && data.retorno_especifico) {
                 // Transforme os dados uma vez e armazene em uma variável
                 const transformedData = transformedData_Recebimento_pedentes(data.retorno_especifico);
 
                 // Chame a função de atualização da tabela com os dados transformados
-                updateTableRecebimento_pedentes(transformedData);
+                updateTableChecklist_pedentes(transformedData);
 
                 console.log("Após chamar a função de atualização da tabela");
              } else {
@@ -2579,30 +2800,30 @@ function Relatorio_Recebimento_pedentes() {
     }
 }
 
-function updateTableRecebimento_pedentes(retorno_especifico) {
+function updateTableChecklist_pedentes(retorno_especifico) {
     console.log('Dados detalhados recebidos:', retorno_especifico);
 
-    if (!table_Recebimento_pedentes) {
+    if (!Table_Checklist_pedentes) {
         console.log('Tabela não existe. Inicializando...');
-        initializeTable_Recebimento_pedentes();
+        initializeTable_Checklist_pedentes();
     }
 
     // Adicione este log para verificar a existência da tabela
-    console.log('Tabela existe:', table_Recebimento_pedentes);
+    console.log('Tabela existe:', Table_Checklist_pedentes);
 
-    table_Recebimento_pedentes.setData(retorno_especifico);
+    Table_Checklist_pedentes.setData(retorno_especifico);
 }
 
 
-  function initializeTable_Recebimento_pedentes() {
-  table_Recebimento_pedentes = new Tabulator("#table_Recebimento_pedentes", {
+  function initializeTable_Checklist_pedentes() {
+  Table_Checklist_pedentes = new Tabulator("#Table_Checklist_pedentes", {
       pagination:"local",
       paginationSize:300,
       paginationInitialPage: 1,
       movableColumns:true,
       paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
       paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
-      name: "table_Recebimento_pedentes",
+      name: "Table_Checklist_pedentes",
       deferRender: true,
       scrollCollapse: true,
       scroller: true,
@@ -2706,9 +2927,9 @@ function updateTableRecebimento_pedentes(retorno_especifico) {
 
 
   function destruirTabela__Recebimento_pedentes() {
-  if (table_Recebimento_pedentes) {
-      table_Recebimento_pedentes.destroy();
-      table_Recebimento_pedentes = null;
+  if (Table_Checklist_pedentes) {
+      Table_Checklist_pedentes.destroy();
+      Table_Checklist_pedentes = null;
   }
   }         
           function preencherCamposDeEntrada(rowData) {

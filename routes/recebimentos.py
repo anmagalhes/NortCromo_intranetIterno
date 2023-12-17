@@ -103,7 +103,6 @@ def selecionar_recebimentos_f():
     except Exception as e:
         return jsonify({"error": f"Erro ao carregar recebimentos: {str(e)}"})
     
-    
 @recebimentos.route("/selecionar_recebimentos_especificos", methods=["POST"])
 def selecionar_recebimentos_especificos_f():
     try:
@@ -237,3 +236,27 @@ def selecionar_recebimentos_especificos_f():
     except Exception as e:
         print(f"Erro ao carregar recebimentos específicos: {str(e)}")
         return jsonify({"error": f"Erro ao carregar recebimentos específicos: {str(e)}", "traceback": traceback.format_exc()})
+
+
+@recebimentos.route("/numeroControles_Unicos", methods=["POST"])
+def numeroControles_Unicos_f():
+    try:
+        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = recebimentos_aba.get_all_values()
+        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+
+        # Seleciona apenas as colunas desejadas
+        colunas_desejadas = ["ID", "ID_Ordem"]
+        df_selecionado = df_recebimentos[colunas_desejadas]
+
+        # Filtra os registros onde a coluna "Nome_cliente" é diferente de vazio ou nulo
+        recebimentos_ok = df_selecionado[df_selecionado["ID"].notna()]
+
+        # Converte o DataFrame resultante para um dicionário
+        recebimentos_lista =recebimentos_ok.to_dict(orient="records")
+
+        # print("Clientes carregados com sucesso:", clientes_lista)
+        return jsonify({"retorno_especifico": recebimentos_lista})
+    
+    except Exception as e:
+        return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})

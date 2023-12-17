@@ -52,57 +52,6 @@ checklists = Blueprint(
 # Variáveis globais para armazenar os DataFrames  - BIBLIOTECA PANDAS X GOOGLESHEET
 df_checklists = None
 
-
-@checklists.route("/selecionar_checklists", methods=["POST"])
-def selecionar_checklists_f():
-    try:
-        checklists_aba = arquivo().worksheet_by_title("Recebimento_v2")
-        dados_checklists = checklists_aba.get_all_values()
-        df_checklists = pd.DataFrame(data=dados_checklists[1:], columns=dados_checklists[0])
-        
-        # Seleciona apenas as colunas desejadas
-        colunas_desejadas_checklists = ["ID", "ID_Ordem", "DataRec_OrdemServiços", "ID_cliente", "NotaInterna", "TipoOrdem"]
-        df_selecionado_checklists = df_checklists[colunas_desejadas_checklists]
-        
-        # Filtra os registros onde a coluna "ID_Ordem" é diferente de nulo e diferente de vazio
-        checklists_ok = df_selecionado_checklists[df_selecionado_checklists["ID_Ordem"].notna() & (df_selecionado_checklists["ID_Ordem"] != "")]
-
-        # Conta quantas linhas têm na coluna "TipoOrdem" com nome "NOVO"
-        contador_novo = checklists_ok[checklists_ok["TipoOrdem"] == "NOVO"].shape[0]
-
-        # Calcular o valor_seg com base no contador_novo
-        valor_seg = (
-            f"0001-{str(datetime.now().year)[-2:]}"
-            if contador_novo < 2
-            else f"{contador_novo + 1:04d}-{str(datetime.now().year)[-2:]}"
-        )
-
-        # Verifica se todos os valores na coluna "ID" são numéricos antes de calcular o máximo
-        if checklists_ok["ID"].str.isnumeric().all():
-            # Converte a coluna "ID" para numérica e calcula o último número na coluna "ID" e incrementa 1
-            ultimo_id = checklists_ok["ID"].astype(int).max()
-            novo_id_recebimento = ultimo_id + 1 if not pd.isnull(ultimo_id) else 1
-        else:
-            # Se houver valores não numéricos, define novo_id_recebimento como 1
-            novo_id_recebimento = 1
-
-        # Ordena os produtos pelo nome do produto
-        checklists_ok = checklists_ok.sort_values(by="ID_Ordem")
-
-        # Converte o DataFrame resultante, o contador, o valor_seg e o novo_id_recebimento para um dicionário
-        checklists_lista = checklists_ok.to_dict(orient="records")
-
-        # Converte o novo_id_recebimento para um tipo Python nativo antes de retornar a resposta JSON
-        novo_id_recebimento = int(novo_id_recebimento)
-
-        # Adiciona o contador, o valor_seg e o novo_id_recebimento à resposta JSON
-        resposta_json = {"retorno": checklists_lista, "contador_novo": contador_novo, "valor_seg": valor_seg, "novo_id_recebimento": novo_id_recebimento}
-
-        return jsonify(resposta_json)
-
-    except Exception as e:
-        return jsonify({"error": f"Erro ao carregar checklists: {str(e)}"})
-    
     
 @checklists.route("/selecionar_checklists_especificos", methods=["POST"])
 def selecionar_checklists_especificos_f():
@@ -397,3 +346,48 @@ def selecionar_checklists_especificos_Recebimento_f():
     except Exception as e:
         print(f"Erro ao carregar checklists específicos: {str(e)}")
         return jsonify({"error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
+    
+
+@checklists.route("/numeroControle_checklists_especificos_Recebimento", methods=["POST"])
+def numeroControle_checklists_especificos_Recebimento_f():
+    try:
+        checklists_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
+        dados_checklists = checklists_aba.get_all_values()
+        df_checklists = pd.DataFrame(data=dados_checklists[1:], columns=dados_checklists[0])
+
+        # Ordena os produtos pelo numero Ordem
+        df_checklists = df_checklists.sort_values(by="ID_Recebimento")
+
+        # Pega os IDs dos Ordem Recebimento únicos
+        ids_recebimentos_unicos = df_checklists["ID_Recebimento"].unique()
+
+        print('ids_recebimentos_unicos', ids_recebimentos_unicos)
+
+        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = recebimentos_aba.get_all_values()
+        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+
+       # Filtra os Recebimento usando os IDs únicos
+        recebimento_selecionados = df_recebimentos[df_recebimentos["ID_Ordem"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
+
+        # Realiza o merge com os checklists
+        checklists_especificos = pd.merge(checklists_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
+
+        # Adiciona a coluna   ID_Ordem ao DataFrame checklists_especificos
+        # após o merge
+        checklists_especificos["ID_Ordem"] = checklists_especificos["ID_Ordem"].fillna('')
+
+        checklists_especificos_lista = checklists_especificos.fillna('').to_dict(orient="records")
+
+        # Adiciona os resultados à resposta JSON
+        resposta_json = {"retorno_especifico": checklists_especificos_lista}
+
+        print('Tony - resposta_json', resposta_json)
+        return jsonify(resposta_json)
+
+    except Exception as e:
+        print(f"Erro ao carregar checklists específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
+
+
+
