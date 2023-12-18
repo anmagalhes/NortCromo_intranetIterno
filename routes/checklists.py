@@ -393,8 +393,7 @@ def numeroControle_checklists_especificos_Recebimento_f():
 def impressao_checklists_especificos_Recebimento_f():
     try:
         # Obter o período inicial e final do corpo da requisição
-        id_checklist_Filtrado_frontend = '1'  # Substitua por request.json["ID_Checklist"] conforme necessário
-
+        id_checklist_Filtrado_frontend = request.json["ID_Recebimento"] 
         print('id_checklist_Filtrado_frontend', id_checklist_Filtrado_frontend)
 
         # Carrega dados da folha "ChecklistRecebimento2"

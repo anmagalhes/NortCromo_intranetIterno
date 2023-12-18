@@ -1404,19 +1404,16 @@ function notifyCompletion() {
 }
 
 function callGeneratePDFsForOperations2(finalData) {
-
 const idPCPData = selectedItems.map(item => item.idPCP);
-
 console.log("Dados enviados para a segunda chamada:", finalData);
 $.ajax({
+  url: my_url() + "impressao_checklists_especificos_Recebimento",
   type: "POST",
-  data: {
-      qualFuncao: "generatePDFsForOperations2",
-      selectedItems: JSON.stringify( idPCPData),
-  },
-  url: minhaUrl,
-  dataType: "json",
-})
+  contentType: "application/json",
+            data: JSON.stringify({
+                  "item.idPCP": item.idPCP,
+            }),
+        })
 .done(function(response) {
   // Você pode tratar a resposta da segunda chamada aqui, se necessário
   console.log("Resposta da segunda chamada:", response);
