@@ -1199,15 +1199,16 @@ function generatePDFsForSelectedOperations() {
           console.log("Dados enviados para o GAS:", finalData); // Log de dados enviados
 
           selectedItems = JSON.stringify(finalData);
+          // Supondo que finalData seja uma variável que contém os dados
+          const dadosEnviados = finalData.map(item => ({ "idPCP": item.idPCP }));
           $.ajax({
-            type: "POST",
-            data: {
-              qualFuncao: "generatePDFsForOperations",
-              selectedItems: JSON.stringify(finalData),
-            },
-            url: minhaUrl,
-            dataType: "json",
-          })
+          url: my_url() + "impressao_checklists_especificos_Recebimento",
+          type: "POST",
+          contentType: "application/json",
+                    data: JSON.stringify({
+                      "dadosEnviados": dadosEnviados 
+                    }),
+                })
             .done(function (response) {
               console.log("Resposta do GAS:", response); // Log da resposta do GAS
               responseHandler(response);
@@ -3168,6 +3169,7 @@ function exibirMensagemUsuario(mensagem) {
         mensagemElem.remove();
     }, 5000);
 }
+
 
 
 

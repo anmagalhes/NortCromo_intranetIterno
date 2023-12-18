@@ -69,7 +69,7 @@ def selecionar_checklists_especificos_f():
         # Pega os IDs dos Ordem Recebimento únicos
         ids_recebimentos_unicos = checklists_especificos["ID_Recebimento"].unique()
         
-        print('ids_recebimentos_unicos', ids_recebimentos_unicos)
+        # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
         
         recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
         dados_recebimentos = recebimentos_aba.get_all_values()
@@ -78,7 +78,7 @@ def selecionar_checklists_especificos_f():
         # Filtra os Recebimento usando os IDs únicos
         recebimento_selecionados = df_recebimentos[df_recebimentos["ID"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
 
-        print('recebimento_selecionados', df_recebimentos)
+        # print('recebimento_selecionados', df_recebimentos)
          
         # Realiza o merge com os checklists
         checklists_especificos = pd.merge(checklists_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
@@ -93,7 +93,7 @@ def selecionar_checklists_especificos_f():
         # após o merge
         checklists_especificos["ID_Ordem"] = checklists_especificos["ID_Ordem"].fillna('')
         
-        print('checklists_especificos', checklists_especificos)
+        # print('checklists_especificos', checklists_especificos)
 
         # Pega os IDs dos Ordem Recebimento únicos
         ids_clientes_unicos = checklists_especificos["ID"].unique()
@@ -187,8 +187,8 @@ def selecionar_checklists_especificos_f():
 
         checklists_especificos_lista = checklists_especificos.fillna('').to_dict(orient="records")
 
-        print("Colunas em checklists_especificos:")
-        print("TONY - checklists_especificos_lista :",checklists_especificos_lista  )
+            #print("Colunas em checklists_especificos:")
+            #print("TONY - checklists_especificos_lista :",checklists_especificos_lista  )
         
         # Adiciona os resultados à resposta JSON
         resposta_json = {"retorno_especifico": checklists_especificos_lista}
@@ -220,7 +220,7 @@ def selecionar_checklists_especificos_Recebimento_f():
         # Pega os IDs dos Ordem Recebimento únicos
         ids_recebimentos_unicos = checklists_especificos["ID_Recebimento"].unique()
         
-        print('ids_recebimentos_unicos', ids_recebimentos_unicos)
+        # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
         
         recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
         dados_recebimentos = recebimentos_aba.get_all_values()
@@ -361,7 +361,7 @@ def numeroControle_checklists_especificos_Recebimento_f():
         # Pega os IDs dos Ordem Recebimento únicos
         ids_recebimentos_unicos = df_checklists["ID_Recebimento"].unique()
 
-        print('ids_recebimentos_unicos', ids_recebimentos_unicos)
+        # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
 
         recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
         dados_recebimentos = recebimentos_aba.get_all_values()
@@ -382,7 +382,7 @@ def numeroControle_checklists_especificos_Recebimento_f():
         # Adiciona os resultados à resposta JSON
         resposta_json = {"retorno_especifico": checklists_especificos_lista}
 
-        print('Tony - resposta_json', resposta_json)
+        # print('Tony - resposta_json', resposta_json)
         return jsonify(resposta_json)
 
     except Exception as e:
@@ -392,24 +392,35 @@ def numeroControle_checklists_especificos_Recebimento_f():
 @checklists.route("/impressao_checklists_especificos_Recebimento", methods=["POST"])
 def impressao_checklists_especificos_Recebimento_f():
     try:
-        # Obter o período inicial e final do corpo da requisição
-        id_checklist_Filtrado_frontend = request.json["ID_Recebimento"] 
-        print('id_checklist_Filtrado_frontend', id_checklist_Filtrado_frontend)
+         # Obter o período inicial e final do corpo da requisição
+        id_checklist_Filtrado_frontend = request.json.get("dadosEnviados", [])
 
+        # print('id_checklist_Filtrado_frontend', id_checklist_Filtrado_frontend)
+
+        # Extrair apenas o campo "idPCP"
+        id_pcp_list = [item.get("idPCP") for item in id_checklist_Filtrado_frontend]
+
+        # Inicializar checklists_especificos como um DataFrame vazio
+        checklists_especificos = pd.DataFrame()
+        
         # Carrega dados da folha "ChecklistRecebimento2"
         checklists_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
         dados_checklists = checklists_aba.get_all_values()
         df_checklists = pd.DataFrame(data=dados_checklists[1:], columns=dados_checklists[0])
 
-        # Filtra os registros com base no ID_Checklist fornecido
-        checklists_especificos = df_checklists[df_checklists["ID_Checklist"] == id_checklist_Filtrado_frontend]
+        # Verifica se a lista id_pcp_list não está vazia antes de fazer a comparação
+        if id_pcp_list:
+            checklists_especificos = df_checklists[df_checklists["ID_Checklist"].isin(id_pcp_list)]
+            
+        # Imprime checklists_especificos após atribuir valor a ele
+        # print('checklists_especificos', checklists_especificos)
 
         # Ordena os produtos pelo numero Ordem
         checklists_especificos = checklists_especificos.sort_values(by="ID_Recebimento")
 
         # Pega os IDs dos Ordem Recebimento únicos
         ids_recebimentos_unicos = df_checklists["ID_Recebimento"].unique()
-        print('ids_recebimentos_unicos', ids_recebimentos_unicos)
+        # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
 
         # Carrega dados da folha "Recebimento_v2"
         recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
@@ -533,18 +544,105 @@ def impressao_checklists_especificos_Recebimento_f():
         # Limpa todos os dados na planilha
         impressao_ChecklistRecebimento_aba.clear()
 
-        # Adicione os dados à folha "resumo_Presenca_Funcionario_Obra"
+        # Adicione os dados à folha "Impressao_ChecklistRecebimento"
         impressao_ChecklistRecebimento_aba.set_dataframe(
             pd.DataFrame(resposta_json["retorno_especifico"]), start="A1"
         )
 
-        print('Tony - resposta_json', resposta_json)
-
-        # Retornar um indicador de sucesso para o front-end
-        return jsonify({"success": True, "message": "Dados adicionados com sucesso."})
+        # print('Tony - resposta_json', resposta_json)
+        
+          # Agora, chame a outra rota
+        resultado_criacao_documento = criar_copia_e_processar_documento()
+        
+        if resultado_criacao_documento["success"]:
+            # Retornar um indicador de sucesso para o front-end
+            return jsonify({"success": True, "message": "Dados adicionados com sucesso."})
+        else:
+            # Retornar um indicador de erro para o front-end
+            return jsonify({"success": False, "error": resultado_criacao_documento["error"], "traceback": resultado_criacao_documento["traceback"]})
 
     except Exception as e:
         print(f"Erro ao carregar checklists específicos: {str(e)}")
 
         # Retornar um indicador de erro para o front-end
         return jsonify({"success": False, "error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
+
+# ........................................////.........................../////.............
+@checklists.route("/criar_copia_e_processar_documento", methods=["POST"])
+def criar_copia_e_processar_documento():
+    resultados_processados = []
+
+    try:
+        
+        # Atribua os valores às variáveis
+        modeloId = '1VIrF8PyUYe-DCIeDBv3Nmiy8if7pIPhl9zA7jM50PhE'
+        destinoId = '1fstEX_fgNPnzBEeu1szOvZ43AdMTPTjk'
+        
+        # Obtenha os dados do modelo_id e destino_id da requisição
+        modelo_id = modeloId
+        destino_id = destinoId
+
+        # Inicialize o objeto google_docs_handler com as credenciais
+        google_docs_handler = GoogleDocsHandler(
+            credenciais_sheets, credenciais_drive, service_file_path
+        )
+
+        # Obtenha os dados da planilha usando o método da classe
+        resultados = google_docs_handler.obter_dados_google_sheets()
+        print("TONY RESULTADO", resultados)
+
+        # Itera sobre os dados da requisição
+        for dados_linha in resultados:
+           # print("TONY - dados_linha", dados_linha)
+
+            # Verifique se Nome_funcionario não está vazio ou nulo
+            if dados_linha["ID_Ordem"]:
+                try:
+                    # Chame a função para criar a cópia do documento
+                    doc_copiado_id = google_docs_handler.criar_copia_do_doc(
+                        modelo_id, destino_id, dados_linha["ID_Ordem"]
+                    )
+                      # Vprint("doc_copiado_id", doc_copiado_id)
+
+                    # Obter o link da cópia do documento
+                    link_documento_copiado = google_docs_handler.obter_link_documento_copiado(
+                        doc_copiado_id
+                    )
+                      # Vprint("link_documento_copiado", link_documento_copiado)
+
+                    # Adicionar o Link GoogleDoc GoogleSheet
+                    google_docs_handler.adicionar_link_para_linha(
+                        doc_copiado_id,
+                        link_documento_copiado,
+                        dados_linha["ID_Ordem"],
+                    )
+                    print("adicionar_link_para_linha")
+
+                    # Abrir o documento para edição
+                    google_docs_handler.abrir_documento_para_edicao(
+                        doc_copiado_id, dados_linha
+                    )
+
+                    # Armazenar resultados
+                    resultados_processados.append(
+                        {
+                            "doc_copiado_id": doc_copiado_id,
+                            "link_documento_copiado": link_documento_copiado,
+                            "dados_linha": dados_linha,
+                        }
+                    )
+
+                except Exception as e:
+                    # Tratar erros específicos se necessário
+                    print(f"Erro ao processar linha: {str(e)}")
+
+    except Exception as e:
+        # Tratar erros específicos se necessário
+        print(f"Erro ao processar requisição: {str(e)}")
+        resultados_processados = []  # Garante que a variável seja inicializada
+
+    # Extraia apenas os links de documento copiado da lista resultados_processados
+    links_documentos_copiados = [resultado["link_documento_copiado"] for resultado in resultados_processados]
+
+    # print('TONY NORTHCROMO  - resultados_processados', links_documentos_copiados)
+    return jsonify({"status": "success", "resultados": links_documentos_copiados})

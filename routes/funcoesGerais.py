@@ -170,3 +170,861 @@ def converter_data_frontend(data_frontend):
     # Supondo que a data do frontend esteja em formato 'DD/MM/YYYY'
     return pd.to_datetime(data_frontend, format="%d/%m/%Y")
 
+
+
+
+class SomeOtherSpecificError(Exception):
+    """Exceção específica para indicar um erro particular."""
+
+    pass
+
+
+class GoogleDocsHandler:
+    PDF_MIME_TYPE = "application/pdf"
+
+    def __init__(
+        self,
+        credentials_sheets=None,
+        credentials_drive=None,
+        credentials_docs=None,
+        service_file_path=None,
+    ):
+        self.credentials_sheets = credentials_sheets
+        self.credentials_drive = credentials_drive
+        self.credentials_docs = credentials_docs
+        self.gc = None
+        self.aba_resumo_presenca = None
+
+        self.nomes_colunas_resumoFuncionario = None
+        self.resultados_numeroLinha_resumoFuncionario = None
+        self.docs_service = None
+
+        if service_file_path:
+            self.configure_credentials(service_file_path)
+            self.authorize_sheets(service_file_path)
+            self.authorize_docs(service_file_path)
+
+    def configure_credentials(self, service_file_path):
+        try:
+            if service_file_path:
+                with open(service_file_path, "r") as f:
+                    credentials_info = json.load(f)
+
+                # Use from_service_account_file diretamente
+                self.credentials_sheets = (
+                    service_account.Credentials.from_service_account_file(
+                        service_file_path,
+                        scopes=["https://www.googleapis.com/auth/spreadsheets"],
+                    )
+                )
+
+                self.credentials_drive = (
+                    service_account.Credentials.from_service_account_file(
+                        service_file_path,
+                        scopes=["https://www.googleapis.com/auth/drive"],
+                    )
+                )
+
+                # Crie as credenciais_docs manualmente
+                self.credentials_docs = (
+                    service_account.Credentials.from_service_account_info(
+                        credentials_info,
+                        scopes=["https://www.googleapis.com/auth/documents"],
+                    )
+                )
+                return (
+                    self.credentials_sheets,
+                    self.credentials_drive,
+                    self.credentials_docs,
+                )
+
+            else:
+                raise ValueError("Caminho do arquivo de serviço não fornecido.")
+        except Exception as e:
+            logging.error(f"Erro ao configurar Sheets, Drive e Docs: {str(e)}")
+            raise RuntimeError(f"Erro ao configurar Sheets, Drive e Docs: {str(e)}")
+
+    def authorize_docs(self, service_file_path):
+        try:
+             # Inicialize o serviço do Google Docs
+            creds = service_account.Credentials.from_service_account_file(
+                service_file_path,
+                scopes=["https://www.googleapis.com/auth/documents"],
+            )
+            # Inicialize o serviço do Google Docs corretamente
+            self.docs_service = build("docs", "v1", credentials=creds)
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Docs: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Docs: {str(e)}")
+    
+    def authorize_drive(self, service_file_path):
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            creds = service_account.Credentials.from_service_account_file(
+                service_file_path,
+                scopes=['https://www.googleapis.com/auth/drive']
+            )
+
+            # Crie o serviço do Google Drive
+            drive_service = build('drive', 'v3', credentials=creds)
+
+            return drive_service
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
+    
+    def salvar_documento(self, service, doc_copiado_id, body):
+        print("salvar_documento")
+        try:
+            resultado = (
+                service.documents()
+                .batchUpdate(documentId=doc_copiado_id, body=body)
+                .execute()
+            )
+            print("TONY - Documento salvo com sucesso!", resultado)
+            
+        # Obtenha o link de visualização do documento
+            document_link = f"https://docs.google.com/document/d/{doc_copiado_id}/edit"
+
+            return document_link
+
+        except Exception as e:
+                print(f"Erro ao salvar o documento: {str(e)}")
+                import traceback
+                traceback.print_exc()
+                raise RuntimeError(f"Erro ao salvar o documento: {str(e)}")
+            
+    def criar_copias_e_processar_documentos(self, service, quantidade, ID_Ordem, corpo_documento):
+            links_documentos = []
+
+            for _ in range(quantidade):
+                # Crie uma cópia do modelo
+                copia = self.criar_copia_documento(service, corpo_documento)
+
+                # Salve a cópia e obtenha o link do documento
+                link_documento = self.salvar_documento(service, copia["documentId"], corpo_documento)
+
+                # Adicione o link à lista
+                links_documentos.append(link_documento)
+
+            print('TONY -  links_documentos',  links_documentos)
+            
+            # Retorna a lista de links dos documentos criados
+            return links_documentos
+                    
+    def upload_to_google_drive(self, file_path, folder_id, nome_arquivo):
+        try:
+            file_metadata = {'name': nome_arquivo, 'parents': [folder_id]}
+            media = MediaFileUpload(file_path, mimetype='application/pdf', resumable=True)
+            file = self.drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            file_id = file.get('id')
+            print(f'Arquivo enviado para o Google Drive com o ID: {file_id}')
+        except Exception as e:
+            print(f"Erro ao fazer upload para o Google Drive: {str(e)}")
+            raise RuntimeError(f"Erro ao fazer upload para o Google Drive: {str(e)}")
+        
+    def get_inline_object_image(self, inline_object_id, doc_id):
+        try:
+            # Obtém os dados da imagem do objeto inline
+            img_data = self.docs_service.documents().get(
+                documentId=doc_id, inlineObjectId=inline_object_id
+            ).execute()
+
+            # Recupera a URL da imagem
+            img_url = img_data["inlineObject"]["inlineObjectProperties"]["embeddedObject"]["image"]["contentUri"]
+
+            # Baixa a imagem e retorna os dados binários
+            response = self.docs_service.documents().get(
+                documentId=doc_id, resourceId=inline_object_id, alt="media"
+            ).execute()
+
+            # Converte a imagem para bytes
+            img_bytes = io.BytesIO(response.content).read()
+
+            return img_bytes
+
+        except Exception as e:
+            logging.error(f"Erro ao obter dados da imagem inline: {str(e)}")
+            raise RuntimeError(f"Erro ao obter dados da imagem inline: {str(e)}")
+
+    def convert_to_pdf_and_upload(self, doc_copiado_id, folder_id, nome_arquivo):
+        try:
+            # Certifique-se de que doc_copiado_id é uma string
+            doc_copiado_id = str(doc_copiado_id)
+
+            # Obtenha o documento
+            documento = self.docs_service.documents().get(documentId=doc_copiado_id).execute()
+
+            # Salva o documento localmente (opcional)
+            caminho_temporario = f"{doc_copiado_id}_temp.docx"
+            with open(caminho_temporario, "w", encoding="utf-8") as temp_file:
+                temp_file.write(str(documento))
+
+            print(f"Documento salvo em: {caminho_temporario}")
+
+            # Define o nome desejado para o arquivo PDF no Google Drive
+            nome_arquivo_pdf = f"{doc_copiado_id}.pdf"
+
+            # Converte o documento Google Doc para PDF
+            pdf_content = self.convert_to_pdf(documento, doc_copiado_id)
+            with open(nome_arquivo_pdf, "wb") as pdf_file:
+                pdf_file.write(pdf_content)
+
+            # Envia o documento PDF para o Google Drive na mesma pasta do documento original
+            self.upload_to_google_drive(nome_arquivo_pdf, folder_id, nome_arquivo_pdf)
+
+            # Remove os arquivos temporários locais
+            os.remove(caminho_temporario)
+            os.remove(nome_arquivo_pdf)
+
+            print(f"PDF salvo em: {nome_arquivo_pdf}")
+
+            return nome_arquivo_pdf  # Retorna o nome do arquivo PDF no Google Drive
+
+        except Exception as e:
+            print(f"Erro ao abrir o documento para leitura: {str(e)}")
+            raise RuntimeError(f"Erro ao abrir o documento para leitura: {str(e)}")        
+            
+    def authorize_sheets(self, service_file_path):
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            credenciais = pygsheets.authorize(service_file=service_file_path)
+
+            # Abra a planilha pelo URL
+            arquivo_url = "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
+            arquivo = credenciais.open_by_url(arquivo_url)
+            
+            # Selecione a aba correta VALIDADO
+            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+                "Impressao_ChecklistRecebimento"
+            )
+
+            # Verifique se a guia foi encontrada
+            if self.aba_resumo_presenca is None:
+                raise RuntimeError(
+                    "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
+                )
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Sheets: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Sheets: {str(e)}")
+
+    def get_credentials(self):
+            SCOPES = ["https://www.googleapis.com/auth/documents"]
+            SERVICE_ACCOUNT_FILE = "path/to/your/credentials.json"
+            creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            return creds
+        
+    
+class SomeOtherSpecificError(Exception):
+    """Exceção específica para indicar um erro particular."""
+
+    pass
+
+
+class GoogleDocsHandler:
+    PDF_MIME_TYPE = "application/pdf"
+
+    def __init__(
+        self,
+        credentials_sheets=None,
+        credentials_drive=None,
+        credentials_docs=None,
+        service_file_path=None,
+    ):
+        self.credentials_sheets = credentials_sheets
+        self.credentials_drive = credentials_drive
+        self.credentials_docs = credentials_docs
+        self.gc = None
+        self.aba_resumo_presenca = None
+
+        self.nomes_colunas_resumoFuncionario = None
+        self.resultados_numeroLinha_resumoFuncionario = None
+        self.docs_service = None
+
+        if service_file_path:
+            self.configure_credentials(service_file_path)
+            self.authorize_sheets(service_file_path)
+            self.authorize_docs(service_file_path)
+
+    def configure_credentials(self, service_file_path):
+        try:
+            if service_file_path:
+                with open(service_file_path, "r") as f:
+                    credentials_info = json.load(f)
+
+                # Use from_service_account_file diretamente
+                self.credentials_sheets = (
+                    service_account.Credentials.from_service_account_file(
+                        service_file_path,
+                        scopes=["https://www.googleapis.com/auth/spreadsheets"],
+                    )
+                )
+
+                self.credentials_drive = (
+                    service_account.Credentials.from_service_account_file(
+                        service_file_path,
+                        scopes=["https://www.googleapis.com/auth/drive"],
+                    )
+                )
+
+                # Crie as credenciais_docs manualmente
+                self.credentials_docs = (
+                    service_account.Credentials.from_service_account_info(
+                        credentials_info,
+                        scopes=["https://www.googleapis.com/auth/documents"],
+                    )
+                )
+                return (
+                    self.credentials_sheets,
+                    self.credentials_drive,
+                    self.credentials_docs,
+                )
+
+            else:
+                raise ValueError("Caminho do arquivo de serviço não fornecido.")
+        except Exception as e:
+            logging.error(f"Erro ao configurar Sheets, Drive e Docs: {str(e)}")
+            raise RuntimeError(f"Erro ao configurar Sheets, Drive e Docs: {str(e)}")
+
+    def authorize_docs(self, service_file_path):
+        try:
+             # Inicialize o serviço do Google Docs
+            creds = service_account.Credentials.from_service_account_file(
+                service_file_path,
+                scopes=["https://www.googleapis.com/auth/documents"],
+            )
+            # Inicialize o serviço do Google Docs corretamente
+            self.docs_service = build("docs", "v1", credentials=creds)
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Docs: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Docs: {str(e)}")
+    
+    def authorize_drive(self, service_file_path):
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            creds = service_account.Credentials.from_service_account_file(
+                service_file_path,
+                scopes=['https://www.googleapis.com/auth/drive']
+            )
+
+            # Crie o serviço do Google Drive
+            drive_service = build('drive', 'v3', credentials=creds)
+
+            return drive_service
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
+    
+    def salvar_documento(self, service, doc_copiado_id, body):
+        print("salvar_documento")
+        try:
+            resultado = (
+                service.documents()
+                .batchUpdate(documentId=doc_copiado_id, body=body)
+                .execute()
+            )
+            print("TONY - Documento salvo com sucesso!", resultado)
+            
+        # Obtenha o link de visualização do documento
+            document_link = f"https://docs.google.com/document/d/{doc_copiado_id}/edit"
+
+            return document_link
+
+        except Exception as e:
+                print(f"Erro ao salvar o documento: {str(e)}")
+                import traceback
+                traceback.print_exc()
+                raise RuntimeError(f"Erro ao salvar o documento: {str(e)}")
+            
+    def criar_copias_e_processar_documentos(self, service, quantidade, ID_Ordem, corpo_documento):
+            links_documentos = []
+
+            for _ in range(quantidade):
+                # Crie uma cópia do modelo
+                copia = self.criar_copia_documento(service, corpo_documento)
+
+                # Salve a cópia e obtenha o link do documento
+                link_documento = self.salvar_documento(service, copia["documentId"], corpo_documento)
+
+                # Adicione o link à lista
+                links_documentos.append(link_documento)
+
+            print('TONY -  links_documentos',  links_documentos)
+            
+            # Retorna a lista de links dos documentos criados
+            return links_documentos
+                    
+    def upload_to_google_drive(self, file_path, folder_id, nome_arquivo):
+        try:
+            file_metadata = {'name': nome_arquivo, 'parents': [folder_id]}
+            media = MediaFileUpload(file_path, mimetype='application/pdf', resumable=True)
+            file = self.drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            file_id = file.get('id')
+            print(f'Arquivo enviado para o Google Drive com o ID: {file_id}')
+        except Exception as e:
+            print(f"Erro ao fazer upload para o Google Drive: {str(e)}")
+            raise RuntimeError(f"Erro ao fazer upload para o Google Drive: {str(e)}")
+        
+    def get_inline_object_image(self, inline_object_id, doc_id):
+        try:
+            # Obtém os dados da imagem do objeto inline
+            img_data = self.docs_service.documents().get(
+                documentId=doc_id, inlineObjectId=inline_object_id
+            ).execute()
+
+            # Recupera a URL da imagem
+            img_url = img_data["inlineObject"]["inlineObjectProperties"]["embeddedObject"]["image"]["contentUri"]
+
+            # Baixa a imagem e retorna os dados binários
+            response = self.docs_service.documents().get(
+                documentId=doc_id, resourceId=inline_object_id, alt="media"
+            ).execute()
+
+            # Converte a imagem para bytes
+            img_bytes = io.BytesIO(response.content).read()
+
+            return img_bytes
+
+        except Exception as e:
+            logging.error(f"Erro ao obter dados da imagem inline: {str(e)}")
+            raise RuntimeError(f"Erro ao obter dados da imagem inline: {str(e)}")
+
+    def convert_to_pdf_and_upload(self, doc_copiado_id, folder_id, nome_arquivo):
+        try:
+            # Certifique-se de que doc_copiado_id é uma string
+            doc_copiado_id = str(doc_copiado_id)
+
+            # Obtenha o documento
+            documento = self.docs_service.documents().get(documentId=doc_copiado_id).execute()
+
+            # Salva o documento localmente (opcional)
+            caminho_temporario = f"{doc_copiado_id}_temp.docx"
+            with open(caminho_temporario, "w", encoding="utf-8") as temp_file:
+                temp_file.write(str(documento))
+
+            print(f"Documento salvo em: {caminho_temporario}")
+
+            # Define o nome desejado para o arquivo PDF no Google Drive
+            nome_arquivo_pdf = f"{doc_copiado_id}.pdf"
+
+            # Converte o documento Google Doc para PDF
+            pdf_content = self.convert_to_pdf(documento, doc_copiado_id)
+            with open(nome_arquivo_pdf, "wb") as pdf_file:
+                pdf_file.write(pdf_content)
+
+            # Envia o documento PDF para o Google Drive na mesma pasta do documento original
+            self.upload_to_google_drive(nome_arquivo_pdf, folder_id, nome_arquivo_pdf)
+
+            # Remove os arquivos temporários locais
+            os.remove(caminho_temporario)
+            os.remove(nome_arquivo_pdf)
+
+            print(f"PDF salvo em: {nome_arquivo_pdf}")
+
+            return nome_arquivo_pdf  # Retorna o nome do arquivo PDF no Google Drive
+
+        except Exception as e:
+            print(f"Erro ao abrir o documento para leitura: {str(e)}")
+            raise RuntimeError(f"Erro ao abrir o documento para leitura: {str(e)}")        
+            
+    def authorize_sheets(self, service_file_path):
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            credenciais = pygsheets.authorize(service_file=service_file_path)
+
+            # Abra a planilha pelo URL
+            arquivo_url = "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
+            arquivo = credenciais.open_by_url(arquivo_url)
+
+            # Selecione a aba correta VALIDADO
+            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+                "Impressao_ChecklistRecebimento"
+            )
+
+            # Verifique se a guia foi encontrada
+            if self.aba_resumo_presenca is None:
+                raise RuntimeError(
+                    "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
+                )
+
+        except Exception as e:
+            logging.error(f"Erro ao autorizar o acesso ao Google Sheets: {str(e)}")
+            raise RuntimeError(f"Erro ao autorizar o acesso ao Google Sheets: {str(e)}")
+
+    def get_credentials(self):
+            SCOPES = ["https://www.googleapis.com/auth/documents"]
+            SERVICE_ACCOUNT_FILE = "path/to/your/credentials.json"
+            creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            return creds
+
+    def criar_copia_do_doc(self, modelo_id, destino_id, ID_Ordem):
+        try:
+            drive_service = build("drive", "v3", credentials=self.credentials_drive)
+
+            # Construa o nome da cópia com o nome do funcionário
+            nome_copia = f"Recibo - {ID_Ordem}"
+
+            # Verifique se já existe uma cópia com o mesmo nome
+            query = (
+                f"name='{nome_copia}' and '{destino_id}' in parents and trashed=false"
+            )
+            existing_files = (
+                drive_service.files().list(q=query).execute().get("files", [])
+            )
+
+            # Exclua cópias antigas se existirem
+            for existing_file in existing_files:
+                drive_service.files().delete(fileId=existing_file["id"]).execute()
+
+            # Crie uma nova cópia
+            copia_request = {"name": nome_copia, "parents": [destino_id]}
+            copia = (
+                drive_service.files()
+                .copy(fileId=modelo_id, body=copia_request)
+                .execute()
+            )
+
+            print("TONY criar_copia_do_doc - COPIA ID", copia["id"])
+            return copia["id"]
+
+        except Exception as e:
+            logging.error(f"Erro ao criar cópia do documento: {str(e)}")
+            raise RuntimeError(f"Erro ao criar cópia do documento: {str(e)}")
+
+    def criar_copia_do_doc_e_exportar_pdf(
+        self, modelo_id, destino_id, ID_Ordem
+    ):
+        try:
+            drive_service = build("drive", "v3", credentials=self.credentials_drive)
+            copia_request = {
+                "name": f"Recebimento_{ID_Ordem}",
+                "parents": [destino_id],
+            }
+            copia = (
+                drive_service.files()
+                .copy(fileId=modelo_id, body=copia_request)
+                .execute()
+            )
+
+            pdf_export_request = {"mimeType": self.PDF_MIME_TYPE}
+            pdf_export = drive_service.files().export(
+                fileId=copia["id"], mimeType="application/pdf"
+            )
+            pdf_bytes = pdf_export.execute()
+
+            pdf_file = BytesIO(pdf_bytes)
+            media_body = MediaIoBaseUpload(
+                pdf_file, mimetype="application/pdf", resumable=True
+            )
+
+            pdf_upload_request = drive_service.files().create(
+                media_body=media_body,
+                body={
+                    "name": f"Recebimento_{ID_Ordem}.pdf",
+                    "parents": [destino_id],
+                },
+            )
+            pdf_upload_response = pdf_upload_request.execute()
+            pdf_link = (
+                drive_service.files()
+                .get(fileId=pdf_upload_response["id"], fields="webViewLink")
+                .execute()["webViewLink"]
+            )
+
+            return {"id": copia["id"], "pdf_link": pdf_link}
+
+        except Exception as e:
+            logging.error(f"Erro ao criar cópia do documento e exportar PDF: {str(e)}")
+            return {
+                "error": f"Erro ao criar cópia do documento e exportar PDF: {str(e)}"
+            }
+
+    def obter_link_documento_copiado(self, file_id):
+        try:
+            drive_service = build("drive", "v3", credentials=self.credentials_drive)
+            file_metadata = (
+                drive_service.files()
+                .get(fileId=file_id, fields="webViewLink")
+                .execute()
+            )
+
+            print("TONY - file_metadata", file_metadata["webViewLink"])
+            return file_metadata["webViewLink"]
+
+        except Exception as e:
+            logging.error(
+                f"Erro ao obter link do documento (File ID: {file_id}): {str(e)}"
+            )
+            raise RuntimeError(
+                f"Erro ao obter link do documento (File ID: {file_id}): {str(e)}"
+            )
+            
+        
+    def abrir_documento_para_edicao(self, doc_copiado_id, dados_linha):
+        try:
+            print('abrir_documento_para_edicao')
+            # print("TONY - abrir_documento_para_edicao")
+            SCOPES = ["https://www.googleapis.com/auth/documents"]
+
+            # Carregue as credenciais do arquivo JSON
+            creds = service_account.Credentials.from_service_account_file(
+                os.path.join(os.getcwd(), "sistemaNortrCromo_googleConsole.json"),
+                scopes=SCOPES,
+            )
+
+            # Crie um serviço Google Docs
+            service = build("docs", "v1", credentials=creds)
+
+            # Certifique-se de que doc_copiado_id é uma string
+            doc_copiado_id = str(doc_copiado_id)
+
+            # Obtenha o documento
+            documento = service.documents().get(documentId=doc_copiado_id).execute()
+            print("abrir_documento_para_edicao - documento", documento)
+
+            # Adicione a lógica para determinar o tipo de documento (CPF ou CNPJ)
+            cpf_cnpj = str(dados_linha.get("Cpf_funcionario", ""))
+            tipo_documento = "CPF" if len(cpf_cnpj) <= 11 else "CNPJ"
+            dados_linha["tipo_documento"] = tipo_documento
+
+            # Obtenha a data atual no formato desejado (dia/mês/ano)
+            data_atual = datetime.now().strftime("%d/%m/%Y")
+
+            # Adicione a data atual ao dicionário dados_linha
+            dados_linha["DATA"] = data_atual
+
+            # Substitua os marcadores pelos valores correspondentes
+            for paragrafo in documento["body"]["content"]:
+                if "paragraph" in paragrafo:
+                    for elemento in paragrafo["paragraph"]["elements"]:
+                        if "textRun" in elemento:
+                            texto = elemento["textRun"]["content"]
+                            # Identificar marcadores no formato {{nome_do_marcador}}
+                            marcadores = re.findall(r"{{(.*?)}}", texto)
+                            for marcador in marcadores:
+                                if marcador in dados_linha:
+                                    valor = str(dados_linha[marcador])
+                                    # Substitua o marcador pelo valor correspondente
+                                    elemento["textRun"]["content"] = elemento[
+                                        "textRun"
+                                    ]["content"].replace(f"{{{marcador}}}", valor)
+
+            # Construa as solicitações de lote
+            requests = []
+            for marcador, valor in dados_linha.items():
+                requests.append(
+                    {
+                        "replaceAllText": {
+                            "containsText": {
+                                "text": f"{{{marcador}}}",
+                                "matchCase": True,
+                            },
+                            "replaceText": str(valor),
+                        }
+                    }
+                )
+
+            # Atualize o documento com as alterações usando o lote
+            resultado = self.salvar_documento(
+                service, doc_copiado_id, {"requests": requests}
+            )
+
+            print("TONY - RESULTADO", resultado)
+
+            return resultado  # Adicione esta linha para retornar o resultado
+
+        except Exception as e:
+            logging.error(f"Erro ao abrir o documento para edição: {str(e)}")
+            raise RuntimeError(f"Erro ao abrir o documento para edição: {str(e)}")
+
+    def obter_dados_google_sheets(self):
+        print("obter_dados_google_sheets")
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            credenciais = pygsheets.authorize(
+                service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
+            )
+
+            # Abra a planilha pelo URL
+            arquivo_url = " https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
+            arquivo = credenciais.open_by_url(arquivo_url)
+            
+            
+            # Selecione a aba correta
+            aba_resumo_presenca = arquivo.worksheet_by_title(
+                "Impressao_ChecklistRecebimento"
+            )
+
+            # Verifique se a guia foi encontrada
+            if aba_resumo_presenca is None:
+                raise RuntimeError(
+                    "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
+                )
+
+            # Obtenha todos os valores da planilha
+            dados_da_planilha = aba_resumo_presenca.get_all_values()
+
+            # A primeira linha contém os nomes das colunas, que serão usados para
+            # mapeamento
+            colunas = dados_da_planilha[0]
+
+            # Os dados começam da segunda linha em diante
+            dados = dados_da_planilha[1:]
+
+            resultados = []
+
+            for row in dados:
+                # Crie um dicionário para armazenar os dados
+                dados_funcionario = dict(zip(colunas, row))
+
+                # Adicione o dicionário à lista de resultados
+                resultados.append(dados_funcionario)
+
+                # Armazene os nomes das colunas e os resultados como variáveis de instância
+                self.nomes_colunas_resumoFuncionario = colunas
+                self.resultados_numeroLinha_resumoFuncionario = resultados
+
+            return resultados
+
+        except Exception as e:
+            # Manipule outras exceções
+            logging.error(
+                f"Erro desconhecido ao obter dados do Google Sheets: {str(e)}"
+            )
+            raise RuntimeError(
+                f"Erro desconhecido ao obter dados do Google Sheets: {str(e)}"
+            )
+
+    # Novo método para obter o número da linha pelo ID do documento
+    def obter_numero_linha_pelo_ID_Ordem(self, ID_Ordem):
+        try:
+            print("self.aba_resumo_presenca", self.aba_resumo_presenca)
+
+            # Obtenha os valores da coluna ID_Ordem
+            coluna_ID_Ordem = "ID_Ordem"
+            # coluna_valores = self.aba_resumo_presenca.get_col(coluna_ID_Ordem)
+            colunas = self.aba_resumo_presenca.get_all_values()[
+                0
+            ]  # Assume que o cabeçalho está na primeira linha
+            indice_coluna = colunas.index(coluna_ID_Ordem)
+
+            coluna_valores = self.aba_resumo_presenca.get_col(
+                indice_coluna + 1
+            )  # Adicione 1 porque os índices de coluna começam em 1
+
+            # Verifique se o ID_Ordem está na coluna
+            if ID_Ordem not in coluna_valores:
+                print(
+                    "obter_numero_linha_pelo_ID_Ordem ID_Ordem NÃO ENCONTRADO"
+                )
+                return None
+
+            # Encontre o número da linha correspondente
+            numero_linha = (
+                coluna_valores.index(ID_Ordem) + 1
+            )  # Adicione 1 porque os índices de linha começam em 1
+            print(
+                "obter_numero_linha_pelo_ID_Ordem numero_linha",
+                numero_linha,
+            )
+            return numero_linha
+
+        except Exception as e:
+            logging.error(
+                f"Erro ao obter número da linha pelo nome do funcionário: {str(e)}"
+            )
+            raise RuntimeError(
+                f"Erro ao obter número da linha pelo nome do funcionário: {str(e)}"
+            )
+
+    def adicionar_link_para_linha(
+        self, doc_copiado_id, link_documento_copiado, ID_Ordem
+    ):
+        print("TONY - adicionar_link_para_linha")
+        try:
+            # Autorize o acesso usando o arquivo de serviço
+            credenciais = pygsheets.authorize(
+                service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
+            )
+
+            # Abra a planilha pelo URL
+            arquivo_url = "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
+            arquivo = credenciais.open_by_url(arquivo_url)
+
+            # Selecione a aba correta
+            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+                "Impressao_ChecklistRecebimento"
+            )
+
+            # Verifique se a guia foi encontrada
+            if self.aba_resumo_presenca is None:
+                raise RuntimeError(
+                    "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
+                )
+
+            ID_Ordem = ID_Ordem
+            print("TONY - ID_Ordem", ID_Ordem)
+
+            # Obtenha os valores da primeira linha (cabeçalho) para obter os índices das colunas
+            colunas = self.aba_resumo_presenca.get_all_values()[0]
+
+            # Verifique se a guia foi encontrada
+            numero_linha = self.obter_numero_linha_pelo_ID_Ordem(
+                ID_Ordem
+            )
+            print("TONY - numero_linha", numero_linha)
+
+            print("Antes do bloco condicional")
+            # Se o número da linha for encontrado, adicione o link à coluna N
+            if numero_linha is not None:
+                print("Depois do bloco condicional")
+                # Adiciona o link à coluna N da linha especificada
+                coluna_link = "Link_Documento"
+                try:
+                    indice_coluna = self.nomes_colunas_resumoFuncionario.index(
+                        coluna_link
+                    )
+                    print("Depois do bloco condicional", indice_coluna)
+                    self.aba_resumo_presenca.update_value(
+                        (numero_linha, indice_coluna + 1),
+                        link_documento_copiado,
+                    )
+                    print(
+                        f"Link adicionado à linha {numero_linha} para o funcionário {ID_Ordem}"
+                    )
+
+                except ValueError:
+                    logging.error(
+                        f"Erro: Coluna '{coluna_link}' não encontrada na lista de colunas."
+                    )
+        except pygsheets.exceptions.RequestError as e:
+            if "Unable to find sheet" in str(e):
+                logging.error("Erro: Guia não encontrada na planilha.")
+                raise RuntimeError("Erro: Guia não encontrada na planilha.")
+            else:
+                # Manipule outras exceções
+                logging.error(f"Erro ao adicionar link à planilha: {str(e)}")
+                raise RuntimeError(f"Erro ao adicionar link à planilha: {str(e)}")
+
+
+# Substitua pelo caminho correto para o seu arquivo de serviço
+service_file_path = os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
+
+# Crie uma instância de GoogleDocsHandler
+google_docs_handler = GoogleDocsHandler()
+
+# Configure as credenciais
+(
+    credenciais_sheets,
+    credenciais_drive,
+    _,
+) = google_docs_handler.configure_credentials(service_file_path)
+
+# Autorize o acesso ao Google Sheets
+google_docs_handler.authorize_sheets(service_file_path)
+
