@@ -248,6 +248,9 @@ def numeroControles_Unicos_f():
         # Seleciona apenas as colunas desejadas
         colunas_desejadas = ["ID", "ID_Ordem"]
         df_selecionado = df_recebimentos[colunas_desejadas]
+        
+        # Filtra os registros onde a coluna "ID_Ordem" é diferente de nulo e diferente de vazio
+        recebimentos_ok = df_recebimentos[df_selecionado["ID_Ordem"].notna() & (df_selecionado["ID_Ordem"] != "")]
 
         # Filtra os registros onde a coluna "Nome_cliente" é diferente de vazio ou nulo
         recebimentos_ok = df_selecionado[df_selecionado["ID"].notna()]

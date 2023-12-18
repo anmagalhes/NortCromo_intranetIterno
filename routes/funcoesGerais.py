@@ -10,6 +10,51 @@ import json
 
 lock = threading.Lock()
 
+
+from flask import Blueprint, render_template, jsonify, request, redirect, url_for
+import pandas as pd
+import os
+import pygsheets
+import datetime
+from routes.funcoesGerais import *
+
+import threading
+import traceback
+
+import re
+import json
+from flask import send_file
+import random
+import string
+import numpy as np
+import logging
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
+from googleapiclient.discovery import build
+from threading import Lock
+from functools import lru_cache
+from datetime import datetime, timedelta
+from cachetools import cached, TTLCache
+
+from google.auth.transport.requests import Request
+from google.auth.credentials import AnonymousCredentials
+from google.auth import impersonated_credentials
+from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
+from google.oauth2.service_account import Credentials
+from io import BytesIO
+from google.oauth2 import service_account
+from docx import Document
+from googleapiclient.http import MediaIoBaseUpload
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from googleapiclient.errors import HttpError
+
+from googleapiclient import discovery
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+import io
+
 # credencias = pygsheets.authorize(
 #     service_file=os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
 # )
@@ -124,3 +169,4 @@ def verificaSeOUsuarioTemPermissao(usuario, rota):
 def converter_data_frontend(data_frontend):
     # Supondo que a data do frontend esteja em formato 'DD/MM/YYYY'
     return pd.to_datetime(data_frontend, format="%d/%m/%Y")
+
