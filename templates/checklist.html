@@ -1209,10 +1209,20 @@ function generatePDFsForSelectedOperations() {
                       "dadosEnviados": dadosEnviados 
                     }),
                 })
-            .done(function (response) {
-              console.log("Resposta do GAS:", response); // Log da resposta do GAS
-              responseHandler(response);
-            })
+            .done(function (data) {
+              console.log("Tipo da Resposta:", typeof data);
+              console.log('data.resultados', data.resultados);
+              if (data.success === true && data.resultados.length > 0) {
+                
+                 processarLinksNoApScript(data.resultados);
+                  //responseHandler(data);
+                } else {
+                      // Ocultar o alerta de carregamento
+                      hideLoadingAlert();
+                      console.error("Nenhum link retornado pelo servidor.");
+                      exibirMensagemErro("Não foi possível processar os links, Favor tente apertar novamente Impr.");
+                    }
+                  })
             .fail(errorHandler)
             .always(hideLoadingAlert);
         });
@@ -2963,185 +2973,185 @@ function updateTableChecklist_pedentes(retorno_especifico) {
 
 // ..........................................//................////.........................////////...........................
   
-var processoConcluido = false;
+  var processoConcluido = false;
 
- // Função para criar cópia do documento e processar os links
- function criar_copia_documentoTab3() {
+  // Função para criar cópia do documento e processar os links
+  function criar_copia_documentoTab3() {
 
-    // Substitua os valores abaixo pelos dados corretos
-    var modeloId = '1VIrF8PyUYe-DCIeDBv3Nmiy8if7pIPhl9zA7jM50PhE';
-    var destinoId = '1fstEX_fgNPnzBEeu1szOvZ43AdMTPTjk';
+      // Substitua os valores abaixo pelos dados corretos
+      var modeloId = '1VIrF8PyUYe-DCIeDBv3Nmiy8if7pIPhl9zA7jM50PhE';
+      var destinoId = '1fstEX_fgNPnzBEeu1szOvZ43AdMTPTjk';
 
-    console.log('modeloId', modeloId);
-    console.log('destinoId', destinoId);
+      console.log('modeloId', modeloId);
+      console.log('destinoId', destinoId);
 
-    $.ajax({
-        url: my_url() + "criar_copia_e_processar_documento",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "modelo_id": modeloId,
-            "destino_id": destinoId,
-        }),
-    })
-    .done(function (data) {
-        console.log("Tipo da Resposta:", typeof data);
+      $.ajax({
+          url: my_url() + "criar_copia_e_processar_documento",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+              "modelo_id": modeloId,
+              "destino_id": destinoId,
+          }),
+      })
+      .done(function (data) {
+          console.log("Tipo da Resposta:", typeof data);
+          console.log('data.resultados', data.resultados);
 
-        // Exibir os links em algum lugar no seu front-end
-        if (data.status === "success" && data.resultados.length > 0) {
-            // Chamar a função para processar os links no ApScript
+          // Exibir os links em algum lugar no seu front-end
+          if (data.success === true && data.resultados.length > 0) {
+              // Chamar a função para processar os links no ApScript
+              console.log('Primeiro elemento de data.resultados', data.resultados[0]);
+              
+               //processarLinksNoApScript(data.resultados);
 
-            console.log('data.resultados', data.resultados)
+              // Exibir mensagem para o usuário
+                exibirMensagemUsuario("Processo concluído com sucesso!");
 
-            processarLinksNoApScript(data.resultados);
+              // Exibir o alerta de sucesso
+                showSuccessAlert("Os PDFs estão prontos para ser impressos!");
 
-            // Exibir mensagem para o usuário
-            exibirMensagemUsuario("Processo concluído com sucesso!");
+          } else {
+              // Ocultar o alerta de carregamento
+              hideLoadingAlert();
+              console.error("Nenhum link retornado pelo servidor.");
+              exibirMensagemErro("Não foi possível processar os links, Favor tente apertar novamente Impr.");
+  
+          }
+      })
+      .fail(function (xhr, status, error) {
+          console.error("Erro ao criar cópia do documento:", error);
+          console.log("Status da requisição:", status);
+          console.log("Resposta do servidor (falha):", xhr.responseText);
 
-            // Exibir o alerta de sucesso
-            showSuccessAlert("Os PDFs estão prontos para ser impressos!");
+          // Se a resposta for um objeto, você pode tentar analisá-la manualmente
+          try {
+              var parsedData = JSON.parse(xhr.responseText);
+              console.log("Resposta analisada manualmente:", parsedData);
+          } catch (parseError) {
+              console.error("Erro ao analisar manualmente a resposta:", parseError);
+          }
 
-        } else {
+          // Exibir mensagem de erro para o usuário
+          exibirMensagemErro("Erro ao criar cópia do documento.");
+
             // Ocultar o alerta de carregamento
             hideLoadingAlert();
-            console.error("Nenhum link retornado pelo servidor.");
-            exibirMensagemErro("Não foi possível processar os links, Favor tente apertar novamente Impr.");
- 
-        }
-    })
-    .fail(function (xhr, status, error) {
-        console.error("Erro ao criar cópia do documento:", error);
-        console.log("Status da requisição:", status);
-        console.log("Resposta do servidor:", xhr.responseText);
+      });
+  }
 
-        // Se a resposta for um objeto, você pode tentar analisá-la manualmente
-        try {
-            var parsedData = JSON.parse(xhr.responseText);
-            console.log("Resposta analisada manualmente:", parsedData);
-        } catch (parseError) {
-            console.error("Erro ao analisar manualmente a resposta:", parseError);
-        }
+  // Função para mover o arquivo para a pasta destino e excluir o original
+  function moverArquivoParaPasta(fileUrl, targetFolderId) {
+      var fileId = getFileIdFromUrl(fileUrl);
+      var targetFolder = DriveApp.getFolderById(targetFolderId);
 
-        // Exibir mensagem de erro para o usuário
-        exibirMensagemErro("Erro ao criar cópia do documento.");
+      // Obter o arquivo pelo ID
+      var file = DriveApp.getFileById(fileId);
 
-           // Ocultar o alerta de carregamento
-           hideLoadingAlert();
-    });
-}
+      // Fazer uma cópia do arquivo na pasta destino
+      var fileCopy = file.makeCopy(file.getName(), targetFolder);
 
-// Função para mover o arquivo para a pasta destino e excluir o original
-function moverArquivoParaPasta(fileUrl, targetFolderId) {
-    var fileId = getFileIdFromUrl(fileUrl);
-    var targetFolder = DriveApp.getFolderById(targetFolderId);
+      // Obter o link do arquivo copiado
+      var copiedFileUrl = fileCopy.getUrl();
 
-    // Obter o arquivo pelo ID
-    var file = DriveApp.getFileById(fileId);
+      // Excluir o arquivo original
+      file.setTrashed(true);
 
-    // Fazer uma cópia do arquivo na pasta destino
-    var fileCopy = file.makeCopy(file.getName(), targetFolder);
+      return copiedFileUrl;
+  }
 
-    // Obter o link do arquivo copiado
-    var copiedFileUrl = fileCopy.getUrl();
+  function exibirLinksPDF(pdfLinks) {
+      const linksContainer = $("#documentos-container");
+      linksContainer.empty(); // Limpar links antigos
 
-    // Excluir o arquivo original
-    file.setTrashed(true);
+      pdfLinks.forEach((pdfInfo, index) => {
+          const linkElem = $("<div>")
+              .addClass("pdf-link-container");
 
-    return copiedFileUrl;
-}
+          // Adicionar um ícone de PDF
+          const pdfIcon = $("<span>")
+              .addClass("mui-icon material-icons")
+              .text("picture_as_pdf")
+              .css({
+                  marginRight: "5px",
+                  color: "red",  // Cor do ícone PDF
+              });
+          linkElem.append(pdfIcon);
 
-function exibirLinksPDF(pdfLinks) {
-    const linksContainer = $("#documentos-container");
-    linksContainer.empty(); // Limpar links antigos
+          // Adicionar o link de download
+          const downloadLink = $("<a>")
+              .attr("href", pdfInfo.pdfLink)
+              .attr("target", "_blank")
+              .attr("download", `${pdfInfo.nomeFuncionario || ""}_${index + 1}.pdf`)  // Utilizar nome do funcionário, ou "Funcionario" se o nome for indefinido
+              .text(`Imprimir ou Visualizar ${pdfInfo.nomeFuncionario || ""}`)  // Utilizar nome do funcionário, ou nada se o nome for indefinido
+              .addClass("pdf-link");
+          linkElem.append(downloadLink);
 
-    pdfLinks.forEach((pdfInfo, index) => {
-        const linkElem = $("<div>")
-            .addClass("pdf-link-container");
+          // Adicionar o nome do documento (pode ser o nome do funcionário)
+          const documentName = pdfInfo.nomeFuncionario || "";  // Usar "Funcionario" se o nome for indefinido
+          const documentNameElem = $("<span>")
+              .text(documentName)
+              .addClass("pdf-name");
+          linkElem.append(documentNameElem);
 
-        // Adicionar um ícone de PDF
-        const pdfIcon = $("<span>")
-            .addClass("mui-icon material-icons")
-            .text("picture_as_pdf")
-            .css({
-                marginRight: "5px",
-                color: "red",  // Cor do ícone PDF
-            });
-        linkElem.append(pdfIcon);
+          linksContainer.append(linkElem);
+      });
 
-        // Adicionar o link de download
-        const downloadLink = $("<a>")
-            .attr("href", pdfInfo.pdfLink)
-            .attr("target", "_blank")
-            .attr("download", `${pdfInfo.nomeFuncionario || ""}_${index + 1}.pdf`)  // Utilizar nome do funcionário, ou "Funcionario" se o nome for indefinido
-            .text(`Imprimir ou Visualizar ${pdfInfo.nomeFuncionario || ""}`)  // Utilizar nome do funcionário, ou nada se o nome for indefinido
-            .addClass("pdf-link");
-        linkElem.append(downloadLink);
+      // Atualizar a variável para indicar que o processo está totalmente concluído
+      processoConcluido = true;
+      
+      // Mostrar o contêiner com os links
+      linksContainer.show();
 
-        // Adicionar o nome do documento (pode ser o nome do funcionário)
-        const documentName = pdfInfo.nomeFuncionario || "";  // Usar "Funcionario" se o nome for indefinido
-        const documentNameElem = $("<span>")
-            .text(documentName)
-            .addClass("pdf-name");
-        linkElem.append(documentNameElem);
-
-        linksContainer.append(linkElem);
-    });
-
-    // Atualizar a variável para indicar que o processo está totalmente concluído
-    processoConcluido = true;
-     
-    // Mostrar o contêiner com os links
-    linksContainer.show();
-
-    // Se o processo estiver totalmente concluído e todos os links foram exibidos, exibir mensagem adicional
-    if (processoConcluido && pdfLinks.length > 0) {
-        showSuccessAlert("Todos os PDFs foram processados com sucesso!");
-    }
-}
+      // Se o processo estiver totalmente concluído e todos os links foram exibidos, exibir mensagem adicional
+      if (processoConcluido && pdfLinks.length > 0) {
+          showSuccessAlert("Todos os PDFs foram processados com sucesso!");
+      }
+  }
 
 
-// Função para processar os links no ApScript
-function processarLinksNoApScript(links) {
+  // Função para processar os links no ApScript
+  function processarLinksNoApScript(links) {
 
-    showLoadingAlert("Por favor, aguarde. Mais alguns segundo Finalizado a preparação dos PDF ...");
+      showLoadingAlert("Por favor, aguarde. Mais alguns segundo Finalizado a preparação dos PDF ...");
 
-    // Enviar os links para o ApScript
-    $.ajax({
-        type: 'POST',
-        data: {
-            qualFuncao: 'processarLinks',
-            links: JSON.stringify(links), // Converter a array para JSON
-        },
-        url: minhaUrl,
-        dataType: 'json',
-    })
-    .done(function (data) {
-        console.log('Resposta do ApScript:', data);
+      // Enviar os links para o ApScript
+      $.ajax({
+          type: 'POST',
+          data: {
+              qualFuncao: 'processarLinks',
+              links: JSON.stringify(links), // Converter a array para JSON
+          },
+          url: minhaUrl,
+          dataType: 'json',
+      })
+      .done(function (data) {
+          console.log('Resposta do ApScript:', data);
 
-        // Exibir os links ou fazer qualquer outra coisa com a resposta do ApScript
-        if (data.success && Array.isArray(data.pdfLinks)) {
-            // Exibir o contêiner após a conclusão do processamento no ApScript
-            exibirLinksPDF(data.pdfLinks);
+          // Exibir os links ou fazer qualquer outra coisa com a resposta do ApScript
+          if (data.success && Array.isArray(data.pdfLinks)) {
+              // Exibir o contêiner após a conclusão do processamento no ApScript
+              exibirLinksPDF(data.pdfLinks);
 
-            // Acessar o link gerado do PDF
-            var linkGeradoPDF = data.pdfLinks[0].copiedPdfLink;
-            console.log("Link gerado do PDF:", linkGeradoPDF);
+              // Acessar o link gerado do PDF
+              var linkGeradoPDF = data.pdfLinks[0].copiedPdfLink;
+              console.log("Link gerado do PDF:", linkGeradoPDF);
 
 
-        } else {
-            console.error('Erro no ApScript:', data.error);
-            alert('Erro ao processar os PDFs no ApScript.');
-        }
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-        console.error('Erro na chamada AJAX para o ApScript:', textStatus, errorThrown);
-        alert('Erro ao enviar os links para o ApScript.');
+          } else {
+              console.error('Erro no ApScript:', data.error);
+              alert('Erro ao processar os PDFs no ApScript.');
+          }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+          console.error('Erro na chamada AJAX para o ApScript:', textStatus, errorThrown);
+          alert('Erro ao enviar os links para o ApScript.');
 
-        // Adicione esta parte para log detalhado no console
-        console.log('Detalhes do erro:', jqXHR);
-        console.log('Erro ao processar os links no ApScript (detalhes):', jqXHR.responseText);
-    });
-}
+          // Adicione esta parte para log detalhado no console
+          console.log('Detalhes do erro:', jqXHR);
+          console.log('Erro ao processar os links no ApScript (detalhes):', jqXHR.responseText);
+      });
+  }
 
 
 // Função auxiliar para exibir mensagens de erro

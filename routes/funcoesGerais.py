@@ -193,7 +193,7 @@ class GoogleDocsHandler:
         self.credentials_drive = credentials_drive
         self.credentials_docs = credentials_docs
         self.gc = None
-        self.aba_resumo_presenca = None
+        self.aba_Impressao_ChecklistRecebimento = None
 
         self.nomes_colunas_resumoFuncionario = None
         self.resultados_numeroLinha_resumoFuncionario = None
@@ -276,14 +276,14 @@ class GoogleDocsHandler:
             raise RuntimeError(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
     
     def salvar_documento(self, service, doc_copiado_id, body):
-        print("salvar_documento")
+          #print("salvar_documento")
         try:
             resultado = (
                 service.documents()
                 .batchUpdate(documentId=doc_copiado_id, body=body)
                 .execute()
             )
-            print("TONY - Documento salvo com sucesso!", resultado)
+              #print("TONY - Documento salvo com sucesso!", resultado)
             
         # Obtenha o link de visualização do documento
             document_link = f"https://docs.google.com/document/d/{doc_copiado_id}/edit"
@@ -309,7 +309,7 @@ class GoogleDocsHandler:
                 # Adicione o link à lista
                 links_documentos.append(link_documento)
 
-            print('TONY -  links_documentos',  links_documentos)
+            # print('TONY -  links_documentos',  links_documentos)
             
             # Retorna a lista de links dos documentos criados
             return links_documentos
@@ -397,12 +397,12 @@ class GoogleDocsHandler:
             arquivo = credenciais.open_by_url(arquivo_url)
             
             # Selecione a aba correta VALIDADO
-            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+            self.aba_Impressao_ChecklistRecebimento = arquivo.worksheet_by_title(
                 "Impressao_ChecklistRecebimento"
             )
 
             # Verifique se a guia foi encontrada
-            if self.aba_resumo_presenca is None:
+            if self.aba_Impressao_ChecklistRecebimento is None:
                 raise RuntimeError(
                     "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
                 )
@@ -438,7 +438,7 @@ class GoogleDocsHandler:
         self.credentials_drive = credentials_drive
         self.credentials_docs = credentials_docs
         self.gc = None
-        self.aba_resumo_presenca = None
+        self.aba_Impressao_ChecklistRecebimento = None
 
         self.nomes_colunas_resumoFuncionario = None
         self.resultados_numeroLinha_resumoFuncionario = None
@@ -519,7 +519,7 @@ class GoogleDocsHandler:
         except Exception as e:
             logging.error(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
             raise RuntimeError(f"Erro ao autorizar o acesso ao Google Drive: {str(e)}")
-    
+
     def salvar_documento(self, service, doc_copiado_id, body):
         print("salvar_documento")
         try:
@@ -554,7 +554,7 @@ class GoogleDocsHandler:
                 # Adicione o link à lista
                 links_documentos.append(link_documento)
 
-            print('TONY -  links_documentos',  links_documentos)
+                print('TONY NORTHCROMO -  links_documentos',  links_documentos)
             
             # Retorna a lista de links dos documentos criados
             return links_documentos
@@ -642,12 +642,12 @@ class GoogleDocsHandler:
             arquivo = credenciais.open_by_url(arquivo_url)
 
             # Selecione a aba correta VALIDADO
-            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+            self.aba_Impressao_ChecklistRecebimento = arquivo.worksheet_by_title(
                 "Impressao_ChecklistRecebimento"
             )
 
             # Verifique se a guia foi encontrada
-            if self.aba_resumo_presenca is None:
+            if self.aba_Impressao_ChecklistRecebimento is None:
                 raise RuntimeError(
                     "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
                 )
@@ -763,12 +763,11 @@ class GoogleDocsHandler:
             raise RuntimeError(
                 f"Erro ao obter link do documento (File ID: {file_id}): {str(e)}"
             )
-            
-        
+              
     def abrir_documento_para_edicao(self, doc_copiado_id, dados_linha):
         try:
-            print('abrir_documento_para_edicao')
-            # print("TONY - abrir_documento_para_edicao")
+            print('NOTH CROMO - abrir_documento_para_edicao')
+
             SCOPES = ["https://www.googleapis.com/auth/documents"]
 
             # Carregue as credenciais do arquivo JSON
@@ -785,12 +784,6 @@ class GoogleDocsHandler:
 
             # Obtenha o documento
             documento = service.documents().get(documentId=doc_copiado_id).execute()
-            print("abrir_documento_para_edicao - documento", documento)
-
-            # Adicione a lógica para determinar o tipo de documento (CPF ou CNPJ)
-            cpf_cnpj = str(dados_linha.get("Cpf_funcionario", ""))
-            tipo_documento = "CPF" if len(cpf_cnpj) <= 11 else "CNPJ"
-            dados_linha["tipo_documento"] = tipo_documento
 
             # Obtenha a data atual no formato desejado (dia/mês/ano)
             data_atual = datetime.now().strftime("%d/%m/%Y")
@@ -798,50 +791,109 @@ class GoogleDocsHandler:
             # Adicione a data atual ao dicionário dados_linha
             dados_linha["DATA"] = data_atual
 
+            print('NORTH CROMO - dados_linha', dados_linha)
+
+            mapeamento_campos = {
+                'Referencia_Produto': '{{o}}',
+                'ID_Ordem': '{{a}}',
+                'Nome_cliente': '{{cl}}',
+                'Qtd_Produto': ' {{qtd}}',
+                'nome_produto': '{{produto}}',
+                'ID_Checklist': '{{doc.cl}}',
+                'NotaInterna': '{{b}}',
+                # Adicione outros campos conforme necessário
+            }
+
             # Substitua os marcadores pelos valores correspondentes
-            for paragrafo in documento["body"]["content"]:
-                if "paragraph" in paragrafo:
-                    for elemento in paragrafo["paragraph"]["elements"]:
-                        if "textRun" in elemento:
-                            texto = elemento["textRun"]["content"]
+            for pagina in documento["body"]["content"]:
+                if "paragraph" in pagina:
+                    for paragrafo in pagina.get("paragraph", {}).get("elements", []):
+                        if "textRun" in paragrafo:
+                            # Adicione esta linha para imprimir informações sobre o parágrafo
+                            print(f"Parágrafo antes: {paragrafo}")
+
+                            texto_original = paragrafo["textRun"]["content"]
+                            texto = texto_original
+                            print('texto_original', texto_original)
+
                             # Identificar marcadores no formato {{nome_do_marcador}}
-                            marcadores = re.findall(r"{{(.*?)}}", texto)
-                            for marcador in marcadores:
-                                if marcador in dados_linha:
-                                    valor = str(dados_linha[marcador])
+                            marcadores_no_documento = set(re.findall(r"\{\{\s*(.*?)\s*\}\}", texto, flags=re.IGNORECASE))
+                            marcadores_no_mapeamento = set(mapeamento_campos.values())
+
+                            marcadores_faltando = marcadores_no_documento - marcadores_no_mapeamento
+
+                            for marcador in marcadores_no_documento:
+                                if marcador in mapeamento_campos:
+                                    valor = str(mapeamento_campos[marcador])
+                                    print('NOTHCROMO - valor', valor)
+
                                     # Substitua o marcador pelo valor correspondente
-                                    elemento["textRun"]["content"] = elemento[
-                                        "textRun"
-                                    ]["content"].replace(f"{{{marcador}}}", valor)
+                                    texto = texto.replace(f"{{{{{marcador}}}}}", valor)
 
-            # Construa as solicitações de lote
+                                    # Atualize o texto no parágrafo
+                                    paragrafo["textRun"]["content"] = texto
+
+                                    # Adicione prints para verificar as alterações
+                                    if texto != texto_original:
+                                        print(f'NOTHCROMO - Marcadores substituídos em: {texto_original}')
+                                        print(f'NOTHCROMO - Resultado final: {texto}')
+
             requests = []
-            for marcador, valor in dados_linha.items():
-                requests.append(
-                    {
-                        "replaceAllText": {
-                            "containsText": {
-                                "text": f"{{{marcador}}}",
-                                "matchCase": True,
-                            },
-                            "replaceText": str(valor),
-                        }
-                    }
-                )
 
-            # Atualize o documento com as alterações usando o lote
-            resultado = self.salvar_documento(
-                service, doc_copiado_id, {"requests": requests}
-            )
+            for marcador, valor in mapeamento_campos.items():
+                for pagina in documento["body"]["content"]:
+                    if "paragraph" in pagina:
+                        for paragrafo in pagina.get("paragraph", {}).get("elements", []):
+                            if "textRun" in paragrafo:
+                                texto_original = paragrafo["textRun"]["content"]
 
-            print("TONY - RESULTADO", resultado)
+                                # Identificar marcadores no formato {{nome_do_marcador}}
+                                marcadores_no_documento = set(re.findall(r"\{\{\s*(.*?)\s*\}\}", texto_original, flags=re.IGNORECASE))
 
-            return resultado  # Adicione esta linha para retornar o resultado
+                                if marcador in marcadores_no_documento:
+                                    # Substitua o marcador pelo valor correspondente
+                                    texto_original = texto_original.replace(f"{{{{{marcador}}}}}", str(valor))
+
+                                # Adicione prints para verificar as alterações
+                                if texto_original != paragrafo["textRun"]["content"]:
+                                    print(f'NOTHCROMO - Marcadores substituídos em: {texto_original}')
+                                    print(f'NOTHCROMO - Resultado final: {paragrafo["textRun"]["content"]}')
+
+                                # Atualize o texto no parágrafo
+                                paragrafo["textRun"]["content"] = texto_original
+
+            # Adicione uma única solicitação de lote para todas as atualizações
+            requests.append({
+                "replaceAllText": {
+                    "containsText": {"text": "{{", "matchCase": True},
+                    "replaceText": "",
+                }
+            })
+
+            # Verifique se há pelo menos uma solicitação antes de tentar salvar
+            if not requests:
+                raise RuntimeError("Nenhuma solicitação de atualização foi gerada. Verifique o mapeamento de campos.")
+
+            # Tente salvar o documento
+            resultado = self.salvar_documento(service, doc_copiado_id, {"requests": requests})
+
+            # Verifique o resultado da operação de salvamento
+            if "documentId" in resultado:
+                print("Documento salvo com sucesso!")
+            else:
+                # Adicione informações detalhadas sobre o resultado do salvamento
+                if "error" in resultado:
+                    error_message = resultado["error"]["message"]
+                    logging.error(f"NORTH CROMO - Erro ao salvar o documento. Detalhes: {error_message}")
+                    raise RuntimeError(f"NORTH CROMO - Erro ao salvar o documento. Detalhes: {error_message}")
+                else:
+                    logging.error("NORTH CROMO - Erro ao salvar o documento. Detalhes indisponíveis.")
+                    raise RuntimeError("MOTHCROMO - Erro ao salvar o documento. Operações subsequentes não serão realizadas.")
 
         except Exception as e:
-            logging.error(f"Erro ao abrir o documento para edição: {str(e)}")
-            raise RuntimeError(f"Erro ao abrir o documento para edição: {str(e)}")
-
+            logging.error(f"NORTH CROMO - Erro ao abrir o documento para edição: {str(e)}")
+            raise RuntimeError(f"NORTH CROMO - Erro ao abrir o documento para edição: {str(e)}")
+    
     def obter_dados_google_sheets(self):
         print("obter_dados_google_sheets")
         try:
@@ -853,21 +905,21 @@ class GoogleDocsHandler:
             # Abra a planilha pelo URL
             arquivo_url = " https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"
             arquivo = credenciais.open_by_url(arquivo_url)
-            
-            
+
             # Selecione a aba correta
-            aba_resumo_presenca = arquivo.worksheet_by_title(
+            aba_Impressao_ChecklistRecebimento = arquivo.worksheet_by_title(
                 "Impressao_ChecklistRecebimento"
             )
 
             # Verifique se a guia foi encontrada
-            if aba_resumo_presenca is None:
+            if aba_Impressao_ChecklistRecebimento is None:
                 raise RuntimeError(
                     "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
                 )
 
             # Obtenha todos os valores da planilha
-            dados_da_planilha = aba_resumo_presenca.get_all_values()
+            dados_da_planilha = aba_Impressao_ChecklistRecebimento.get_all_values()
+            print('dados_da_planilha', dados_da_planilha)
 
             # A primeira linha contém os nomes das colunas, que serão usados para
             # mapeamento
@@ -882,12 +934,17 @@ class GoogleDocsHandler:
                 # Crie um dicionário para armazenar os dados
                 dados_funcionario = dict(zip(colunas, row))
 
-                # Adicione o dicionário à lista de resultados
-                resultados.append(dados_funcionario)
+                print("DEBUG: ID_Checklist", dados_funcionario.get("ID_Checklist"))
+                print("DEBUG: ID_Ordem", dados_funcionario.get("ID_Ordem"))
 
-                # Armazene os nomes das colunas e os resultados como variáveis de instância
-                self.nomes_colunas_resumoFuncionario = colunas
-                self.resultados_numeroLinha_resumoFuncionario = resultados
+                if dados_funcionario.get("ID_Ordem") and dados_funcionario.get("ID_Checklist") and int(dados_funcionario["ID_Checklist"]) > 0:
+                    resultados.append(dados_funcionario)
+                    
+                    
+                    
+            # Armazene os nomes das colunas e os resultados como variáveis de instância
+            self.nomes_colunas_resumoFuncionario = colunas
+            self.resultados_numeroLinha_resumoFuncionario = resultados
 
             return resultados
 
@@ -902,49 +959,40 @@ class GoogleDocsHandler:
 
     # Novo método para obter o número da linha pelo ID do documento
     def obter_numero_linha_pelo_ID_Ordem(self, ID_Ordem):
+        cells = self.aba_Impressao_ChecklistRecebimento.find(ID_Ordem)
         try:
-            print("self.aba_resumo_presenca", self.aba_resumo_presenca)
+            if cells:
+                # Se encontrou mais de uma célula, escolha a primeira
+                cell = cells[0] if isinstance(cells, list) else cells
+                print("obter_numero_linha_pelo_ID_Ordem numero_linha", cell.row)
+                return cell.row
 
             # Obtenha os valores da coluna ID_Ordem
             coluna_ID_Ordem = "ID_Ordem"
-            # coluna_valores = self.aba_resumo_presenca.get_col(coluna_ID_Ordem)
-            colunas = self.aba_resumo_presenca.get_all_values()[
-                0
-            ]  # Assume que o cabeçalho está na primeira linha
+            colunas = self.aba_Impressao_ChecklistRecebimento.get_all_values()[0]
+
+            if coluna_ID_Ordem not in colunas:
+                raise RuntimeError(f"Coluna '{coluna_ID_Ordem}' não encontrada na planilha.")
+
             indice_coluna = colunas.index(coluna_ID_Ordem)
 
-            coluna_valores = self.aba_resumo_presenca.get_col(
-                indice_coluna + 1
-            )  # Adicione 1 porque os índices de coluna começam em 1
+            coluna_valores = self.aba_Impressao_ChecklistRecebimento.get_col(indice_coluna + 1)
 
             # Verifique se o ID_Ordem está na coluna
             if ID_Ordem not in coluna_valores:
-                print(
-                    "obter_numero_linha_pelo_ID_Ordem ID_Ordem NÃO ENCONTRADO"
-                )
+                print("obter_numero_linha_pelo_ID_Ordem ID_Ordem NÃO ENCONTRADO")
                 return None
 
             # Encontre o número da linha correspondente
-            numero_linha = (
-                coluna_valores.index(ID_Ordem) + 1
-            )  # Adicione 1 porque os índices de linha começam em 1
-            print(
-                "obter_numero_linha_pelo_ID_Ordem numero_linha",
-                numero_linha,
-            )
-            return numero_linha
+            numero_linha = coluna_valores.index(ID_Ordem) + 1
+            print("obter_numero_linha_pelo_ID_Ordem numero_linha", numero_linha)
+            return numero_linha if numero_linha > 0 else None
 
         except Exception as e:
-            logging.error(
-                f"Erro ao obter número da linha pelo nome do funcionário: {str(e)}"
-            )
-            raise RuntimeError(
-                f"Erro ao obter número da linha pelo nome do funcionário: {str(e)}"
-            )
+            print(f"Erro ao obter número da linha pelo ID_Ordem: {str(e)}")
+            raise  # Removendo a captura da exceção para ver o traceback completo
 
-    def adicionar_link_para_linha(
-        self, doc_copiado_id, link_documento_copiado, ID_Ordem
-    ):
+    def adicionar_link_para_linha(self, doc_copiado_id, link_documento_copiado, ID_Ordem):
         print("TONY - adicionar_link_para_linha")
         try:
             # Autorize o acesso usando o arquivo de serviço
@@ -957,51 +1005,39 @@ class GoogleDocsHandler:
             arquivo = credenciais.open_by_url(arquivo_url)
 
             # Selecione a aba correta
-            self.aba_resumo_presenca = arquivo.worksheet_by_title(
+            self.aba_Impressao_ChecklistRecebimento = arquivo.worksheet_by_title(
                 "Impressao_ChecklistRecebimento"
             )
 
             # Verifique se a guia foi encontrada
-            if self.aba_resumo_presenca is None:
-                raise RuntimeError(
-                    "A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha."
-                )
+            if self.aba_Impressao_ChecklistRecebimento is None:
+                raise RuntimeError("A guia 'Impressao_ChecklistRecebimento' não foi encontrada na planilha.")
 
             ID_Ordem = ID_Ordem
             print("TONY - ID_Ordem", ID_Ordem)
 
-            # Obtenha os valores da primeira linha (cabeçalho) para obter os índices das colunas
-            colunas = self.aba_resumo_presenca.get_all_values()[0]
-
-            # Verifique se a guia foi encontrada
-            numero_linha = self.obter_numero_linha_pelo_ID_Ordem(
-                ID_Ordem
-            )
+            # Obtenha o número da linha pelo ID_Ordem
+            numero_linha = self.obter_numero_linha_pelo_ID_Ordem(ID_Ordem)
             print("TONY - numero_linha", numero_linha)
 
             print("Antes do bloco condicional")
             # Se o número da linha for encontrado, adicione o link à coluna N
             if numero_linha is not None:
                 print("Depois do bloco condicional")
-                # Adiciona o link à coluna N da linha especificada
-                coluna_link = "Link_Documento"
+                # Adiciona o link à coluna LINK_PDF_CHECKLIST da linha especificada
+                coluna_link = "LINK_PDF_CHECKLIST"
                 try:
-                    indice_coluna = self.nomes_colunas_resumoFuncionario.index(
-                        coluna_link
-                    )
+                    indice_coluna = self.nomes_colunas_resumoFuncionario.index(coluna_link)
                     print("Depois do bloco condicional", indice_coluna)
-                    self.aba_resumo_presenca.update_value(
+                    self.aba_Impressao_ChecklistRecebimento.update_value(
                         (numero_linha, indice_coluna + 1),
                         link_documento_copiado,
                     )
-                    print(
-                        f"Link adicionado à linha {numero_linha} para o funcionário {ID_Ordem}"
-                    )
+                    print(f"Link adicionado à linha {numero_linha} para o funcionário {ID_Ordem}")
 
                 except ValueError:
-                    logging.error(
-                        f"Erro: Coluna '{coluna_link}' não encontrada na lista de colunas."
-                    )
+                    logging.error(f"Erro: Coluna '{coluna_link}' não encontrada na lista de colunas.")
+
         except pygsheets.exceptions.RequestError as e:
             if "Unable to find sheet" in str(e):
                 logging.error("Erro: Guia não encontrada na planilha.")
@@ -1010,7 +1046,6 @@ class GoogleDocsHandler:
                 # Manipule outras exceções
                 logging.error(f"Erro ao adicionar link à planilha: {str(e)}")
                 raise RuntimeError(f"Erro ao adicionar link à planilha: {str(e)}")
-
 
 # Substitua pelo caminho correto para o seu arquivo de serviço
 service_file_path = os.getcwd() + "/sistemaNortrCromo_googleConsole.json"
@@ -1027,4 +1062,3 @@ google_docs_handler = GoogleDocsHandler()
 
 # Autorize o acesso ao Google Sheets
 google_docs_handler.authorize_sheets(service_file_path)
-
