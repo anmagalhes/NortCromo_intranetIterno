@@ -538,14 +538,19 @@ def impressao_checklists_especificos_Recebimento_f():
         # Adiciona os resultados à resposta JSON, incluindo apenas as colunas desejadas
         resposta_json = {"retorno_especifico": checklists_especificos[colunas_desejadas].fillna('').to_dict(orient="records")}
 
-        # Adiciona os resultados à folha "Impressao_ChecklistRecebimento"
+        # Adiciona os resultados à resposta JSON
         impressao_ChecklistRecebimento_aba = arquivo().worksheet_by_title("Impressao_ChecklistRecebimento")
+
+        # Limpa todos os dados na planilha
         impressao_ChecklistRecebimento_aba.clear()
+
+        # Adicione os dados à folha "Impressao_ChecklistRecebimento"
         impressao_ChecklistRecebimento_aba.set_dataframe(
             pd.DataFrame(resposta_json["retorno_especifico"]), start="A1"
         )
-        
-        # Chame a função para criar a cópia do documento
+
+         # Chame a função para criar a cópia do documento
+        print("Antes de chamar criar_copia_e_processar_documento()")
         if criar_copia_e_processar_documento():
             # Retorna um indicador de sucesso para o frontend
             response = jsonify({"success": True, "message": "Operação concluída com sucesso.", "resultados": resposta_json["retorno_especifico"]})
@@ -553,19 +558,23 @@ def impressao_checklists_especificos_Recebimento_f():
             response = jsonify({"success": False, "message": "Erro ao processar documento."})
 
         response.headers.add('Content-Type', 'application/json')
+        print("Depois de chamar criar_copia_e_processar_documento()")
         return response  # Adicione este retorno
-
-    except Exception as e:
-        # Tratar erros específicos se necessário
-        print(f"Erro ao processar requisição: {str(e)}")
-        response = jsonify({"success": False, "message": str(e)})
-        response.headers.add('Content-Type', 'application/json')
-        return response
     
-    # ........................................////.........................../////.............
+    
+    except Exception as e:
+        print(f"Erro ao carregar checklists específicos: {str(e)}")
+
+        # Retornar um indicador de erro para o front-end
+        return jsonify({"success": False, "error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
+
+# ........................................////.........................../////.............
 @checklists.route("/criar_copia_e_processar_documento", methods=["POST"])
 def criar_copia_e_processar_documento():
+    resultados_processados = []
+
     try:
+        
         # Atribua os valores às variáveis
         modeloId = '1VIrF8PyUYe-DCIeDBv3Nmiy8if7pIPhl9zA7jM50PhE'
         destinoId = '1fstEX_fgNPnzBEeu1szOvZ43AdMTPTjk'
@@ -581,29 +590,26 @@ def criar_copia_e_processar_documento():
 
         # Obtenha os dados da planilha usando o método da classe
         resultados = google_docs_handler.obter_dados_google_sheets()
-        print("NORTH CHOMO -  RESULTADO", resultados)
+        print("TONY RESULTADO", resultados)
 
         # Itera sobre os dados da requisição
         for dados_linha in resultados:
-            print("Antes do bloco condicional")
-            print("TONY - ID_Ordem", dados_linha["ID_Ordem"])
-            
-            try:
-                # Verifique se Nome_funcionario não está vazio ou nulo
-                if dados_linha["ID_Ordem"]:
-                    print("Depois do bloco condicional")
-                    
+           # print("TONY - dados_linha", dados_linha)
+
+            # Verifique se Nome_funcionario não está vazio ou nulo
+            if dados_linha["ID_Ordem"]:
+                try:
                     # Chame a função para criar a cópia do documento
                     doc_copiado_id = google_docs_handler.criar_copia_do_doc(
                         modelo_id, destino_id, dados_linha["ID_Ordem"]
                     )
-                    print("doc_copiado_id", doc_copiado_id)
+                      # Vprint("doc_copiado_id", doc_copiado_id)
 
                     # Obter o link da cópia do documento
                     link_documento_copiado = google_docs_handler.obter_link_documento_copiado(
                         doc_copiado_id
                     )
-                    print("link_documento_copiado", link_documento_copiado)
+                      # Vprint("link_documento_copiado", link_documento_copiado)
 
                     # Adicionar o Link GoogleDoc GoogleSheet
                     google_docs_handler.adicionar_link_para_linha(
@@ -613,13 +619,31 @@ def criar_copia_e_processar_documento():
                     )
                     print("adicionar_link_para_linha")
 
-            except Exception as e:
-                print(f"Erro ao processar documento: {str(e)}")
-                return False  # Retorna False se ocorrer algum erro
+                    # Abrir o documento para edição
+                    google_docs_handler.abrir_documento_para_edicao(
+                        doc_copiado_id, dados_linha
+                    )
 
-        # Retornar True se processamento for bem-sucedido
-        return True
+                    # Armazenar resultados
+                    resultados_processados.append(
+                        {
+                            "doc_copiado_id": doc_copiado_id,
+                            "link_documento_copiado": link_documento_copiado,
+                            "dados_linha": dados_linha,
+                        }
+                    )
+
+                except Exception as e:
+                    # Tratar erros específicos se necessário
+                    print(f"Erro ao processar linha: {str(e)}")
 
     except Exception as e:
-        print(f"Erro ao processar documento: {str(e)}")
-        return False
+        # Tratar erros específicos se necessário
+        print(f"Erro ao processar requisição: {str(e)}")
+        resultados_processados = []  # Garante que a variável seja inicializada
+
+    # Extraia apenas os links de documento copiado da lista resultados_processados
+    links_documentos_copiados = [resultado["link_documento_copiado"] for resultado in resultados_processados]
+
+    # print('TONY NORTHCROMO  - resultados_processados', links_documentos_copiados)
+    return jsonify({"status": "success", "resultados": links_documentos_copiados})
