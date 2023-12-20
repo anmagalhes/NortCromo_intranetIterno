@@ -807,7 +807,7 @@ class GoogleDocsHandler:
             # Substitua os marcadores pelos valores correspondentes
             for pagina in documento["body"]["content"]:
                 if "paragraph" in pagina:
-                    for paragrafo in pagina.get("paragraph", {}).get("elements", []):
+                    for paragrafo in pagina.get("paragraph", {{{}}}).get("elements", []):
                         if "textRun" in paragrafo:
                             # Adicione esta linha para imprimir informações sobre o parágrafo
                             print(f"Parágrafo antes: {paragrafo}")
@@ -817,7 +817,7 @@ class GoogleDocsHandler:
                             print('texto_original', texto_original)
 
                             # Identificar marcadores no formato {{nome_do_marcador}}
-                            marcadores_no_documento = set(re.findall(r"\{\{\s*(.*?)\s*\}\}", texto, flags=re.IGNORECASE))
+                            marcadores_no_documento = set(re.findall(r"\s*(.*?)\s*\}\}", texto, flags=re.IGNORECASE))
                             marcadores_no_mapeamento = set(mapeamento_campos.values())
 
                             marcadores_faltando = marcadores_no_documento - marcadores_no_mapeamento
@@ -848,8 +848,7 @@ class GoogleDocsHandler:
                                 texto_original = paragrafo["textRun"]["content"]
 
                                 # Identificar marcadores no formato {{nome_do_marcador}}
-                                marcadores_no_documento = set(re.findall(r"\{\{\s*(.*?)\s*\}\}", texto_original, flags=re.IGNORECASE))
-
+                                marcadores_no_documento = set(re.findall(r"\s*(.*?)\s*\}\}", texto_original, flags=re.IGNORECASE))
                                 if marcador in marcadores_no_documento:
                                     # Substitua o marcador pelo valor correspondente
                                     texto_original = texto_original.replace(f"{{{{{marcador}}}}}", str(valor))
