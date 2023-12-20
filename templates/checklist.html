@@ -116,7 +116,7 @@
         <div class="col-md-4">
           <button
             id="seuBotaoId"
-            onclick="generatePDFsForSelectedOperations()"
+            onclick="processarLinksNoApScript()"
             class="btn btn-block button-height"
             style="
               background-color: #4caf50;
@@ -161,10 +161,9 @@
 
      // Varivavel para o ApiScript
  var minhaUrl =
-       'https://script.google.com/macros/s/AKfycbyGaRLwpsR78fBEO_0QDiDY070H6Uq0k-o3yBw_EhXNK8cJcNO2AUdLATGSfUkexBWUyQ/exec'
-    
-    
-       function formatarParaFormatoInput(dataFormatada) {
+       'https://script.google.com/macros/s/AKfycbxamqHw9y5LlAb39TzLgp7dtymZIura1zWcO8XrPz2pEktMnIW_WxITVGugmeCUcpEmbw/exec'
+  
+      function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
 }
@@ -1285,15 +1284,27 @@ function responseHandler(data) {
     // Adicione um console log para ver a resposta completa
     console.log('Resposta completa do ApScript: responseHandler', data);
     
-    var parsedData = JSON.parse(data);
+    var parsedData;
+
+    // Verifica se data é uma string antes de fazer o parsing
+    if (typeof data === 'string') {
+      // Se for uma string, cria um objeto com a propriedade pdfLinks
+      parsedData = { success: true, pdfLinks: data };
+    } else {
+      parsedData = JSON.parse(data);
+    }
+
     console.log('NORTH CROMO - Resposta do ApScript:', parsedData);
 
-    if (parsedData.success && Array.isArray(parsedData.pdfLinks) && parsedData.pdfLinks.length) {
-      parsedData.pdfLinks.forEach((linkInfo, i) => {
+    if (parsedData.success) {
+      // Se pdfLinks for uma string (um link direto), cria um array de objeto
+      const linksArray = typeof parsedData.pdfLinks === 'string' ? [{ nomeDocumento: 'Documento', linkPDF: parsedData.pdfLinks }] : parsedData.pdfLinks;
+
+      linksArray.forEach((linkInfo, i) => {
         console.log(`Link ${i + 1} - Nome do Documento: ${linkInfo.nomeDocumento}, Link PDF: ${linkInfo.linkPDF}`);
       });
 
-      const linkGeradoPDF = parsedData.pdfLinks[0].linkPDF;
+      const linkGeradoPDF = parsedData.pdfLink;
       console.log("Link gerado do PDF:", linkGeradoPDF);
 
       // Chame a função de sucesso para gerar os PDFs
@@ -1310,7 +1321,6 @@ function responseHandler(data) {
     handleError('Erro ao processar a resposta do ApScript.');
   }
 }
-
 
 
 function showSuccessAlert(message) {
@@ -1394,11 +1404,11 @@ function onSuccessGeneratePDFs(data) {
 
   try {
     const parsedData = typeof data === 'object' ? data : JSON.parse(data);
-    
+
     console.log('Parsed Data:', parsedData);
 
     if (!parsedData.success || !parsedData.pdfLinks || !Array.isArray(parsedData.pdfLinks) || parsedData.pdfLinks.length === 0) {
-      console.error("Erro: Resposta inesperada do servidor.");
+      console.error("Erro: NORTH CROMO - Resposta inesperada do servidor.");
       handleError("Erro: Resposta inesperada do servidor.");
       return;
     }
@@ -1416,13 +1426,16 @@ function onSuccessGeneratePDFs(data) {
     // Limpar os links antigos antes de adicionar novos
     linksContainer.innerHTML = "";
 
-    parsedData.pdfLinks.forEach((link, index) => {
+    parsedData.pdfLinks.forEach((linkData, index) => {
+      // Se for uma string, assumimos que é um URL diretamente
+      const link = typeof linkData === 'string' ? linkData : linkData.linkPDF;
+
       const linkElem = document.createElement("a");
-      linkElem.href = link.linkPDF;
+      linkElem.href = link;
       linkElem.target = "_blank";
       linkElem.innerHTML = `<i class="fas fa-file-pdf"></i> Abrir PDF ${index + 1}`;
       linkElem.className = "pdfLink d-block mb-2";
-      
+
       linksContainer.appendChild(linkElem);
     });
 
