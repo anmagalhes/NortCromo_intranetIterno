@@ -116,7 +116,7 @@
         <div class="col-md-4">
           <button
             id="seuBotaoId"
-            onclick="processarLinksNoApScript()"
+            onclick="generatePDFsForSelectedOperations()"
             class="btn btn-block button-height"
             style="
               background-color: #4caf50;
@@ -153,6 +153,7 @@
   </div>
 
     <div id="pdfLinksContainer"></div>
+
     <div id="linksContainer" class="container"></div>
   </body>
 
@@ -160,10 +161,13 @@
 
      // Varivavel para o ApiScript
  var minhaUrl =
-       'https://script.google.com/macros/s/AKfycbzNFXpZ1kvTYqSrEMvk2CLGUOvu1JtlDxDzrT7MR9i3G3CUkfTKTfoxpVaMuXVwnIvkfg/exec'
+       'https://script.google.com/macros/s/AKfycbzGVqhYV77EFPG2r36j5DRLivdVIpwkWJvlsTkqwQRfBnsnUXFGaodCJMl6rrK6vlfBCQ/exec'
+
+
+
+ 
     
-    
-   function formatarParaFormatoInput(dataFormatada) {
+       function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
 }
@@ -505,6 +509,7 @@ $(window).on('beforeunload', function() {
   }
 
   let parsedData;
+
   try {
   // Verifica se os dados já são um array
   if (Array.isArray(data.retorno_especifico)) {
@@ -1210,7 +1215,6 @@ function generatePDFsForSelectedOperations() {
               console.log('data.resultados', data.resultados);
               if (data.success === true && data.resultados.length > 0) {
                  processarLinksNoApScript();
-                  //responseHandler(data);
                 } else {
                       // Ocultar o alerta de carregamento
                       hideLoadingAlert();
@@ -1239,13 +1243,13 @@ try {
     },
     url: minhaUrl,
   })
-  .done(handleSuccess)
+  .done(responseHandler)
   .fail(errorHandler)
   .always(hideLoadingAlert);
-} catch (error) {
-  console.error('Erro ao executar o bloco try:', error);
-  // Aqui você pode adicionar uma mensagem de alerta ou realizar outras ações conforme necessário
-}
+  } catch (error) {
+    console.error('Erro ao executar o bloco try:', error);
+    // Aqui você pode adicionar uma mensagem de alerta ou realizar outras ações conforme necessário
+  }
 }
 
 function handleSuccess(data) {
@@ -1254,19 +1258,19 @@ function handleSuccess(data) {
 
     let parsedData = JSON.parse(data);
 
-     console.log('Tipo de parsedData:', typeof parsedData);
-     console.log('parsedData.success:', parsedData.success);
+    console.log('Tipo de parsedData:', typeof parsedData);
+    console.log('parsedData.success:', parsedData.success);
 
     if (parsedData && parsedData.success && Array.isArray(parsedData.pdfLinks) && parsedData.pdfLinks.length) {
       parsedData.pdfLinks.forEach((linkInfo, i) => {
         console.log(`Link ${i + 1} - Nome do Documento: ${linkInfo.nomeDocumento}, Link PDF: ${linkInfo.linkPDF}`);
       });
 
-      const linkGeradoPDF = parsedData.pdfLinks[0].linkPDF;
-      console.log("Link gerado do PDF:", linkGeradoPDF);
-
       // Atualizar a variável global 'links' com os novos links
       links = parsedData.pdfLinks;
+
+      // Chama a função responseHandler(data)
+      responseHandler(data);
 
       // Agora você pode usar a variável 'links' conforme necessário
     } else {
@@ -1279,6 +1283,38 @@ function handleSuccess(data) {
   }
 }
 
+function responseHandler(data) {
+  try {
+    // Adicione um console log para ver a resposta completa
+    console.log('Resposta completa do ApScript: responseHandler', data);
+    
+    var parsedData = JSON.parse(data);
+    console.log('NORTH CROMO - Resposta do ApScript:', parsedData);
+
+    if (parsedData.success && Array.isArray(parsedData.pdfLinks) && parsedData.pdfLinks.length) {
+      parsedData.pdfLinks.forEach((linkInfo, i) => {
+        console.log(`Link ${i + 1} - Nome do Documento: ${linkInfo.nomeDocumento}, Link PDF: ${linkInfo.linkPDF}`);
+      });
+
+      const linkGeradoPDF = parsedData.pdfLinks[0].linkPDF;
+      console.log("Link gerado do PDF:", linkGeradoPDF);
+
+      // Chame a função de sucesso para gerar os PDFs
+      onSuccessGeneratePDFs(data);
+
+      // Notifique o usuário sobre a conclusão
+      notifyCompletion();
+    } else {
+      console.error("Erro: Resposta inesperada do servidor.");
+      handleError("Erro: Resposta inesperada do servidor.");
+    }
+  } catch (error) {
+    console.error('Erro ao analisar JSON:', error);
+    handleError('Erro ao processar a resposta do ApScript.');
+  }
+}
+
+
 
 function showSuccessAlert(message) {
   Swal.fire({
@@ -1289,18 +1325,6 @@ function showSuccessAlert(message) {
     confirmButtonText: "Entendi!",
   });
 }
-
-function responseHandler(data) {
-        console.log(data);
-        if (data.success) {
-          showSuccessAlert("Os PDFs estão prontos para ser impressos!");
-          onSuccessGeneratePDFs(data);
-          notifyCompletion(); // Notifique o usuário aqui
-        } else {
-          console.error("Erro: Resposta inesperada do servidor.");
-          handleError("Erro: Resposta inesperada do servidor.");
-        }
-      }
 
 function errorHandler(jqXHR, textStatus, errorThrown) {
   handleError("Erro ao gerar os PDFs.");
@@ -3113,7 +3137,9 @@ function updateTableChecklist_pedentes(retorno_especifico) {
   }
 
   function exibirLinksPDF(pdfLinks) {
-      const linksContainer = $("#documentos-container");
+    console.log("exibirLinksPDF");
+
+      const linksContainer = $("#pdfLinksContainer");
       linksContainer.empty(); // Limpar links antigos
 
       pdfLinks.forEach((pdfInfo, index) => {

@@ -549,7 +549,7 @@ def impressao_checklists_especificos_Recebimento_f():
             pd.DataFrame(resposta_json["retorno_especifico"]), start="A1"
         )
 
-         # Chame a função para criar a cópia do documento
+        # Chame a função para criar a cópia do documento
         print("Antes de chamar criar_copia_e_processar_documento()")
         if criar_copia_e_processar_documento():
             # Retorna um indicador de sucesso para o frontend
