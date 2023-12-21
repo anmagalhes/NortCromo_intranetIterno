@@ -4,6 +4,7 @@
   {% include 'head.html' %}
 
 <head>
+
   <style>
 
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
@@ -81,7 +82,7 @@
     }
     }
   </style>
-  <title>Checklist - Recebimento</title>
+  <title>Novas Tarefas</title>
 </head>
   <body>
     <div class="header">
@@ -89,7 +90,7 @@
         src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
         alt="Logo da Empresa"
       />
-      RELATÓRIO CHECKLIST - <span>NOTH CROMO</span>
+      NOVAS TAREFAS - <span>NOTH CROMO</span>
     </div>
 
     <link
@@ -113,63 +114,233 @@
 
         <!-- Campo Data de Recebimento -->
         <div class="col-md-4 mb-3">
-          <label for="dataRecebimento_inicial" class="custom-label">Data de Recebimento Inicial</label>
+          <label for="dataLancamento" class="custom-label">Data de Lançamento</label>
           <input
-              id="dataRecebimento_inicial"
+              id="dataLancamento"
               type="date"
               class="form-control"
           />
       </div>
 
-
       <!-- Campo Data de Recebimento -->
       <div class="col-md-4 mb-3">
-        <label for="dataRecebimento_Final" class="custom-label">Data de Recebimento Final</label>
+        <label for="client-name" class="custom-label">Nome do Cliente</label>
         <input
-            id="dataRecebimento_final"
-            type="date"
+            id="client-name"
+            type="text"
             class="form-control"
         />
     </div>
-
       </div>
 
-      <div class="row mt-2">
+      <!-- Seção de Quantidade, Código do Produto, Descrição do Produto e Operação -->
+    <div class="row">
+        <div class="col-md-2">
+            <label for="quantidade" class="custom-label">Quantidade</label>
+            <input
+            id="quantidade"
+            type="number"
+            class="form-control"
+            placeholder="Quantidade"
+            value="1" 
+            min="1" 
+        />
+        </div>
+
+        <div class="col-md-3">
+            <!-- Campo de entrada para o código do produto -->
+            <label for="codigoProduto" class="custom-label">Código do Produto</label>
+            <div class="input-group">
+                <input
+                    id="codigoProduto"
+                    type="text"
+                    class="form-control"
+                    placeholder="Produto ou serviço"
+                    oninput="onProductCodeInput()"
+                />
+                <div class="input-group-append">
+                    <button
+                        onclick="fetchProductsAndOpenForm()"
+                        class="btn btn-outline-secondary"
+                        style="background-color: blue; border-color: blue;"
+                        title="Pesquisar Produto"
+                    >
+                        <i class="material-icons" style="color: white;">search</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <div class="col-md-4">
-          <button
-            id="seuBotaoId"
-            onclick="generatePDFsForSelectedOperations()" 
+            <label for="descricaoProduto" class="custom-label">Desc Serviço/ Produto / Tarefa</label>
+            <textarea
+                id="descricaoProduto"
+                class="form-control"
+            ></textarea>
+        </div>
+        <div class="col-md-3">
+            <label for="operacao" class="custom-label">Operação</label>
+            <input
+                id="operacao"
+                type="text"
+                class="form-control"
+                placeholder="Operação"
+            />
+        </div>
+    </div>
+
+    <!-- Seção de Observações -->
+    <div class="col-md-12 mb-3">
+        <label for="queixaCliente" class="custom-label">Observação:</label>
+        <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+      </div>
+
+    <!-- Seção de Lista de Produtos (está escondida inicialmente) -->
+    <div id="form" class="form-group" style="display: none">
+        <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
+        <input
+            id="filtroProdutos"
+            type="text"
+            class="form-control"
+            oninput="filterProducts(this.value)"
+            placeholder="Digite o código ou nome > Depois para Lista Selecionar o Produto ou Serviço"
+        />
+        <label for="listaProdutos" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
+        <select
+            id="listaProdutos"
+            onchange="selectProduct()"
+            class="form-control"
+        ></select>
+    </div>
+
+    <!-- Campos ocultos somente para parâmetros -->
+    <input type="text" id="inputIDORDEM" placeholder="IDORDEM" style="display: none;" />
+    <input type="text" id="inputIDPRODUTO" placeholder="IDPRODUTO" style="display: none;" />
+
+    <input type="text" id="input1" style="display: none;" />
+    <input type="text" id="input2" style="display: none;" />
+    <input type="text" id="input3" style="display: none;" />
+
+    <!-- Seção para mostrar o valor da operação (está escondida inicialmente) -->
+    <div id="resultado" class="form-group" style="display: none;">
+        <label for="valorOperacao" class="custom-label">Op</label>
+    </div>
+
+
+    <div class="row mt-2">
+        <!-- Botão Adicionar -->
+        <div class="col-md-4">
+            <button
+                id="btnAdd"
+                onclick="addRow()" 
+                class="btn btn-block button-height"
+                style="
+                    background-color: #555;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                "
+            >
+                <span class="material-icons" style="margin-right: 8px">add</span>
+                Adicionar
+            </button>
+        </div>
+
+<!-- Tabela para exibir itens adicionados-->
+    <!-- Botão Adicionar -->
+    <div class="col-md-4">
+        <button
+            id="deleteRowsBtn"
+            onclick="deleteSelectedRows()" 
             class="btn btn-block button-height"
             style="
-              background-color: #4caf50;
-              color: white;
-              padding: 10px 20px;
-              border: none;
-              border-radius: 25px;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              width: 100%;
+                background-color:  #f44336;;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                width: 100%;
             "
-          >
-            <span class="material-icons" style="margin-right: 8px">cloud_download</span>
-            GERA PDFs
-          </button>
-        </div>
-      </div>
+        >
+            <span class="material-icons" style="margin-right: 8px">delete</span>
+             Excluir Linhas
+        </button>
     </div>
+    
+        <!-- Botão Salvar -->
+        <div class="col-md-4">
+            <button
+                id="btnSave"
+                onclick="confirmClose()" 
+                class="btn btn-block button-height"
+                style="
+                    background-color: #4caf50;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                "
+            >
+                <span class="material-icons" style="margin-right: 8px">save</span>
+                Salvar
+            </button>
+        </div>
+    </div>
+    
+</div>
+
 
     <datalist id="numerosDeControle"></datalist>
 
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Você tem certeza que quer fechar a página?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="google.script.run.confirmClose()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Tabela Tabular   onclick="generatePDFsForSelectedOperations()"  -->
     <div class="table-responsive myTable table-wrapper scrollable-content">
       <div id="table_checklist" class="tabulator myTable"></div>
     </div>
 
-    <div id="pdfLinksContainer"></div>
+ 
+    <select id="dateFilterDropdown">
+        <!-- As opções serão preenchidas pelo JavaScript -->
+    </select>
+          <!--Lista supresa no campo  -->
+        <datalist id="numerosDeControle">
+              <!-- As opções serão adicionadas aqui pelo JavaScript -->
+        </datalist>
 
-    <div id="linksContainer" class="container"></div>
+
+
   </body>
 
   <script>
@@ -178,16 +349,16 @@
  var minhaUrl =
         'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
     
-    
-    var globalIdOrdem = null
-    window.onbeforeunload = function() {
-        globalIdOrdem = null;
-    };
+   function autoResize(element) {
+  element.style.height = 'auto';
+  element.style.height = (element.scrollHeight) + 'px';
 
-    // ARMANEZAR OS DADOS
-    var allProducts = [];
-    
+    // Converter para maiúsculas
+    elemento.value = elemento.value.toUpperCase();
 
+};
+
+    
     function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
@@ -338,9 +509,6 @@ $(window).on('beforeunload', function() {
 
     // Formata a data para o formato DD/MM/AAAA
     const dataFormatada = `${dia}/${mes}/${ano}`;  
-
-    document.getElementById('dataRecebimento_inicial').value = formatarParaFormatoInput(dataFormatada);
-
     // Retorna a data formatada
     return dataFormatada;
 }
@@ -356,7 +524,7 @@ function getDataFinal() {
     // Formata a data para o formato DD/MM/AAAA
     const dataFormatada_Final = `${dia}/${mes}/${ano}`;  
 
-    document.getElementById('dataRecebimento_final').value = formatarParaFormatoInput(dataFormatada_Final);
+    document.getElementById('dataLancamento').value = formatarParaFormatoInput(dataFormatada_Final);
 
     // Retorna a data formatada
     return dataFormatada_Final;
@@ -364,7 +532,7 @@ function getDataFinal() {
 
     $(document).ready(function () {
       //initializeTable_Checklist_pedentes();
-      getDataAtual();
+      //getDataAtual();
       getDataFinal();
       inicializarTabela();
       initializeTable();
@@ -2946,7 +3114,7 @@ console.log('Relatorio_Checklits_pedentes')
 
 try {
     $.ajax({
-        url: my_url() + "selecionar_checklists_especificos",
+        url: my_url() + "selecionar_novas_tarefas_Checklist",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({

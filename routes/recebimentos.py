@@ -263,3 +263,42 @@ def numeroControles_Unicos_f():
     
     except Exception as e:
         return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})
+    
+@recebimentos.route("/numeroControles_Unicos_Filtros", methods=["POST"])
+def numeroControles_Unicos_Filtros_f():
+    try:
+        # Obter o período inicial e final do corpo da requisição
+        data_inicial_frontend = request.json["data_inicial"]
+        data_final_frontend = request.json["data_final"]
+ 
+        # Convertendo as datas do frontend
+        data_inicial = converter_data_frontend(data_inicial_frontend)
+        data_final = converter_data_frontend(data_final_frontend)
+
+        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = recebimentos_aba.get_all_values()
+        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+             
+        # Seleciona apenas as colunas desejadas
+        colunas_desejadas = ["ID", "ID_Ordem, DataRec_OrdemServiços"]
+        df_selecionado = df_recebimentos[colunas_desejadas]
+
+        # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
+        df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+        # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
+        df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
+
+        # Filtra os registros com base no período fornecido
+        df_selecionado  = df_recebimentos[(df_recebimentos["DataRec_OrdemServiços"] >= data_inicial) & (df_recebimentos["DataRec_OrdemServiços"] <= data_final) & (df_selecionado["ID_Ordem"].notna()) & (df_selecionado["ID_Ordem"] != "")]
+        
+        # Filtra os registros onde a coluna "Recebimento" é diferente de vazio ou nulo
+        recebimentos_ok = df_selecionado[df_selecionado["ID"].notna()]
+
+        # Converte o DataFrame resultante para um dicionário
+        recebimentos_lista2 =recebimentos_ok.to_dict(orient="records")
+
+        # print("Clientes carregados com sucesso:", clientes_lista)
+        return jsonify({"retorno_especifico": recebimentos_lista2})
+    
+    except Exception as e:
+        return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})
