@@ -73,7 +73,12 @@ def selecionar_novas_tarefas_Checklist_f():
             (df_checklist_recebimento["ID_Recebimento"] != "") &
             (~df_checklist_recebimento["ID_Recebimento"].isin(df_NovasTarefas["ID_Recebimento"]))
         ]
-        
+    
+        # Adicione prints para verificar os tamanhos dos DataFrames
+        print("Tamanho df_checklist_recebimento:", len(df_checklist_recebimento))
+        print("Tamanho df_NovasTarefas:", len(df_NovasTarefas))
+        print("Tamanho novastarefas_checklist_filtrados:", len(novastarefas_checklist_filtrados))
+                
         # Ordena os ID_Recebimento pelo numero Ordem
         novastarefas_checklist_filtrados = novastarefas_checklist_filtrados.sort_values(by="ID_Recebimento")
 
@@ -98,13 +103,9 @@ def selecionar_novas_tarefas_Checklist_f():
         # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
         df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
     
-    
         # Adiciona a coluna Nome_cliente ao DataFrame novastarefas_checklist_filtrados
-        # após o merge
         novastarefas_checklist_filtrados["ID_Ordem"] = novastarefas_checklist_filtrados["ID_Ordem"].fillna('')
-        
-        # print('novastarefas_checklist_filtrados', novastarefas_checklist_filtrados)
-
+ 
         # Pega os IDs dos Ordem Recebimento únicos
         ids_clientes_unicos = novastarefas_checklist_filtrados["ID"].unique()
 
@@ -116,14 +117,10 @@ def selecionar_novas_tarefas_Checklist_f():
         # Filtra os clientes usando os IDs únicos
         clientes_selecionados = df_clientes[df_clientes["ID"].isin(ids_clientes_unicos)][["ID", "Nome_cliente"]]
 
-         #print("Clientes Selecionados:")
-         #print(clientes_selecionados)
-
         # Realiza o merge com os checklists
         novastarefas_checklist_filtrados = pd.merge(novastarefas_checklist_filtrados, clientes_selecionados, left_on="ID", right_on="ID", how="left")
-    
-        # Adiciona a coluna Nome_cliente ao DataFrame novastarefas_checklist_filtrados
-        # após o merge
+       
+        # Adiciona a coluna Nome_cliente ao DataFrame novastarefas_checklist_filtrados após o merge
         novastarefas_checklist_filtrados["Nome_cliente"] = novastarefas_checklist_filtrados["Nome_cliente"].fillna('')
 
         # Pega os IDs dos produtos únicos
@@ -136,9 +133,6 @@ def selecionar_novas_tarefas_Checklist_f():
 
         # Filtra os produtos usando os IDs únicos
         produtos_selecionados = df_produtos[df_produtos["Cod_Produto"].isin(ids_produtos_unicos)][["Cod_Produto", "nome_produto", "idGrupo", "idoperacaoServico", "ID_Componente", "ID_PostoTrabalho"]]
-
-         #print("Produtos Selecionados:")
-         #print(produtos_selecionados)
 
         # Realiza o merge com os checklists
         novastarefas_checklist_filtrados = pd.merge(novastarefas_checklist_filtrados, produtos_selecionados, on="Cod_Produto", how="left")
@@ -153,9 +147,6 @@ def selecionar_novas_tarefas_Checklist_f():
 
         # Filtra os grupos usando os IDs únicos
         grupos_selecionados = df_grupos[df_grupos["Id"].isin(ids_grupos_unicos)][["Id", "nome"]]
-
-         #print("Grupos Selecionados:")
-         #print(grupos_selecionados)
 
          # Realiza o merge com os checklists
         novastarefas_checklist_filtrados = pd.merge(novastarefas_checklist_filtrados, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
@@ -178,8 +169,6 @@ def selecionar_novas_tarefas_Checklist_f():
         operacoes_selecionadas["grupo_Processo"] = operacoes_selecionadas["grupo_Processo"].fillna('')
         operacoes_selecionadas["nome_operacao"] = operacoes_selecionadas["nome_operacao"].fillna('')
 
-         #print("Operações Selecionadas:")
-         #print(operacoes_selecionadas)
    
         # Pega os IDs das componetes únicas
         ids_componetes_unicas = novastarefas_checklist_filtrados["ID_Componente"].unique()
@@ -195,13 +184,104 @@ def selecionar_novas_tarefas_Checklist_f():
         # Preenche os valores nulos em "nome_operacao"
         componetes_selecionadas["nome_Componente"] = componetes_selecionadas["nome_Componente"].fillna('')
         
-        # Converta o DataFrame resultante para um dicionário
-        novastarefas_checklist_filtrados_dict = novastarefas_checklist_filtrados.to_dict(orient="records")
+        # Agrupa pelos IDs únicos e seleciona apenas a primeira linha
+        primeira_linha_checklist = novastarefas_checklist_filtrados.groupby("ID_Checklist").first().reset_index()
 
-        # Adiciona os resultados à resposta JSON
-        return jsonify({"novastarefas_checklist_filtrados": novastarefas_checklist_filtrados_dict})
+        # Seleciona apenas as colunas necessárias para visualização do usuário
+        colunas_resumidas = ["ID_Checklist"]
+        checklist_resumido = primeira_linha_checklist[colunas_resumidas]
+
+        # Converta o DataFrame resultante para um dicionário
+        checklist_resumido_dict = checklist_resumido.to_dict(orient="records")
+
+        # Converta o DataFrame original para um dicionário
+        novastarefas_checklist_filtrados_dict = novastarefas_checklist_filtrados.to_dict(orient="records")
+        
+         # Adiciona os resultados à resposta JSON
+        return jsonify({
+            "checklist_resumido": checklist_resumido_dict,
+            "retorno_especifico": novastarefas_checklist_filtrados_dict
+        })
+
+    except ValueError as ve:
+        # Captura de erro específica para ID_Recebimento ausente
+        return jsonify({"error": str(ve)})
 
     except Exception as e:
+        # Captura de erro genérico
+        print(f"Erro ao carregar checklists específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
+    
+@novas_Tarefas.route("/selecionar_novas_tarefas_Checklist_resumido", methods=["POST"])
+def selecionar_novas_tarefas_Checklist_resumido():
+    try:
+        # Carrega os dados da folha "NovasTarefas2"
+        NovasTarefas_aba = arquivo().worksheet_by_title("NovasTarefas2")
+        dados_NovasTarefas = NovasTarefas_aba.get_all_values()
+        df_NovasTarefas = pd.DataFrame(data=dados_NovasTarefas[1:], columns=dados_NovasTarefas[0])
+        
+        # Filtra os registros da folha "ChecklistRecebimento2" com base no status e ID_Recebimento
+        checklist_recebimento_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
+        dados_checklist_recebimento = checklist_recebimento_aba.get_all_values()
+        df_checklist_recebimento = pd.DataFrame(data=dados_checklist_recebimento[1:], columns=dados_checklist_recebimento[0])
+        
+        # Filtra os registros com base no status e ID_Recebimento
+        novastarefas_checklist_filtrados = df_checklist_recebimento[
+            (df_checklist_recebimento["Status_Checklist"] == "FINALIZADO") &
+            (df_checklist_recebimento["ID_Recebimento"].notna()) &
+            (df_checklist_recebimento["ID_Recebimento"] != "0") &
+            (df_checklist_recebimento["ID_Recebimento"] != "") &
+            (~df_checklist_recebimento["ID_Recebimento"].isin(df_NovasTarefas["ID_Recebimento"]))
+        ]
+    
+        # Adicione prints para verificar os tamanhos dos DataFrames
+        print("Tamanho df_checklist_recebimento:", len(df_checklist_recebimento))
+        print("Tamanho df_NovasTarefas:", len(df_NovasTarefas))
+        print("Tamanho novastarefas_checklist_filtrados:", len(novastarefas_checklist_filtrados))
+                
+        # Ordena os ID_Recebimento pelo numero Ordem
+        novastarefas_checklist_filtrados = novastarefas_checklist_filtrados.sort_values(by="ID_Recebimento")
+
+        # Pega os IDs dos Ordem Recebimento únicos
+        ids_recebimentos_unicos = novastarefas_checklist_filtrados["ID_Recebimento"].unique()
+
+        # Carrega os dados da folha "Recebimento"
+        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = recebimentos_aba.get_all_values()
+        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+
+        # Filtra os Recebimento usando os IDs únicos
+        recebimento_selecionados = df_recebimentos[df_recebimentos["ID"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
+
+
+        # Realiza o merge com os checklists
+        novastarefas_checklist_filtrados = pd.merge(novastarefas_checklist_filtrados, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
+
+        # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
+        df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+        # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
+        df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
+    
+        # Adiciona a coluna Nome_cliente ao DataFrame novastarefas_checklist_filtrados
+        novastarefas_checklist_filtrados["ID_Ordem"] = novastarefas_checklist_filtrados["ID_Ordem"].fillna('')
+
+        # Seleciona apenas as colunas desejadas
+        checklist_resumido_NumeroControle = novastarefas_checklist_filtrados[["ID_Recebimento", "ID_Ordem"]]
+
+        # Converte o DataFrame resumido para um dicionário
+        checklist_resumido_NumeroControle_dict = checklist_resumido_NumeroControle.to_dict(orient="records")
+
+        # Adiciona os resultados à resposta JSON
+        return jsonify({
+            "checklist_resumido": checklist_resumido_NumeroControle_dict,
+        })
+
+    except ValueError as ve:
+        # Captura de erro específica para ID_Recebimento ausente
+        return jsonify({"error": str(ve)})
+
+    except Exception as e:
+        # Captura de erro genérico
         print(f"Erro ao carregar checklists específicos: {str(e)}")
         return jsonify({"error": f"Erro ao carregar checklists específicos: {str(e)}", "traceback": traceback.format_exc()})
 

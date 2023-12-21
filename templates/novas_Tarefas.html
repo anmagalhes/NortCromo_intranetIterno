@@ -537,21 +537,10 @@ function getDataFinal() {
       inicializarTabela();
       initializeTable();
       onPaginaCarregada();
+      selecionar_produtos();
       setupEventListeners();
+      
       console.log("Documento carregado e pronto!");
-
-    // Ocultar informações específicas das TABs 2 e 3
-     // $('#data_inicial_recebimento, #data_final_recebimento').hide();
-    // Também oculte os rótulos, se necessário
-     // $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
-
-     //setDataFinal_Geral();
-     //horaSistema();
-     //selecionar_clientes();
-     //selecionar_produtos();
-
-    // carregarValorSeg();
-    //Lista_recebimento();
 
     // Formatar campo de telefone
     $('#telefone').keyup(function () {
@@ -572,7 +561,18 @@ function getDataFinal() {
     $(this).removeClass('filled');
     }
     });
-        
+
+    // Adicionar descrição e operação pela função para atualizar campos
+    $("#codigoProduto").on("change", function () {
+            // Obtenha o valor digitado
+            var codigoProduto = $(this).val();
+            // Chame a função para atualizar campos
+            atualizarCamposProduto(codigoProduto);
+        });
+
+        var codigoProdutoAutomatico = $("#codigoProduto").val();
+        atualizarCamposProduto(codigoProdutoAutomatico);
+
             $(".scrollable-content").perfectScrollbar();
               
               });
@@ -585,6 +585,50 @@ function getDataFinal() {
     elemento.value = elemento.value.toUpperCase();
 
     };
+
+
+function selecionar_produtos() {
+console.log('Relatorio_Checklits_pedentes')
+try {
+    $.ajax({
+        url: my_url() + "selecionar_novos_produtos",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+        }),
+    })
+    .done(function (data) {
+      let dados_novos_produtos = data.novos_produtos;
+      console.log("dados_novos_produtos:", dados_novos_produtos);
+
+    // Chame a função para atualizar campos
+    atualizarCamposProduto(codigoProduto);
+      
+    })
+    .fail(function (xhr, status, error) {
+        console.error("Erro ao buscar dados consolidados:", error);
+        console.log("Status da requisição:", status);
+        console.log("Resposta do servidor:", xhr.responseText);
+    });
+} catch (error) {
+    console.error("Erro ao executar a função: " + error);
+}
+}
+    // Função para atualizar campos com dados de produtos
+    function atualizarCamposProduto(codigoProduto) {
+            // Encontre o produto pelo código na lista já carregada
+            var produtoEncontrado = dados_novos_produtos.find(function (produto) {
+                return produto.Cod_Produto === codigoProduto;
+            });
+
+            // Se o produto foi encontrado, atualize os campos
+            if (produtoEncontrado) {
+                $("#descricaoProduto").val(produtoEncontrado.nome_produto);
+                $("#operacao").val(produtoEncontrado.nome);
+            } else {
+                console.log("Produto não encontrado.");
+            }
+        }
 
     function showAlert(message) {
       Swal.fire({
@@ -3111,19 +3155,26 @@ function updateTableData(data) {
 // Função para carregar a lista de obras
 function Relatorio_Checklits_pedentes_Inicial() {
 console.log('Relatorio_Checklits_pedentes')
-
 try {
     $.ajax({
-        url: my_url() + "selecionar_novas_tarefas_Checklist",
+        url: my_url() + "selecionar_novos_produtos",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({
         }),
     })
     .done(function (data) {
-      let dados = data.retorno;
-      console.log("carregarDados Checklists_especificos:", dados);
-      updateTableData(data);
+      //let dados = data.checklist_resumido;
+      let dados_resumidos = data.checklist_resumido;
+      let dados_especificos = data.retorno_especifico;
+      let dados_novos_produtos = data.novos_produtos;
+
+      console.log("Dados Checklists Resumidos:", dados_resumidos);
+      console.log("Dados Checklists Específicos:", dados_especificos);
+      console.log("Dados Checklists Específicos:", dados_novos_produtos);
+      
+      //console.log("carregarDados Checklists_especificos:", dados);
+      //updateTableData(data);
     })
     .fail(function (xhr, status, error) {
         console.error("Erro ao buscar dados consolidados:", error);
@@ -3134,6 +3185,23 @@ try {
     console.error("Erro ao executar a função: " + error);
 }
 }
+ // Função para obter detalhes do produto
+ function obterDetalhesProduto(codigoProduto) {
+        // Faça uma requisição AJAX para obter os detalhes do produto
+        $.ajax({
+            url: "/obter_detalhes_produto",  // Substitua pelo URL apropriado no Flask
+            method: "POST",
+            data: {codigoProduto: codigoProduto},
+            success: function (data) {
+                // Atualize os campos com os dados obtidos
+                $("#descricaoProduto").val(data.nome_produto);
+                $("#operacao").val(data.nome);
+            },
+            error: function (error) {
+                console.log("Erro ao obter detalhes do produto:", error);
+            }
+        });
+    }
 
 // Função para carregar a lista de obras
 function Relatorio_Checklits_pedentes() {
@@ -3498,6 +3566,90 @@ function exibirMensagemUsuario(mensagem) {
         mensagemElem.remove();
     }, 5000);
 }
+
+
+// ----------------------- PESQUISA -----------------------
+
+function onProductSelected() {
+    var productCode = document.getElementById("product-list").value;
+    document.getElementById("product-search").value = productCode;  // Atualiza o campo de pesquisa com o código do produto selecionado
+    console.log("fillProductList chamado com:", productCode);
+    onProductCodeInput();  // Chama a função
+}
+
+
+        //  TESTE - FILTRAR O PRODUTO CONFORME DIGITADO
+          function filterProducts(inputValue) {
+          var filteredProducts = allProducts.filter(function(product) {
+              // Verificando e convertendo para string
+              var codigoStr = String(product.codigo || "");
+              var nomeStr = String(product.nome || "");
+              
+              return nomeStr.toLowerCase().includes(inputValue.toLowerCase()) || 
+                    codigoStr.toLowerCase().includes(inputValue.toLowerCase());
+          });
+          
+          fillProductList(filteredProducts);  // Atualiza a lista de produtos
+      }
+
+             // FILTRAR O PRODUTO CONFORME DIGITADO
+            function fillProductList(products) {
+                var select = document.getElementById("product-list");
+                select.innerHTML = "";
+                for (var i = 0; i < products.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = products[i].codigo;
+                    option.text = products[i].codigo + " - " + products[i].nome;
+                    select.appendChild(option);
+                }
+                document.getElementById("form").style.display = "block";
+            }
+
+function onProductCodeInput() {
+  var productCode = document.getElementById("searchbar").value;
+
+  // Log the productCode being sent
+  console.log("Sending productCode to GAS:", productCode);
+
+  fetchDataFromGAS('fetchAllProductDetails', productCode, function(data) {
+    document.getElementById("product-description").value = data.description;
+    document.getElementById("operation").value = data.operation;
+    window.operationId = data.operationId;
+    showOperationValue(data.operationValue);
+  });
+}
+
+
+function selectProduct() {
+  var selectedValue = document.getElementById("product-list").value;
+  document.getElementById("searchbar").value = selectedValue;
+  document.getElementById("form").style.display = "none";
+
+  fetchDataFromGAS('fetchAllProductDetails', selectedValue, function(data) {
+    document.getElementById("product-description").value = data.description;
+    document.getElementById("operation").value = data.operation;
+    window.operationId = data.operationId;
+    showOperationValue(data.operationValue);
+  });
+}
+
+function showOperationValue(value) {
+    const resultValueElement = document.getElementById("result-value");
+    const resultElement = document.getElementById("result");
+
+    if (resultValueElement) {
+        resultValueElement.textContent = value;
+    } else {
+        console.error("Elemento com ID 'result-value' não encontrado!");
+    }
+
+    if (resultElement) {
+        resultElement.style.display = "none";
+    } else {
+        console.error("Elemento com ID 'result' não encontrado!");
+    }
+}
+
 
 </script>
 </html>
