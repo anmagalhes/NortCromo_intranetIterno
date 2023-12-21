@@ -1184,6 +1184,9 @@ function confirmIncludingEmptySEQ(selectedData, callback) {
   });
 }
 
+
+var links = []; 
+
 function generatePDFsForSelectedOperations() {
         const selectedData = getSelectedRowsData();
         if (!selectedData.length) {
@@ -1223,14 +1226,16 @@ function generatePDFsForSelectedOperations() {
                     }
                   })
             .fail(errorHandler)
-            .always(hideLoadingAlert);
         });
       }
 
-var links = []; 
+
 function processarLinksNoApScript() {
 try {
-  showLoadingAlert("Por favor, aguarde. Mais alguns Minutos. Finalizando a preparação dos PDFs...");
+  showLoadingAlert2(
+    "Por favor, aguarde. Mais alguns Minutos. Finalizando a preparação dos PDFs..."
+    );
+    
   console.log('NORTH CROMO - processarLinksNoApScript');
 
   // Adicione um console log aqui para garantir que o código está sendo executado
@@ -1380,6 +1385,15 @@ function handleError(message) {
 
 // ALETAR DE ESPERAR
 function showLoadingAlert(message) {
+  Swal.fire({
+    title: message,
+    html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
+    showConfirmButton: false,
+    allowOutsideClick: false,
+  });
+}
+
+function showLoadingAlert2(message) {
   Swal.fire({
     title: message,
     html: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Carregando...</span></div>',
