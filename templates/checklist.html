@@ -112,11 +112,13 @@
         </div>
       </div>
 
+      /* generatePDFsForSelectedOperations()*/
+
       <div class="row mt-2">
         <div class="col-md-4">
           <button
             id="seuBotaoId"
-            onclick="processarLinksNoApScript()"
+            onclick="generatePDFsForSelectedOperations()" 
             class="btn btn-block button-height"
             style="
               background-color: #4caf50;
@@ -161,9 +163,11 @@
 
      // Varivavel para o ApiScript
  var minhaUrl =
-       'https://script.google.com/macros/s/AKfycby3sQZ5NBj3X93BiiR53LfHAFhUXkR93VFuNMv-FQjlzt9NTSJXss_CL8unp7HeJa4REg/exec'
-  
-     function formatarParaFormatoInput(dataFormatada) {
+        'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
+    
+    
+    
+        function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
 }
@@ -1239,9 +1243,19 @@ try {
     },
     url: minhaUrl,
   })
-  .done(responseHandler)
-  .fail(errorHandler)
-  .always(hideLoadingAlert);
+  .done(function(response) {
+      try {
+        responseHandler(response);
+      } catch (error) {
+        console.error('Erro ao processar resposta:', error);
+        // Trate o erro de processamento da resposta aqui, se necessário
+      }
+    })
+    .fail(function(xhr, status, error) {
+      console.error('Erro na solicitação AJAX:', status, error);
+      errorHandler(xhr, status, error);
+    })
+    .always(hideLoadingAlert);
   } catch (error) {
     console.error('Erro ao executar o bloco try:', error);
     // Aqui você pode adicionar uma mensagem de alerta ou realizar outras ações conforme necessário
@@ -1283,15 +1297,21 @@ function responseHandler(data) {
   try {
     // Adicione um console log para ver a resposta completa
     console.log('Resposta completa do ApScript: responseHandler', data);
-    
+
     var parsedData;
 
     // Verifica se data é uma string antes de fazer o parsing
     if (typeof data === 'string') {
-      // Se for uma string, cria um objeto com a propriedade pdfLinks
-      parsedData = { success: true, pdfLinks: data };
+      // Verifica se a string é válida antes de fazer o parsing
+      if (/^\s*{/.test(data)) {
+        parsedData = JSON.parse(data);
+      } else {
+        console.error('Erro: String JSON inválida.');
+        handleError('Erro: String JSON inválida.');
+        return;
+      }
     } else {
-      parsedData = JSON.parse(data);
+      parsedData = data;
     }
 
     console.log('NORTH CROMO - Resposta do ApScript:', parsedData);
@@ -1321,7 +1341,6 @@ function responseHandler(data) {
     handleError('Erro ao processar a resposta do ApScript.');
   }
 }
-
 
 function showSuccessAlert(message) {
   Swal.fire({
@@ -1429,11 +1448,22 @@ function onSuccessGeneratePDFs(data) {
     parsedData.pdfLinks.forEach((linkData, index) => {
       // Se for uma string, assumimos que é um URL diretamente
       const link = typeof linkData === 'string' ? linkData : linkData.linkPDF;
+      const header = parsedData.pdfHeaders[index] || `PDF ${index + 1}`;
+
+      // Remover a parte específica do nome do cabeçalho
+      const cleanedHeader = header.replace("NothCromo_", "");
 
       const linkElem = document.createElement("a");
       linkElem.href = link;
       linkElem.target = "_blank";
-      linkElem.innerHTML = `<i class="fas fa-file-pdf"></i> Abrir PDF ${index + 1}`;
+
+      // Adicionar ícone de PDF
+      const pdfIcon = document.createElement("i");
+      pdfIcon.className = "fas fa-file-pdf mr-2";
+      
+      linkElem.appendChild(pdfIcon);
+
+      linkElem.innerHTML = `<i class="fas fa-file-pdf"></i>${cleanedHeader}`;
       linkElem.className = "pdfLink d-block mb-2";
 
       linksContainer.appendChild(linkElem);
@@ -1446,13 +1476,11 @@ function onSuccessGeneratePDFs(data) {
 }
 
 // PDF POR OPERAÇÃO VARIOS
-function imprimirPDF(pdfLinksFromServer) {
+function imprimirPDF(pdfLinksFromServer, pdfHeaders) {
   const linksContainer = document.getElementById("pdfLinksContainer");
 
   if (!linksContainer) {
-    console.error(
-      "Erro: O elemento #pdfLinksContainer não foi encontrado!"
-    );
+    console.error("Erro: O elemento #pdfLinksContainer não foi encontrado!");
     return;
   }
 
@@ -1470,8 +1498,17 @@ function imprimirPDF(pdfLinksFromServer) {
     const link = document.createElement("a");
     link.href = pdfLink;
     link.target = "_blank";
-    link.innerHTML =
-      '<i class="fas fa-file-pdf"></i> Download PDF #' + (index + 1);
+
+    // Adicionar ícone de PDF
+    const pdfIcon = document.createElement("i");
+    pdfIcon.className = "fas fa-file-pdf";
+
+    link.appendChild(pdfIcon);
+
+    const header = pdfHeaders[index] || `PDF #${index + 1}`;
+    const cleanedHeader = header.replace("NothCromo_", "");
+
+    link.innerHTML += ` Download ${cleanedHeader}`;
     link.className = "pdf-link";
 
     rowDiv.appendChild(link);
