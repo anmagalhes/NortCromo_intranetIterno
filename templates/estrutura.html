@@ -528,6 +528,7 @@
       function toggleMenuState() {
         try {
           if (ladoEsquerdo.classList.contains("expanded")) {
+             // Se estiver expandido, recolha
             ladoEsquerdo.classList.remove("expanded");
             ladoEsquerdo.classList.add("collapsed");
             ladoDireito.classList.add("expanded-content"); // Adicione uma classe para ajustar o conteúdo
@@ -672,6 +673,7 @@
         grid-column: 2;
         overflow: scroll;
         overflow-x: hidden;
+        transition: width 0.3s ease; /* Adicione uma transição suave para a animação */
       }
     
       #lado_esquerdo.expanded {

@@ -266,7 +266,7 @@
     <div class="col-md-4">
         <button
             id="deleteRowsBtn"
-            onclick="deleteSelectedRows()" 
+            onclick="mostrarAlertaExclusao()" 
             class="btn btn-block button-height"
             style="
                 background-color:  #f44336;;
@@ -3066,7 +3066,6 @@ function errorFunction(jqXHR, textStatus, errorThrown) {
 
 // ALERTA PERSONALIZADO
 function mostrarAlerta() {
-
   // Primeira pergunta: "Deseja realmente salvar as alterações?"
   Swal.fire({
     title: "Você tem certeza?",
@@ -3124,6 +3123,47 @@ function mostrarAlerta() {
   });
 }
 
+
+// Função para mostrar o alerta de confirmação de exclusão
+function mostrarAlertaExclusao() {
+  Swal.fire({
+    title: "Deletar Linha?",
+    text: "Deseja deletar as linhas selecionadas?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sim, deletar!",
+    cancelButtonText: "Não, continuar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const idsToDelete = updateSelectedIDs(); // Pega os IDs das linhas selecionadas
+
+      console.log("IDs a serem deletados:", idsToDelete);
+
+      if (idsToDelete.length > 0) {
+        // Se o usuário clicar em "Sim, deletar!"
+        deletarLinhas(idsToDelete);
+
+        // Alerta informando que os dados foram excluídos com sucesso
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Os dados foram excluídos com sucesso.",
+          icon: "success",
+        });
+      } else {
+        // Se não houver IDs para deletar, apenas exibir um alerta
+        Swal.fire({
+          title: "Nada para excluir!",
+          text: "Não há linhas selecionadas para exclusão.",
+          icon: "info",
+        });
+      }
+    }
+  });
+}
+
+
 // Função para pegar os IDs das linhas selecionadas
 function getselectedIDs() {
 
@@ -3171,7 +3211,7 @@ function deletarLinhas() {
       console.warn(`Linha com ID ${idNumber} não encontrada.`);
     }
   });
-  
+
   console.log("IDs a serem deletados:", idsToDelete);
 
   // Use o AJAX para enviar os dados
