@@ -786,19 +786,11 @@ function updateSelectedIDs() {
   });
 
   // Remove duplicatas transformando em Set e depois de volta em Array
-  selectedIDs = [...new Set(selectedIDs)];
-  selectedRowsData = [...new Set(selectedRowsData)];
-
-  // Remove duplicatas transformando em Set e depois de volta em Array
   const uniqueSelectedIDs = [...new Set(selectedIDs)];
   const uniqueSelectedRowsData = [...new Set(selectedRowsData)];
 
   console.log("IDs selecionados:", uniqueSelectedIDs);
   console.log("Dados de linhas selecionadas:", uniqueSelectedRowsData);
-
-
-  console.log("IDs selecionados:", selectedIDs);
-  console.log("Dados de linhas selecionadas:", selectedRowsData);
 
   return uniqueSelectedIDs; // Retornar os IDs selecionados
 }
@@ -3134,6 +3126,7 @@ function mostrarAlerta() {
 
 // Função para pegar os IDs das linhas selecionadas
 function getselectedIDs() {
+
   const selectedRows = table_checklist.getSelectedRows(); // Pega todas as linhas selecionadas na tabela Tabulator
 
   selectedRows.forEach((row) => {
@@ -3141,6 +3134,7 @@ function getselectedIDs() {
     selectedIDs.push(rowData.idPCP); // Assumindo que 'idPCP' é o nome do campo que contém o ID
   });
 
+  console.log('selectedIDs',selectedIDs)
   return selectedIDs;
 }
 
@@ -3154,6 +3148,30 @@ function deletarLinhas() {
     return;
   }
 
+  console.log("IDs a serem deletados:", idsToDelete);
+
+  // Remover as linhas da tabela no front-end
+  idsToDelete.forEach((idPCP) => {
+    // Certifique-se de que idPCP seja um número
+    const idNumber = parseInt(idPCP, 10);
+
+    console.log("Tentando deletar a linha com ID:", idNumber);
+
+    // Encontrar a linha com base no ID convertido para número
+    const row = table_checklist.getRows().find((rowData) => parseInt(rowData.getData().idPCP, 10) === idNumber);
+
+    // Verificar se a linha existe antes de tentar deletar
+    console.log("Linha que vai ser Deletado.", row);
+
+    if (row) {
+      // Deletar a linha da tabela imediatamente
+      row.delete();
+      console.log("Linha deletada com sucesso.");
+    } else {
+      console.warn(`Linha com ID ${idNumber} não encontrada.`);
+    }
+  });
+  
   console.log("IDs a serem deletados:", idsToDelete);
 
   // Use o AJAX para enviar os dados
