@@ -133,6 +133,7 @@
             id="client-name"
             type="text"
             class="form-control"
+            oninput="converterParaMaiusculas(this)" 
         />
     </div>
       </div>
@@ -179,6 +180,7 @@
             <textarea
                 id="descricaoProduto"
                 class="form-control"
+                oninput="converterParaMaiusculas(this)" 
             ></textarea>
         </div>
         <div class="col-md-3">
@@ -188,6 +190,7 @@
                 type="text"
                 class="form-control"
                 placeholder="Operação"
+                oninput="converterParaMaiusculas(this)" 
             />
         </div>
     </div>
@@ -361,6 +364,11 @@ let dados_novos_produtos;
  var minhaUrl =
         'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
     
+
+    function converterParaMaiusculas(elemento) {
+    elemento.value = elemento.value.toUpperCase();
+}
+
     function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
