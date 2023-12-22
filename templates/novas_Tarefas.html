@@ -159,7 +159,7 @@
                 />
                 <div class="input-group-append">
                     <button
-                        onclick="fetchProductsAndOpenForm()"
+                        id="btnPesquisarProduto"
                         class="btn btn-outline-secondary"
                         style="background-color: blue; border-color: blue;"
                         title="Pesquisar Produto"
@@ -561,7 +561,7 @@ function getDataFinal() {
     }
     });
 
-    // Adicionar descrição e operação pela função para atualizar campos
+// Adicionar descrição e operação pela função para atualizar campos
 $("#codigoProduto").on("input", function () {
     // Obtenha o valor digitado
     var codigoProduto = $(this).val();
@@ -579,6 +579,38 @@ $("#codigoProduto").on("input", function () {
 
 var codigoProdutoAutomatico = $("#codigoProduto").val();
 atualizarCamposProduto(codigoProdutoAutomatico);
+
+
+ // Adicionar evento de clique para o botão de pesquisa
+ $("#btnPesquisarProduto").on("click", function () {
+        // Exibir a seção de Lista de Produtos
+        $("#form").show();
+
+        // Chamar a função para carregar a lista de produtos
+        carregarListaProdutos();
+    });
+
+    // Adicionar evento de alteração para o campo de filtro
+    $("#filtroProdutos").on("input", function () {
+        // Obter o valor digitado
+        var filtro = $(this).val();
+
+        // Chamar a função para filtrar a lista de produtos no front-end
+        filtrarListaProdutosFrontEnd(filtro);
+    });
+
+    // Adicionar evento de alteração para a lista de produtos
+    $("#listaProdutos").on("change", function () {
+         // Obter o código do produto selecionado
+         var codigoProdutoSelecionado = $(this).val();
+
+        // Atualizar os campos com os detalhes do produto selecionado
+        atualizarCamposProduto(codigoProdutoSelecionado);
+
+        // Ocultar a seção de Lista de Produtos
+        $("#form").hide();
+    });
+
 
             $(".scrollable-content").perfectScrollbar();
               
@@ -623,6 +655,8 @@ try {
 
     // Chame a função para atualizar campos
     atualizarCamposProduto(codigoProduto);
+
+    carregarListaProdutosFrontEnd(data)
       
     })
     .fail(function (xhr, status, error) {
@@ -643,15 +677,36 @@ try {
 
             // Se o produto foi encontrado, atualize os campos
             if (produtoEncontrado) {
-              console.log('produtoEncontrado',)
+              //console.log('produtoEncontrado',)
                 $("#descricaoProduto").val(produtoEncontrado.nome_produto);
                 $("#operacao").val(produtoEncontrado.nome);
             } else {
-                console.log("Produto não encontrado.");
+                //console.log("Produto não encontrado.");
                 $("#descricaoProduto").val("");
                 $("#operacao").val("");
             }
         }
+
+// Função para preencher a lista de produtos no front-end
+function preencherListaProdutosFrontEnd() {
+    // Limpar a lista de produtos
+    $("#listaProdutos").empty();
+
+    // Adicionar uma opção padrão
+    $("#listaProdutos").append('<option value="">Selecione um produto</option>');
+
+    // Adicionar cada produto à lista
+    listaDeProdutos.forEach(function (produto) {
+        $("#listaProdutos").append('<option value="' + produto.Cod_Produto + '">' + produto.Cod_Produto + ' - ' + produto.nome + ' - ' + produto.nome_produto + '</option>');
+    });
+}
+
+// Atribuir a resposta da sua chamada AJAX à variável listaDeProdutos
+function carregarListaProdutosFrontEnd(data) {
+    listaDeProdutos = data.novos_produtos;
+    // Preencher a lista de produtos no front-end
+    preencherListaProdutosFrontEnd();
+}
 
     function showAlert(message) {
       Swal.fire({
