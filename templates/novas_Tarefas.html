@@ -2,8 +2,12 @@
 <html lang="pt-br">
 
   {% include 'head.html' %}
-
 <head>
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Bootstrap JS (Popper.js included) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
 
@@ -194,21 +198,30 @@
         <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
       </div>
 
-    <!-- Seção de Lista de Produtos (está escondida inicialmente) -->
-    <div id="form" class="form-group" style="display: none">
-        <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
-        <input
-            id="filtroProdutos"
-            type="text"
-            class="form-control"
-            placeholder="Digite o código ou nome > Depois para Lista Selecionar o Produto ou Serviço"
-        />
-        <label for="listaProdutos" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
-        <select
-            id="listaProdutos"
-            class="form-control"
-        ></select>
-    </div>
+<!-- Modal de Pesquisa de Produto -->
+<div class="modal fade" id="modalPesquisaProduto" tabindex="-1" role="dialog" aria-labelledby="modalPesquisaProdutoLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalPesquisaProdutoLabel">Pesquisar Produto</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
+              <input id="filtroProdutosModal" type="text" class="form-control" placeholder="Digite o código ou nome para pesquisar">
+              <label for="listaProdutosModal" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
+              <select id="listaProdutosModal" class="form-control"></select>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-primary" id="btnSelecionarProdutoModal">Selecionar Produto</button>
+          </div>
+      </div>
+  </div>
+</div>
+
 
     <!-- Campos ocultos somente para parâmetros -->
     <input type="text" id="inputIDORDEM" placeholder="IDORDEM" style="display: none;" />
@@ -222,14 +235,14 @@
     <div id="resultado" class="form-group" style="display: none;">
         <label for="valorOperacao" class="custom-label">Op</label>
     </div>
-
+   
 
     <div class="row mt-2">
         <!-- Botão Adicionar -->
         <div class="col-md-4">
             <button
-                id="btnAdd"
-                onclick="addRow()" 
+                id=" btnAdicionar"
+                onclick="adicionarLinhaTabela()" 
                 class="btn btn-block button-height"
                 style="
                     background-color: #555;
@@ -276,7 +289,6 @@
         <div class="col-md-4">
             <button
                 id="btnSave"
-                onclick="confirmClose()" 
                 class="btn btn-block button-height"
                 style="
                     background-color: #4caf50;
@@ -561,6 +573,11 @@ function getDataFinal() {
     }
     });
 
+    // Adicionar evento de clique para o botão "Adicionar"
+    $("#btnAdicionar").on("click", function () {
+        adicionarLinhaTabela();
+    });
+
 // Adicionar descrição e operação pela função para atualizar campos
 $("#codigoProduto").on("input", function () {
     // Obtenha o valor digitado
@@ -582,19 +599,38 @@ atualizarCamposProduto(codigoProdutoAutomatico);
 
 
  // Adicionar evento de clique para o botão de pesquisa
- $("#btnPesquisarProduto").on("click", function () {
-        // Exibir a seção de Lista de Produtos
-        $("#form").show();
+// Adicionar evento de clique para o botão de pesquisa
+$("#btnPesquisarProduto").on("click", function () {
+    console.log("Botão Pesquisar Produto clicado!");
 
-        // Chamar a função para carregar a lista de produtos
-        carregarListaProdutos();
-    });
+    // Limpar o filtro ao abrir o modal
+    $("#filtroProdutosModal").val("");
+
+    // Carregar a lista de produtos no modal
+    carregarListaProdutosFrontEnd();
+    
+    // Exibir o modal de pesquisa de produto
+    $("#modalPesquisaProduto").modal("show");
+});
+
+// Adicionar evento de clique para o botão "Selecionar Produto" dentro do modal
+$("#btnSelecionarProdutoModal").on("click", function () {
+    // Obter o código do produto selecionado no modal
+    var codigoProdutoSelecionado = $("#listaProdutosModal").val();
+
+    // Atualizar os campos com os detalhes do produto selecionado
+    atualizarCamposProduto(codigoProdutoSelecionado);
+
+    // Fechar o modal
+    $("#modalPesquisaProduto").modal("hide");
+});
+
+
 
     // Adicionar evento de alteração para o campo de filtro
     $("#filtroProdutos").on("input", function () {
         // Obter o valor digitado
         var filtro = $(this).val();
-
         // Chamar a função para filtrar a lista de produtos no front-end
         filtrarListaProdutosFrontEnd(filtro);
     });
@@ -602,7 +638,7 @@ atualizarCamposProduto(codigoProdutoAutomatico);
     // Adicionar evento de alteração para a lista de produtos
     $("#listaProdutos").on("change", function () {
          // Obter o código do produto selecionado
-         var codigoProdutoSelecionado = $(this).val();
+        var codigoProdutoSelecionado = $(this).val();
 
         // Atualizar os campos com os detalhes do produto selecionado
         atualizarCamposProduto(codigoProdutoSelecionado);
@@ -637,39 +673,51 @@ function formatarNumero(numero) {
     return numeroFormatado;
 }
 
-function selecionar_produtos() {
-console.log('Relatorio_Checklits_pedentes')
-try {
-    $.ajax({
-        url: my_url() + "selecionar_novos_produtos",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-        }),
-    })
-    .done(function (data) {
+// Função para adicionar uma nova linha à tabela
+function adicionarLinhaTabela() {
+    // Capturar os valores dos campos de entrada
+    var numeroControle = $("#numeroControle").val();
+    var dataLancamento = $("#dataLancamento").val();
+    var nomeCliente = $("#client-name").val();
+    var quantidade = $("#quantidade").val();
+    var codigoProduto = $("#codigoProduto").val();
+    var descricaoProduto = $("#descricaoProduto").val();
+    var operacao = $("#operacao").val();
+    var observacao = $("#queixaCliente").val();
 
-      // Atribua a resposta a dados_novos_produtos globalmente
-      dados_novos_produtos = data.novos_produtos;
-      console.log("dados_novos_produtos:", dados_novos_produtos);
+    // Verificar se todos os campos obrigatórios estão preenchidos
+    if (!numeroControle || !dataLancamento || !nomeCliente || !quantidade || !codigoProduto) {
+        alert("Preencha todos os campos obrigatórios!");
+        return;
+    }
 
-    // Chame a função para atualizar campos
-    atualizarCamposProduto(codigoProduto);
+     // Adicionar uma nova linha à tabela
+     var newRowData = {
+        numControle: numeroControle,
+        dataEntrada: dataLancamento,
+        cliente: nomeCliente,
+        qtd: quantidade,
+        cod: codigoProduto,
+        descricao: descricaoProduto,
+        op: operacao,
+        observacao: observacao
+    };
 
-    carregarListaProdutosFrontEnd(data)
-      
-    })
-    .fail(function (xhr, status, error) {
-        console.error("Erro ao buscar dados consolidados:", error);
-        console.log("Status da requisição:", status);
-        console.log("Resposta do servidor:", xhr.responseText);
-    });
-} catch (error) {
-    console.error("Erro ao executar a função: " + error);
+    console.log('newRowData',newRowData)
+    // Adicionar a nova linha à tabela
+    table_checklist.addData([newRowData]);
+
+    // Limpar os campos de entrada após adicionar a linha
+    limparCamposEntrada();
 }
+
+// Função para limpar os campos de entrada após adicionar uma linha
+function limparCamposEntrada() {
+    $("#codigoProduto, #descricaoProduto, #operacao").val("");
 }
-    // Função para atualizar campos com dados de produtos
-    function atualizarCamposProduto(codigoProduto) {
+
+// Função para atualizar campos com dados de produtos
+function atualizarCamposProduto(codigoProduto) {
             // Encontre o produto pelo código na lista já carregada
             var produtoEncontrado = dados_novos_produtos.find(function (produto) {
                 return produto.Cod_Produto === codigoProduto;
@@ -701,12 +749,69 @@ function preencherListaProdutosFrontEnd() {
     });
 }
 
+// Função para filtrar a lista de produtos no front-end
+function filtrarListaProdutosFrontEnd(filtro) {
+    // Filtrar a lista de produtos
+    var produtosFiltrados = listaDeProdutos.filter(function (produto) {
+        // Inclua a lógica de filtro conforme necessário (por exemplo, por código ou nome)
+        return produto.Cod_Produto.includes(filtro) || produto.nome.includes(filtro) || produto.nome_produto.includes(filtro);
+    });
+
+    // Preencher a lista de produtos filtrada
+    preencherListaProdutosFrontEnd(produtosFiltrados);
+}
+
 // Atribuir a resposta da sua chamada AJAX à variável listaDeProdutos
 function carregarListaProdutosFrontEnd(data) {
-    listaDeProdutos = data.novos_produtos;
-    // Preencher a lista de produtos no front-end
-    preencherListaProdutosFrontEnd();
+    // Atribuir a resposta a dados_novos_produtos globalmente
+    dados_novos_produtos = data.novos_produtos;
+
+    // Limpar a lista de produtos
+    $("#listaProdutos").empty();
+
+    // Adicionar uma opção padrão
+    $("#listaProdutos").append('<option value="">Selecione um produto</option>');
+
+    // Adicionar cada produto à lista
+    dados_novos_produtos.forEach(function (produto) {
+        $("#listaProdutos").append('<option value="' + produto.Cod_Produto + '">' + produto.Cod_Produto + ' - ' + produto.nome + ' - ' + produto.nome_produto + '</option>');
+    });
 }
+
+
+function selecionar_produtos() {
+console.log('Relatorio_Checklits_pedentes')
+try {
+    $.ajax({
+        url: my_url() + "selecionar_novos_produtos",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+        }),
+    })
+    .done(function (data) {
+
+      // Atribua a resposta a dados_novos_produtos globalmente
+      dados_novos_produtos = data.novos_produtos;
+      console.log("dados_novos_produtos:", dados_novos_produtos);
+
+    // Chame a função para atualizar campos
+    atualizarCamposProduto(codigoProduto);
+    carregarListaProdutosFrontEnd(data)
+      
+    })
+    .fail(function (xhr, status, error) {
+        console.error("Erro ao buscar dados consolidados:", error);
+        console.log("Status da requisição:", status);
+        console.log("Resposta do servidor:", xhr.responseText);
+    });
+} catch (error) {
+    console.error("Erro ao executar a função: " + error);
+}
+}
+    
+
+
 
     function showAlert(message) {
       Swal.fire({
@@ -1193,6 +1298,9 @@ function handleTabPress(event) {
     }
   }
 }
+
+
+
 function openDialog() {
   // Atualizar a lista de IDs selecionados antes de fazer qualquer coisa
   updateSelectedIDs();
