@@ -361,16 +361,6 @@ let dados_novos_produtos;
  var minhaUrl =
         'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
     
-   function autoResize(element) {
-  element.style.height = 'auto';
-  element.style.height = (element.scrollHeight) + 'px';
-
-    // Converter para maiúsculas
-    elemento.value = elemento.value.toUpperCase();
-
-};
-
-    
     function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
@@ -628,15 +618,13 @@ $("#btnSelecionarProdutoModal").on("click", function () {
               
               });
 
-    function autoResize(element) {
-    element.style.height = 'auto';
-    element.style.height = (element.scrollHeight) + 'px';
+    function autoResize(elemento) {
+    elemento.style.height = 'auto';
+    elemento.style.height = (elemento.scrollHeight) + 'px';
 
     // Converter para maiúsculas
     elemento.value = elemento.value.toUpperCase();
-
-    };
-
+}
 
 // Função para formatar o número
 function formatarNumero(numero) {
