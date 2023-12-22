@@ -691,8 +691,12 @@ function adicionarLinhaTabela() {
         return;
     }
 
+     // Gerar um ID único para a linha
+     var idLinha = "linha_" + Date.now();
+
      // Adicionar uma nova linha à tabela
      var newRowData = {
+        idPCP: idLinha,
         numControle: numeroControle,
         dataEntrada: dataLancamento,
         cliente: nomeCliente,
@@ -700,7 +704,7 @@ function adicionarLinhaTabela() {
         cod: codigoProduto,
         descricao: descricaoProduto,
         op: operacao,
-        observacao: observacao
+        observacao: observacao,
     };
 
     console.log('newRowData',newRowData)
@@ -715,6 +719,25 @@ function adicionarLinhaTabela() {
 function limparCamposEntrada() {
     $("#codigoProduto, #descricaoProduto, #operacao").val("");
 }
+
+function obterDadosDaTabela() {
+    var tableData = table_checklist.getData();
+    return tableData.map(function (row) {
+        return {
+            idLinha: row.idLinha,
+            numControle: row.numControle,
+            dataEntrada: row.dataEntrada,
+            cliente: row.cliente,
+            qtd: row.qtd,
+            cod: row.cod,
+            descricao: row.descricao,
+            op: row.op,
+            observacao: row.observacao
+            // Adicione mais campos conforme necessário
+        };
+    });
+}
+
 
 // Função para atualizar campos com dados de produtos
 function atualizarCamposProduto(codigoProduto) {
