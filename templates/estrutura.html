@@ -315,9 +315,7 @@
       </ul>
   </div>
   <!-- Fim da div .menu-mobile -->
-{% include 'funcoes_comuns.html' %}
-   
-   
+  {% include 'funcoes_comuns.html' %}
 <script>
   try {
       $(document).ready(function () {
@@ -569,6 +567,8 @@
   openMenuBtn.addEventListener("click", toggleMenuState);
   closeMenuBtn.addEventListener("click", toggleMenuState);
 
+  closeMenuBtn.addEventListener("click", toggleMenuVisibility);
+  
   // Event listener para o menu
   menu.addEventListener("click", function (event) {
       try {
@@ -668,11 +668,45 @@
   $("#lado-esquerdo-flutuante ul li").click(function () {
       toggleMenuLateralFlutuante();
   });
+
+
+  // Função para alternar a visibilidade do menu
+  function toggleMenuVisibility() {
+    var menu = document.getElementById("lado_esquerdo");
+    var content = document.getElementById("lado_direito");
+
+    // Verifica se o menu está visível ou não
+    if (menu.classList.contains("hidden")) {
+      // Se estiver oculto, torna visível
+      menu.classList.remove("hidden");
+      content.classList.remove("full-width");
+    } else {
+      // Se estiver visível, torna oculto
+      menu.classList.add("hidden");
+      content.classList.add("full-width");
+    }
+  }
+
+  // Função para ajustar o tamanho do conteúdo quando a janela é redimensionada
+    window.addEventListener("resize", function () {
+    var menu = document.getElementById("lado_esquerdo");
+    var content = document.getElementById("lado_direito");
+
+    // Verifica se o menu está oculto
+    if (menu.classList.contains("hidden")) {
+      // Se estiver oculto, expande o conteúdo para a largura total da janela
+      content.classList.add("full-width");
+    } else {
+      // Se estiver visível, ajusta o conteúdo para a largura padrão
+      content.classList.remove("full-width");
+    }
+  });
+
 </script>
 
 
-
 <style>
+
   body {
     font-size: 16px;
   }

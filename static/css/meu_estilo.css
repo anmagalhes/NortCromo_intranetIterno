@@ -1535,3 +1535,12 @@ body {
   background-color: #4CAF50;
   color: white;
 }
+
+/* Adicione estas classes ao seu CSS */
+.hidden {
+  display: none;
+}
+
+.full-width {
+  width: 100%;
+}
