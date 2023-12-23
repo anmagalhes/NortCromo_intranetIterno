@@ -270,9 +270,27 @@
         <!-- Fim da div .menu -->
       </div>
       <!-- Fim da div #lado_esquerdo -->
+      
       <div id="lado_direito"></div>
     </div>
     <!-- Fim da div #divide_em_dois -->
+    <i class="material-icons">build</i>
+    Obras
+    <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
+    </div>
+    </li>
+    
+    <li class="expandable desktop-menu-item" onclick="logout()">
+    <div class="menu-header">
+    <i class="material-icons">exit_to_app</i>
+    Sair
+    <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
+    </div>
+    </li>
+    </ul>
+    </div>
+    <!-- Fim da div .menu-mobile -->
+    {% include 'funcoes_comuns.html' %}
     {% include 'funcoes_comuns.html' %}
 
     <div id="menu-flutuante" onclick="toggleMenuLateralFlutuante()">
@@ -299,23 +317,6 @@
 
           <li class="expandable desktop-menu-item" data-template="lista_obras.html">
               <div class="menu-header">
-                  <i class="material-icons">build</i>
-                  Obras
-                  <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
-              </div>
-          </li>
-
-          <li class="expandable desktop-menu-item" onclick="logout()">
-              <div class="menu-header">
-                  <i class="material-icons">exit_to_app</i>
-                  Sair
-                  <i class="material-icons toggle-submenu invisible-icon">arrow_drop_down</i>
-              </div>
-          </li>
-      </ul>
-  </div>
-  <!-- Fim da div .menu-mobile -->
-  {% include 'funcoes_comuns.html' %}
 <script>
   try {
       $(document).ready(function () {
