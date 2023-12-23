@@ -1544,3 +1544,16 @@ body {
 .full-width {
   width: 100%;
 }
+
+/* Novo Selector */
+.main-section {
+  position: relative;
+  left: 0;
+  width: 100vw;
+  transition: all 0.2s;
+}
+
+.change .main-section {
+  left: 15vw;
+  width: 85vw;
+}

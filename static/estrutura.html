@@ -271,7 +271,7 @@
                 </li>
               </ul>
             </li>
-            <li class="expandable" onclick="muda_de_tela('index_3.html')">
+            <li class="expandable" onclick="muda_de_tela('index_3.html')"  data-selection="vendas">
               <div class="menu-header">
                 <i class="material-icons">account_balance_wallet</i>
                 <span class="menu-text"> Vendas</span>
@@ -377,7 +377,7 @@
   
           function loadContent(template) {
             try {
-              console.log("Carregando conteúdo para o template:", template);
+              console.log("Carregando conteúdo para o template:", template, "com a seleção principal:", mainSelection);
               $.ajax({
                 url: my_url() + "muda_de_tela",
                 type: "POST",
