@@ -6,10 +6,18 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="/static/css/meu_estilo.css" />
   
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+  <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
+  {% include 'funcoes_comuns.html' %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.0.9/dist/js/tabulator.min.js"></script>
   
+  <!-- Se você precisar do MUI, inclua aqui -->
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/js/mui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/css/mui.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/css/mui.min.css.map"></script>
+
     <script>
       $(function () {
         $('#tabs').tabs();
@@ -45,6 +53,18 @@
   .elemento-oculto {
   display: none;
 }
+
+ /* Estilos para TAB-1 */
+ .tab1 #table_checklist .myTable thead {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  /* Estilos para TAB-2 */
+  .tab2 #table_check2ist2 .myTable thead {
+    background-color: #4CAF50;
+    color: white;
+  }
 
     /* Adicione estilos para o scroll em dispositivos móveis */
     @media (max-width: 767px) {
@@ -109,152 +129,193 @@
       type="image/x-icon"
     />
 
-    <div class="container">
-      <div class="row mt-3 mb-3 scrollable-content">
-        <div class="col-md-3">
-          <label for="numeroControle" class="custom-label">Número de Controrole</label>
-          <input
-            id="numeroControle"
-            type="text"
-            class="form-control highlight-input"
-            placeholder="Controle"
-            list="numerosDeControle"
-          />
-        </div>
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Aguardando Aprovação</a></li>
+        <li><a href="#tabs-2">Cria Novas Tarefas</a></li>
+      </ul>
 
-        <!-- Campo Data de Recebimento -->
-        <div class="col-md-4 mb-3">
-          <label for="dataLancamento" class="custom-label">Data de Lançamento</label>
-          <input
-              id="dataLancamento"
-              type="date"
-              class="form-control"
-          />
+      <div id="tabs-1" class="container tab1">
+
+         <!-- Tabela Tabular -->
+         <div class="table-responsive myTable table-wrapper scrollable-content">
+          <div id="table_checklist2" class="tabulator myTable"></div>
+        </div>
+    
+<!-- Div de Fechamento da TAB1  -->
       </div>
 
-      <!-- Campo Data de Recebimento -->
-      <div class="col-md-4 mb-3">
-        <label for="client-name" class="custom-label">Nome do Cliente</label>
-        <input
-            id="client-name"
-            type="text"
-            class="form-control"
-            oninput="converterParaMaiusculas(this)" 
-        />
-    </div>
-      </div>
-
-      <!-- Seção de Quantidade, Código do Produto, Descrição do Produto e Operação -->
-    <div class="row">
-        <div class="col-md-2">
-            <label for="quantidade" class="custom-label">Quantidade</label>
-            <input
-            id="quantidade"
-            type="number"
-            class="form-control"
-            placeholder="Quantidade"
-            value="1" 
-            min="1" 
-        />
-        </div>
-
-        <div class="col-md-3">
-            <!-- Campo de entrada para o código do produto -->
-            <label for="codigoProduto" class="custom-label">Código do Produto</label>
-            <div class="input-group">
-                <input
-                    id="codigoProduto"
-                    type="text"
-                    class="form-control"
-                    placeholder="Produto ou serviço"
-                />
-                <div class="input-group-append">
-                    <button
-                        id="btnPesquisarProduto"
-                        class="btn btn-outline-secondary"
-                        style="background-color: blue; border-color: blue;"
-                        title="Pesquisar Produto"
-                    >
-                        <i class="material-icons" style="color: white;">search</i>
-                    </button>
-                </div>
+      <div id="tabs-2" class="container tab2">
+        <div class="container">
+          <div class="row mt-3 mb-3 scrollable-content">
+            <div class="col-md-3">
+              <label for="numeroControle" class="custom-label">Número de Controrole</label>
+              <input
+                id="numeroControle"
+                type="text"
+                class="form-control highlight-input"
+                placeholder="Controle"
+                list="numerosDeControle"
+              />
             </div>
-        </div>
-        
-        <div class="col-md-4">
-            <label for="descricaoProduto" class="custom-label">Desc Serviço/ Produto / Tarefa</label>
-            <textarea
-                id="descricaoProduto"
-                class="form-control"
-                oninput="converterParaMaiusculas(this)" 
-            ></textarea>
-        </div>
-        <div class="col-md-3">
-            <label for="operacao" class="custom-label">Operação</label>
+    
+            <!-- Campo Data de Recebimento -->
+            <div class="col-md-4 mb-3">
+              <label for="dataLancamento" class="custom-label">Data de Lançamento</label>
+              <input
+                  id="dataLancamento"
+                  type="date"
+                  class="form-control"
+              />
+          </div>
+    
+          <!-- Campo Data de Recebimento -->
+          <div class="col-md-4 mb-3">
+            <label for="client-name" class="custom-label">Nome do Cliente</label>
             <input
-                id="operacao"
+                id="client-name"
                 type="text"
                 class="form-control"
-                placeholder="Operação"
                 oninput="converterParaMaiusculas(this)" 
             />
         </div>
-    </div>
-
-    <!-- Seção de Observações -->
-    <div class="col-md-12 mb-3">
-        <label for="queixaCliente" class="custom-label">Observação:</label>
-        <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+          </div>
+    
+          <!-- Seção de Quantidade, Código do Produto, Descrição do Produto e Operação -->
+        <div class="row">
+            <div class="col-md-2">
+                <label for="quantidade" class="custom-label">Quantidade</label>
+                <input
+                id="quantidade"
+                type="number"
+                class="form-control"
+                placeholder="Quantidade"
+                value="1" 
+                min="1" 
+            />
+            </div>
+    
+            <div class="col-md-3">
+                <!-- Campo de entrada para o código do produto -->
+                <label for="codigoProduto" class="custom-label">Código do Produto</label>
+                <div class="input-group">
+                    <input
+                        id="codigoProduto"
+                        type="text"
+                        class="form-control"
+                        placeholder="Produto ou serviço"
+                    />
+                    <div class="input-group-append">
+                        <button
+                            id="btnPesquisarProduto"
+                            class="btn btn-outline-secondary"
+                            style="background-color: blue; border-color: blue;"
+                            title="Pesquisar Produto"
+                        >
+                            <i class="material-icons" style="color: white;">search</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="descricaoProduto" class="custom-label">Desc Serviço/ Produto / Tarefa</label>
+                <textarea
+                    id="descricaoProduto"
+                    class="form-control"
+                    oninput="converterParaMaiusculas(this)" 
+                ></textarea>
+            </div>
+            <div class="col-md-3">
+                <label for="operacao" class="custom-label">Operação</label>
+                <input
+                    id="operacao"
+                    type="text"
+                    class="form-control"
+                    placeholder="Operação"
+                    oninput="converterParaMaiusculas(this)" 
+                />
+            </div>
+        </div>
+    
+        <!-- Seção de Observações -->
+        <div class="col-md-12 mb-3">
+            <label for="queixaCliente" class="custom-label">Observação:</label>
+            <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+          </div>
+    
+    <!-- Modal de Pesquisa de Produto -->
+    <div class="modal fade" id="modalPesquisaProduto" tabindex="-1" role="dialog" aria-labelledby="modalPesquisaProdutoLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modalPesquisaProdutoLabel">Pesquisar Produto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
+                  <input id="filtroProdutosModal" type="text" class="form-control" placeholder="Digite o código ou nome para pesquisar">
+                  <label for="listaProdutosModal" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
+                  <select id="listaProdutosModal" class="form-control"></select>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                  <button type="button" class="btn btn-primary" id="btnSelecionarProdutoModal">Selecionar Produto</button>
+              </div>
+          </div>
       </div>
-
-<!-- Modal de Pesquisa de Produto -->
-<div class="modal fade" id="modalPesquisaProduto" tabindex="-1" role="dialog" aria-labelledby="modalPesquisaProdutoLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="modalPesquisaProdutoLabel">Pesquisar Produto</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
-              <input id="filtroProdutosModal" type="text" class="form-control" placeholder="Digite o código ou nome para pesquisar">
-              <label for="listaProdutosModal" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
-              <select id="listaProdutosModal" class="form-control"></select>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-              <button type="button" class="btn btn-primary" id="btnSelecionarProdutoModal">Selecionar Produto</button>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-    <!-- Campos ocultos somente para parâmetros -->
-    <input type="text" id="inputIDORDEM" placeholder="IDORDEM" style="display: none;" />
-    <input type="text" id="inputIDPRODUTO" placeholder="IDPRODUTO" style="display: none;" />
-
-    <input type="text" id="input1" style="display: none;" />
-    <input type="text" id="input2" style="display: none;" />
-    <input type="text" id="input3" style="display: none;" />
-
-    <!-- Seção para mostrar o valor da operação (está escondida inicialmente) -->
-    <div id="resultado" class="form-group" style="display: none;">
-        <label for="valorOperacao" class="custom-label">Op</label>
     </div>
-   
-
-    <div class="row mt-2">
+    
+    
+        <!-- Campos ocultos somente para parâmetros -->
+        <input type="text" id="inputIDORDEM" placeholder="IDORDEM" style="display: none;" />
+        <input type="text" id="inputIDPRODUTO" placeholder="IDPRODUTO" style="display: none;" />
+    
+        <input type="text" id="input1" style="display: none;" />
+        <input type="text" id="input2" style="display: none;" />
+        <input type="text" id="input3" style="display: none;" />
+    
+        <!-- Seção para mostrar o valor da operação (está escondida inicialmente) -->
+        <div id="resultado" class="form-group" style="display: none;">
+            <label for="valorOperacao" class="custom-label">Op</label>
+        </div>
+       
+    
+        <div class="row mt-2">
+            <!-- Botão Adicionar -->
+            <div class="col-md-4">
+                <button
+                    id=" btnAdicionar"
+                    onclick="adicionarLinhaTabela()" 
+                    class="btn btn-block button-height"
+                    style="
+                        background-color: #555;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                    "
+                >
+                    <span class="material-icons" style="margin-right: 8px">add</span>
+                    Adicionar
+                </button>
+            </div>
+    
+    <!-- Tabela para exibir itens adicionados-->
         <!-- Botão Adicionar -->
         <div class="col-md-4">
             <button
-                id=" btnAdicionar"
-                onclick="adicionarLinhaTabela()" 
+                id="deleteRowsBtn"
+                onclick="mostrarAlertaExclusao()" 
                 class="btn btn-block button-height"
                 style="
-                    background-color: #555;
+                    background-color:  #f44336;;
                     color: white;
                     padding: 10px 20px;
                     border: none;
@@ -265,102 +326,80 @@
                     width: 100%;
                 "
             >
-                <span class="material-icons" style="margin-right: 8px">add</span>
-                Adicionar
+                <span class="material-icons" style="margin-right: 8px">delete</span>
+                 Excluir Linhas
             </button>
         </div>
-
-<!-- Tabela para exibir itens adicionados-->
-    <!-- Botão Adicionar -->
-    <div class="col-md-4">
-        <button
-            id="deleteRowsBtn"
-            onclick="mostrarAlertaExclusao()" 
-            class="btn btn-block button-height"
-            style="
-                background-color:  #f44336;;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 25px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                width: 100%;
-            "
-        >
-            <span class="material-icons" style="margin-right: 8px">delete</span>
-             Excluir Linhas
-        </button>
-    </div>
-    
-        <!-- Botão Salvar -->
-        <div class="col-md-4">
-            <button
-                id="btnSave"
-                onclick="mostrarAlerta()"
-                class="btn btn-block button-height"
-                style="
-                    background-color: #4caf50;
-                    color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 25px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                "
-            >
-                <span class="material-icons" style="margin-right: 8px">save</span>
-                Salvar
-            </button>
+        
+            <!-- Botão Salvar -->
+            <div class="col-md-4">
+                <button
+                    id="btnSave"
+                    onclick="mostrarAlerta()"
+                    class="btn btn-block button-height"
+                    style="
+                        background-color: #4caf50;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                    "
+                >
+                    <span class="material-icons" style="margin-right: 8px">save</span>
+                    Salvar
+                </button>
+            </div>
         </div>
+        
     </div>
     
-</div>
-
-
-    <datalist id="numerosDeControle"></datalist>
-
-    <!-- Modal de Confirmação -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Você tem certeza que quer fechar a página?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="google.script.run.confirmClose()">Fechar</button>
+    
+        <datalist id="numerosDeControle"></datalist>
+    
+        <!-- Modal de Confirmação -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Você tem certeza que quer fechar a página?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="google.script.run.confirmClose()">Fechar</button>
+                    </div>
                 </div>
             </div>
         </div>
+    
+        <!-- Tabela Tabular   onclick="generatePDFsForSelectedOperations()"  -->
+        <div class="table-responsive myTable table-wrapper scrollable-content">
+          <div id="table_checklist" class="tabulator myTable"></div>
+        </div>
+    
+     
+        <select id="dateFilterDropdown">
+            <!-- As opções serão preenchidas pelo JavaScript -->
+        </select>
+              <!--Lista supresa no campo  -->
+            <datalist id="numerosDeControle">
+                  <!-- As opções serão adicionadas aqui pelo JavaScript -->
+            </datalist>
+  
+<!-- Div de Fechamento da TAB3  -->
+</div>
+
+  <!-- Div Geral da TAB -->
     </div>
-
-    <!-- Tabela Tabular   onclick="generatePDFsForSelectedOperations()"  -->
-    <div class="table-responsive myTable table-wrapper scrollable-content">
-      <div id="table_checklist" class="tabulator myTable"></div>
-    </div>
-
- 
-    <select id="dateFilterDropdown">
-        <!-- As opções serão preenchidas pelo JavaScript -->
-    </select>
-          <!--Lista supresa no campo  -->
-        <datalist id="numerosDeControle">
-              <!-- As opções serão adicionadas aqui pelo JavaScript -->
-        </datalist>
-
-
-
-  </body>
 
   <script>
 
@@ -522,6 +561,12 @@ function getDataFinal() {
 }
 
     $(document).ready(function () {
+
+     // Ocultar informações específicas das TABs 2 e 3
+     $('#data_inicial_recebimento, #data_final_recebimento').hide();
+     // Também oculte os rótulos, se necessário
+     $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
+
       //initializeTable_Checklist_pedentes();
       //getDataAtual();
       getDataFinal();
@@ -532,6 +577,7 @@ function getDataFinal() {
       setupEventListeners();
       
       console.log("Documento carregado e pronto!");
+
 
     // Formatar campo de telefone
     $('#telefone').keyup(function () {
@@ -552,6 +598,23 @@ function getDataFinal() {
     $(this).removeClass('filled');
     }
     });
+
+    // Adicione um manipulador de eventos para os links das guias
+    $('#tabs a').on('click', function() {
+                  // Obtenha o número da guia a partir do atributo href
+                  var numeroTab = parseInt($(this).attr('href').split('-')[1]);
+
+                    // Chame a função para mostrar a guia
+                     mostrarTab(numeroTab);
+                    // getDataAtual(numeroTab);
+                    // setDataFinal(numeroTab);
+
+                  // Chame as funções relevantes
+                  controleVisibilidadeCampoTab(numeroTab);
+                  controleVisibilidadeCampoTab2(numeroTab);
+
+              });
+
 
     // Adicionar evento de clique para o botão "Adicionar"
     $("#btnAdicionar").on("click", function () {
@@ -627,7 +690,7 @@ $("#btnSelecionarProdutoModal").on("click", function () {
         $("#form").hide();
     });
 
-
+  
             $(".scrollable-content").perfectScrollbar();
               
               });
@@ -638,6 +701,72 @@ $("#btnSelecionarProdutoModal").on("click", function () {
 
     // Converter para maiúsculas
     elemento.value = elemento.value.toUpperCase();
+}
+
+// Função para alternar entre as TABs e atualizar os estilos da tabela
+function switchToTab(tab) {
+    // Remova todas as classes existentes do elemento da tabela
+    $("#table_checklist2").removeClass("tab1 tab2");
+
+    // Adicione a classe correspondente à TAB atual
+    $("#table_checklist2").addClass("tab" + tab);
+  }
+
+
+  //  ......................................///..............................///................/....../..........
+
+ // INFORMAÇÃO PARA AS TABELAS 
+ function mostrarTab(numeroTab) {
+
+// Ocultar todas as guias
+$('#tabs-1, #tabs-2').hide();
+
+// Mostrar a guia ativa
+$('#tabs-' + numeroTab).show();
+
+ // Ocultar rótulos e inputs específicos na TAB1
+ if (numeroTab === 1) {
+  console.log('RHAVI')
+
+  // Se for, exibe os elementos específicos
+  $('#data_inicial_recebimento, #data_final_recebimento').show();
+
+} else {
+          console.log('Não é a Tab 2');
+            // Se não for a "Tab 2", esconde os elementos
+            $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
+alert('Não é a Tab 2')
+     }
+
+// Verifica se é a Tab 2
+if (numeroTab === 2) {
+
+  console.log('STVEN')
+
+}
+};
+
+function controleVisibilidadeCampoTab(numeroTab) {
+
+if (numeroTab === 1) {
+  console.log('controleVisibilidadeCampoTab')
+
+} else {
+    
+  console.log('TESTE 01');
+
+}
+}
+
+function controleVisibilidadeCampoTab2(numeroTab) {
+
+if (numeroTab === 2) {
+  console.log('controleVisibilidadeCampoTab2')
+
+} else {
+      console.log('TESTE02');
+
+}
 }
 
 // Função para formatar o número
@@ -4112,4 +4241,7 @@ function showOperationValue(value) {
 }
 
 </script>
+
+</body>
+
 </html>

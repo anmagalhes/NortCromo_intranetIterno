@@ -316,599 +316,632 @@
   </div>
   <!-- Fim da div .menu-mobile -->
 {% include 'funcoes_comuns.html' %}
-    <script>
-      try {
-        $(document).ready(function () {
+   
+   
+<script>
+  try {
+      $(document).ready(function () {
 
+          // Elementos do menu mobile
           const menuOverlay = document.getElementById("menu-overlay");
           const menuMobile = document.querySelector(".menu-mobile");
-
           const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
           const toggleMenuBtn = document.getElementById("toggleMenuBtn");
-
           const menuFlutuanteBtn = document.getElementById("menu-flutuante");
 
+          // Event listener para o botão de menu flutuante
           if (menuFlutuanteBtn) {
-                menuFlutuanteBtn.addEventListener("click", function () {
-                    toggleMobileMenu();
-                });
-            }
-
-          if (openMenuFloatingBtnMobile) {
-            openMenuFloatingBtnMobile.addEventListener("click", function () {
-              toggleMobileMenu();
-            });
+              menuFlutuanteBtn.addEventListener("click", function () {
+                  toggleMobileMenu();
+              });
           }
-        if (toggleMenuBtn) {
-        toggleMenuBtn.addEventListener("click", function () {
-          toggleMobileMenu();
-        });
-      }
 
-      function toggleMenuMobile() {
-      menuOverlay.style.display = menuMobile.style.display === "block" ? "none" : "block";
-      menuMobile.style.display = menuMobile.style.display === "block" ? "none" : "block";
-    }
-      function abrirMenu() {
-            // Adicione aqui a lógica para abrir o menu
-            $("#menu-lateral").toggleClass("open-menu");
-           
-        }
-      function toggleMobileMenu() {
-    $("#lado_esquerdo").toggleClass("open");
-  }
+          // Event listener para o botão de abertura de menu no mobile
+          if (openMenuFloatingBtnMobile) {
+              openMenuFloatingBtnMobile.addEventListener("click", function () {
+                  toggleMobileMenu();
+              });
+          }
+
+          // Event listener para o botão de toggle do menu no desktop
+          if (toggleMenuBtn) {
+              toggleMenuBtn.addEventListener("click", function () {
+                  toggleMobileMenu();
+              });
+          }
+
+          // Função para alternar visibilidade do menu mobile
+          function toggleMenuMobile() {
+              menuOverlay.style.display = menuMobile.style.display === "block" ? "none" : "block";
+              menuMobile.style.display = menuMobile.style.display === "block" ? "none" : "block";
+          }
+
+          // Função para abrir o menu
+          function abrirMenu() {
+              $("#menu-lateral").toggleClass("open-menu");
+          }
+
+          // Função para alternar visibilidade do menu no mobile
+          function toggleMobileMenu() {
+              $("#lado_esquerdo").toggleClass("open");
+          }
+
+          // Verifica se a tela é mobile
           const isMobile = window.innerWidth <= 768;
           if (isMobile) {
-            $("#openMenuBtn").on("click", toggleMobileMenu);
-            $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
+              $("#openMenuBtn").on("click", toggleMobileMenu);
+              $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
           }
 
-  
+          // Event listener para itens do menu expansível
           $(".expandable").click(function () {
-            try {
-              $(this).toggleClass("active");
-              $(this).children(".submenu").toggle();
-              $(this).find(".toggle-submenu").toggleClass("rotated");
-              $(this).children(".menu-text").toggle();
-            } catch (error) {
-              console.error("Error in expandable click:", error);
-            }
+              try {
+                  $(this).toggleClass("active");
+                  $(this).children(".submenu").toggle();
+                  $(this).find(".toggle-submenu").toggleClass("rotated");
+                  $(this).children(".menu-text").toggle();
+              } catch (error) {
+                  console.error("Error in expandable click:", error);
+              }
           });
-  
+
+          // Event listener para itens do submenu
           $(".submenu li").click(function () {
-            try {
-              closeMobileMenu();
-              loadContent($(this).attr("data-template"));
-            } catch (error) {
-              console.error("Error in submenu li click:", error);
-            }
+              try {
+                  closeMobileMenu();
+                  loadContent($(this).attr("data-template"));
+              } catch (error) {
+                  console.error("Error in submenu li click:", error);
+              }
           });
-  
+
+          // Event listener para fechar o menu
           $("#closeMenuBtn").on("click", function () {
-            $("#lado_esquerdo").removeClass("open");
+              $("#lado_esquerdo").removeClass("open");
           });
-  
+
+          // Configurações iniciais para a tela maior que 768 pixels
           if (window.innerWidth > 768) {
-            ladoEsquerdo.style.width = "60px";
-            ladoEsquerdo.style.overflow = "hidden";
+              ladoEsquerdo.style.width = "60px";
+              ladoEsquerdo.style.overflow = "hidden";
           }
-  
+
+          // Event listener para cliques no documento
           document.addEventListener("click", function (event) {
-            try {
-              console.log("Clique em:", event.target);
-            } catch (error) {
-              console.error("Error in document click:", error);
-            }
+              try {
+                  console.log("Clique em:", event.target);
+              } catch (error) {
+                  console.error("Error in document click:", error);
+              }
           });
-  
+
+          // Função para carregar conteúdo
           function loadContent(template) {
-            try {
-              console.log("Carregando conteúdo para o template:", template);
-              $.ajax({
-                url: my_url() + "muda_de_tela",
-                type: "POST",
-                data: {
-                  qual_template: template,
-                },
-                success: function (response) {
+              try {
+                  console.log("Carregando conteúdo para o template:", template);
+                  $.ajax({
+                      url: my_url() + "muda_de_tela",
+                      type: "POST",
+                      data: {
+                          qual_template: template,
+                      },
+                      success: function (response) {
+                          $("#lado_direito").html(response);
+                          $("#lado_esquerdo").removeClass("expanded");
+                          $("#menu").css("left", "-260px");
+                      },
+                      error: function (response) {
+                          $("#lado_direito").html("Error");
+                      },
+                  }).done(function (data) {});
+              } catch (error) {
+                  console.error("Error in loadContent:", error);
+              }
+          }
+
+          // Event listener para itens do menu no desktop
+          $(".desktop-menu-item").click(function () {
+              try {
+                  const template = $(this).attr("data-template");
+                  loadContent(template);
+                  $("#lado_esquerdo").removeClass("expanded");
+                  $("#menu").css("left", "-260px");
+              } catch (error) {
+                  console.error("Error in desktop-menu-item click:", error);
+              }
+          });
+
+          // Event listener para itens do submenu
+          $(".submenu li").click(function () {
+              try {
+                  closeMobileMenu();
+                  loadContent($(this).attr("data-template"));
+              } catch (error) {
+                  console.error("Error in submenu li click:", error);
+              }
+          });
+      });
+  } catch (error) {
+      console.error("Error in document ready:", error);
+  }
+
+  // Função para mudar de tela na seção de presença
+  function muda_de_tela_presenca(x) {
+      try {
+          alert("Função muda_de_tela_presenca chamada com: " + x);
+          $.ajax({
+              url: my_url() + "muda_de_tela_presenca",
+              type: "POST",
+              data: {
+                  qual_template: x,
+              },
+              success: function (response) {
+                  $("#lado_direito").html(response);
+              },
+              error: function (response) {
+                  $("#lado_direito").html("Error");
+              },
+          }).done(function (data) {});
+      } catch (error) {
+          console.error("Error in muda_de_tela_presenca:", error);
+      }
+  }
+
+  // Função para mudar de tela
+  function muda_de_tela(x) {
+      try {
+          alert("Função muda_de_tela chamada com: " + x);
+          $.ajax({
+              url: my_url() + "muda_de_tela",
+              type: "POST",
+              data: {
+                  qual_template: x,
+              },
+              success: function (response) {
                   $("#lado_direito").html(response);
                   $("#lado_esquerdo").removeClass("expanded");
                   $("#menu").css("left", "-260px");
-                },
-                error: function (response) {
+              },
+              error: function (response) {
                   $("#lado_direito").html("Error");
-                },
-              }).done(function (data) {});
-            } catch (error) {
-              console.error("Error in loadContent:", error);
-            }
-          }
-  
-          $(".desktop-menu-item").click(function () {
-            try {
-              const template = $(this).attr("data-template");
-              loadContent(template);
-              $("#lado_esquerdo").removeClass("expanded");
-              $("#menu").css("left", "-260px");
-            } catch (error) {
-              console.error("Error in desktop-menu-item click:", error);
-            }
-          });
-  
-          $(".submenu li").click(function () {
-            try {
-              closeMobileMenu();
-              loadContent($(this).attr("data-template"));
-            } catch (error) {
-              console.error("Error in submenu li click:", error);
-            }
-          });
-        });
+              },
+          }).done(function (data) {});
       } catch (error) {
-        console.error("Error in document ready:", error);
-      }
-  
-      function muda_de_tela_presenca(x) {
-        try {
-          alert("Função muda_de_tela chamada com: " + x);
-          $.ajax({
-            url: my_url() + "muda_de_tela_presenca",
-            type: "POST",
-            data: {
-              qual_template: x,
-            },
-            success: function (response) {
-              $("#lado_direito").html(response);
-            },
-            error: function (response) {
-              $("#lado_direito").html("Error");
-            },
-          }).done(function (data) {});
-        } catch (error) {
-          console.error("Error in muda_de_tela_presenca:", error);
-        }
-      }
-  
-      function muda_de_tela(x) {
-        try {
-          alert("Função muda_de_tela chamada com: " + x);
-          $.ajax({
-            url: my_url() + "muda_de_tela",
-            type: "POST",
-            data: {
-              qual_template: x,
-            },
-            success: function (response) {
-              $("#lado_direito").html(response);
-              $("#lado_esquerdo").removeClass("expanded");
-              $("#menu").css("left", "-260px");
-            },
-            error: function (response) {
-              $("#lado_direito").html("Error");
-            },
-          }).done(function (data) {});
-        } catch (error) {
           console.error("Error in muda_de_tela:", error);
-        }
       }
-  
-      function submenu_muda_de_tela(x, event) {
-        try {
+  }
+
+  // Função para mudar de tela no submenu
+  function submenu_muda_de_tela(x, event) {
+      try {
           event.preventDefault();
           event.stopPropagation();
-  
+
           $.ajax({
-            url: "/submenu_muda_de_tela",
-            type: "POST",
-            data: { qual_template: x },
-            success: function (response) {
-              $("#lado_direito").html(response);
-              $("#lado_esquerdo").removeClass("expanded");
-              $("#menu").css("left", "-260px");
-            },
-            error: function (response) {
-              $("#lado_direito").html("Error");
-            },
+              url: "/submenu_muda_de_tela",
+              type: "POST",
+              data: { qual_template: x },
+              success: function (response) {
+                  $("#lado_direito").html(response);
+                  $("#lado_esquerdo").removeClass("expanded");
+                  $("#menu").css("left", "-260px");
+              },
+              error: function (response) {
+                  $("#lado_direito").html("Error");
+              },
           }).done(function (data) {
-            $(event.target).closest(".submenu").hide();
+              $(event.target).closest(".submenu").hide();
           });
-        } catch (error) {
+      } catch (error) {
           console.error("Error in submenu_muda_de_tela:", error);
-        }
       }
-  
-      const menu = document.getElementById("menu");
-      const ladoEsquerdo = document.getElementById("lado_esquerdo");
-      const ladoDireito = document.getElementById("lado_direito");
-      const toggleMenuBtn = document.getElementById("toggleMenuBtn");
-      const openMenuBtn = document.getElementById("openMenuBtn");
-      const closeMenuBtn = document.getElementById("closeMenuBtn");
-      const submenus = document.querySelectorAll(".submenu");
-  
-      function toggleMenuState() {
-        try {
+  }
+
+  // Elementos globais
+  const menu = document.getElementById("menu");
+  const ladoEsquerdo = document.getElementById("lado_esquerdo");
+  const ladoDireito = document.getElementById("lado_direito");
+  const toggleMenuBtn = document.getElementById("toggleMenuBtn");
+  const openMenuBtn = document.getElementById("openMenuBtn");
+  const closeMenuBtn = document.getElementById("closeMenuBtn");
+  const submenus = document.querySelectorAll(".submenu");
+
+  // Função para alternar estado do menu
+  function toggleMenuState() {
+      try {
           if (ladoEsquerdo.classList.contains("expanded")) {
-             // Se estiver expandido, recolha
-            ladoEsquerdo.classList.remove("expanded");
-            ladoEsquerdo.classList.add("collapsed");
-            ladoDireito.classList.add("expanded-content"); // Adicione uma classe para ajustar o conteúdo
+              // Se estiver expandido, recolha
+              ladoEsquerdo.classList.remove("expanded");
+              ladoEsquerdo.classList.add("collapsed");
+              ladoDireito.classList.add("expanded-content"); // Adicione uma classe para ajustar o conteúdo
           } else {
-            ladoEsquerdo.classList.remove("collapsed");
-            ladoEsquerdo.classList.add("expanded");
-            ladoDireito.classList.remove("expanded-content"); // Remova a classe para reverter o ajuste do conteúdo
+              ladoEsquerdo.classList.remove("collapsed");
+              ladoEsquerdo.classList.add("expanded");
+              ladoDireito.classList.remove("expanded-content"); // Remova a classe para reverter o ajuste do conteúdo
           }
-        } catch (error) {
+      } catch (error) {
           console.error("Error in toggleMenuState:", error);
-        }
       }
+  }
 
+  // Event listeners para os botões de toggle do menu
+  toggleMenuBtn.addEventListener("click", toggleMenuState);
+  openMenuBtn.addEventListener("click", toggleMenuState);
+  closeMenuBtn.addEventListener("click", toggleMenuState);
 
-      toggleMenuBtn.addEventListener("click", toggleMenuState);
-      openMenuBtn.addEventListener("click", toggleMenuState);
-      closeMenuBtn.addEventListener("click", toggleMenuState);
-  
-      menu.addEventListener("click", function (event) {
-        try {
+  // Event listener para o menu
+  menu.addEventListener("click", function (event) {
+      try {
           const target = event.target;
-  
+
+          // Lógica para lidar com cliques no cabeçalho do menu
           if (target.classList.contains("menu-header")) {
-            const submenu = target.nextElementSibling;
-            if (
-              submenu.style.display === "none" ||
-              submenu.style.display === ""
-            ) {
-              submenu.style.display = "block";
-              target.querySelector(".toggle-submenu").innerText = "arrow_drop_up";
-            } else {
-              submenu.style.display = "none";
-              target.querySelector(".toggle-submenu").innerText =
-                "arrow_drop_down";
-            }
+              const submenu = target.nextElementSibling;
+              if (
+                  submenu.style.display === "none" ||
+                  submenu.style.display === ""
+              ) {
+                  submenu.style.display = "block";
+                  target.querySelector(".toggle-submenu").innerText = "arrow_drop_up";
+              } else {
+                  submenu.style.display = "none";
+                  target.querySelector(".toggle-submenu").innerText =
+                      "arrow_drop_down";
+              }
           }
-  
+
+          // Remover seleção de itens do menu
           document
-            .querySelectorAll('[data-selected="true"]')
-            .forEach((item) => item.removeAttribute("data-selected"));
-  
+              .querySelectorAll('[data-selected="true"]')
+              .forEach((item) => item.removeAttribute("data-selected"));
+
+          // Adicionar seleção ao item clicado
           if (
-            target.tagName === "LI" &&
-            !target.nextElementSibling.classList.contains("submenu")
+              target.tagName === "LI" &&
+              !target.nextElementSibling.classList.contains("submenu")
           ) {
-            target.setAttribute("data-selected", "true");
+              target.setAttribute("data-selected", "true");
           }
-        } catch (error) {
+      } catch (error) {
           console.error("Error in menu click:", error);
-        }
-      });
-  
-      openMenuBtn.addEventListener("click", function () {
-        try {
+      }
+  });
+
+  // Event listener para abrir o menu no desktop
+  openMenuBtn.addEventListener("click", function () {
+      try {
           menu.style.left = "0px";
           ladoEsquerdo.classList.add("expanded");
-        } catch (error) {
+      } catch (error) {
           console.error("Error in openMenuBtn click:", error);
-        }
-      });
-  
-      closeMenuBtn.addEventListener("click", function () {
-  try {
-    menu.style.left = "-260px";
-    submenus.forEach((sub) => (sub.style.display = "none"));
-    ladoEsquerdo.classList.remove("expanded");
-    ladoDireito.classList.remove("expanded-content"); // Remova a classe ao fechar o menu
-  } catch (error) {
-    console.error("Error in closeMenuBtn click:", error);
-  }
-});
-  
-      document.addEventListener("DOMContentLoaded", function () {
-        try {
+      }
+  });
+
+  // Event listener para fechar o menu
+  closeMenuBtn.addEventListener("click", function () {
+      try {
+          menu.style.left = "-260px";
+          submenus.forEach((sub) => (sub.style.display = "none"));
+          ladoEsquerdo.classList.remove("expanded");
+          ladoDireito.classList.remove("expanded-content"); // Remova a classe ao fechar o menu
+      } catch (error) {
+          console.error("Error in closeMenuBtn click:", error);
+      }
+  });
+
+  // Event listener para carregamento inicial
+  document.addEventListener("DOMContentLoaded", function () {
+      try {
           const toggleButtons = document.querySelectorAll(".toggle-submenu");
           toggleButtons.forEach((button) => {
-            button.addEventListener("click", function () {
-              const submenu = this.parentElement.nextElementSibling;
-              if (
-                submenu.style.display === "block" ||
-                submenu.style.display === ""
-              ) {
-                submenu.style.display = "none";
-                this.innerText = "arrow_drop_down";
-              } else {
-                submenu.style.display = "block";
-                this.innerText = "arrow_drop_up";
-              }
-            });
+              button.addEventListener("click", function () {
+                  const submenu = this.parentElement.nextElementSibling;
+                  if (
+                      submenu.style.display === "block" ||
+                      submenu.style.display === ""
+                  ) {
+                      submenu.style.display = "none";
+                      this.innerText = "arrow_drop_down";
+                  } else {
+                      submenu.style.display = "block";
+                      this.innerText = "arrow_drop_up";
+                  }
+              });
           });
-        } catch (error) {
+      } catch (error) {
           console.error("Error in DOMContentLoaded event:", error);
-        }
-      });
+      }
+  });
 
-      $(".mobile-menu-item").click(function () {
-        abrirMenu();
-    });
+  // Event listener para itens do menu no mobile
+  $(".mobile-menu-item").click(function () {
+      abrirMenu();
+  });
 
-    function toggleMenuLateralFlutuante() {
-        $("#lado-esquerdo-flutuante").toggleClass("open-menu");
-        $("#menu-overlay").toggleClass("menu-open");
-    }
+  // Função para alternar visibilidade do menu lateral flutuante
+  function toggleMenuLateralFlutuante() {
+      $("#lado-esquerdo-flutuante").toggleClass("open-menu");
+      $("#menu-overlay").toggleClass("menu-open");
+  }
 
-    // Adicione a lógica para fechar o menu lateral flutuante quando um item é clicado
-    $("#lado-esquerdo-flutuante ul li").click(function () {
-        toggleMenuLateralFlutuante();
-    });
-    </script>
-    <style>
-      body {
-        font-size: 16px;
-      }
-    
-      .logo-suelopro {
-        width: 130px;
-        height: auto;
-      }
-    
-      #cabecalho_SueloPro {
-        background-color: #5ec864;
-        color: #fff;
-        font-weight: bold;
-        padding: 0.5em;
-      }
-    
-      #divide_em_dois {
-        display: grid;
-        grid-template-columns: 260px 1fr;
-        width: 100%;
-        height: 95vh;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      }
-    
-      #lado_esquerdo {
-        transition: width 0.3s ease;
-        width: 60px;
-        overflow: hidden;
-      }
-    
-      #lado_direito {
-        grid-column: 2;
-        overflow: scroll;
-        overflow-x: hidden;
-        transition: width 0.3s ease; /* Adicione uma transição suave para a animação */
-      }
-    
-      #lado_esquerdo.expanded {
-        width: 200px;
-      }
-    
-      .menu {
-        text-align: left;
-      }
-    
-      .expandable {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 12px 10px;
-      }
-    
-      .menu-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        padding: 10px 5px;
-      }
-    
-      .submenu {
-        display: none;
-        list-style-type: none;
-        padding-left: 15px;
-        max-width: 100%;
-      }
-    
-      .invisible-icon {
-        visibility: hidden;
-      }
-    
-      .submenu li {
-        padding: 5px 0;
-      }
-    
-      .expandable:hover {
-        background-color: #eaeaea;
-      }
-    
-      [data-selected="true"] {
-        background-color: #4da752;
-        color: white;
-        font-weight: bold;
-      }
-    
-      .menu ul li,
-      .submenu li {
-        color: black;
-        text-align: left;
-        display: flex;
-        align-items: center;
-      }
-    
-      .swal-title {
-        font-size: 24px;
-      }
-      .swal-text {
-        font-size: 18px;
-      }
+  // Event listener para fechar o menu lateral flutuante quando um item é clicado
+  $("#lado-esquerdo-flutuante ul li").click(function () {
+      toggleMenuLateralFlutuante();
+  });
+</script>
 
- /* ADICIONAR PARA CELULAR MENU LATERAL  */
-   #lado-esquerdo-flutuante {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 260px;
-    background-color:#f0f0f0;  /* Cor de fundo do menu lateral */
-    color: #333; /* Cor do texto do menu lateral */
-    z-index: 1000;
-    display: none; /* Inicialmente oculto */
-    font-size: 16px; /* Tamanho da fonte semelhante ao menu desktop */
-    transition: width 0.3s ease;
-    overflow: hidden;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito mais profissional */
-}
 
-#lado-esquerdo-flutuante.open-menu {
-    display: block; /* Exibido quando a classe open-menu é aplicada */
-    width: 60%; /* Largura expandida semelhante ao menu desktop */
-}
 
-#lado-esquerdo-flutuante #cabecalho_SueloPro {
+<style>
+  body {
+    font-size: 16px;
+  }
+
+  .logo-suelopro {
+    width: 130px;
+    height: auto;
+  }
+
+  #cabecalho_SueloPro {
     background-color: #5ec864;
     color: #fff;
     font-weight: bold;
     padding: 0.5em;
-}
+  }
 
-#lado-esquerdo-flutuante .menu {
+  #divide_em_dois {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    width: 100%;
+    height: 95vh;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  #lado_esquerdo {
+    transition: width 0.3s ease;
+    width: 60px;
+    overflow: hidden;
+  }
+
+  #lado_direito {
+    grid-column: 2;
+    overflow: scroll;
+    overflow-x: hidden;
+    transition: width 0.3s ease; /* Adicione uma transição suave para a animação */
+  }
+
+  #lado_esquerdo.expanded {
+    width: 200px;
+  }
+
+  .menu {
     text-align: left;
-}
+  }
 
-#lado-esquerdo-flutuante .expandable {
+  .expandable {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 12px 10px;
-}
+  }
 
-#lado-esquerdo-flutuante .menu-header {
+  .menu-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     padding: 10px 5px;
-}
+  }
 
-#lado-esquerdo-flutuante .submenu {
+  .submenu {
     display: none;
     list-style-type: none;
     padding-left: 15px;
     max-width: 100%;
-}
+  }
 
-#lado-esquerdo-flutuante .submenu li {
+  .invisible-icon {
+    visibility: hidden;
+  }
+
+  .submenu li {
     padding: 5px 0;
-}
+  }
 
-#lado-esquerdo-flutuante .expandable:hover {
+  .expandable:hover {
     background-color: #eaeaea;
-}
+  }
 
-#lado-esquerdo-flutuante [data-selected="true"] {
+  [data-selected="true"] {
     background-color: #4da752;
     color: white;
     font-weight: bold;
-}
+  }
 
-#lado-esquerdo-flutuante .menu ul li,
-#lado-esquerdo-flutuante .submenu li {
+  .menu ul li,
+  .submenu li {
     color: black;
     text-align: left;
     display: flex;
     align-items: center;
+  }
+
+  .swal-title {
+    font-size: 24px;
+  }
+  .swal-text {
+    font-size: 18px;
+  }
+
+/* ADICIONAR PARA CELULAR MENU LATERAL  */
+#lado-esquerdo-flutuante {
+position: fixed;
+top: 0;
+left: 0;
+height: 100%;
+width: 260px;
+background-color:#f0f0f0;  /* Cor de fundo do menu lateral */
+color: #333; /* Cor do texto do menu lateral */
+z-index: 1000;
+display: none; /* Inicialmente oculto */
+font-size: 16px; /* Tamanho da fonte semelhante ao menu desktop */
+transition: width 0.3s ease;
+overflow: hidden;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito mais profissional */
+}
+
+#lado-esquerdo-flutuante.open-menu {
+display: block; /* Exibido quando a classe open-menu é aplicada */
+width: 60%; /* Largura expandida semelhante ao menu desktop */
+}
+
+#lado-esquerdo-flutuante #cabecalho_SueloPro {
+background-color: #5ec864;
+color: #fff;
+font-weight: bold;
+padding: 0.5em;
+}
+
+#lado-esquerdo-flutuante .menu {
+text-align: left;
+}
+
+#lado-esquerdo-flutuante .expandable {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 12px 10px;
+}
+
+#lado-esquerdo-flutuante .menu-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+cursor: pointer;
+padding: 10px 5px;
+}
+
+#lado-esquerdo-flutuante .submenu {
+display: none;
+list-style-type: none;
+padding-left: 15px;
+max-width: 100%;
+}
+
+#lado-esquerdo-flutuante .submenu li {
+padding: 5px 0;
+}
+
+#lado-esquerdo-flutuante .expandable:hover {
+background-color: #eaeaea;
+}
+
+#lado-esquerdo-flutuante [data-selected="true"] {
+background-color: #4da752;
+color: white;
+font-weight: bold;
+}
+
+#lado-esquerdo-flutuante .menu ul li,
+#lado-esquerdo-flutuante .submenu li {
+color: black;
+text-align: left;
+display: flex;
+align-items: center;
 }
 
 #lado-esquerdo-flutuante .swal-title {
-    font-size: 24px;
+font-size: 24px;
 }
 
 #lado-esquerdo-flutuante .swal-text {
-    font-size: 18px;
+font-size: 18px;
 }
 
-    
-    @media screen and (max-width: 768px) {
-      
-      #menu-flutuante {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          z-index: 999;
-          cursor: pointer;
-          background-color: #5ec864; /* Cor de destaque */
-          color: #fff; /* Cor do texto */
-          border: none;
-          border-radius: 50%;
-          padding: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-          transition: background-color 0.3s ease;
-      }
 
-      #menu-flutuante:hover {
-          background-color: #4da752; /* Cor de destaque ao passar o mouse */
-      }
-
-      #menu-flutuante i {
-          font-size: 24px;
-      }
-
-          body {
-          font-size: 14px;
-        }
-
-       #menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo com transparência */
-            z-index: 1;
-            cursor: pointer;
-        }
-
-        .menu-open #menu-overlay {
-            display: block;
-        }
-
-        #lado_esquerdo {
-            display: none;
-          }
-
-          .menu-toggle-btn {
-          display: block;
-        }
-
-        #divide_em_dois {
-            position: relative;
-            z-index: 2;
-        }
-      
-          #divide_em_dois {
-            grid-template-columns: 1fr;
-            height: auto;
-          }
-      
+@media screen and (max-width: 768px) {
   
-          #lado_direito {
-            width: 100%;
-            overflow: scroll;
-            overflow-x: hidden;
-          }
-      
-          .swal-title {
-            font-size: 18px;
-          }
-          .swal-text {
-            font-size: 16px;
-          }
+  #menu-flutuante {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      cursor: pointer;
+      background-color: #5ec864; /* Cor de destaque */
+      color: #fff; /* Cor do texto */
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+  }
 
-          #menu-flutuante.open-menu {
-                width: 60px;
-            }
+  #menu-flutuante:hover {
+      background-color: #4da752; /* Cor de destaque ao passar o mouse */
+  }
 
-            
+  #menu-flutuante i {
+      font-size: 24px;
+  }
+
+      body {
+      font-size: 14px;
+    }
+
+   #menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo com transparência */
+        z-index: 1;
+        cursor: pointer;
+    }
+
+    .menu-open #menu-overlay {
+        display: block;
+    }
+
+    #lado_esquerdo {
+        display: none;
+      }
+
+      .menu-toggle-btn {
+      display: block;
+    }
+
+    #divide_em_dois {
+        position: relative;
+        z-index: 2;
+    }
+  
+      #divide_em_dois {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+  
+
+      #lado_direito {
+        width: 100%;
+        overflow: scroll;
+        overflow-x: hidden;
+      }
+  
+      .swal-title {
+        font-size: 18px;
+      }
+      .swal-text {
+        font-size: 16px;
+      }
+
+      #menu-flutuante.open-menu {
+            width: 60px;
         }
-      </style>
-    </body>
+
+        
+    }
+  </style>
+</body>
 </html>
-          

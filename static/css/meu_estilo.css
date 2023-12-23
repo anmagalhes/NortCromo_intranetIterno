@@ -456,6 +456,77 @@ input[type='radio']:checked + .checkmark {
   border-left: 1px dashed #000; /* Adicione a borda esquerda pontilhada à primeira célula de cada linha */
 }
 
+
+
+
+/* Estilos de tabelas */
+.tabulator2 {
+  white-space: nowrap;
+  max-height: 1000px;
+  overflow-y: auto;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tabulator2 table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabulator2 .tabulator-tableHolder {
+  position: relative;
+  max-height: 1000px;
+  overflow: auto;
+}
+
+.tabulator2 .tabulator2-header .tabulator2-col {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #43a04d;
+  color: white;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+}
+
+.tabulator2 .tabulator-row {
+  height: 20px;
+}
+
+.tabulator2 .tabulator-cell {
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabulator2 .tabulator-row:hover {
+  background-color: #f5f5f5;
+}
+
+.tabulator2 .tabulator-row:last-child .tabulator-cell {
+  border-bottom: none;
+}
+
+.tabulator-row,
+.tabulator-cell {
+  border-bottom: 1px dashed #000; /* Bordas inferiores pontilhadas */
+  border-right: 1px dashed #000; /* Bordas direitas pontilhadas */
+}
+
+.tabulator-row:last-child .tabulator-cell {
+  border-bottom: none; /* Remova a borda inferior da última linha */
+}
+
+.tabulator-cell:first-child {
+  border-left: 1px dashed #000; /* Adicione a borda esquerda pontilhada à primeira célula de cada linha */
+}
+
+
+
 /* Estilos para checkbox */
 
 .checkbox-material input[type='checkbox'] {
@@ -474,7 +545,7 @@ input[type='radio']:checked + .checkmark {
 }
 
 .checkbox-material input[type='checkbox']:checked + .checkmark {
-  background-color: #2196f3;
+  background-color: #43a04d;
 }
 
 .checkbox-material .checkmark:after {
@@ -609,6 +680,11 @@ input[type='radio']:checked + .checkmark {
   transform: rotate(45deg);
 }
 
+
+
+
+
+
 .tabulator .text-center {
   text-align: center;
 }
@@ -644,7 +720,7 @@ input[type='radio']:checked + .checkmark {
 
 .custom-checkbox input:checked ~ span {
   background-color: white;
-  border: 1px solid #2196f3;
+  border: 1px solid #43a04d;
 }
 
 .custom-checkbox span:after {
@@ -1158,6 +1234,19 @@ body {
 
 /* Seu CSS básico já se adapta bem à nova tabela */
 /* Estilos de tabelas */
+
+.tabulator.tab1 {
+  /* Estilos para TAB1 */
+  background-color: #4CAF50;
+  color: white;
+}
+
+.tabulator.tab2 {
+  /* Estilos para TAB2 */
+  background-color: #4CAF50;
+  color: white;
+}
+
 .tabulator {
   width: 100% !important;
   white-space: nowrap;
@@ -1241,7 +1330,7 @@ body {
 }
 
 .checkbox-material input[type='checkbox']:checked + .checkmark {
-  background-color: #2196f3;
+  background-color: #43a04d;
 }
 
 .checkbox-material .checkmark:after {
@@ -1405,7 +1494,7 @@ body {
 
 .custom-checkbox input:checked ~ span {
   background-color: white;
-  border: 1px solid #2196f3;
+  border: 1px solid #43a04d;
 }
 
 .custom-checkbox span:after {
@@ -1432,5 +1521,17 @@ body {
 /* Adicione um estilo para a guia ativa (cor vermelha, por exemplo) */
 #tabs a.ativa {
   background-color: red;
+  color: white;
+}
+
+/* Estilos para TAB-1 */
+.tab1 .myTable thead {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Estilos para TAB-2 */
+.tab2 .myTable thead {
+  background-color: #4CAF50;
   color: white;
 }

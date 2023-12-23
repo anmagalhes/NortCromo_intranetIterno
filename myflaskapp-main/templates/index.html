@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body id="sbody"></body>
+  <script>
+    $(document).ready(function () {
+      $.ajax({
+        url: my_url() + 'verificador_inicial',
+        data: {
+          userName: getCookie('userName'),
+          token: getCookie('token'),
+        },
+        type: 'POST',
+        success: function (response) {
+          $('#sbody').html(response);
+        },
+      });
+    });
+
+    function my_url() {
+      if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+        return 'http://127.0.0.1:5000/';
+      } else {
+        return 'https://myflaskappdantederette.pythonanywhere.com/';
+      }
+    }
+    function setCookie(name, value, days) {
+      let expires = '';
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = '; expires=' + date.toUTCString();
+      }
+      document.cookie = name + '=' + (value || '') + expires + '; path=/';
+    }
+    function getCookie(name) {
+      const nameEQ = name + '=';
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) {
+          return c.substring(nameEQ.length, c.length);
+        }
+      }
+      return null;
+    }
+  </script>
+</html>
