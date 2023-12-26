@@ -602,9 +602,36 @@ function setDataFinal_Geral() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const btnGroup = document.querySelector('.btn-group');
-  const hiddenInput = document.getElementById('marcaNovo');
+  const capturarBotao = document.getElementById('seuIdDoBotaoCapturar');
+  const cameraFrenteBotao = document.getElementById('seuIdDoBotaoCameraFrente');
+  const cameraTransBotao = document.getElementById('seuIdDoBotaoCameraTrans');
+  const desativarCameraBotao = document.getElementById('seuIdDoBotaoDesativarCamera');
 
+  if (capturarBotao) {
+    capturarBotao.addEventListener('click', capturePhoto);
+  }
+
+  if (cameraFrenteBotao) {
+    cameraFrenteBotao.addEventListener('click', function () {
+      stopCamera();
+      startCamera({ video: { facingMode: 'user' } });
+    });
+  }
+
+  if (cameraTransBotao) {
+    cameraTransBotao.addEventListener('click', function () {
+      stopCamera();
+      startCamera({ video: { facingMode: { exact: 'environment' } } });
+    });
+  }
+
+  if (desativarCameraBotao) {
+    desativarCameraBotao.addEventListener('click', function () {
+      stopCamera();
+      video.style.display = 'none';
+    });
+  }
+  
   btnGroup.addEventListener('click', function (event) {
     const target = event.target;
     if (target.tagName === 'BUTTON') {

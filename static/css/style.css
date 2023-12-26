@@ -543,6 +543,7 @@ button:hover {
 
 .form-control,
 .btn {
+  font-size: 14px; /* Ajuste o tamanho conforme necessário */
   border-radius: 20px;
 }
 
@@ -984,18 +985,23 @@ input[type='radio']:checked + .checkmark {
 }
 .checkbox-material {
   position: relative;
-  padding-left: 35px;
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 30px;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 20px;
   user-select: none;
 }
 
+
 .checkbox-material input {
   position: absolute;
+  left: 0;
+  top: 0;
   opacity: 0;
+  height: 20px; /* Ajuste conforme necessário */
+  width: 20px; /* Ajuste conforme necessário */
   cursor: pointer;
-  height: 0;
-  width: 0;
 }
 
 .checkmark {
@@ -1004,7 +1010,9 @@ input[type='radio']:checked + .checkmark {
   left: 0;
   height: 20px;
   width: 20px;
-  border: 1px solid #ccc;
+  background-color: #eee;
+  border-radius: 2px;
+  border: 1px solid #ddd;
 }
 
 .checkbox-material .checkmark {
@@ -1027,9 +1035,12 @@ input[type='radio']:checked + .checkmark {
 }
 
 .checkmark:after {
-  content: '';
+  content: '\2714';
   position: absolute;
   display: none;
+  color: white;
+  left: 6px;
+  top: 2px;
 }
 
 .checkbox-material input:checked ~ .checkmark:after {
@@ -1042,8 +1053,8 @@ input[type='radio']:checked + .checkmark {
   display: none;
   color: white;
 
-  left: 9px;
-  top: 5px;
+  left: 6px;
+  top: 2px;
   width: 5px;
   height: 10px;
   border: solid white;
