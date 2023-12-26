@@ -355,9 +355,21 @@
 
 <script>
 
- document.getElementById('mostrarInfoFlask').addEventListener('click', function() {
-  var divInfoFlask = document.getElementById('divInfoFlask');
-  divInfoFlask.style.display = 'block';
+document.addEventListener('DOMContentLoaded', function() {
+    var mostrarInfoFlaskBtn = document.getElementById('mostrarInfoFlask');
+    
+    if (mostrarInfoFlaskBtn) {
+        mostrarInfoFlaskBtn.addEventListener('click', function() {
+            var divInfoFlask = document.getElementById('divInfoFlask');
+            if (divInfoFlask) {
+                divInfoFlask.style.display = 'block';
+            } else {
+                console.error('Elemento com ID "divInfoFlask" não encontrado.');
+            }
+        });
+    } else {
+        console.error('Elemento com ID "mostrarInfoFlask" não encontrado.');
+    }
 });
 
 </script>

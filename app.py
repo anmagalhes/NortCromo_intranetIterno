@@ -154,11 +154,18 @@ def muda_de_tela_presenca():  # associa uma função a esta rota.
 
 @app.route("/submenu_muda_de_tela", methods=["POST"])
 def submenu_muda_de_tela():
-    print("Requisição recebida")  # Adicione esta linha
-    qual_template = request.form["qual_template"]
-    return render_template(qual_template)
+    try:
+        print("Requisição recebida")  
 
+        qual_template = request.form["qual_template"]
 
+        print("Template a ser retornado:", qual_template)  # Adicione esta linha
+
+        return render_template(qual_template)
+    except Exception as e:
+        print("Erro:", str(e))
+        return "Erro ao processar a solicitação."
+    
 @app.route("/index_2", methods=["GET"])
 def index_2():  # associa uma função a esta rota.
     # Retorna o resultado desta rota.

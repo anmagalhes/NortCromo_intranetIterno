@@ -150,42 +150,41 @@
               >
             </div>
               <ul class="submenu">
-                <li>
+                <li  onclick="submenu_muda_de_tela('checklist.html', event)" >
                   <i class="material-icons"
-                  onclick="submenu_muda_de_tela('checklist.html', event)"
                   >playlist_add_check</i>
                   <span class="menu-text"
-                  onclick="submenu_muda_de_tela('checklist.html', event)"
                   > checklist</span>
                 </li>
               </ul>
             </li>
 
             <li class="expandable hide-text">
-              <div class="menu-header">
-                  <i class="material-icons">code</i>
-                  <span class="menu-text"> Programação</span>
-                  <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
-              </div>
-              <ul class="submenu">
-                  <li>
-                      <i class="material-icons"
-                      onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"
-                      >playlist_add</i>
-                      <span class="menu-text"
-                      onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"
-                      > Apontamento de Tarefas</span>
-                  </li>
-                  <li>
-                      <i class="material-icons">send</i>
-                      <span class="menu-text"> Lançamento p/ Produção</span>
-                  </li>
-                  <li>
-                      <i class="material-icons">update</i>
-                      <span class="menu-text"> Andamento na Produção</span>
-                  </li>
-              </ul>
-          </li>
+                <div class="menu-header">
+                    <i class="material-icons">code</i>
+                    <span class="menu-text"> Programação</span>
+                    <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+                </div>
+                <ul class="submenu">
+                    <li>
+                        <i class="material-icons"
+                        onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"
+                        >playlist_add</i>
+                        <span class="menu-text"
+                        onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"
+                        > Apontamento de Tarefas</span>
+                    </li>
+                    <li>
+                        <i class="material-icons">send</i>
+                        <span class="menu-text"> Lançamento p/ Produção</span>
+                    </li>
+                    <li>
+                        <i class="material-icons">update</i>
+                        <span class="menu-text"> Andamento na Produção</span>
+                    </li>
+                </ul>
+            </li>
+            
           
             <li class="expandable hide-text">
               <div class="menu-header">
@@ -340,6 +339,7 @@
 <script>
   try {
       $(document).ready(function () {
+
           // Evento de clique para abrir o menu e fechar
           $("#toggleMenuBtn").click(function () {
             console.log('Botão do menu clicado')
@@ -355,6 +355,9 @@ $("#menu ul li.expandable").on("click", function (e) {
         // Alternar a classe active no item clicado
         $(el).toggleClass("active");
         //setSubmenuHeight();
+
+         // Alternar a classe change2 no item clicado e seu submenu
+         $(el).find(".submenu").toggleClass("change2");
 
         // Remover a classe active de outros itens do menu
         $("#menu ul li.expandable").not(el).removeClass("active");
@@ -392,31 +395,7 @@ $("#menu ul li.expandable").on("click", function (e) {
     $(".container").toggleClass("change2");
   });
      
-        // Evento de clique nos itens do menu
-        $(".nav-list").on("click", ".nav-link", function (e) {
-          const el = e.target.parentNode;
-
-          console.log(el);
-
-          if (el.classList[0] === "nav-link") {
-
-            // Remover a classe active de todos os itens do menu
-
-            $(".nav-link").removeClass("active");
-
-            // Adicionar a classe active ao item clicado
-            el.classList.add("active");
-
-            el.nextElementSibling.classList.toggle("change2");
-            el.classList.toggle("change2");
-          }
-        });
-
-      
-        $(".nav-list").on("click", ".submenu-link", function (e) {
-          toggleSubMenu();
-        });
-
+        
           // Elementos do menu mobile
           const menuOverlay = document.getElementById("menu-overlay");
           const menuMobile = document.querySelector(".menu-mobile");
@@ -491,21 +470,7 @@ $("#menu ul li.expandable").on("click", function (e) {
               }
           });
 
-          // Event listener para itens do submenu
-          $(".submenu li").click(function () {
-              try {
-                  closeMobileMenu();
-                  loadContent($(this).attr("data-template"));
-              } catch (error) {
-                  console.error("Error in submenu li click:", error);
-              }
-          });
-
-          // Event listener para fechar o menu
-          $("#closeMenuBtn").on("click", function () {
-              $("#lado_esquerdo").removeClass("open");
-          });
-
+          
           // Função para carregar conteúdo
           function loadContent(template) {
               try {
@@ -545,14 +510,15 @@ $("#menu ul li.expandable").on("click", function (e) {
           });
 
           // Event listener para itens do submenu
-          $(".submenu li").click(function () {
-              try {
-                  closeMobileMenu();
-                  loadContent($(this).attr("data-template"));
-              } catch (error) {
-                  console.error("Error in submenu li click:", error);
-              }
-          });
+          $(document).on("click", ".submenu li", function () {
+        try {
+            closeMobileMenu();
+            loadContent($(this).attr("data-template"));
+        } catch (error) {
+            console.error("Error in submenu li click:", error);
+        }
+    });
+
       });
   } catch (error) {
       console.error("Error in document ready:", error);
@@ -569,10 +535,10 @@ $("#menu ul li.expandable").on("click", function (e) {
                   qual_template: x,
               },
               success: function (response) {
-                  $("#lado_direito").html(response);
+                  $("#mainContent").html(response);
               },
               error: function (response) {
-                  $("#lado_direito").html("Error");
+                  $("#mainContent").html("Error");
               },
           }).done(function (data) {});
       } catch (error) {
@@ -591,10 +557,10 @@ $("#menu ul li.expandable").on("click", function (e) {
                   qual_template: x,
               },
               success: function (response) {
-                  $("#lado_direito").html(response);
+                  $("#mainContent").html(response);
               },
               error: function (response) {
-                  $("#lado_direito").html("Error");
+                  $("#mainContent").html("Error");
               },
           }).done(function (data) {});
       } catch (error) {
@@ -608,15 +574,17 @@ $("#menu ul li.expandable").on("click", function (e) {
           event.preventDefault();
           event.stopPropagation();
 
+          console.log('Função submenu_muda_de_tela chamada com:', x);
+
           $.ajax({
               url: "/submenu_muda_de_tela",
               type: "POST",
               data: { qual_template: x },
               success: function (response) {
-                  $("#lado_direito").html(response);
+                  $("#mainContent").html(response);
               },
               error: function (response) {
-                  $("#lado_direito").html("Error");
+                  $("#mainContent").html("Error");
               },
           }).done(function (data) {
               $(event.target).closest(".submenu").hide();
