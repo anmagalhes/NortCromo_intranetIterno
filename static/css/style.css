@@ -409,6 +409,7 @@ h2 {
   color: #fff; /* Adicione esta linha para ajustar a cor do texto, se necessário */
 }
 
+/* validado */
 .menu-top img {
   vertical-align: middle;
   margin-right: 10px;
@@ -1134,105 +1135,190 @@ input[type='radio']:checked + .checkmark {
 }
 
 .menu-header,
-.menu li {
-  padding: 8px;
-  cursor: pointer;
-  position: relative;
-}
+  .menu li {
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .menu .expandable {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu .expandable i.material-icons {
+    margin-right: 8px;
+  }
+  
+  .menu-top img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  
+  .menu li[data-selected='true'],
+  .menu-header:hover,
+  .menu li:hover {
+    background-color: var(--background-situacao); /* Cor de destaque ao passar o mouse ou quando está selecionado */
+    color: #fff;
+  }
+  
+  .submenu {
+    display: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 100%; /* Mudança para posicionar o submenu abaixo do item pai */
+    left: 0;
+    background-color: #555;
+    width: 100%;
+    z-index: 1;
+    overflow-y: auto; /* Adicione esta linha para habilitar a rolagem vertical no submenu */
+    transition: max-height 0.5s;
+  }
 
-.menu .expandable {
-  display: flex;
-  align-items: center;
-}
 
-.menu .expandable i.material-icons {
-  margin-right: 8px;
-}
+  
+
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu ul li {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .menu ul li i {
+    margin-right: 10px;
+  }
+  
+  .menu nav ul li {
+    justify-content: space-between;
+  }
+  
+  /* Estilo para quando um item do menu está selecionado */
+  .menu nav ul li[data-selected='true'] {
+    background-color:var(--background-situacao);
+    color: white;
+  }
+  
+  .menu.collapsed li,
+  .menu.collapsed span,
+  .menu.collapsed button.close-menu-btn {
+    display: none; /* esconde os elementos */
+  }
+  
+  .menu.collapsed .material-icons {
+    display: inline-block; /* garante que os ícones ainda estejam visíveis */
+  }
+  
+  /* Estilo para ocultar o menu lateral */
+  .change2 #lado_direito {
+    width: 80vw;
+  }
+  
+  #lado_direito {
+    grid-column: 1;
+    overflow: auto; /* Alterar para overflow: auto para mostrar a barra de rolagem somente quando necessário */
+    transition: width 0.3s ease;
+    height: 100vh; /* Adicionar altura para ocupar toda a tela verticalmente */
+    margin-left: 20vw; /* Ajustar margem para evitar sobreposição com o menu lateral */
+    padding: 20px; /* Adicionar padding conforme necessário */
+  }
 
 
-.menu-top img {
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
-.menu li[data-selected='true'],
-.menu-header:hover,
-.menu li:hover {
-  background-color: var(--background-situacao); /* Cor de destaque ao passar o mouse ou quando está selecionado */
-  color: #fff;
-}
 
 
 
-.submenu {
-  display: none;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  top: 100%; /* Mudança para posicionar o submenu abaixo do item pai */
-  left: 0;
-  background-color: #555;
-  width: 100%;
-  z-index: 1;
-}
 
-.submenu {
-  overflow-y: auto; /* Adicione esta linha para habilitar a rolagem vertical no submenu */
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s;
-}
 
-.menu ul {
-  list-style-type: none;
-  padding: 0;
-}
 
-.menu ul li {
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
+  
+  @media (max-width: 1500px) {
+    .sidebar {
+      width: 20vw;
+      left: -20vw;
+    }
+  
+    .change2 .main-section {
+      left: 20vw;
+      width: 80vw;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .sidebar {
+      width: 25vw;
+      left: -25vw;
+    }
+  
+    .change2 .main-section {
+      left: 25vw;
+      width: 75vw;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .sidebar {
+      width: 30vw;
+      left: -30vw;
+    }
+  
+    .change2 .main-section {
+      left: 30vw;
+      width: 70vw;
+    }
+  
+    .heading {
+      font-size: 10rem;
+    }
+  }
+  
+  @media (max-width: 700px) {
+    .sidebar {
+      width: 50vw;
+      left: -50vw;
+    }
+  
+    .change2 .main-section {
+      left: 50vw;
+      width: 50vw;
+    }
+  
+    .heading {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .sidebar {
+      width: 100vw;
+      left: -100vw;
+    }
+  
+    .change2 .main-section {
+      left: 100vw;
+      width: 0;
+    }
+  
+    .heading {
+      display: none;
+    }
+  }
+  
 
-.menu ul li i {
-  margin-right: 10px;
-}
 
-.menu nav ul li {
-  justify-content: space-between;
-}
 
-/* Estilo para quando um item do menu está selecionado */
-.menu nav ul li[data-selected='true'] {
-  background-color:var(--background-situacao);
-  color: white;
-}
 
-.menu.collapsed li,
-.menu.collapsed span,
-.menu.collapsed button.close-menu-btn {
-  display: none; /* esconde os elementos */
-}
 
-.menu.collapsed .material-icons {
-  display: inline-block; /* garante que os ícones ainda estejam visíveis */
-}
 
-/* Estilo para ocultar o menu lateral */
-.change2 #lado_direito {
-  width: 80vw;
-}
 
-#lado_direito {
-  grid-column: 1;
-  overflow: auto; /* Alterar para overflow: auto para mostrar a barra de rolagem somente quando necessário */
-  transition: width 0.3s ease;
-  height: 100vh; /* Adicionar altura para ocupar toda a tela verticalmente */
-  margin-left: 20vw; /* Ajustar margem para evitar sobreposição com o menu lateral */
-  padding: 20px; /* Adicionar padding conforme necessário */
-}
+
+
 
 
 
