@@ -1,0 +1,1331 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  font-family: "Arial, Helvetica, sans-serif";
+  outline: none;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+/* Adicione o seguinte para remover o preenchimento padrão do body e html */
+body, html {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+:root {
+  --main-bg-color: #f0f0f0; /* Claro */
+  --primary-color: #068349; /* Cor Primária */
+  --secondary-color: #015830; /* Cor Secundária */
+  --text-color: #9c9393; /* Cinza */
+  --hover-text-color: #bdb8b8; /* Escuro */
+  --active-icon-color: #2ae7e7; /* Claro */
+  --text-color2: #fff; /* Claro */
+  --background-situacao: #43a04d; /* Verde claro */
+}
+
+#cabecalho_NorthCromo {
+  width: 100%;
+  height: 5vh;
+  background-color:var(--primary-color) !important;
+  color: var(--text-color2) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0; /* Redefina a margem */
+  padding: 0; /* Redefina o preenchimento */
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-northcromo {
+  margin-right: 1rem; /* Espaçamento entre a imagem e o texto, ajuste conforme necessário */
+}
+
+h2 {
+  margin: 0; /* Remova a margem padrão do h2 */
+  font-size: 1.5rem; /* Tamanho do texto, ajuste conforme necessário */
+}
+
+/* Adicione estilos para o ícone, substitua 'fa-icon' pela classe apropriada do ícone que você está usando */
+.icon-container i {
+  font-size: 2rem; /* Tamanho do ícone, ajuste conforme necessário */
+  color: #fff; /* Cor do ícone, substitua pela cor desejada */
+}
+
+/* Adicione este bloco de estilos */
+.nav-list .nav-link i.material-icons,
+.subnav-list .subnav-item .subnav-link i.material-icons,
+.nav-list .nav-link i.fas,
+.subnav-list .subnav-item .subnav-link i.fas {
+  color: inherit; /* Isso faz com que a cor seja herdada do estilo pai */
+}
+
+.nav-list .nav-link > i.fas {
+  color: inherit; /* Isso faz com que a cor seja herdada do estilo pai */
+}
+
+ .nav-link.active {
+    background-color: #4CAF50; /* Cor de destaque verde */
+    color: #fff; /* Cor do texto no destaque */
+  }
+
+.sidebar {
+  box-sizing: border-box;
+  padding: 1.5rem 1rem;
+  width: 250px; /* Ajuste a largura conforme necessário */
+  height: 100vh;
+  background-color: var(--main-bg-color);
+  position: fixed;
+  left: -15vw; /* Inicia fora da tela */
+  z-index: 100;
+  height: 95vh;
+  overflow-y: auto; /* Adicione esta linha para habilitar a rolagem vertical */
+  transition: left 0.3s;
+}
+
+.change2 .sidebar {
+  left: 0;
+}
+
+.hamburger-menu {
+  box-sizing: border-box;
+  padding: 0.5rem ;
+  width: auto;
+  height: 3.5rem;
+  border-bottom-right-radius: 1rem;
+  background-color: var(--primary-color);
+  position: absolute;
+  right: 2.5rem; /* Ajuste este valor conforme necessário para afastar mais o botão do canto */
+  top: 0;
+  transition: right 0.3s 0.3s;
+  color: #fff; /* Cor do texto branco */
+}
+
+.change2 .hamburger-menu {
+  right: 0;
+}
+
+.line {
+  position: absolute;
+  width: 2.5rem;
+  height: 0.3rem;
+  background-color: var(--secondary-color);
+  transition: transform 0.3s, top 0.3s 0.3s, opacity 0.2s;
+  transform-origin: left;
+}
+
+.line-1 {
+  top: 1.2rem;
+}
+
+.line-2 {
+  top: 1.8rem;
+}
+
+.line-3 {
+  top: 2.4rem;
+}
+
+.change2 .line-1 {
+  top: 2.4rem;
+  transform: rotate(-40deg) translateY(0.3rem);
+  transition: top 0.3s, transform 0.3s 0.3s;
+}
+
+.change2 .line-2 {
+  opacity: 0;
+}
+
+.change2 .line-3 {
+  top: 1.2rem;
+  transform: rotate(40deg) translateY(-0.3rem);
+  transition: top 0.3s, transform 0.3s 0.3s;
+}
+
+.card {
+  display: flex;
+}
+
+.admin-image {
+  border-radius: 0.5rem;
+  width: 5rem;
+}
+
+.card-body {
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.card-title {
+  font-size: 2rem;
+  margin-right: 3rem;
+  color: var(--text-color);
+  letter-spacing: 0.1rem;
+}
+
+.card-subtitle {
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+}
+
+.search-form {
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  height: 4rem;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  color: var(--text-color);
+  font-size: 1.6rem;
+  letter-spacing: 0.1rem;
+}
+
+.search-button {
+  transform: translateX(-150%);
+  background-color: transparent;
+  border: none;
+}
+
+.search-button i {
+  color: var(--secondary-color);
+  font-size: 2rem;
+}
+
+.nav-list {
+  margin-top: 3rem;
+}
+
+.nav-item {
+  margin: 2rem 0;
+}
+
+.nav-link{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  transition: color 0.2s; 
+}
+
+.nav-link-text {
+  font-size: 1.8rem;
+  padding-left: 1rem;
+  flex-grow: 1;
+}
+
+.nav-link:hover {
+   color: var(--hover-text-color);
+}
+
+.change2.nav-link {
+ color: var(--hover-text-color);
+}
+
+.nav-link i:first-child {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.3rem;
+  padding: 0.2rem;
+  transition: color 0.2s;
+}
+
+.nav-link:hover i:first-child {
+  color: var(--active-icon-color);
+}
+
+.change2.nav-link i:first-child {
+  color: var(--active-icon-color);
+}
+
+.nav-link i:last-child {
+  margin-right: 2.5rem;
+  font-size: 1.6rem;
+  transition: transform 0.5s;
+}
+
+.subnav-list {
+  width: 90%;
+  margin-left: auto;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s;
+}
+
+.change2.subnav-list {
+  max-height: 10rem;
+}
+
+.change2 > i:last-child {
+  transform: rotate(90deg);
+}
+
+.subnav-item {
+  margin: 0.5rem 0;
+}
+
+.subnav-link {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  transition: color 0.2s;
+}
+
+.subnav-link:hover {
+  color: var(--hover-text-color);
+}
+
+.subnav-link i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  transition: color 0.2s;
+}
+.subnav-link:hover i {
+  color: var(--active-icon-color);
+}
+
+.bottom-list {
+  width: 100%;
+  background-color: var(--primary-color);
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-around;
+  transform: translateX(-1rem);
+}
+
+.bottom-link {
+  position: relative;
+}
+
+.bottom-link i {
+  font-size: 1.6rem;
+  color: var(--secondary-color);
+  transition: color 0.3s;
+}
+
+.bottom-link:hover i {
+  color: var(--active-icon-color);
+}
+
+.bottom-link span {
+  font-family: "Roboto Slab", serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  position: absolute;
+  top: -100%;
+  right: -50%;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom-item:nth-child(1) span {
+  background-color: #cfa012;
+}
+
+.bottom-item:nth-child(2) span {
+  background-color: #54b154;
+}
+
+.bottom-item:nth-child(3) span {
+  background-color: #e22727;
+}
+
+.main-section {
+  position: relative;
+  left: 2px;
+  width: 100vw;
+  height: 100vh;
+  transition: all 0.2s;
+  align-items: flex-start; /* Alinhar os itens à esquerda */
+  justify-content: flex-start; /* Justificar os itens ao topo */
+  padding: 10px; /* Adicione algum espaçamento se necessário */
+  box-sizing: border-box; /* Inclua a borda e o preenchimento no cálculo do tamanho total */
+  overflow-x: auto;
+}
+
+.change2 .main-section {
+  left: 15vw;
+  width: 85vw;
+}
+
+.heading {
+  position: absolute;
+  letter-spacing: 1rem;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12rem;
+  color: #fff;
+}
+
+/* Adicione um estilo para destacar o botão do menu quando o menu estiver aberto */
+#hamburgerMenu.menu-opened {
+  background-color: var(--secondary-color);
+  /* Substitua pelo seu código de cor desejado */
+  color: #fff; /* Adicione esta linha para ajustar a cor do texto, se necessário */
+}
+
+.menu-top img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.header img {
+  width: 35px; /* Ajuste o valor de acordo com o tamanho desejado */
+  height: auto; /* Mantém a proporção da imagem */
+  border-radius: 5px; /* Borda arredondada para deixar elegante */
+  margin-right: 10px; /* Espaçamento à direita da imagem */
+}
+
+.menu.collapsed .material-icons {
+  display: inline-block; /* garante que os ícones ainda estejam visíveis */
+}
+
+i.material-icons {
+  font-size: 20px;
+  color: #555; /* Cor do ícone */
+  margin-right: 5px;
+}
+.selected {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+
+.toggle-submenu {
+  float: right; /* Para que a seta apareça à direita */
+}
+
+ /* Redefinição de estilos básica */
+ body, h1, h2, h3, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ajustes específicos para o Bootstrap */
+.container, .row, .col {
+  margin: 0;
+  padding: 0;
+}
+
+.divisor {
+  margin: 1em;
+  display: grid;
+  grid-template-columns: 4fr 2fr 4fr;
+}
+
+.seg {
+  display: grid;
+  border-radius: 5px; /* Curvinha nos cantos */
+  padding: 2em;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 0.5em;
+}
+
+.seg > button {
+  margin-top: 1em;
+}
+
+.seg > label {
+  margin-top: 1em;
+}
+
+.seg > h3 {
+  text-align: center;
+}
+
+input[type='text'] {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+}
+
+input[type='text']:hover {
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 6px;
+  padding: 3px;
+  width: 100%;
+  background-color: #f3f8f4;
+}
+
+/* Estilos gerais */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #a0daa2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+/* Header */
+.header {
+  background-color: var(--background-situacao);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header span {
+  color: #fff8e1;
+  font-weight: 700;
+}
+
+.form-control,
+.btn {
+  border-radius: 20px;
+}
+
+#filter {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+#filter:focus {
+  box-shadow: 0 0 8px rgba(72, 239, 128, 0.8);
+  outline: none;
+}
+
+#filter:hover {
+  background-color: #45a049;
+}
+
+#filter::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.btn-enhanced {
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  transition: 0.3s;
+}
+
+.btn-enhanced:hover {
+  transform: scale(1.05);
+}
+
+.bg-success {
+  color: #ffffff;
+}
+
+/* Modals */
+.modal {
+  display: none; /* Escondido por padrão */
+  position: fixed; /* Fica fixo na janela */
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  margin: 10% auto; /* 10% a partir do topo e alinhado ao centro */
+  padding: 20px;
+  border-radius: 4px;
+  width: 60%; /* Ajuste para a largura que você deseja, talvez 60%? */
+  background-color: #fff;
+  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+  background-color: var(--background-situacao);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap; /* Isto impedirá que os itens se quebrem em duas linhas */
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.close {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-body {
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.modal-footer {
+  padding: 10px 20px;
+  text-align: right;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.modal-header {
+  background-color: var(--background-situacao);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header img {
+  width: 50px;
+  vertical-align: middle;
+  margin-right: 10px; /* adicionada margem à direita */
+}
+
+.mdl-dialog {
+  width: 90%; /* faz o modal ocupar 90% da largura da tela */
+  max-width: 100%; /* garante que não exceda a largura da tela */
+  margin: 2% auto; /* centraliza o modal */
+}
+
+/* Estilizando o título do modal */
+.mdl-dialog__title {
+  background-color: #4caf50; /* Cor verde padrão. Ajuste de acordo com o seu verde específico */
+  color: white; /* Cor do texto */
+  padding: 10px 24px; /* Espaçamento interno */
+  margin: 0; /* Remover margem padrão */
+}
+
+/* Estilizando o conteúdo do modal */
+.mdl-dialog__content {
+  border-top: 5px solid #4caf50; /* Adicionar uma borda verde no topo para continuidade do design */
+  padding: 24px; /* Espaçamento interno */
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Estilizando o modal para cobrir mais da largura da tela */
+.mdl-dialog {
+  width: 80%; /* Aumentando a largura para 80% */
+  max-width: 1000px; /* Definindo uma largura máxima */
+  margin: 2% auto;
+  border: none;
+  overflow: visible;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilização do ícone/checkbox para quando ele é selecionado */
+.options label input[type='radio']:checked + span.checkmark {
+  background-color: var(--background-situacao);
+  border-color: var(--background-situacao);
+}
+
+.highlighted {
+  background-color: #a8f4a2; /* Escolha a cor que preferir */
+}
+
+.header img {
+  width: 35px; /* Ajuste o valor de acordo com o tamanho desejado */
+  height: auto; /* Mantém a proporção da imagem */
+  border-radius: 5px; /* Borda arredondada para deixar elegante */
+  margin-right: 10px; /* Espaçamento à direita da imagem */
+}
+
+.modal-header {
+  background-color: var(--background-situacao);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mdl-dialog {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.modal-content {
+  padding: 0 20px 20px;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid-item {
+  flex: 1;
+}
+
+.option-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+
+option-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+input[type='radio']:checked + .checkmark {
+  background-color: var(--background-situacao);
+}
+
+.option-description {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.modal-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.confirm-btn {
+  background-color: var(--background-situacao);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.confirm-btn:hover {
+  background-color: #389c43;
+}
+
+/* Se quiser personalizar o botão também */
+.mdl-button--accent {
+  background-color: #4caf50;
+  color: white;
+}
+
+.mdl-button--accent:hover {
+  background-color: #45a049;
+}
+
+/* Estilos de tabelas */
+.tabulator {
+  white-space: nowrap;
+  max-height: 1000px;
+  overflow-y: auto;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tabulator table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabulator .tabulator-tableHolder {
+  position: relative;
+  max-height: 1000px;
+  overflow: auto;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--background-situacao);
+  color: white;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+}
+
+.tabulator .tabulator-row {
+  height: 20px;
+}
+
+.tabulator .tabulator-cell {
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: #f5f5f5;
+}
+
+.tabulator .tabulator-row:last-child .tabulator-cell {
+  border-bottom: none;
+}
+
+.tabulator-row,
+.tabulator-cell {
+  border-bottom: 1px dashed #000; /* Bordas inferiores pontilhadas */
+  border-right: 1px dashed #000; /* Bordas direitas pontilhadas */
+}
+
+.tabulator-row:last-child .tabulator-cell {
+  border-bottom: none; /* Remova a borda inferior da última linha */
+}
+
+.tabulator-cell:first-child {
+  border-left: 1px dashed #000; /* Adicione a borda esquerda pontilhada à primeira célula de cada linha */
+}
+
+.tabulator-row,
+.tabulator-cell {
+  border-bottom: 1px dashed #000; /* Bordas inferiores pontilhadas */
+  border-right: 1px dashed #000; /* Bordas direitas pontilhadas */
+}
+
+.tabulator-row:last-child .tabulator-cell {
+  border-bottom: none; /* Remova a borda inferior da última linha */
+}
+
+.tabulator-cell:first-child {
+  border-left: 1px dashed #000; /* Adicione a borda esquerda pontilhada à primeira célula de cada linha */
+}
+
+/* Estilos para checkbox */
+.checkbox-material input[type='checkbox'] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.checkbox-material .checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material input[type='checkbox']:checked + .checkmark {
+  background-color: var(--background-situacao);
+}
+
+.checkbox-material .checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+}
+
+.checkbox-material input[type='checkbox']:checked + .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Coluna do checkbox */
+#table td:nth-child(1),
+#table th:nth-child(1) {
+  text-align: center; /* Centralizar horizontalmente */
+  vertical-align: middle; /* Centralizar verticalmente */
+}
+
+.editable-cell {
+  background-color: #e0e0e0 !important; /* Um cinza claro */
+  cursor: pointer !important;
+  border: 1px dashed #7e7e7e !important; /* Cinza médio para a borda tracejada */
+  padding: 5px 10px !important;
+}
+
+.highlighted-cell {
+  background-color: #c7c7c7; /* Cinza um pouco mais escuro que o anterior */
+}
+
+.highlighted-row {
+  background-color: #b0b0b0; /* Cinza ainda mais escuro */
+}
+.checkbox-material input[type='checkbox'] {
+  display: none;
+}
+.checkbox-material label {
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.checkbox-material input[type='checkbox']:checked + label {
+  color: #4caf50; /* você pode alterar a cor se quiser */
+}
+.checkbox-material {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+}
+
+.checkbox-material input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-material .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 2px;
+}
+
+.checkbox-material:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-material input:checked ~ .checkmark {
+  background-color: var(--background-situacao);
+  border-color: white;
+}
+
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.checkbox-material input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-material .checkmark:after {
+  content: '\2714';
+  position: absolute;
+  display: none;
+  color: white;
+
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.tabulator .text-center {
+  text-align: center;
+}
+
+.white-bg {
+  background-color: white;
+}
+
+.custom-checkbox {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input[type='checkbox'] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.custom-checkbox input:checked ~ span {
+  background-color: white;
+  border: 1px solid var(--background-situacao);
+}
+
+.custom-checkbox span:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ span:after {
+  display: block;
+}
+
+.custom-checkbox span:after {
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid var(--background-situacao);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.tabulator-editing .tabulator-cell-editor {
+  vertical-align: top !important;
+  padding-top: 5px !important;
+}
+
+.tabulator .tabulator-editing input[type='text'] {
+  padding: 2px 5px !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-header h1 {
+  font-size: 18px;
+}
+
+.close-menu-btn {
+  display: none; /* Isso irá esconder o botão */
+}
+
+#closeMenuBtn {
+  margin-left: 15px; /* um pequeno espaço entre o logo e o botão de fechar */
+}
+
+.menu-header,
+.menu li {
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu .expandable {
+  display: flex;
+  align-items: center;
+}
+
+.menu .expandable i.material-icons {
+  margin-right: 8px;
+}
+
+
+.menu-top img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.menu li[data-selected='true'],
+.menu-header:hover,
+.menu li:hover {
+  background-color: var(--background-situacao); /* Cor de destaque ao passar o mouse ou quando está selecionado */
+  color: #fff;
+}
+
+
+
+.submenu {
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 100%; /* Mudança para posicionar o submenu abaixo do item pai */
+  left: 0;
+  background-color: #555;
+  width: 100%;
+  z-index: 1;
+}
+
+.submenu {
+  overflow-y: auto; /* Adicione esta linha para habilitar a rolagem vertical no submenu */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.menu ul li i {
+  margin-right: 10px;
+}
+
+.menu nav ul li {
+  justify-content: space-between;
+}
+
+/* Estilo para quando um item do menu está selecionado */
+.menu nav ul li[data-selected='true'] {
+  background-color:var(--background-situacao);
+  color: white;
+}
+
+.menu.collapsed li,
+.menu.collapsed span,
+.menu.collapsed button.close-menu-btn {
+  display: none; /* esconde os elementos */
+}
+
+.menu.collapsed .material-icons {
+  display: inline-block; /* garante que os ícones ainda estejam visíveis */
+}
+
+/* Estilo para ocultar o menu lateral */
+.change2 #lado_direito {
+  width: 80vw;
+}
+
+#lado_direito {
+  grid-column: 1;
+  overflow: auto; /* Alterar para overflow: auto para mostrar a barra de rolagem somente quando necessário */
+  transition: width 0.3s ease;
+  height: 100vh; /* Adicionar altura para ocupar toda a tela verticalmente */
+  margin-left: 20vw; /* Ajustar margem para evitar sobreposição com o menu lateral */
+  padding: 20px; /* Adicionar padding conforme necessário */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 1500px) {
+  .sidebar {
+    width: 20vw;
+    left: -20vw;
+  }
+
+  .change2 .main-section {
+    left: 20vw;
+    width: 80vw;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 25vw;
+    left: -25vw;
+  }
+
+  .change2 .main-section {
+    left: 25vw;
+    width: 75vw;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 30vw;
+    left: -30vw;
+  }
+
+  .change2 .main-section {
+    left: 30vw;
+    width: 70vw;
+  }
+
+  .heading {
+    font-size: 10rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 50vw;
+    left: -50vw;
+  }
+
+  .change2 .main-section {
+    left: 50vw;
+    width: 50vw;
+  }
+
+  .heading {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .sidebar {
+    width: 100vw;
+    left: -100vw;
+  }
+
+  .change2 .main-section {
+    left: 100vw;
+    width: 0;
+  }
+
+  .heading {
+    display: none;
+  }
+}

@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+<head>
   {% include 'head.html' %}
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <body>
-    <div id="cabecalho_NorthCromo">
-      <div>NORTHCROMO SISTEMA CONTROLES</div>
-    </div>
-    {% include 'funcoes_comuns.html' %}
-    <div id="divide_em_dois">
-      <div id="lado_esquerdo">
+  <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
+</head>
+<body>
+    <div class="container">
+    <div id="cabecalho_NorthCromo" class="custom-header">
+      <header>
         <div class="logo-container">
-          <!-- Adicione sua logo aqui -->
+          <img class="logo-northcromo" src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j" alt="Logo da NorthCromo" width="35" />
+          <h2>
+            <span class="company-name">NORTH CROMO</span> - 
+            <span class="system-name">SISTEMA CONTROLES INTERNO</span> - 
+            <span class="additional-info">( INSPERSÃO )</span>
+          </h2>
         </div>
-        <div class="content">
-          <button
-            class="mui-btn mui-btn--raised open-menu-btn"
-            id="openMenuBtn"
-          >
-            ☰ Menu
-          </button>
+        <div class="hamburger-menu" id="hamburgerMenu">
+          ☰ MENU
         </div>
-        <div class="menu" id="menu">
+      </header>
+    </div>
+
+    {% include 'funcoes_comuns.html' %}
+
+    <nav class="sidebar">
+
+      <div class="menu" id="menu">
           <div class="menu-top">
             <img
               class="logo-northcromo"
@@ -38,11 +45,13 @@
             class="mui-btn mui-btn--raised close-menu-btn"
             id="closeMenuBtn"
           >
-            <span class="menu-text">Fechar</span>
+           <span class="menu-text">Fechar</span>
           </button>
+
+          <!-- Adicionando o contêiner para informações específicas do menu -->
           <ul>
-            <li class="expandable hide-text"></li>
             <li class="expandable hide-text">
+            <div class="menu-header">
               <i class="material-icons">folder</i>
               <!-- ícone de pasta para Cadastro -->
               <span class="menu-text" id="cadastroText"> Cadastro</span>
@@ -54,6 +63,7 @@
                 "
                 >arrow_drop_down</i
               >
+              </div>
               <ul class="submenu">
                 <li>
                   <i
@@ -115,7 +125,8 @@
                 </li>
               </ul>
             </li>
-            <li class="expandable desktop-menu-item" data-template="recebimento.html">
+
+            <li class="expandable hide-text desktop-menu-item" data-template="recebimento.html">
               <div class="menu-header">
                 <i class="material-icons">input</i>
                 <span class="menu-text"> Recebimento</span>
@@ -124,7 +135,9 @@
                 >
               </div>
             </li>
+            
             <li class="expandable hide-text">
+                <div class="menu-header">
               <i class="material-icons">build</i>
               <span class="menu-text"> Desmontagem</span>
               <i
@@ -135,6 +148,7 @@
                 "
                 >arrow_drop_down</i
               >
+            </div>
               <ul class="submenu">
                 <li>
                   <i class="material-icons"
@@ -261,17 +275,24 @@
                 >
               </div>
             </li>
+            
             <li class="expandable" onclick="logout()">
               <i class="material-icons">exit_to_app</i>
               <span class="menu-text"> Sair</span>
             </li>
+
           </ul>
         </div>
-        <!-- Fim da div .menu -->
-      </div>
-      <!-- Fim da div #lado_esquerdo -->
-      
-      <div id="lado_direito"></div>
+      </nav>
+
+      <section class="main-section" id="mainContent">
+        <header class="header">
+           
+        </header>
+        
+    </section>
+    
+
     </div>
     <!-- Fim da div #divide_em_dois -->
     <i class="material-icons">build</i>
@@ -290,7 +311,6 @@
     </ul>
     </div>
     <!-- Fim da div .menu-mobile -->
-    {% include 'funcoes_comuns.html' %}
     {% include 'funcoes_comuns.html' %}
 
     <div id="menu-flutuante" onclick="toggleMenuLateralFlutuante()">
@@ -320,6 +340,82 @@
 <script>
   try {
       $(document).ready(function () {
+          // Evento de clique para abrir o menu e fechar
+          $("#toggleMenuBtn").click(function () {
+            console.log('Botão do menu clicado')
+            $("#menu").toggleClass("change2");
+          });
+
+// Evento de clique nos itens do menu
+$("#menu ul li.expandable").on("click", function (e) {
+    try {
+      const el = e.currentTarget;
+
+      if (el) {
+        // Alternar a classe active no item clicado
+        $(el).toggleClass("active");
+        //setSubmenuHeight();
+
+        // Remover a classe active de outros itens do menu
+        $("#menu ul li.expandable").not(el).removeClass("active");
+
+        // Alternar a classe change2 no item clicado e seu submenu
+        $(el).find(".submenu").toggleClass("change2");
+
+        // Alternar a seta para cima ou para baixo com base na existência da classe change2
+        $(el).find(".toggle-submenu").toggleClass("arrow-up", $(el).find(".submenu").hasClass("change2"));
+      } else {
+        console.error("Elemento não encontrado.");
+      }
+    } catch (error) {
+      console.error("Erro no clique do item do menu:", error);
+    }
+  });
+
+  // Impede a propagação do evento de clique para o pai
+  $("#menu ul li.expandable .submenu").on("click", function (e) {
+    e.stopPropagation();
+  });
+
+  // Fechar o menu ao clicar no botão de fechar
+  $("#closeMenuBtn").click(function () {
+    $("#menu").removeClass("change2");
+    // Remover a classe active de todos os itens do menu ao fechar
+    $("#menu ul li.expandable").removeClass("active");
+  });
+
+  // Evento de clique para abrir o menu e fechar
+  $(".hamburger-menu").click(function () {
+    console.log('Botão do menu clicado');
+
+    // Alternar a classe change2 no elemento com a classe container
+    $(".container").toggleClass("change2");
+  });
+     
+        // Evento de clique nos itens do menu
+        $(".nav-list").on("click", ".nav-link", function (e) {
+          const el = e.target.parentNode;
+
+          console.log(el);
+
+          if (el.classList[0] === "nav-link") {
+
+            // Remover a classe active de todos os itens do menu
+
+            $(".nav-link").removeClass("active");
+
+            // Adicionar a classe active ao item clicado
+            el.classList.add("active");
+
+            el.nextElementSibling.classList.toggle("change2");
+            el.classList.toggle("change2");
+          }
+        });
+
+      
+        $(".nav-list").on("click", ".submenu-link", function (e) {
+          toggleSubMenu();
+        });
 
           // Elementos do menu mobile
           const menuOverlay = document.getElementById("menu-overlay");
@@ -327,6 +423,17 @@
           const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
           const toggleMenuBtn = document.getElementById("toggleMenuBtn");
           const menuFlutuanteBtn = document.getElementById("menu-flutuante");
+         
+         // Adicione um identificador único a cada ícone do Material Design
+          const iconButtons = document.querySelectorAll(".material-icons");
+
+          iconButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+              const template = this.parentElement.getAttribute("data-template");
+              loadContent(template);
+              toggleMenuState(this.innerText);
+          });
+      });
 
           // Event listener para o botão de menu flutuante
           if (menuFlutuanteBtn) {
@@ -399,21 +506,6 @@
               $("#lado_esquerdo").removeClass("open");
           });
 
-          // Configurações iniciais para a tela maior que 768 pixels
-          if (window.innerWidth > 768) {
-              ladoEsquerdo.style.width = "60px";
-              ladoEsquerdo.style.overflow = "hidden";
-          }
-
-          // Event listener para cliques no documento
-          document.addEventListener("click", function (event) {
-              try {
-                  console.log("Clique em:", event.target);
-              } catch (error) {
-                  console.error("Error in document click:", error);
-              }
-          });
-
           // Função para carregar conteúdo
           function loadContent(template) {
               try {
@@ -425,12 +517,11 @@
                           qual_template: template,
                       },
                       success: function (response) {
-                          $("#lado_direito").html(response);
-                          $("#lado_esquerdo").removeClass("expanded");
-                          $("#menu").css("left", "-260px");
+                          $("#mainContent").html(response);
+                          //updatePageTitle(pageTitle);
                       },
                       error: function (response) {
-                          $("#lado_direito").html("Error");
+                          $("#mainContent").html("Error");
                       },
                   }).done(function (data) {});
               } catch (error) {
@@ -438,12 +529,15 @@
               }
           }
 
+            function updatePageTitle(title) {
+            $("#pageTitle").text(title);
+        }
+
           // Event listener para itens do menu no desktop
           $(".desktop-menu-item").click(function () {
               try {
                   const template = $(this).attr("data-template");
                   loadContent(template);
-                  $("#lado_esquerdo").removeClass("expanded");
                   $("#menu").css("left", "-260px");
               } catch (error) {
                   console.error("Error in desktop-menu-item click:", error);
@@ -498,8 +592,6 @@
               },
               success: function (response) {
                   $("#lado_direito").html(response);
-                  $("#lado_esquerdo").removeClass("expanded");
-                  $("#menu").css("left", "-260px");
               },
               error: function (response) {
                   $("#lado_direito").html("Error");
@@ -522,8 +614,6 @@
               data: { qual_template: x },
               success: function (response) {
                   $("#lado_direito").html(response);
-                  $("#lado_esquerdo").removeClass("expanded");
-                  $("#menu").css("left", "-260px");
               },
               error: function (response) {
                   $("#lado_direito").html("Error");
@@ -538,7 +628,7 @@
 
   // Elementos globais
   const menu = document.getElementById("menu");
-  const ladoEsquerdo = document.getElementById("lado_esquerdo");
+  const container = document.getElementById("container");
   const ladoDireito = document.getElementById("lado_direito");
   const toggleMenuBtn = document.getElementById("toggleMenuBtn");
   const openMenuBtn = document.getElementById("openMenuBtn");
@@ -546,18 +636,15 @@
   const submenus = document.querySelectorAll(".submenu");
 
   // Função para alternar estado do menu
-  function toggleMenuState() {
+  function toggleMenuState(menuText) {
       try {
-          if (ladoEsquerdo.classList.contains("expanded")) {
-              // Se estiver expandido, recolha
-              ladoEsquerdo.classList.remove("expanded");
-              ladoEsquerdo.classList.add("collapsed");
-              ladoDireito.classList.add("expanded-content"); // Adicione uma classe para ajustar o conteúdo
-          } else {
-              ladoEsquerdo.classList.remove("collapsed");
-              ladoEsquerdo.classList.add("expanded");
-              ladoDireito.classList.remove("expanded-content"); // Remova a classe para reverter o ajuste do conteúdo
-          }
+          mainSelection = selection;
+          
+            // Chame a função loadContent com a seleção atual
+            loadContent(mainSelection);
+
+        console.log("Seleção principal:", mainSelection);
+
       } catch (error) {
           console.error("Error in toggleMenuState:", error);
       }
@@ -565,70 +652,41 @@
 
   // Event listeners para os botões de toggle do menu
   toggleMenuBtn.addEventListener("click", toggleMenuState);
-  openMenuBtn.addEventListener("click", toggleMenuState);
+  //openMenuBtn.addEventListener("click", toggleMenuState);
   closeMenuBtn.addEventListener("click", toggleMenuState);
 
   closeMenuBtn.addEventListener("click", toggleMenuVisibility);
-  
+
+      
   // Event listener para o menu
   menu.addEventListener("click", function (event) {
       try {
-          const target = event.target;
+        const target = event.target;
+        const submenu = target.nextElementSibling;
 
           // Lógica para lidar com cliques no cabeçalho do menu
-          if (target.classList.contains("menu-header")) {
-              const submenu = target.nextElementSibling;
-              if (
-                  submenu.style.display === "none" ||
-                  submenu.style.display === ""
-              ) {
-                  submenu.style.display = "block";
-                  target.querySelector(".toggle-submenu").innerText = "arrow_drop_up";
-              } else {
-                  submenu.style.display = "none";
-                  target.querySelector(".toggle-submenu").innerText =
-                      "arrow_drop_down";
-              }
-          }
+    if (target.classList.contains("menu-header") && submenu) {
+      submenu.classList.toggle("show-submenu");
+      const toggleIcon = target.querySelector(".toggle-submenu");
+      toggleIcon.innerText = submenu.classList.contains("show-submenu") ? "arrow_drop_up" : "arrow_drop_down";
+    }
 
-          // Remover seleção de itens do menu
-          document
-              .querySelectorAll('[data-selected="true"]')
-              .forEach((item) => item.removeAttribute("data-selected"));
+    // Remover seleção de itens do menu
+    document
+      .querySelectorAll('[data-selected="true"]')
+      .forEach((item) => item.removeAttribute("data-selected"));
 
-          // Adicionar seleção ao item clicado
-          if (
-              target.tagName === "LI" &&
-              !target.nextElementSibling.classList.contains("submenu")
-          ) {
-              target.setAttribute("data-selected", "true");
-          }
-      } catch (error) {
-          console.error("Error in menu click:", error);
-      }
-  });
-
-  // Event listener para abrir o menu no desktop
-  openMenuBtn.addEventListener("click", function () {
-      try {
-          menu.style.left = "0px";
-          ladoEsquerdo.classList.add("expanded");
-      } catch (error) {
-          console.error("Error in openMenuBtn click:", error);
-      }
-  });
-
-  // Event listener para fechar o menu
-  closeMenuBtn.addEventListener("click", function () {
-      try {
-          menu.style.left = "-260px";
-          submenus.forEach((sub) => (sub.style.display = "none"));
-          ladoEsquerdo.classList.remove("expanded");
-          ladoDireito.classList.remove("expanded-content"); // Remova a classe ao fechar o menu
-      } catch (error) {
-          console.error("Error in closeMenuBtn click:", error);
-      }
-  });
+    // Adicionar seleção ao item clicado
+    if (
+      target.tagName === "LI" &&
+      !target.nextElementSibling.classList.contains("submenu")
+    ) {
+      target.setAttribute("data-selected", "true");
+    }
+  } catch (error) {
+    console.error("Error in menu click:", error);
+  }
+});
 
   // Event listener para carregamento inicial
   document.addEventListener("DOMContentLoaded", function () {
@@ -703,280 +761,33 @@
     }
   });
 
+  function toggleSubMenu() {
+        var submenu = $("#submenu");
+        var submenuIcon = $("#submenu-icon");
+
+        submenu.toggle();
+
+        if (submenu.is(":visible")) {
+          submenuIcon.text('arrow_drop_up');
+        } else {
+          submenuIcon.text('arrow_drop_down');
+        }
+      }
+
+
+   function setSubmenuHeight() {
+  const submenus = document.querySelectorAll('.menu li.expandable .submenu');
+  submenus.forEach(submenu => {
+    if (submenu.parentElement.classList.contains('active')) {
+      submenu.style.maxHeight = submenu.scrollHeight + 'px';
+    } else {
+      submenu.style.maxHeight = '0';
+    }
+  });
+}
+
 </script>
 
 
-<style>
-
-  body {
-    font-size: 16px;
-  }
-
-  .logo-suelopro {
-    width: 130px;
-    height: auto;
-  }
-
-  #cabecalho_SueloPro {
-    background-color: #5ec864;
-    color: #fff;
-    font-weight: bold;
-    padding: 0.5em;
-  }
-
-  #divide_em_dois {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    width: 100%;
-    height: 95vh;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  #lado_esquerdo {
-    transition: width 0.3s ease;
-    width: 60px;
-    overflow: hidden;
-  }
-
-  #lado_direito {
-    grid-column: 2;
-    overflow: scroll;
-    overflow-x: hidden;
-    transition: width 0.3s ease; /* Adicione uma transição suave para a animação */
-  }
-
-  #lado_esquerdo.expanded {
-    width: 200px;
-  }
-
-  .menu {
-    text-align: left;
-  }
-
-  .expandable {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 10px;
-  }
-
-  .menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px 5px;
-  }
-
-  .submenu {
-    display: none;
-    list-style-type: none;
-    padding-left: 15px;
-    max-width: 100%;
-  }
-
-  .invisible-icon {
-    visibility: hidden;
-  }
-
-  .submenu li {
-    padding: 5px 0;
-  }
-
-  .expandable:hover {
-    background-color: #eaeaea;
-  }
-
-  [data-selected="true"] {
-    background-color: #4da752;
-    color: white;
-    font-weight: bold;
-  }
-
-  .menu ul li,
-  .submenu li {
-    color: black;
-    text-align: left;
-    display: flex;
-    align-items: center;
-  }
-
-  .swal-title {
-    font-size: 24px;
-  }
-  .swal-text {
-    font-size: 18px;
-  }
-
-/* ADICIONAR PARA CELULAR MENU LATERAL  */
-#lado-esquerdo-flutuante {
-position: fixed;
-top: 0;
-left: 0;
-height: 100%;
-width: 260px;
-background-color:#f0f0f0;  /* Cor de fundo do menu lateral */
-color: #333; /* Cor do texto do menu lateral */
-z-index: 1000;
-display: none; /* Inicialmente oculto */
-font-size: 16px; /* Tamanho da fonte semelhante ao menu desktop */
-transition: width 0.3s ease;
-overflow: hidden;
-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito mais profissional */
-}
-
-#lado-esquerdo-flutuante.open-menu {
-display: block; /* Exibido quando a classe open-menu é aplicada */
-width: 60%; /* Largura expandida semelhante ao menu desktop */
-}
-
-#lado-esquerdo-flutuante #cabecalho_SueloPro {
-background-color: #5ec864;
-color: #fff;
-font-weight: bold;
-padding: 0.5em;
-}
-
-#lado-esquerdo-flutuante .menu {
-text-align: left;
-}
-
-#lado-esquerdo-flutuante .expandable {
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 12px 10px;
-}
-
-#lado-esquerdo-flutuante .menu-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-cursor: pointer;
-padding: 10px 5px;
-}
-
-#lado-esquerdo-flutuante .submenu {
-display: none;
-list-style-type: none;
-padding-left: 15px;
-max-width: 100%;
-}
-
-#lado-esquerdo-flutuante .submenu li {
-padding: 5px 0;
-}
-
-#lado-esquerdo-flutuante .expandable:hover {
-background-color: #eaeaea;
-}
-
-#lado-esquerdo-flutuante [data-selected="true"] {
-background-color: #4da752;
-color: white;
-font-weight: bold;
-}
-
-#lado-esquerdo-flutuante .menu ul li,
-#lado-esquerdo-flutuante .submenu li {
-color: black;
-text-align: left;
-display: flex;
-align-items: center;
-}
-
-#lado-esquerdo-flutuante .swal-title {
-font-size: 24px;
-}
-
-#lado-esquerdo-flutuante .swal-text {
-font-size: 18px;
-}
-
-
-@media screen and (max-width: 768px) {
-  
-  #menu-flutuante {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 999;
-      cursor: pointer;
-      background-color: #5ec864; /* Cor de destaque */
-      color: #fff; /* Cor do texto */
-      border: none;
-      border-radius: 50%;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s ease;
-  }
-
-  #menu-flutuante:hover {
-      background-color: #4da752; /* Cor de destaque ao passar o mouse */
-  }
-
-  #menu-flutuante i {
-      font-size: 24px;
-  }
-
-      body {
-      font-size: 14px;
-    }
-
-   #menu-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo com transparência */
-        z-index: 1;
-        cursor: pointer;
-    }
-
-    .menu-open #menu-overlay {
-        display: block;
-    }
-
-    #lado_esquerdo {
-        display: none;
-      }
-
-      .menu-toggle-btn {
-      display: block;
-    }
-
-    #divide_em_dois {
-        position: relative;
-        z-index: 2;
-    }
-  
-      #divide_em_dois {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
-  
-
-      #lado_direito {
-        width: 100%;
-        overflow: scroll;
-        overflow-x: hidden;
-      }
-  
-      .swal-title {
-        font-size: 18px;
-      }
-      .swal-text {
-        font-size: 16px;
-      }
-
-      #menu-flutuante.open-menu {
-            width: 60px;
-        }
-
-        
-    }
-  </style>
 </body>
 </html>

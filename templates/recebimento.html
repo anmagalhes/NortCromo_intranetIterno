@@ -8,8 +8,6 @@
       rel="stylesheet"
       href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
     />
-    <link rel="stylesheet" href="/static/css/meu_estilo.css" />
-
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
@@ -20,6 +18,19 @@
       });
     </script>
   <style>
+
+     /* Redefinição de estilos básica */
+      body, h1, h2, h3, p, ul, li {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Ajustes específicos para o Bootstrap */
+      .container, .row, .col {
+        margin: 0;
+        padding: 0;
+      }
+
 
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
     .custom-label {
@@ -421,6 +432,13 @@ function formatarData(data) {
                   controleVisibilidadeCampoTab3(numeroTab);
 
               });
+              var mainContent = $("#mainContent");
+              if (mainContent.length > 0) {
+                  // Faça algo com mainContent
+                  mainContent.perfectScrollbar();
+              } else {
+                  console.error("Elemento #mainContent não encontrado.");
+              }
 
               $(".scrollable-content").perfectScrollbar();
                 
