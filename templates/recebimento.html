@@ -313,12 +313,20 @@
 </div>
 <!-- Fechando a div 'tab-pane' -->
 
+</div>
+</body>
 
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
         {% include 'funcoes_comuns.html' %}
         <!-- <script src="capturar_foto.js"></script> -->
-        <script>
-          function my_url() {
+      <script>
+ // Varivavel para o ApiScript
+ var minhaUrl =
+       'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
+
+
+
+       function my_url() {
             if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
               return 'http://127.0.0.1:5000/';
             } else {
@@ -351,14 +359,13 @@
               console.error('No file selected');
             }
           }
-        </script> 
 
-<script>
-
+/*
 document.addEventListener('DOMContentLoaded', function() {
     var mostrarInfoFlaskBtn = document.getElementById('mostrarInfoFlask');
     
     if (mostrarInfoFlaskBtn) {
+      console.log("Elemento encontrado:", mostrarInfoFlaskBtn);
         mostrarInfoFlaskBtn.addEventListener('click', function() {
             var divInfoFlask = document.getElementById('divInfoFlask');
             if (divInfoFlask) {
@@ -372,14 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-</script>
-        
-      <script>
- // Varivavel para o ApiScript
-
- var minhaUrl =
-       'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
-       
+*/
 
 function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
@@ -395,6 +395,8 @@ function formatarData(data) {
 
 
   $(document).ready(function () {
+
+    $("#tabs").tabs();
 
      // Ocultar informações específicas das TABs 2 e 3
      $('#data_inicial_recebimento, #data_final_recebimento').hide();
@@ -601,14 +603,19 @@ function setDataFinal_Geral() {
     return dataFormatada_Final;
 }
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const capturarBotao = document.getElementById('seuIdDoBotaoCapturar');
   const cameraFrenteBotao = document.getElementById('seuIdDoBotaoCameraFrente');
   const cameraTransBotao = document.getElementById('seuIdDoBotaoCameraTrans');
   const desativarCameraBotao = document.getElementById('seuIdDoBotaoDesativarCamera');
+  
 
   if (capturarBotao) {
     capturarBotao.addEventListener('click', capturePhoto);
+  } else {
+    console.error('Elemento com ID "seuIdDoBotaoCapturar" não encontrado.');
   }
 
   if (cameraFrenteBotao) {
@@ -616,6 +623,8 @@ document.addEventListener('DOMContentLoaded', function () {
       stopCamera();
       startCamera({ video: { facingMode: 'user' } });
     });
+  } else {
+    console.error('Elemento com ID "seuIdDoBotaoCameraFrente" não encontrado.');
   }
 
   if (cameraTransBotao) {
@@ -623,6 +632,8 @@ document.addEventListener('DOMContentLoaded', function () {
       stopCamera();
       startCamera({ video: { facingMode: { exact: 'environment' } } });
     });
+  } else {
+    console.error('Elemento com ID "seuIdDoBotaoCameraTrans" não encontrado.');
   }
 
   if (desativarCameraBotao) {
@@ -630,7 +641,10 @@ document.addEventListener('DOMContentLoaded', function () {
       stopCamera();
       video.style.display = 'none';
     });
+  } else {
+    console.error('Elemento com ID "seuIdDoBotaoDesativarCamera" não encontrado.');
   }
+
   
   btnGroup.addEventListener('click', function (event) {
     const target = event.target;
@@ -640,6 +654,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
 
 // Script para definir a hora atual no campo
 document.addEventListener('DOMContentLoaded', function () {
@@ -654,17 +669,16 @@ document.addEventListener('DOMContentLoaded', function () {
   horaAtualInput.value = horaFormatada;
 });
 
-const video = document.getElementById('camera-feed');
-const capturarBotao = document.getElementById('capturar-foto');
-const cameraFrenteBotao = document.getElementById(
-  'capturar-camera-frente'
-);
-const cameraTransBotao = document.getElementById(
-  'capturar-camera-trans'
-);
-const desativarCameraBotao =
-  document.getElementById('desativar-camera');
-const canvas = document.getElementById('foto-capturada');
+// Verifica se a variável video já foi declarada
+if (!window.video) {
+  const video = document.getElementById('camera-feed');
+  window.video = video; // Atribui a variável ao escopo global para evitar redeclaração
+  const capturarBotao = document.getElementById('capturar-foto');
+  const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
+  const cameraTransBotao = document.getElementById('capturar-camera-trans');
+  const desativarCameraBotao = document.getElementById('desativar-camera');
+  const canvas = document.getElementById('foto-capturada');
+
 
 let currentStream;
 
@@ -727,6 +741,8 @@ desativarCameraBotao.addEventListener('click', function () {
   stopCamera();
   video.style.display = 'none';
 });
+
+}
 
             function selecionar_clientes() {
                 console.log("selecionar_clientea");
@@ -1155,17 +1171,6 @@ function updateTableRecebimento_pedentes(retorno_especifico) {
   }
   });
 
-
-
-
-
-
-
-
-
-
-
-
  // Função para adicionar um recebimento
 function adicionarRecebimento() {
     $.ajax({
@@ -1267,8 +1272,6 @@ function controleVisibilidadeCampoTab1(numeroTab) {
         }
     }
 
-f
-
  // Função para controlar a visibilidade da "Tab 2"
  function controleVisibilidadeCampoTab2(numeroTab) {
         // Verifica se é a "Tab 2"
@@ -1318,10 +1321,8 @@ if (numeroTab === 3) {
 
 </script>
 
-<!-- Adicione este script no final do body da sua página -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha512-GLbCKLNBXVnDYbWEQaQ3Q2jA2j//b6ZFYyyxvIqxUpn8Oy4z8JUODf60gqV7zvPe7ME1aGrg5ZLysl1mg1yDAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+    <!-- Adicione este script no final do body da sua página -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha512-GLbCKLNBXVnDYbWEQaQ3Q2jA2j//b6ZFYyyxvIqxUpn8Oy4z8JUODf60gqV7zvPe7ME1aGrg5ZLysl1mg1yDAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
 
-  </div>
-  </body>
 </html>

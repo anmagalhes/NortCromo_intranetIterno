@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+  {% include 'head.html' %}
+
+<head>
+
+ <link rel="stylesheet" href="static/css/kaba.css" />
+
+    <!-- Meus Scriptst personalizados -->
+    <script src="static/js/scripts.js" defer></script>
+</head>
+
+<body>
+    <h1>karban</h1>
+    <form id="add-task-form">
+        <p>Crie uma nova Tarefa:</p>
+        <input type="text" placeholder="NumeroControle" />
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div class="kanban">
+
+        <!-- Coluna Para Fazer -->
+        <div class="column">
+            <h2>Para Fazer </h2>
+            <ul class="tasks" id="todo">
+                <li draggable="true"> 1 </li>
+                <li draggable="true"> 2 </li>
+            </ul>
+        </div>
+
+        <div class="column">
+            <h2>fazendo </h2>
+            <ul class="tasks" id="doing">
+                <li draggable="true"> 2 </li>
+                <li draggable="true"> 3 </li>
+            </ul>
+        </div>
+
+        <div class="column">
+            <h2>Pronta </h2>
+            <ul class="tasks" id="done">
+                <li draggable="true"> 4 </li>
+                <li draggable="true"> 5 </li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    // Varivavel para o ApiScript
+var minhaUrl =
+       'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
+   
+   
+   var globalIdOrdem = null
+   window.onbeforeunload = function() {
+       globalIdOrdem = null;
+   };
+
+   // ARMANEZAR OS DADOS
+   var allProducts = [];
+
+   var draggableTask = null;
+   
+   $(document).ready(function () {
+   let draggableTask = null;
+
+   // Capturar todas as linhas de tarefas
+   $(".tasks li").each(function () {
+      $(this).attr("draggable", true);
+
+      $(this).on("dragstart", function (event) {
+         draggableTask = $(this);
+         event.originalEvent.dataTransfer.effectAllowed = "move";
+         event.originalEvent.dataTransfer.setData("text/html", $(this).html());
+         $(this).addClass("dragging");
+      });
+
+      $(this).on("dragend", function () {
+         draggableTask.removeClass("dragging");
+         draggableTask = null;
+      });
+   });
+
+   $(".tasks").each(function () {
+      $(this).on("dragover", function (event) {
+         event.preventDefault();
+         event.originalEvent.dataTransfer.dropEffect = "move";
+         $(this).addClass("dragover");
+      });
+
+      $(this).on("dragleave", function () {
+         $(this).removeClass("dragover");
+      });
+
+      $(this).on("drop", function (event) {
+         event.preventDefault();
+         if (draggableTask) {
+            const sourceColumnId = draggableTask.closest(".tasks").attr("id");
+            const targetColumnId = $(this).attr("id");
+
+            if (sourceColumnId !== targetColumnId) {
+               $(this).append(draggableTask);
+               $(this).removeClass("dragover");
+            }
+         }
+      });
+   });
+
+
+    // Manipulador de evento para o envio do formulário
+    $("#add-task-form").on("submit", function (event) {
+      event.preventDefault(); // Evitar o comportamento padrão do formulário
+
+      const taskText = $("#add-task-form input").val().trim();
+
+      if (taskText) {
+         const newTask = $("<li>").text(taskText).attr("draggable", true);
+         newTask.on("dragstart", function (event) {
+            draggableTask = $(this);
+            event.originalEvent.dataTransfer.effectAllowed = "move";
+            event.originalEvent.dataTransfer.setData("text/html", $(this).html());
+            $(this).addClass("dragging");
+         });
+         newTask.on("dragend", function () {
+            draggableTask.removeClass("dragging");
+            draggableTask = null;
+         });
+
+         $("#todo").append(newTask);
+         $("#add-task-form input").val(""); // Limpar o campo do formulário
+      }
+   });
+
+      // Formatar campo de telefone
+      $('#telefone').keyup(function () {
+      var val = this.value.replace(/\D/g, '');
+      var newVal = '';
+      while (val.length > 0) {
+      newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+      val = val.substr(2);
+      }
+      this.value = newVal.trim();
+      });
+  
+      // Adicionar estilo ao campo quando preenchido
+      $('input').blur(function () {
+      if ($(this).val()) {
+      $(this).addClass('filled');
+      } else {
+      $(this).removeClass('filled');
+      }
+      });
+          
+              $(".scrollable-content").perfectScrollbar();
+                
+                });
+
+
+
+
+// Função para carregar a lista de obras
+function carregar_acompanhamento_OrdemServicos() {
+
+    console.log('Relatorio_Checklits_pedentes')
+
+    VAR = ID_Recebimento = '18'
+    
+    console.log("ID_Recebimento:", ID_Recebimento);
+
+    try {
+        $.ajax({
+            url: my_url() + "selecionar_checklists_especificos_Recebimento",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              "ID_Recebimento":ID_Recebimento,
+            }),
+        })
+        .done(function (data) {
+            console.log('Relatorio_Checklits_pedentes', data);
+            // Antes de processar os dados na resposta AJAX
+            if (data && data.retorno_especifico) {
+
+                preencherKanban(dados);
+
+                console.log("Após chamar a função de atualização da tabela");
+             } else {
+                console.error("Resposta JSON inválida ou ausente");
+            }
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Erro ao buscar dados consolidados:", error);
+            console.log("Status da requisição:", status);
+            console.log("Resposta do servidor:", xhr.responseText);
+        });
+    } catch (error) {
+        console.error("Erro ao executar a função: " + error);
+    }
+}
+
+function preencherKanban(dados) {
+   // Adicionar as novas tarefas
+   dados.retorno_especifico.forEach(function (tarefa) {
+      const newTask = $("<li>")
+         .text(tarefa.texto)
+         .attr("draggable", true)
+         .attr("data-task-id", tarefa.id); // Adicione um identificador único, se disponível
+
+      // Adicionar eventos de drag, se necessário
+      // ...
+
+      // Adicionar a nova tarefa à coluna correta
+      $("#" + tarefa.coluna).append(newTask);
+   });
+}
+
+
+  
+            </script>
+
+</html>

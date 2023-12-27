@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Arial, Helvetica, sans-serif";
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-size: 62.5%;
+  }
+  
+  /* Adicione o seguinte para remover o preenchimento padrão do body e html */
+  body, html {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  :root {
+    --main-bg-color: #f0f0f0; /* Claro */
+    --primary-color: #068349; /* Cor Primária */
+    --secondary-color: #015830; /* Cor Secundária */
+    --text-color: #9c9393; /* Cinza */
+    --hover-text-color: #bdb8b8; /* Escuro */
+    --active-icon-color: #2ae7e7; /* Claro */
+    --text-color2: #fff; /* Claro */
+    --background-situacao: #43a04d; /* Verde claro */
+    --background-kanba: #eee; /* Quse Branco */
+  }
+  
+ #add-task-form{
+    margin:0 1rem 1.5rem;
+}
+
+#add-task-form input {
+    padding: .3rem;
+    margin-right: .5rem;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+#add-task-form button {
+    padding: .3rem 1rem;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+  .kanban {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+  }
+
+    
+  .tasks {
+    list-style:none;
+    margin: 0;
+    padding: 1rem;
+    border: 2px dashed #ccc;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+    border-radius: 5px;
+    min-height: 100px;
+  }
+
+    
+  .tasks li {
+    cursor: pointer;
+    background-color: #fff;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    cursor: move;
+    transition: 0.4s;
+  }
+
+  .tasks li.dragging {
+    opacity: 0.5;
+
+  }
+
+  .tasks li.houver {
+    background-color: #f5f5f5;
+
+  }
+
+  h2 {
+   text-align: center;
+
+  }
+
+
+
+
+
+
+
+  /* Redefinição de estilos básica */
+ body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Ajustes específicos para o Bootstrap */
+  .container, .row, .col {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    text-align: center;
+}
+
+ .column {
+    width: 30%;
+    background-color: var(--background-kanba);
+    border-radius: 10px;
+    padding: 0.5rem;
+ }
+  
