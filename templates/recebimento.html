@@ -12,11 +12,6 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
     
-    <script>
-      $(function () {
-        $('#tabs').tabs();
-      });
-    </script>
   <style>
 
      /* Redefinição de estilos básica */
@@ -122,1123 +117,697 @@
 
     <div id="tabs">
       <ul>
-        <li><a href="#tabs-1">Entrada</a></li>
-        <li><a href="#tabs-2">Câmera</a></li>
-        <li><a href="#tabs-3">Relatório</a></li>
+        <li><a href="#tab-1">Entrada</a></li>
+        <li><a href="#tab-2">Câmera</a></li>
+        <li><a href="#tab-3">Relatório</a></li>
       </ul>
 
-       <div id="tabs-1" class="container">
-        <!-- Campos de entrada -->
-        <div class="row mt-3 scrollable-content">
-            <!-- Campo Tipo de Ordem -->
-            <div class="col-md-4 mb-3">
-                <label for="tipoOrdem" class="custom-label">Tipo de Ordem</label>
-                <select id="tipoOrdem" class="form-control">
-                    <option value="novo">Novo</option>
-                    <option value="nao">Não</option>
-                </select>
-            </div>
-    
-            <!-- Campo Número de Controle -->
-            <div class="col-md-4 mb-3">
-                <label for="numeroControle" class="custom-label">Número de Controle</label>
-                <input
-                    id="numeroControle"
-                    type="text"
-                    class="form-control"
-                    placeholder="NumeroControle"
-                    disabled
-                />
-            </div>
-    
-            <!-- Campo Data de Recebimento -->
-            <div class="col-md-4 mb-3">
-                <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
-                <input
-                    id="dataRecebimento"
-                    type="date"
-                    class="form-control"
-                />
-            </div>
+      <div id="tab-1" class="container">
+        <!-- Conteúdo da Tab 1 -->
 
-            <!-- Campo Cliente (ID do Cliente) -->
-            <div class="col-md-4 mb-3">
-                <label for="idCliente_Select_Tab2" class="custom-label">Cliente</label>
-                <select id="idCliente_Select_Tab2" class="form-control">
-                  <option value="">Selecione a Opção..</option>
-                    <!-- Preencha com os clientes disponíveis -->
-                </select>
-            </div>
+         <!-- Campos de entrada -->
+         <div class="row mt-3 scrollable-content">
+          <!-- Campo Tipo de Ordem -->
+          <div class="col-md-4 mb-3">
+              <label for="tipoOrdem" class="custom-label">Tipo de Ordem</label>
+              <select id="tipoOrdem" class="form-control">
+                  <option value="novo">Novo</option>
+                  <option value="nao">Não</option>
+              </select>
+          </div>
+  
+          <!-- Campo Número de Controle -->
+          <div class="col-md-4 mb-3">
+              <label for="numeroControle" class="custom-label">Número de Controle</label>
+              <input
+                  id="numeroControle"
+                  type="text"
+                  class="form-control"
+                  placeholder="NumeroControle"
+                  disabled
+              />
+          </div>
+  
+          <!-- Campo Data de Recebimento -->
+          <div class="col-md-4 mb-3">
+              <label for="dataRecebimento" class="custom-label">Data de Recebimento</label>
+              <input
+                  id="dataRecebimento"
+                  type="date"
+                  class="form-control"
+              />
+          </div>
 
-            <!-- Campo Quantidade -->
-            <div class="col-md-3 mb-3">
-                <label for="quantidade" class="custom-label">Quantidade</label>
-                <input
-                    id="quantidade"
-                    type="number"
-                    class="form-control"
-                    placeholder="Quantidade"
-                    value="1" 
-                    min="1" 
-                />
-            </div>
-    
-            <!-- Campo Produto (Código do Produto) -->
-            <div class="col-md-5 mb-3">
-                <label for="codigoProduto_Select_Tab2" class="custom-label">Produto</label>
-                <select id="codigoProduto_Select_Tab2" class="form-control">
-                  <option value="">Selecione a Opção..</option>
-                    <!-- Preencha com os produtos disponíveis -->
-                </select>
-            </div>
+          <!-- Campo Cliente (ID do Cliente) -->
+          <div class="col-md-4 mb-3">
+              <label for="idCliente_Select_Tab2" class="custom-label">Cliente</label>
+              <select id="idCliente_Select_Tab2" class="form-control">
+                <option value="">Selecione a Opção..</option>
+                  <!-- Preencha com os clientes disponíveis -->
+              </select>
+          </div>
 
-            <!-- Campo adicional Nota Interna -->
-            <div class="col-md-4 mb-3">
-                <label for="notaInterna" class="custom-label">Nota Interna</label>
-                <input id="notaInterna" type="text" class="form-control" placeholder="N/A" oninput="converterParaMaiusculas(this)" />
-            </div>
+          <!-- Campo Quantidade -->
+          <div class="col-md-3 mb-3">
+              <label for="quantidade" class="custom-label">Quantidade</label>
+              <input
+                  id="quantidade"
+                  type="number"
+                  class="form-control"
+                  placeholder="Quantidade"
+                  value="1" 
+                  min="1" 
+              />
+          </div>
+  
+          <!-- Campo Produto (Código do Produto) -->
+          <div class="col-md-5 mb-3">
+              <label for="codigoProduto_Select_Tab2" class="custom-label">Produto</label>
+              <select id="codigoProduto_Select_Tab2" class="form-control">
+                <option value="">Selecione a Opção..</option>
+                  <!-- Preencha com os produtos disponíveis -->
+              </select>
+          </div>
 
-             <!-- Campo Número de Referência -->
-             <div class="col-md-4 mb-3">
-                <label for="numeroReferencia" class="custom-label">Referência</label>
-                <input
-                    id="numeroReferencia"
-                    type="text"
-                    class="form-control"
-                    placeholder="Referência"
-                    oninput="converterParaMaiusculas(this)" 
-                    />
-            </div>
-    
-            <!-- Campo adicional Vendedor (ID do Vendedor) -->
-            <div class="col-md-4 mb-3">
-                <label for="idVendedor" class="custom-label">Vendedor</label>
-                <select id="idVendedor" class="form-control">
-                    <!-- Preencha com os vendedores disponíveis -->
-                </select>
-            </div>
-    
-            <!-- Campo adicional Queixa do Cliente -->
-        <div class="col-md-12 mb-3">
-          <label for="queixaCliente" class="custom-label">Obs:</label>
-          <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
-        </div>
+          <!-- Campo adicional Nota Interna -->
+          <div class="col-md-4 mb-3">
+              <label for="notaInterna" class="custom-label">Nota Interna</label>
+              <input id="notaInterna" type="text" class="form-control" placeholder="N/A" oninput="converterParaMaiusculas(this)" />
+          </div>
 
-        </div>
-    </div>
+           <!-- Campo Número de Referência -->
+           <div class="col-md-4 mb-3">
+              <label for="numeroReferencia" class="custom-label">Referência</label>
+              <input
+                  id="numeroReferencia"
+                  type="text"
+                  class="form-control"
+                  placeholder="Referência"
+                  oninput="converterParaMaiusculas(this)" 
+                  />
+          </div>
+  
+          <!-- Campo adicional Vendedor (ID do Vendedor) -->
+          <div class="col-md-4 mb-3">
+              <label for="idVendedor" class="custom-label">Vendedor</label>
+              <select id="idVendedor" class="form-control">
+                  <!-- Preencha com os vendedores disponíveis -->
+              </select>
+          </div>
+  
+          <!-- Campo adicional Queixa do Cliente -->
+      <div class="col-md-12 mb-3">
+        <label for="queixaCliente" class="custom-label">Obs:</label>
+        <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+      </div>
+
+      </div>
+  </div>
 
 <!-- Div oculta para as informações do Flask -->
 <div class="elemento-oculto" id="divInfoFlask">
-  <input type="text" id="contador_novo" readonly>
-  <input type="text" id="valor_seg" readonly>
-  <input type="text" id="novo_id_recebimento" readonly>
+<input type="text" id="contador_novo" readonly>
+<input type="text" id="valor_seg" readonly>
+<input type="text" id="novo_id_recebimento" readonly>
 </div>
 
-        <!-- Tabela Tabular
-        <div class="table-responsive myTable table-wrapper scrollable-content">
-          <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
-        </div>
-      -->
-
-        <!-- Botões flutuantes -->
-        <div class="floating-buttons">
-          <button id="btn_adiciona_funcionario" onclick="Adicionar_funcionarios_mostrarAlerta()" class="btn" style="background-color: #4caf50; color: white;">
-            <span class="material-icons" style="margin-right: 8px">save</span>
-            Salvar Dados
-          </button>
-
-          <button id="btn_excluir_funcioario" onclick="excluir_funcioario()" class="btn" style="background-color: #f44336; color: white;">
-            <span class="material-icons" style="margin-right: 8px">delete</span>
-            Excluir Dados
-          </button>
-
-          <button id="btn_editar_dados" onclick="editar_funcionario()" class="btn" style="background-color: #2196f3; color: white;">
-            <span class="material-icons" style="margin-right: 8px">edit</span>
-            Editar Dados
-          </button>
-        </div>
+      <!-- Tabela Tabular
+      <div class="table-responsive myTable table-wrapper scrollable-content">
+        <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
       </div>
-      <!-- Fechando a div 'tab-pane' -->
+    -->
 
-      <!-- Câmera -->
-      <div id="tabs-2" class="container">
+      <!-- Botões flutuantes -->
+      <div class="floating-buttons">
+        <button id="btn_adiciona_funcionario" onclick="Adicionar_funcionarios_mostrarAlerta()" class="btn" style="background-color: #4caf50; color: white;">
+          <span class="material-icons" style="margin-right: 8px">save</span>
+          Salvar Dados
+        </button>
+
+        <button id="btn_excluir_funcioario" onclick="excluir_funcioario()" class="btn" style="background-color: #f44336; color: white;">
+          <span class="material-icons" style="margin-right: 8px">delete</span>
+          Excluir Dados
+        </button>
+
+        <button id="btn_editar_dados" onclick="editar_funcionario()" class="btn" style="background-color: #2196f3; color: white;">
+          <span class="material-icons" style="margin-right: 8px">edit</span>
+          Editar Dados
+        </button>
+
+      </div>
+    
+      <div id="tab-2" class="container">
+        <!-- Conteúdo da Tab 2 -->
         <!-- Conteúdo da guia Câmera -->
         <div class="row mt-3 scrollable-content">
-            <!-- Insira aqui o conteúdo específico da guia Câmera, se necessário -->
-            <p>Conteúdo da guia Câmera.</p>
-        </div>
+          <!-- Insira aqui o conteúdo específico da guia Câmera, se necessário -->
+          <p>Conteúdo da guia Câmera.</p>
+      </div>
+
+      </div>
+    
+      <div id="tab-3" class="container">
+        <!-- Conteúdo da Tab 3 -->
+
+        <!-- Conteúdo da guia do relatório -->
+  <div class="row mt-3 scrollable-content">
+    <!-- Data Inicial -->
+    <div class="col-md-6 col-sm-12 mb-3">
+        <label for="data_inicial_recebimento" class="custom-label">Data Inicial</label>
+        <input
+            id="data_inicial_recebimento"
+            type="date"
+            class="form-control"
+            placeholder="Data Inicial"
+        />
     </div>
 
-      <!-- Relatório -->
-<div id="tabs-3" class="container">
+    <!-- Data Final -->
+    <div class="col-md-6 col-sm-12 mb-3">
+        <label for="data_final_recebimento" class="custom-label">Data Final</label>
+        <input
+            id="data_final_recebimento"
+            type="date"
+            class="form-control"
+            placeholder="Data Final"
+        />
+    </div>
 
-  <!-- Conteúdo da guia do relatório -->
-  <div class="row mt-3 scrollable-content">
-      <!-- Data Inicial -->
-      <div class="col-md-6 col-sm-12 mb-3">
-          <label for="data_inicial_recebimento" class="custom-label">Data Inicial</label>
-          <input
-              id="data_inicial_recebimento"
-              type="date"
-              class="form-control"
-              placeholder="Data Inicial"
-          />
+       <!-- Botões flutuantes -->
+       <div class="floating-buttons">
+
+        <button id="btn_pesquisar" onclick="Relatorio_Recebimento_pedentes()" class="btn" style="background-color: #2196F3; color: white;">
+          <span class="material-icons" style="margin-right: 8px">search</span>
+          Pesquisar
+        </button>
       </div>
 
-      <!-- Data Final -->
-      <div class="col-md-6 col-sm-12 mb-3">
-          <label for="data_final_recebimento" class="custom-label">Data Final</label>
-          <input
-              id="data_final_recebimento"
-              type="date"
-              class="form-control"
-              placeholder="Data Final"
-          />
+      <!-- Tabela Tabular -->
+      <div class="table-responsive myTable table-wrapper scrollable-content">
+        <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
       </div>
 
-         <!-- Botões flutuantes -->
-         <div class="floating-buttons">
+  <!-- Final TAB3 -->
+      </div>
+  <!-- Final geral da TAB -->
+    </div>
 
-          <button id="btn_pesquisar" onclick="Relatorio_Recebimento_pedentes()" class="btn" style="background-color: #2196F3; color: white;">
-            <span class="material-icons" style="margin-right: 8px">search</span>
-            Pesquisar
-          </button>
-        </div>
-        <!-- Tabela Tabular -->
-        <div class="table-responsive myTable table-wrapper scrollable-content">
-          <div id="table_Recebimento_pedentes" class="tabulator myTable"></div>
-        </div>
-
-  </div>
-</div>
-<!-- Fechando a div 'tab-pane' -->
-
-</div>
-</body>
+  </body>
 
     <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
-        {% include 'funcoes_comuns.html' %}
-        <!-- <script src="capturar_foto.js"></script> -->
-      <script>
- // Varivavel para o ApiScript
- var minhaUrl =
-       'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
+    {% include 'funcoes_comuns.html' %}
+    <!-- <script src="capturar_foto.js"></script> -->
+  <script>
+// Varivavel para o ApiScript
+var minhaUrl =
+   'https://script.google.com/macros/s/AKfycbyKbCEorAKW_U4alzQvPfWuYb7Gpu1B1ZxrnnINNmYo92W5EKOiK-wIakk2vp8tj88/exec'
 
+   function my_url() {
+        if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+          return 'http://127.0.0.1:5000/';
+        } else {
+          return 'https://www.northcromocontrole.com.br/';
+        }
+      }
 
+      function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
 
-       function my_url() {
-            if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
-              return 'http://127.0.0.1:5000/';
-            } else {
-              return 'https://www.northcromocontrole.com.br/';
-            }
-          }
-  
-          function uploadFile() {
-            var fileInput = document.getElementById('fileInput');
-            var file = fileInput.files[0];
-  
-            if (file) {
-              var formData = new FormData();
-              formData.append('file', file);
-  
-              $.ajax({
-                type: 'POST',
-                url: my_url() + 'upload',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                  console.log('File uploaded successfully:', response);
-                },
-                error: function (error) {
-                  console.error('Error uploading file:', error);
-                },
-              });
-            } else {
-              console.error('No file selected');
-            }
-          }
+        if (file) {
+          var formData = new FormData();
+          formData.append('file', file);
+
+          $.ajax({
+            type: 'POST',
+            url: my_url() + 'upload',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              console.log('File uploaded successfully:', response);
+            },
+            error: function (error) {
+              console.error('Error uploading file:', error);
+            },
+          });
+        } else {
+          console.error('No file selected');
+        }
+      }
 
 /*
 document.addEventListener('DOMContentLoaded', function() {
-    var mostrarInfoFlaskBtn = document.getElementById('mostrarInfoFlask');
-    
-    if (mostrarInfoFlaskBtn) {
-      console.log("Elemento encontrado:", mostrarInfoFlaskBtn);
-        mostrarInfoFlaskBtn.addEventListener('click', function() {
-            var divInfoFlask = document.getElementById('divInfoFlask');
-            if (divInfoFlask) {
-                divInfoFlask.style.display = 'block';
-            } else {
-                console.error('Elemento com ID "divInfoFlask" não encontrado.');
-            }
-        });
-    } else {
-        console.error('Elemento com ID "mostrarInfoFlask" não encontrado.');
-    }
+var mostrarInfoFlaskBtn = document.getElementById('mostrarInfoFlask');
+
+if (mostrarInfoFlaskBtn) {
+  console.log("Elemento encontrado:", mostrarInfoFlaskBtn);
+    mostrarInfoFlaskBtn.addEventListener('click', function() {
+        var divInfoFlask = document.getElementById('divInfoFlask');
+        if (divInfoFlask) {
+            divInfoFlask.style.display = 'block';
+        } else {
+            console.error('Elemento com ID "divInfoFlask" não encontrado.');
+        }
+    });
+} else {
+    console.error('Elemento com ID "mostrarInfoFlask" não encontrado.');
+}
 });
 
 */
 
 function formatarParaFormatoInput(dataFormatada) {
-    const partes = dataFormatada.split("/");
-    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+const partes = dataFormatada.split("/");
+return `${partes[2]}-${partes[1]}-${partes[0]}`;
 }
 
 
 function formatarData(data) {
-    const partes = data.split('-');
-    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
-    return dataFormatada;
+const partes = data.split('-');
+const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+return dataFormatada;
 }
 
 
-  $(document).ready(function () {
+$(document).ready(function () {
 
-    $("#tabs").tabs();
+$("#tabs").tabs();
 
-     // Ocultar informações específicas das TABs 2 e 3
-     $('#data_inicial_recebimento, #data_final_recebimento').hide();
-     // Também oculte os rótulos, se necessário
-     $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
+ // Ocultar informações específicas das TABs 2 e 3
+ $('#data_inicial_recebimento, #data_final_recebimento').hide();
+ // Também oculte os rótulos, se necessário
+ $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
 
-    setDataFinal_Geral();
-    horaSistema();
-    selecionar_clientes();
-    selecionar_produtos();
-    
-    // carregarValorSeg();
-    Lista_recebimento();
-  
+setDataFinal_Geral();
+horaSistema();
+selecionar_clientes();
+selecionar_produtos();
 
-  // Formatar campo de telefone
-  $('#telefone').keyup(function () {
-    var val = this.value.replace(/\D/g, '');
-    var newVal = '';
-    while (val.length > 0) {
-      newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
-      val = val.substr(2);
-    }
-    this.value = newVal.trim();
-  });
+// carregarValorSeg();
+Lista_recebimento();
 
-  // Adicionar estilo ao campo quando preenchido
-  $('input').blur(function () {
-    if ($(this).val()) {
-      $(this).addClass('filled');
-    } else {
-      $(this).removeClass('filled');
-    }
-  });
-                  // Adicione um manipulador de eventos para os links das guias
-                  $('#tabs a').on('click', function() {
-                  // Obtenha o número da guia a partir do atributo href
-                  var numeroTab = parseInt($(this).attr('href').split('-')[1]);
 
-                    // Chame a função para mostrar a guia
-                     mostrarTab(numeroTab);
-                     getDataAtual(numeroTab);
-                     setDataFinal(numeroTab);
+// Formatar campo de telefone
+$('#telefone').keyup(function () {
+var val = this.value.replace(/\D/g, '');
+var newVal = '';
+while (val.length > 0) {
+  newVal += (val.length > 2 ? ' ' : '') + val.substr(0, 2);
+  val = val.substr(2);
+}
+this.value = newVal.trim();
+});
 
-                  // Chame as funções relevantes
-                  controleVisibilidadeCampoTab2(numeroTab);
-                  controleVisibilidadeCampoTab3(numeroTab);
+// Adicionar estilo ao campo quando preenchido
+$('input').blur(function () {
+if ($(this).val()) {
+  $(this).addClass('filled');
+} else {
+  $(this).removeClass('filled');
+}
+});
+              // Adicione um manipulador de eventos para os links das guias
+              $('#tabs a').on('click', function() {
+              // Obtenha o número da guia a partir do atributo href
+              var numeroTab = parseInt($(this).attr('href').split('-')[1]);
 
-              });
-              var mainContent = $("#mainContent");
-              if (mainContent.length > 0) {
-                  // Faça algo com mainContent
-                  mainContent.perfectScrollbar();
-              } else {
-                  console.error("Elemento #mainContent não encontrado.");
-              }
+                // Chame a função para mostrar a guia
+                 mostrarTab(numeroTab);
+                 getDataAtual(numeroTab);
+                 setDataFinal(numeroTab);
 
-              $(".scrollable-content").perfectScrollbar();
-                
-                });
+              // Chame as funções relevantes
+              controleVisibilidadeCampoTab2(numeroTab);
+              controleVisibilidadeCampoTab3(numeroTab);
 
-    function autoResize(elemento) {
-    elemento.style.height = 'auto';
-    elemento.style.height = (elemento.scrollHeight) + 'px';
+          });
+          var mainContent = $("#mainContent");
+          if (mainContent.length > 0) {
+              // Faça algo com mainContent
+              mainContent.perfectScrollbar();
+          } else {
+              console.error("Elemento #mainContent não encontrado.");
+          }
 
-    // Converter para maiúsculas
-    elemento.value = elemento.value.toUpperCase();
+          $(".scrollable-content").perfectScrollbar();
+            
+            });
+
+function autoResize(elemento) {
+elemento.style.height = 'auto';
+elemento.style.height = (elemento.scrollHeight) + 'px';
+
+// Converter para maiúsculas
+elemento.value = elemento.value.toUpperCase();
 }
 
 
 // Função para definir a hora atual no campo
 function horaSistema() {
-  const horaAtualInput = document.getElementById('horaAtual');
-  if (horaAtualInput !== null) {
-    // Continue com a manipulação apenas se o elemento existir
-    horaAtualInput.value = "Nova hora";
+const horaAtualInput = document.getElementById('horaAtual');
+if (horaAtualInput !== null) {
+// Continue com a manipulação apenas se o elemento existir
+horaAtualInput.value = "Nova hora";
 
-    const agora = new Date();
-    // Formatar a hora atual para hh:mm
-    const horaAtual = agora.getHours().toString().padStart(2, '0');
-    const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-    const horaFormatada = `${horaAtual}:${minutoAtual}`;
+const agora = new Date();
+// Formatar a hora atual para hh:mm
+const horaAtual = agora.getHours().toString().padStart(2, '0');
+const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+const horaFormatada = `${horaAtual}:${minutoAtual}`;
 
-    // Atribuir a hora formatada ao input
-    horaAtualInput.value = horaFormatada;
-  }
+// Atribuir a hora formatada ao input
+horaAtualInput.value = horaFormatada;
+}
 }
 
- //  ......................................///..............................///................/....../..........
+//  ......................................///..............................///................/....../..........
 
- // INFORMAÇÃO PARA AS TABELAS 
- function mostrarTab(numeroTab) {
+// INFORMAÇÃO PARA AS TABELAS 
+function mostrarTab(numeroTab) {
 
-   // Ocultar todas as guias
-   $('#tabs-1, #tabs-2, #tabs-3').hide();
+// Ocultar todas as guias
+$('#tabs-1, #tabs-2, #tabs-3').hide();
 
-   // Mostrar a guia ativa
-   $('#tabs-' + numeroTab).show();
+// Mostrar a guia ativa
+$('#tabs-' + numeroTab).show();
 
-    // Ocultar rótulos e inputs específicos na TAB1
-    if (numeroTab === 1) {
-            $('#data_inicial_recebimento, #data_final_recebimento').hide();
-        }
-
-  // Remove a classe ativa de todas as guias
-  $('#tabs a').removeClass('ativa');
-
-  // Adiciona a classe ativa à guia atual
-  $(`#tabs-${numeroTab}`).addClass('ativa');
-
-   // Verifica se é a Tab 2
-   if (numeroTab === 3) {
-
-    // Obtém a data atual
-    var dataAtual = new Date();
-
-    // Subtrai 30 dias da data atual
-    var dataInicial = new Date();
-    dataInicial.setDate(dataAtual.getDate() - 30);
-
-    // Formata a data para o formato DD/MM/AAAA
-    var formatoData = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    var dataInicialFormatada = dataInicial.toLocaleDateString('pt-BR', formatoData);
-    var dataFinalFormatada = dataAtual.toLocaleDateString('pt-BR', formatoData);
-  }
-  };
-    // Função para retornar a data atual no formato DD/MM/AAAA
-    function getDataAtual(numeroTab) {
-    const hoje = new Date();
-    hoje.setDate(hoje.getDate() -300); // Subtrai 7 dias da data de hoje
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const dia = String(hoje.getDate()).padStart(2, '0');
-
-    // Formata a data para o formato DD/MM/AAAA
-    const dataFormatada = `${dia}/${mes}/${ano}`;
-
-    // Atualiza o valor do campo de data com base no número da tab
-    switch (numeroTab) {
-        case 1:
-            document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada);
-            break;
-        case 2:
-            // document.getElementById('data_inicial_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada);
-            break;
-        case 3:
-            document.getElementById('data_inicial_recebimento').value = formatarParaFormatoInput(dataFormatada);
-            break;
-        // Adicione mais cases conforme necessário
-        default:
-            // Comportamento padrão (pode ser ajustado conforme necessário)
-            document.getElementById('data_inicial_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada);
+// Ocultar rótulos e inputs específicos na TAB1
+if (numeroTab === 1) {
+        $('#data_inicial_recebimento, #data_final_recebimento').hide();
     }
 
-    // Retorna a data formatada
-    return dataFormatada;
+// Remove a classe ativa de todas as guias
+$('#tabs a').removeClass('ativa');
+
+// Adiciona a classe ativa à guia atual
+$(`#tabs-${numeroTab}`).addClass('ativa');
+
+// Verifica se é a Tab 2
+if (numeroTab === 3) {
+
+// Obtém a data atual
+var dataAtual = new Date();
+
+// Subtrai 30 dias da data atual
+var dataInicial = new Date();
+dataInicial.setDate(dataAtual.getDate() - 30);
+
+// Formata a data para o formato DD/MM/AAAA
+var formatoData = { year: 'numeric', month: '2-digit', day: '2-digit' };
+var dataInicialFormatada = dataInicial.toLocaleDateString('pt-BR', formatoData);
+var dataFinalFormatada = dataAtual.toLocaleDateString('pt-BR', formatoData);
+}
+};
+// Função para retornar a data atual no formato DD/MM/AAAA
+function getDataAtual(numeroTab) {
+const hoje = new Date();
+hoje.setDate(hoje.getDate() -300); // Subtrai 7 dias da data de hoje
+const ano = hoje.getFullYear();
+const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+const dia = String(hoje.getDate()).padStart(2, '0');
+
+// Formata a data para o formato DD/MM/AAAA
+const dataFormatada = `${dia}/${mes}/${ano}`;
+
+// Atualiza o valor do campo de data com base no número da tab
+switch (numeroTab) {
+    case 1:
+        document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada);
+        break;
+    case 2:
+        // document.getElementById('data_inicial_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada);
+        break;
+    case 3:
+        document.getElementById('data_inicial_recebimento').value = formatarParaFormatoInput(dataFormatada);
+        break;
+    // Adicione mais cases conforme necessário
+    default:
+        // Comportamento padrão (pode ser ajustado conforme necessário)
+        document.getElementById('data_inicial_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada);
+}
+
+// Retorna a data formatada
+return dataFormatada;
 }
 
 function setDataFinal(numeroTab) {
-    const hoje = new Date();
+const hoje = new Date();
 
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const dia = String(hoje.getDate()).padStart(2, '0');
+const ano = hoje.getFullYear();
+const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+const dia = String(hoje.getDate()).padStart(2, '0');
 
-    // Formata a data para o formato DD/MM/AAAA
-    const dataFormatada_Final = `${dia}/${mes}/${ano}`;
+// Formata a data para o formato DD/MM/AAAA
+const dataFormatada_Final = `${dia}/${mes}/${ano}`;
 
-    // Atualiza o valor do campo de data com base no número da tab
-    switch (numeroTab) {
-        case 1:
-            //    document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
-            break;
-        case 2:
-            // document.getElementById('data_final_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada_Final);
-            break;
-        case 3:
-            document.getElementById('data_final_recebimento').value = formatarParaFormatoInput(dataFormatada_Final);
-            break;
-        // Adicione mais cases conforme necessário
-        default:
-            // Comportamento padrão (pode ser ajustado conforme necessário)
-            document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
-    }
+// Atualiza o valor do campo de data com base no número da tab
+switch (numeroTab) {
+    case 1:
+        //    document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
+        break;
+    case 2:
+        // document.getElementById('data_final_presencaObra_Escolhe').value = formatarParaFormatoInput(dataFormatada_Final);
+        break;
+    case 3:
+        document.getElementById('data_final_recebimento').value = formatarParaFormatoInput(dataFormatada_Final);
+        break;
+    // Adicione mais cases conforme necessário
+    default:
+        // Comportamento padrão (pode ser ajustado conforme necessário)
+        document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
+}
 
-    // Retorna a data formatada
-    return dataFormatada_Final;
+// Retorna a data formatada
+return dataFormatada_Final;
 }
 
 
 function setDataFinal_Geral() {
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const dia = String(hoje.getDate()).padStart(2, '0');
+const hoje = new Date();
+const ano = hoje.getFullYear();
+const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+const dia = String(hoje.getDate()).padStart(2, '0');
 
-    // Formata a data para o formato DD/MM/AAAA
-    const dataFormatada_Final = `${dia}/${mes}/${ano}`;
+// Formata a data para o formato DD/MM/AAAA
+const dataFormatada_Final = `${dia}/${mes}/${ano}`;
 
-    // Define o valor do elemento com o ID 'dataRecebimento'
-    document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
+// Define o valor do elemento com o ID 'dataRecebimento'
+document.getElementById('dataRecebimento').value = formatarParaFormatoInput(dataFormatada_Final);
 
-    // Retorna a data formatada
-    return dataFormatada_Final;
+// Retorna a data formatada
+return dataFormatada_Final;
 }
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  const capturarBotao = document.getElementById('seuIdDoBotaoCapturar');
-  const cameraFrenteBotao = document.getElementById('seuIdDoBotaoCameraFrente');
-  const cameraTransBotao = document.getElementById('seuIdDoBotaoCameraTrans');
-  const desativarCameraBotao = document.getElementById('seuIdDoBotaoDesativarCamera');
-  
+const capturarBotao = document.getElementById('seuIdDoBotaoCapturar');
+const cameraFrenteBotao = document.getElementById('seuIdDoBotaoCameraFrente');
+const cameraTransBotao = document.getElementById('seuIdDoBotaoCameraTrans');
+const desativarCameraBotao = document.getElementById('seuIdDoBotaoDesativarCamera');
 
-  if (capturarBotao) {
-    capturarBotao.addEventListener('click', capturePhoto);
-  } else {
-    console.error('Elemento com ID "seuIdDoBotaoCapturar" não encontrado.');
-  }
 
-  if (cameraFrenteBotao) {
-    cameraFrenteBotao.addEventListener('click', function () {
-      stopCamera();
-      startCamera({ video: { facingMode: 'user' } });
-    });
-  } else {
-    console.error('Elemento com ID "seuIdDoBotaoCameraFrente" não encontrado.');
-  }
+if (capturarBotao) {
+capturarBotao.addEventListener('click', capturePhoto);
+} else {
+console.error('Elemento com ID "seuIdDoBotaoCapturar" não encontrado.');
+}
 
-  if (cameraTransBotao) {
-    cameraTransBotao.addEventListener('click', function () {
-      stopCamera();
-      startCamera({ video: { facingMode: { exact: 'environment' } } });
-    });
-  } else {
-    console.error('Elemento com ID "seuIdDoBotaoCameraTrans" não encontrado.');
-  }
+if (cameraFrenteBotao) {
+cameraFrenteBotao.addEventListener('click', function () {
+  stopCamera();
+  startCamera({ video: { facingMode: 'user' } });
+});
+} else {
+console.error('Elemento com ID "seuIdDoBotaoCameraFrente" não encontrado.');
+}
 
-  if (desativarCameraBotao) {
-    desativarCameraBotao.addEventListener('click', function () {
-      stopCamera();
-      video.style.display = 'none';
-    });
-  } else {
-    console.error('Elemento com ID "seuIdDoBotaoDesativarCamera" não encontrado.');
-  }
+if (cameraTransBotao) {
+cameraTransBotao.addEventListener('click', function () {
+  stopCamera();
+  startCamera({ video: { facingMode: { exact: 'environment' } } });
+});
+} else {
+console.error('Elemento com ID "seuIdDoBotaoCameraTrans" não encontrado.');
+}
 
-  
-  btnGroup.addEventListener('click', function (event) {
-    const target = event.target;
-    if (target.tagName === 'BUTTON') {
-      const value = target.getAttribute('data-value');
-      hiddenInput.value = value;
-    }
-  });
+if (desativarCameraBotao) {
+desativarCameraBotao.addEventListener('click', function () {
+  stopCamera();
+  video.style.display = 'none';
+});
+} else {
+console.error('Elemento com ID "seuIdDoBotaoDesativarCamera" não encontrado.');
+}
+
+
+btnGroup.addEventListener('click', function (event) {
+const target = event.target;
+if (target.tagName === 'BUTTON') {
+  const value = target.getAttribute('data-value');
+  hiddenInput.value = value;
+}
+});
 });
 
 
 // Script para definir a hora atual no campo
 document.addEventListener('DOMContentLoaded', function () {
-  const horaAtualInput = document.getElementById('horaAtual');
-  const agora = new Date();
+const horaAtualInput = document.getElementById('horaAtual');
+const agora = new Date();
 
-  // Formatar a hora atual para hh:mm
-  const horaAtual = agora.getHours().toString().padStart(2, '0');
-  const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
-  const horaFormatada = `${horaAtual}:${minutoAtual}`;
+// Formatar a hora atual para hh:mm
+const horaAtual = agora.getHours().toString().padStart(2, '0');
+const minutoAtual = agora.getMinutes().toString().padStart(2, '0');
+const horaFormatada = `${horaAtual}:${minutoAtual}`;
 
-  horaAtualInput.value = horaFormatada;
+horaAtualInput.value = horaFormatada;
 });
 
 // Verifica se a variável video já foi declarada
 if (!window.video) {
-  const video = document.getElementById('camera-feed');
-  window.video = video; // Atribui a variável ao escopo global para evitar redeclaração
-  const capturarBotao = document.getElementById('capturar-foto');
-  const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
-  const cameraTransBotao = document.getElementById('capturar-camera-trans');
-  const desativarCameraBotao = document.getElementById('desativar-camera');
-  const canvas = document.getElementById('foto-capturada');
+const video = document.getElementById('camera-feed');
+window.video = video; // Atribui a variável ao escopo global para evitar redeclaração
+const capturarBotao = document.getElementById('capturar-foto');
+const cameraFrenteBotao = document.getElementById('capturar-camera-frente');
+const cameraTransBotao = document.getElementById('capturar-camera-trans');
+const desativarCameraBotao = document.getElementById('desativar-camera');
+const canvas = document.getElementById('foto-capturada');
 
 
 let currentStream;
 
 function startCamera(streamOptions) {
-  navigator.mediaDevices
-    .getUserMedia(streamOptions)
-    .then(function (stream) {
-      video.srcObject = stream;
-      currentStream = stream;
-    })
-    .catch(function (error) {
-      console.log('Erro ao acessar a câmera: ' + error);
-    });
+navigator.mediaDevices
+.getUserMedia(streamOptions)
+.then(function (stream) {
+  video.srcObject = stream;
+  currentStream = stream;
+})
+.catch(function (error) {
+  console.log('Erro ao acessar a câmera: ' + error);
+});
 }
 
 function stopCamera() {
-  if (currentStream) {
-    const tracks = currentStream.getTracks();
-    tracks.forEach((track) => track.stop());
-    video.srcObject = null;
-  }
+if (currentStream) {
+const tracks = currentStream.getTracks();
+tracks.forEach((track) => track.stop());
+video.srcObject = null;
+}
 }
 
 function capturePhoto() {
-  canvas.style.display = 'block';
-  video.style.display = 'none';
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  canvas
-    .getContext('2d')
-    .drawImage(video, 0, 0, canvas.width, canvas.height);
+canvas.style.display = 'block';
+video.style.display = 'none';
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+canvas
+.getContext('2d')
+.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const dataURL = canvas.toDataURL('image/jpeg');
+const dataURL = canvas.toDataURL('image/jpeg');
 
-  fetch('/upload', {
-    method: 'POST',
-    body: JSON.stringify({ photo: dataURL }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.text())
-    .then((result) => alert(result))
-    .catch((error) => console.error(error));
+fetch('/upload', {
+method: 'POST',
+body: JSON.stringify({ photo: dataURL }),
+headers: {
+  'Content-Type': 'application/json',
+},
+})
+.then((response) => response.text())
+.then((result) => alert(result))
+.catch((error) => console.error(error));
 }
 
 capturarBotao.addEventListener('click', capturePhoto);
 
 cameraFrenteBotao.addEventListener('click', function () {
-  stopCamera();
-  startCamera({ video: { facingMode: 'user' } });
+stopCamera();
+startCamera({ video: { facingMode: 'user' } });
 });
 
 cameraTransBotao.addEventListener('click', function () {
-  stopCamera();
-  startCamera({ video: { facingMode: { exact: 'environment' } } });
+stopCamera();
+startCamera({ video: { facingMode: { exact: 'environment' } } });
 });
 
 desativarCameraBotao.addEventListener('click', function () {
-  stopCamera();
-  video.style.display = 'none';
+stopCamera();
+video.style.display = 'none';
 });
 
 }
 
-            function selecionar_clientes() {
-                console.log("selecionar_clientea");
-                $.ajax({
-                    url: my_url() + "selecionar_clientes",
-                    type: "POST",
-                })
-                .done(function (response) {
-                    try {
-                        let dados = response.retorno; // Ajuste aqui para pegar a propriedade 'retorno'
-                        console.log("selecionar_clientes:", dados);
+        function selecionar_clientes() {
+            console.log("selecionar_clientea");
+            $.ajax({
+                url: my_url() + "selecionar_clientes",
+                type: "POST",
+            })
+            .done(function (response) {
+                try {
+                    let dados = response.retorno; // Ajuste aqui para pegar a propriedade 'retorno'
+                    console.log("selecionar_clientes:", dados);
 
-                        // Verifique se os dados têm as propriedades esperadas
-                        if (Array.isArray(dados) && dados.length > 0 && "Nome_cliente" in dados[0]) {
+                    // Verifique se os dados têm as propriedades esperadas
+                    if (Array.isArray(dados) && dados.length > 0 && "Nome_cliente" in dados[0]) {
 
-                            // Atualize o campo de seleção com as opções recebidas
-                            const select = document.getElementById('idCliente_Select_Tab2');
+                        // Atualize o campo de seleção com as opções recebidas
+                        const select = document.getElementById('idCliente_Select_Tab2');
 
-                            // Limpe as opções existentes
-                            select.innerHTML = '<option value="">Selecione a Opção..</option>';
+                        // Limpe as opções existentes
+                        select.innerHTML = '<option value="">Selecione a Opção..</option>';
 
-                            // Adicione as novas opções
-                            dados.forEach(cliente => {
-                            const option = document.createElement('option');
-                            option.value = cliente.ID;  // Use a propriedade 'ID' para o valor da opção
-                            option.text = cliente.Nome_cliente;  // Use a propriedade 'Nome_cliente' para o texto da opção
-                            select.appendChild(option);
-                        });
-
-                            // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
-                        } else {
-                            console.error("Dados inválidos recebidos:", dados);
-                        }
-                    } catch (e) {
-                        console.error("Erro ao analisar os dados:", e);
-                    }
-                })
-                .fail(function (error) {
-                    console.error("Erro ao buscar dados iniciais de conferência:", error);
-                });
-            }
-
-   function selecionar_produtos() {
-    console.log("selecionar_produtos");
-    $.ajax({
-        url: my_url() + "selecionar_produtos",
-        type: "POST",
-    })
-    .done(function (response) {
-        try {
-            let dados = response.retorno;
-            console.log("selecionar_produtos:", dados);
-
-            // Verifique se os dados têm as propriedades esperadas
-            if (Array.isArray(dados) && dados.length > 0) {
-
-                // Atualize o campo de seleção com as opções recebidas
-                const select_produtos = document.getElementById('codigoProduto_Select_Tab2');
-
-                // Limpe as opções existentes
-                select_produtos.innerHTML = '<option value="">Selecione a Opção..</option>';
-
-                // Adicione as novas opções
-                  dados.forEach(produto => {
-                      const option_produtos = document.createElement('option');
-                      option_produtos.value = produto.Cod_Produto;  // Use a propriedade 'Cod_Produto' para o valor da opção
-                      option_produtos.text = produto.nome_produto;  // Use a propriedade 'nome_produto' para o texto da opção
-                      select_produtos.appendChild(option_produtos);
-                  });
-
-                // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
-            } else {
-                console.error("Dados inválidos recebidos:", dados);
-            }
-        } catch (e) {
-            console.error("Erro ao analisar os dados:", e);
-        }
-    })
-    .fail(function (error) {
-        console.error("Erro ao buscar dados iniciais de conferência:", error);
-    });
-}
-              // Função para carregar a lista de obras
-              function ListaCliente() {
-                $.ajax({
-                    url: my_url() + "lista_clientes",
-                    type: "GET",
-                    dataType: "json",
-                })
-                .done(function (data) {
-                    const  clientes = data.clientes;
-                    clientesContainer.innerHTML = "";
-    
-                    obras.forEach(obra => {
-                        const obraItem = document.createElement('li');
-                        clientesItem.classList.add('obra-item');
-                        clientesItem.setAttribute('data-id',  clientes['id_Obra']);
-                        clientesItem.textContent = clientes['obra_nome'];
-    
-                        clientesItem.addEventListener('click', function() {
-                            const obraId = this.getAttribute('data-id');
-                            console.log(obraId)
-    
-                            carregarDetalhesObra(obraId);
-                        });
-    
-                        obrasContainer.appendChild(obraItem);
+                        // Adicione as novas opções
+                        dados.forEach(cliente => {
+                        const option = document.createElement('option');
+                        option.value = cliente.ID;  // Use a propriedade 'ID' para o valor da opção
+                        option.text = cliente.Nome_cliente;  // Use a propriedade 'Nome_cliente' para o texto da opção
+                        select.appendChild(option);
                     });
-                })
-                .fail(function (error) {
-                    console.error("Erro ao carregar obras:", error);
-                });
-            }
 
-            // Função para carregar a lista de obras
-            function Lista_recebimento() {
-                $.ajax({
-                    url: my_url() + "selecionar_recebimentos",
-                    type: "POST",
-                    dataType: "json",
-                })
-                .done(function (data) {
-                  console.log('Lista_recebimento', data)
-
-                // Preencha os inputs com os dados recebidos
-                $("#contador_novo").val(data.contador_novo).show();
-                $("#valor_seg").val(data.valor_seg).show();
-                $("#novo_id_recebimento").val(data.novo_id_recebimento).show();
-
-              // Padrão: selecionar "Novo" por padrão
-              $("#tipoOrdem").val("novo");
-
-              // Preencher o Número de Controle automaticamente
-              $("#numeroControle").val(data.valor_seg).prop("disabled", true);
-
-
-                 // Manipulador de evento para o Tipo de Ordem
-                 $("#tipoOrdem").change(function() {
-                    var tipoOrdem = $(this).val();
-
-                    // Se o Tipo de Ordem for "Novo", preencha o Número de Controle automaticamente
-                    if (tipoOrdem === "novo") {
-                        $("#numeroControle").val(data.valor_seg).prop("disabled", true);
+                        // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
                     } else {
-                        // Se o Tipo de Ordem for "Não", deixe o Número de Controle habilitado para digitação
-                        $("#numeroControle").val("").prop("disabled", false);
+                        console.error("Dados inválidos recebidos:", dados);
                     }
-                });
+                } catch (e) {
+                    console.error("Erro ao analisar os dados:", e);
+                }
             })
             .fail(function (error) {
-                console.error("Lista_recebimento:", error);
+                console.error("Erro ao buscar dados iniciais de conferência:", error);
             });
         }
 
-    function transformedData_Recebimento_pedentes(data) {
-    console.log("Dados de entrada para transformação:", data);
-
-    const mappedColumns_Recebimento_pedentes = {
-        Cod_Produto: "codProduto",
-        DataCadastro: "dataCadastro",
-        DataRec_OrdemServiços: "dataRecOrdemServicos",
-        HoraInicial_Ordem: "horaInicialOrdem",
-        ID: "id",
-        ID_Componente: "idComponente",
-        ID_Ordem: "idOrdem",
-        ID_PostoTrabalho: "idPostoTrabalho",
-        ID_Vendedor: "idVendedor",
-        ID_cliente: "idCliente",
-        Id: "idGeral",
-        Nome_cliente: "nomeCliente",
-        NotaInterna: "notaInterna",
-        QUEIXA_CLIENTE: "queixaCliente",
-        Qtd_Produto: "qtdProduto",
-        Referencia_Produto: "referenciaProduto",
-        Status_Ordem: "statusOrdem",
-        TipoOrdem: "tipoOrdem",
-        Usuario_Cadastro: "usuarioCadastro",
-        idGrupo: "idGrupo",
-        idoperacaoServico: "idOperacaoServico",
-        nome: "nome",
-        nome_produto: "nomeProduto"
-        // Adicione ou remova colunas conforme necessário
-    };
-
-    if (!data || !Array.isArray(data)) {
-        console.error("Dados inválidos fornecidos para transformação:", data);
-        return [];
-    }
-      
-    const transformed_Recebimento_pedentes = data.map((row) => {
-        const transformedRow_Recebimento_pedentes = {};
-
-        for (const columnFrom_Recebimento_pedentes in mappedColumns_Recebimento_pedentes) {
-            const columnName = mappedColumns_Recebimento_pedentes[columnFrom_Recebimento_pedentes];
-            if (columnFrom_Recebimento_pedentes in row) {
-                transformedRow_Recebimento_pedentes[columnName] = row[columnFrom_Recebimento_pedentes];
-            } else {
-                // Mantém a propriedade, mas define como string vazia
-                transformedRow_Recebimento_pedentes[columnName] = "";
-            }
-        }
-
-        // Inclua a coluna "idPCP" com o valor original "id"
-        transformedRow_Recebimento_pedentes["idPCP"] = row["id"];
-
-        return transformedRow_Recebimento_pedentes;
-    });
-
-    console.log("Dados transformados:", transformed_Recebimento_pedentes);
-    return transformed_Recebimento_pedentes;
-}
-
-// Função para carregar a lista de obras
-function Relatorio_Recebimento_pedentes() {
-    console.log('Relatorio_Recebimento_pedentes')
-
-      var data_inicial_formatada = document.getElementById("data_inicial_recebimento").value;
-      var data_final_formatada = document.getElementById("data_final_recebimento").value;
-
-    //console.log("data_inicial_formatada:", data_inicial_formatada);
-     //console.log("data_final_formatada:", data_final_formatada);
-
-    // Formatando as datas
-     var data_inicial = formatarData(data_inicial_formatada);
-     var data_final = formatarData(data_final_formatada);
-
-    //console.log("Data Inicial:", data_inicial);
-    //console.log("Data Final:", data_final);
-
-    try {
-        $.ajax({
-            url: my_url() + "selecionar_recebimentos_especificos",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                  "data_inicial": data_inicial,
-                  "data_final": data_final,
-            }),
-        })
-        .done(function (data) {
-            console.log('Relatorio_Recebimento_pedentes', data);
-
-            // Antes de processar os dados na resposta AJAX
-            if (data && data.retorno_especifico) {
-                // Transforme os dados uma vez e armazene em uma variável
-                const transformedData = transformedData_Recebimento_pedentes(data.retorno_especifico);
-
-                // Chame a função de atualização da tabela com os dados transformados
-                updateTableRecebimento_pedentes(transformedData);
-
-                console.log("Após chamar a função de atualização da tabela");
-             } else {
-                console.error("Resposta JSON inválida ou ausente");
-            }
-        })
-        .fail(function (xhr, status, error) {
-            console.error("Erro ao buscar dados consolidados:", error);
-            console.log("Status da requisição:", status);
-            console.log("Resposta do servidor:", xhr.responseText);
-        });
-    } catch (error) {
-        console.error("Erro ao executar a função: " + error);
-    }
-}
-
-function updateTableRecebimento_pedentes(retorno_especifico) {
-    console.log('Dados detalhados recebidos:', retorno_especifico);
-
-    if (!table_Recebimento_pedentes) {
-        console.log('Tabela não existe. Inicializando...');
-        initializeTable_Recebimento_pedentes();
-    }
-
-    // Adicione este log para verificar a existência da tabela
-    console.log('Tabela existe:', table_Recebimento_pedentes);
-
-    table_Recebimento_pedentes.setData(retorno_especifico);
-}
-
-
-  function initializeTable_Recebimento_pedentes() {
-  table_Recebimento_pedentes = new Tabulator("#table_Recebimento_pedentes", {
-      pagination:"local",
-      paginationSize:300,
-      paginationInitialPage: 1,
-      movableColumns:true,
-      paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
-      paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
-      name: "table_Recebimento_pedentes",
-      deferRender: true,
-      scrollCollapse: true,
-      scroller: true,
-      scrollY: 200,
-      data: [],
-        // Classificação inicial
-        initialSort: [
-        { column: "dtProducao", dir: "asc" },
-        { column: "SEQ", dir: "asc" },
-        { column: "op", dir: "asc" },
-      ],
-      columns: [
-        {
-            title: "Nº Controle",
-            field: "idOrdem",
-            hozAlign: "center",
-            responsive: 0,
-            },
-
-            {
-            title: "Data Recebimento",
-            field: "dataCadastro", 
-            hozAlign: "center",
-            responsive: 0,
-          },
-            {
-            title: "Cliente",
-            field: "nomeCliente", 
-            hozAlign: "center",
-            responsive: 0,
-          },
-        {
-          title: "Cód",
-          field: "codProduto",
-          hozAlign: "center",
-          responsive: 0,
-        },
-        {
-          title: "Qtda",
-          field: "qtdProduto",
-          hozAlign: "center",
-          responsive: 0,
-        },
-        {
-          title: "Desc Serviço/ Produto / Tarefa",
-          field: "nomeProduto",
-          hozAlign: "left",
-          responsive: 0,
-        },
-        {
-          title: "Nota",
-          field: "notaInterna",
-          hozAlign: "center",
-          responsive: 0,
-        },
-        {
-          title: "Referência Produto",
-          field: "referenciaProduto",
-          hozAlign: "center",
-          responsive: 0,
-        },
-        {
-          title: "Op",
-          field: "op",
-          hozAlign: "center",
-          visible: false,
-          responsive: 0,
-        },
-        {
-          title: "Observação",
-          field: "queixaCliente",
-          hozAlign: "left",
-          responsive: 0,
-        },
-         {
-              title: "Id PCP",
-              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
-              hozAlign: "center",
-              visible: false,
-              responsive: 0,
-          },
-          {
-              title: "Id PCP",
-              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
-              hozAlign: "center",
-              visible: false,
-              responsive: 0,
-          },
-      ],
-      rowClick: function (e, row) {
-          table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
-              r.getElement().classList.remove('selected');
-          });
-
-          row.getElement().classList.add('selected');
-          var rowData = row.getData();
-          preencherCamposDeEntrada(rowData);
-      },
-  });
-  }
-
-
-  function destruirTabela__Recebimento_pedentes() {
-  if (table_Recebimento_pedentes) {
-      table_Recebimento_pedentes.destroy();
-      table_Recebimento_pedentes = null;
-  }
-  }         
-          function preencherCamposDeEntrada(rowData) {
-          console.log("Preenchendo campos de entrada:", rowData);
-          // Defina o valor do campo idPCP usando JavaScript
-          document.getElementById("idPCP").value = rowData.idPCP;
-          document.getElementById("nomeCompleto").value = rowData.nomeCompleto;
-        }
-        
-        
-  // Adicione um evento de input ao campo de pesquisa
-  $('#pesquisar_funcionario_Presenca_FuncionarioDetalhamento').on('input', function () {
-  var valor_para_pesquisar = $(this).val().toLowerCase().trim();
-
-  // Verifique se o valor de pesquisa não está vazio
-  if (valor_para_pesquisar === "") {
-      // Se estiver vazio, remova o filtro
-      table_Presenca_FuncionarioDetalhamento.clearFilter();
-  } else {
-      // Se não estiver vazio, aplique o filtro
-      table_Presenca_FuncionarioDetalhamento.setFilter(function (detalhado) {
-          return (
-              detalhado.idPCP.toLowerCase().includes(valor_para_pesquisar) ||
-              detalhado.nomeCompleto.toLowerCase().includes(valor_para_pesquisar) ||
-            
-              data.formapag.toLowerCase().includes(valor_para_pesquisar)
-
-              // Adicione mais colunas conforme necessário
-          );
-      });
-  }
-  });
-
- // Função para adicionar um recebimento
-function adicionarRecebimento() {
-    $.ajax({
-        url: my_url() + "adicionar_recebimento",
-        type: "POST",
-    })
-    .done(function (response) {
-        try {
-            let dados = response.retorno;
-            console.log("Recebimento adicionado:", dados);
-
-            // Chame a função para processar os dados recebidos
-            processarDados(response);
-
-            // Opcional: Faça mais operações com os dados, se necessário
-        } catch (e) {
-            console.error("Erro ao adicionar recebimento:", e);
-        }
-    })
-    .fail(function (error) {
-        console.error("Erro ao adicionar recebimento:", error);
-    });
-}
-
-
-// Adicione uma função para calcular o ID_Ordem no frontend
-function calcularIDOrdem(tipoOrdem, novoIDNovo) {
-    if (tipoOrdem === "NÃO") {
-        return "";
-    } else if (novoIDNovo === 0) {
-        return "0001-" + new Date().getFullYear().toString().slice(-2);
-    } else if (novoIDNovo === 1) {
-        return "0002-" + new Date().getFullYear().toString().slice(-2);
-    } else {
-        return ("0000" + novoIDNovo).slice(-4) + "-" + new Date().getFullYear().toString().slice(-2);
-    }
-}
-
-// Atualize a função de processamento dos dados recebidos
-function processarDados(response) {
+function selecionar_produtos() {
+console.log("selecionar_produtos");
+$.ajax({
+    url: my_url() + "selecionar_produtos",
+    type: "POST",
+})
+.done(function (response) {
     try {
         let dados = response.retorno;
-        console.log("selecionar_recebimentos:", dados);
+        console.log("selecionar_produtos:", dados);
 
         // Verifique se os dados têm as propriedades esperadas
         if (Array.isArray(dados) && dados.length > 0) {
 
             // Atualize o campo de seleção com as opções recebidas
-            const select_recebimentos = document.getElementById('seuCampoDeRecebimentos');
+            const select_produtos = document.getElementById('codigoProduto_Select_Tab2');
 
             // Limpe as opções existentes
-            select_recebimentos.innerHTML = '<option value="">Selecione a Opção..</option>';
+            select_produtos.innerHTML = '<option value="">Selecione a Opção..</option>';
 
             // Adicione as novas opções
-            dados.forEach(recebimento => {
-                const option_recebimento = document.createElement('option');
-                option_recebimento.value = recebimento.ID;  
-                option_recebimento.text = recebimento.nome_recebimento;
-                select_recebimentos.appendChild(option_recebimento);
-            });
-
-            // Exemplo de como calcular o ID_Ordem com base nos dados
-            const tipoOrdem = document.getElementById('TipoOrdem').value;
-            const novoIDNovo = document.getElementById('NovoIDNovo').value;
-            const idOrdemCalculado = calcularIDOrdem(tipoOrdem, novoIDNovo);
-
-            // Atualize o campo do ID_Ordem no formulário
-            document.getElementById('IDOrdem').value = idOrdemCalculado;
+              dados.forEach(produto => {
+                  const option_produtos = document.createElement('option');
+                  option_produtos.value = produto.Cod_Produto;  // Use a propriedade 'Cod_Produto' para o valor da opção
+                  option_produtos.text = produto.nome_produto;  // Use a propriedade 'nome_produto' para o texto da opção
+                  select_produtos.appendChild(option_produtos);
+              });
 
             // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
         } else {
@@ -1247,82 +816,504 @@ function processarDados(response) {
     } catch (e) {
         console.error("Erro ao analisar os dados:", e);
     }
+})
+.fail(function (error) {
+    console.error("Erro ao buscar dados iniciais de conferência:", error);
+});
+}
+          // Função para carregar a lista de obras
+          function ListaCliente() {
+            $.ajax({
+                url: my_url() + "lista_clientes",
+                type: "GET",
+                dataType: "json",
+            })
+            .done(function (data) {
+                const  clientes = data.clientes;
+                clientesContainer.innerHTML = "";
+
+                obras.forEach(obra => {
+                    const obraItem = document.createElement('li');
+                    clientesItem.classList.add('obra-item');
+                    clientesItem.setAttribute('data-id',  clientes['id_Obra']);
+                    clientesItem.textContent = clientes['obra_nome'];
+
+                    clientesItem.addEventListener('click', function() {
+                        const obraId = this.getAttribute('data-id');
+                        console.log(obraId)
+
+                        carregarDetalhesObra(obraId);
+                    });
+
+                    obrasContainer.appendChild(obraItem);
+                });
+            })
+            .fail(function (error) {
+                console.error("Erro ao carregar obras:", error);
+            });
+        }
+
+        // Função para carregar a lista de obras
+        function Lista_recebimento() {
+            $.ajax({
+                url: my_url() + "selecionar_recebimentos",
+                type: "POST",
+                dataType: "json",
+            })
+            .done(function (data) {
+              console.log('Lista_recebimento', data)
+
+            // Preencha os inputs com os dados recebidos
+            $("#contador_novo").val(data.contador_novo).show();
+            $("#valor_seg").val(data.valor_seg).show();
+            $("#novo_id_recebimento").val(data.novo_id_recebimento).show();
+
+          // Padrão: selecionar "Novo" por padrão
+          $("#tipoOrdem").val("novo");
+
+          // Preencher o Número de Controle automaticamente
+          $("#numeroControle").val(data.valor_seg).prop("disabled", true);
+
+
+             // Manipulador de evento para o Tipo de Ordem
+             $("#tipoOrdem").change(function() {
+                var tipoOrdem = $(this).val();
+
+                // Se o Tipo de Ordem for "Novo", preencha o Número de Controle automaticamente
+                if (tipoOrdem === "novo") {
+                    $("#numeroControle").val(data.valor_seg).prop("disabled", true);
+                } else {
+                    // Se o Tipo de Ordem for "Não", deixe o Número de Controle habilitado para digitação
+                    $("#numeroControle").val("").prop("disabled", false);
+                }
+            });
+        })
+        .fail(function (error) {
+            console.error("Lista_recebimento:", error);
+        });
+    }
+
+function transformedData_Recebimento_pedentes(data) {
+console.log("Dados de entrada para transformação:", data);
+
+const mappedColumns_Recebimento_pedentes = {
+    Cod_Produto: "codProduto",
+    DataCadastro: "dataCadastro",
+    DataRec_OrdemServiços: "dataRecOrdemServicos",
+    HoraInicial_Ordem: "horaInicialOrdem",
+    ID: "id",
+    ID_Componente: "idComponente",
+    ID_Ordem: "idOrdem",
+    ID_PostoTrabalho: "idPostoTrabalho",
+    ID_Vendedor: "idVendedor",
+    ID_cliente: "idCliente",
+    Id: "idGeral",
+    Nome_cliente: "nomeCliente",
+    NotaInterna: "notaInterna",
+    QUEIXA_CLIENTE: "queixaCliente",
+    Qtd_Produto: "qtdProduto",
+    Referencia_Produto: "referenciaProduto",
+    Status_Ordem: "statusOrdem",
+    TipoOrdem: "tipoOrdem",
+    Usuario_Cadastro: "usuarioCadastro",
+    idGrupo: "idGrupo",
+    idoperacaoServico: "idOperacaoServico",
+    nome: "nome",
+    nome_produto: "nomeProduto"
+    // Adicione ou remova colunas conforme necessário
+};
+
+if (!data || !Array.isArray(data)) {
+    console.error("Dados inválidos fornecidos para transformação:", data);
+    return [];
+}
+  
+const transformed_Recebimento_pedentes = data.map((row) => {
+    const transformedRow_Recebimento_pedentes = {};
+
+    for (const columnFrom_Recebimento_pedentes in mappedColumns_Recebimento_pedentes) {
+        const columnName = mappedColumns_Recebimento_pedentes[columnFrom_Recebimento_pedentes];
+        if (columnFrom_Recebimento_pedentes in row) {
+            transformedRow_Recebimento_pedentes[columnName] = row[columnFrom_Recebimento_pedentes];
+        } else {
+            // Mantém a propriedade, mas define como string vazia
+            transformedRow_Recebimento_pedentes[columnName] = "";
+        }
+    }
+
+    // Inclua a coluna "idPCP" com o valor original "id"
+    transformedRow_Recebimento_pedentes["idPCP"] = row["id"];
+
+    return transformedRow_Recebimento_pedentes;
+});
+
+console.log("Dados transformados:", transformed_Recebimento_pedentes);
+return transformed_Recebimento_pedentes;
+}
+
+// Função para carregar a lista de obras
+function Relatorio_Recebimento_pedentes() {
+console.log('Relatorio_Recebimento_pedentes')
+
+  var data_inicial_formatada = document.getElementById("data_inicial_recebimento").value;
+  var data_final_formatada = document.getElementById("data_final_recebimento").value;
+
+//console.log("data_inicial_formatada:", data_inicial_formatada);
+ //console.log("data_final_formatada:", data_final_formatada);
+
+// Formatando as datas
+ var data_inicial = formatarData(data_inicial_formatada);
+ var data_final = formatarData(data_final_formatada);
+
+//console.log("Data Inicial:", data_inicial);
+//console.log("Data Final:", data_final);
+
+try {
+    $.ajax({
+        url: my_url() + "selecionar_recebimentos_especificos",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+              "data_inicial": data_inicial,
+              "data_final": data_final,
+        }),
+    })
+    .done(function (data) {
+        console.log('Relatorio_Recebimento_pedentes', data);
+
+        // Antes de processar os dados na resposta AJAX
+        if (data && data.retorno_especifico) {
+            // Transforme os dados uma vez e armazene em uma variável
+            const transformedData = transformedData_Recebimento_pedentes(data.retorno_especifico);
+
+            // Chame a função de atualização da tabela com os dados transformados
+            updateTableRecebimento_pedentes(transformedData);
+
+            console.log("Após chamar a função de atualização da tabela");
+         } else {
+            console.error("Resposta JSON inválida ou ausente");
+        }
+    })
+    .fail(function (xhr, status, error) {
+        console.error("Erro ao buscar dados consolidados:", error);
+        console.log("Status da requisição:", status);
+        console.log("Resposta do servidor:", xhr.responseText);
+    });
+} catch (error) {
+    console.error("Erro ao executar a função: " + error);
+}
+}
+
+function updateTableRecebimento_pedentes(retorno_especifico) {
+console.log('Dados detalhados recebidos:', retorno_especifico);
+
+if (!table_Recebimento_pedentes) {
+    console.log('Tabela não existe. Inicializando...');
+    initializeTable_Recebimento_pedentes();
+}
+
+// Adicione este log para verificar a existência da tabela
+console.log('Tabela existe:', table_Recebimento_pedentes);
+
+table_Recebimento_pedentes.setData(retorno_especifico);
+}
+
+
+function initializeTable_Recebimento_pedentes() {
+table_Recebimento_pedentes = new Tabulator("#table_Recebimento_pedentes", {
+  pagination:"local",
+  paginationSize:300,
+  paginationInitialPage: 1,
+  movableColumns:true,
+  paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
+  paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
+  name: "table_Recebimento_pedentes",
+  deferRender: true,
+  scrollCollapse: true,
+  scroller: true,
+  scrollY: 200,
+  data: [],
+    // Classificação inicial
+    initialSort: [
+    { column: "dtProducao", dir: "asc" },
+    { column: "SEQ", dir: "asc" },
+    { column: "op", dir: "asc" },
+  ],
+  columns: [
+    {
+        title: "Nº Controle",
+        field: "idOrdem",
+        hozAlign: "center",
+        responsive: 0,
+        },
+
+        {
+        title: "Data Recebimento",
+        field: "dataCadastro", 
+        hozAlign: "center",
+        responsive: 0,
+      },
+        {
+        title: "Cliente",
+        field: "nomeCliente", 
+        hozAlign: "center",
+        responsive: 0,
+      },
+    {
+      title: "Cód",
+      field: "codProduto",
+      hozAlign: "center",
+      responsive: 0,
+    },
+    {
+      title: "Qtda",
+      field: "qtdProduto",
+      hozAlign: "center",
+      responsive: 0,
+    },
+    {
+      title: "Desc Serviço/ Produto / Tarefa",
+      field: "nomeProduto",
+      hozAlign: "left",
+      responsive: 0,
+    },
+    {
+      title: "Nota",
+      field: "notaInterna",
+      hozAlign: "center",
+      responsive: 0,
+    },
+    {
+      title: "Referência Produto",
+      field: "referenciaProduto",
+      hozAlign: "center",
+      responsive: 0,
+    },
+    {
+      title: "Op",
+      field: "op",
+      hozAlign: "center",
+      visible: false,
+      responsive: 0,
+    },
+    {
+      title: "Observação",
+      field: "queixaCliente",
+      hozAlign: "left",
+      responsive: 0,
+    },
+     {
+          title: "Id PCP",
+          field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+          hozAlign: "center",
+          visible: false,
+          responsive: 0,
+      },
+      {
+          title: "Id PCP",
+          field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+          hozAlign: "center",
+          visible: false,
+          responsive: 0,
+      },
+  ],
+  rowClick: function (e, row) {
+      table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
+          r.getElement().classList.remove('selected');
+      });
+
+      row.getElement().classList.add('selected');
+      var rowData = row.getData();
+      preencherCamposDeEntrada(rowData);
+  },
+});
+}
+
+
+function destruirTabela__Recebimento_pedentes() {
+if (table_Recebimento_pedentes) {
+  table_Recebimento_pedentes.destroy();
+  table_Recebimento_pedentes = null;
+}
+}         
+      function preencherCamposDeEntrada(rowData) {
+      console.log("Preenchendo campos de entrada:", rowData);
+      // Defina o valor do campo idPCP usando JavaScript
+      document.getElementById("idPCP").value = rowData.idPCP;
+      document.getElementById("nomeCompleto").value = rowData.nomeCompleto;
+    }
+    
+    
+// Adicione um evento de input ao campo de pesquisa
+$('#pesquisar_funcionario_Presenca_FuncionarioDetalhamento').on('input', function () {
+var valor_para_pesquisar = $(this).val().toLowerCase().trim();
+
+// Verifique se o valor de pesquisa não está vazio
+if (valor_para_pesquisar === "") {
+  // Se estiver vazio, remova o filtro
+  table_Presenca_FuncionarioDetalhamento.clearFilter();
+} else {
+  // Se não estiver vazio, aplique o filtro
+  table_Presenca_FuncionarioDetalhamento.setFilter(function (detalhado) {
+      return (
+          detalhado.idPCP.toLowerCase().includes(valor_para_pesquisar) ||
+          detalhado.nomeCompleto.toLowerCase().includes(valor_para_pesquisar) ||
+        
+          data.formapag.toLowerCase().includes(valor_para_pesquisar)
+
+          // Adicione mais colunas conforme necessário
+      );
+  });
+}
+});
+
+// Função para adicionar um recebimento
+function adicionarRecebimento() {
+$.ajax({
+    url: my_url() + "adicionar_recebimento",
+    type: "POST",
+})
+.done(function (response) {
+    try {
+        let dados = response.retorno;
+        console.log("Recebimento adicionado:", dados);
+
+        // Chame a função para processar os dados recebidos
+        processarDados(response);
+
+        // Opcional: Faça mais operações com os dados, se necessário
+    } catch (e) {
+        console.error("Erro ao adicionar recebimento:", e);
+    }
+})
+.fail(function (error) {
+    console.error("Erro ao adicionar recebimento:", error);
+});
+}
+
+
+// Adicione uma função para calcular o ID_Ordem no frontend
+function calcularIDOrdem(tipoOrdem, novoIDNovo) {
+if (tipoOrdem === "NÃO") {
+    return "";
+} else if (novoIDNovo === 0) {
+    return "0001-" + new Date().getFullYear().toString().slice(-2);
+} else if (novoIDNovo === 1) {
+    return "0002-" + new Date().getFullYear().toString().slice(-2);
+} else {
+    return ("0000" + novoIDNovo).slice(-4) + "-" + new Date().getFullYear().toString().slice(-2);
+}
+}
+
+// Atualize a função de processamento dos dados recebidos
+function processarDados(response) {
+try {
+    let dados = response.retorno;
+    console.log("selecionar_recebimentos:", dados);
+
+    // Verifique se os dados têm as propriedades esperadas
+    if (Array.isArray(dados) && dados.length > 0) {
+
+        // Atualize o campo de seleção com as opções recebidas
+        const select_recebimentos = document.getElementById('seuCampoDeRecebimentos');
+
+        // Limpe as opções existentes
+        select_recebimentos.innerHTML = '<option value="">Selecione a Opção..</option>';
+
+        // Adicione as novas opções
+        dados.forEach(recebimento => {
+            const option_recebimento = document.createElement('option');
+            option_recebimento.value = recebimento.ID;  
+            option_recebimento.text = recebimento.nome_recebimento;
+            select_recebimentos.appendChild(option_recebimento);
+        });
+
+        // Exemplo de como calcular o ID_Ordem com base nos dados
+        const tipoOrdem = document.getElementById('TipoOrdem').value;
+        const novoIDNovo = document.getElementById('NovoIDNovo').value;
+        const idOrdemCalculado = calcularIDOrdem(tipoOrdem, novoIDNovo);
+
+        // Atualize o campo do ID_Ordem no formulário
+        document.getElementById('IDOrdem').value = idOrdemCalculado;
+
+        // Opcional: Inicialize a tabela ou realize outras operações aqui, se necessário
+    } else {
+        console.error("Dados inválidos recebidos:", dados);
+    }
+} catch (e) {
+    console.error("Erro ao analisar os dados:", e);
+}
 }
 
 function converterParaMaiusculas(elemento) {
-    elemento.value = elemento.value.toUpperCase();
+elemento.value = elemento.value.toUpperCase();
 }
 
 
 // Função para controlar a visibilidade da "Tab 2"
 function controleVisibilidadeCampoTab1(numeroTab) {
-        // Verifica se é a "Tab 2"
-        if (numeroTab === 2) {
-          console.log('controleVisibilidadeCampoTab2')
-            // Se for, exibe os elementos específicos
-            $('#data_inicial_recebimento, #data_final_recebimento').show();
-        } else {
-          console.log('Não é a Tab 2');
-            // Se não for a "Tab 2", esconde os elementos
-            $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
+    // Verifica se é a "Tab 2"
+    if (numeroTab === 2) {
+      console.log('controleVisibilidadeCampoTab2')
+        // Se for, exibe os elementos específicos
+        $('#data_inicial_recebimento, #data_final_recebimento').show();
+    } else {
+      console.log('Não é a Tab 2');
+        // Se não for a "Tab 2", esconde os elementos
+        $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
 
-           
+       
 
 
-        }
     }
+}
 
- // Função para controlar a visibilidade da "Tab 2"
- function controleVisibilidadeCampoTab2(numeroTab) {
-        // Verifica se é a "Tab 2"
-        if (numeroTab === 2) {
-          console.log('controleVisibilidadeCampoTab2')
-            // Se for, exibe os elementos específicos
-            $('#data_inicial_recebimento, #data_final_recebimento').show();
-        } else {
-          console.log('Não é a Tab 2');
-            // Se não for a "Tab 2", esconde os elementos
-            $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
+// Função para controlar a visibilidade da "Tab 2"
+function controleVisibilidadeCampoTab2(numeroTab) {
+    // Verifica se é a "Tab 2"
+    if (numeroTab === 2) {
+      console.log('controleVisibilidadeCampoTab2')
+        // Se for, exibe os elementos específicos
+        $('#data_inicial_recebimento, #data_final_recebimento').show();
+    } else {
+      console.log('Não é a Tab 2');
+        // Se não for a "Tab 2", esconde os elementos
+        $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
 
-           
+       
 
 
-        }
     }
+}
 
 function controleVisibilidadeCampoTab3(numeroTab) {
 
 if (numeroTab === 3) {
-  console.log('controleVisibilidadeCampoTab3')
-   // Se for a "Tab 3", exibe os elementos específicos
-   $('#data_inicial_recebimento, #data_final_recebimento').show();
-   // Também oculte os rótulos, se necessário
-   $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').show();
-  
-   // Realiza as ações específicas da "Tab 3"
+console.log('controleVisibilidadeCampoTab3')
+// Se for a "Tab 3", exibe os elementos específicos
+$('#data_inicial_recebimento, #data_final_recebimento').show();
+// Também oculte os rótulos, se necessário
+$('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').show();
 
-     Relatorio_Recebimento_pedentes();
-     //gerarRelatorioTab3(this.value); 
-     initializeTable_Recebimento_pedentes();
-    // initializeTable_Presenca_FuncionarioResumo();
-    // console.log("Antes carregarDadosFuncionario")
-    // carregarDadosFuncionario();
-    // console.log("Depois carregarDadosFuncionario")
+// Realiza as ações específicas da "Tab 3"
+
+ Relatorio_Recebimento_pedentes();
+ //gerarRelatorioTab3(this.value); 
+ initializeTable_Recebimento_pedentes();
+// initializeTable_Presenca_FuncionarioResumo();
+// console.log("Antes carregarDadosFuncionario")
+// carregarDadosFuncionario();
+// console.log("Depois carregarDadosFuncionario")
 } else {
-      console.log('Não é a Tab 3');
-    // Esconde os elementos na "Tab 3"
-    $('#data_inicial_recebimento, #data_final_recebimento').hide();
-    $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
-  
-     // Se não for a "Tab 2", limpe ou esconda a tabela
-       destruirTabela__Recebimento_pedentes();
+  console.log('Não é a Tab 3');
+// Esconde os elementos na "Tab 3"
+$('#data_inicial_recebimento, #data_final_recebimento').hide();
+$('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
+
+ // Se não for a "Tab 2", limpe ou esconda a tabela
+   destruirTabela__Recebimento_pedentes();
 }
 }
 
 </script>
-
-    <!-- Adicione este script no final do body da sua página -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha512-GLbCKLNBXVnDYbWEQaQ3Q2jA2j//b6ZFYyyxvIqxUpn8Oy4z8JUODf60gqV7zvPe7ME1aGrg5ZLysl1mg1yDAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
-
 </html>
