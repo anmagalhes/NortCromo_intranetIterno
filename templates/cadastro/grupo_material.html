@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% include 'head.html' %}
+<body>
+  <div class="seg">
+    <h3>Grupo Material</h3>
+
+    <div class="container">
+        <!-- Campos de entrada -->
+        <div class="row mt-3">
+          <!-- Campo Id Grupo do Material -->
+          <div class="col-md-4 mb-2">
+            <label for="id_grupo_material" class="custom-label">Id Grupo do Material</label>
+            <input
+              id="id_grupo_material"
+              type="text"
+              class="form-control"
+              placeholder="Id Grupo do Material"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+            />
+          </div>
+    
+          <!-- Campo Grupo do Material -->
+          <div class="col-md-8 mb-4">
+            <label for="nome_grupo_material" class="custom-label">Grupo do Material Ex: Ferramentas / Epi</label>
+            <input
+              id="nome_grupo_material"
+              type="text"
+              class="form-control"
+              placeholder="Grupo do Material"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+              oninput="converterParaMaiusculas(this)"
+              
+            />
+          </div>
+        </div>
+        <!-- Fechamento da div 'row mt-3' -->
+
+        <div class="row">
+          <!-- Botão Adicionar Funcionário -->
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_Adicionar_Grupo_material"
+              onclick="Adicionar_Grupo_material_mostrarAlerta()"
+              class="btn btn-block button-height"
+              style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">save</span>
+              Salvar Dados
+            </button>
+          </div>
+
+          <!-- Botão Excluir Funcionário -->
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_excluir_funcioario"
+              onclick="excluir_funcioario()"
+              class="btn btn-block button-height"
+              style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">delete</span>
+              Excluir Dados
+            </button>
+          </div>
+
+          <!-- Botão Editar Dados -->
+          <div class="col-md-4 col-12 mt-3">
+            <button
+              id="btn_editar_dados"
+              onclick="editar_funcionario()"
+              class="btn btn-block button-height"
+              style="background-color: #2196f3; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">edit</span>
+              Editar Dados
+            </button>
+          </div>
+        </div>
+      <!-- Fim do formulário -->
+
+      <!-- Tabela Tabular -->
+      <div class="table-responsive myTable table-wrapper">
+        <div id="table_Grupos_Materiais" class="tabulator myTable"></div>
+      </div>
+    </div>
+    <!-- Fechando a div 'container' -->
+  </div>
+</body>
+
+  {% include 'funcoes_comuns.html' %}
+  <script>
+
+    $(document).ready(function () {
+      carregarDados_Grupos_Materiais();
+      initializeTable_Grupos_Materiais();
+
+      console.log("Colocar a função da tabela ou tabela toda aqui");
+
+      // Formatar campo de telefone
+      $("#telefone").keyup(function () {
+        var val = this.value.replace(/\D/g, "");
+        var newVal = "";
+        while (val.length > 0) {
+          newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
+          val = val.substr(2);
+        }
+        this.value = newVal.trim();
+      });
+
+      // Adicionar estilo ao campo quando preenchido
+      $("input").blur(function () {
+        if ($(this).val()) {
+          $(this).addClass("filled");
+        } else {
+          $(this).removeClass("filled");
+        }
+      });
+    });
+
+    $("#cep").blur(function () {
+      var cep = $(this).val().replace(/\D/g, "");
+
+      if (cep != "") {
+        var validacep = /^[0-9]{8}$/;
+        if (validacep.test(cep)) {
+          $.getJSON(
+            "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+            function (dados) {
+              if (!("erro" in dados)) {
+                $("#endereco").val(dados.logradouro);
+                $("#bairro").val(dados.bairro);
+                $("#cidade").val(dados.localidade);
+                $("#uf").val(dados.uf);
+              } else {
+                alert("CEP não encontrado.");
+              }
+            }
+          );
+        }
+      }
+    });
+
+    function atualizarRotuloSalario() {
+      var tipo = $("#tipoSalario").val();
+      var rotulo = "Salário";
+
+      switch (tipo) {
+        case "diario":
+          rotulo = "Salário Diário";
+          break;
+        case "meiaColher":
+          rotulo = "Salário Meia Colher";
+          break;
+        case "mensal":
+          rotulo = "Salário Mensal";
+          break;
+      }
+
+      $("#rotuloSalario").text(rotulo);
+    }
+
+    function verifica_selecao() {
+      var tabela_funcionario = document.getElementById("tabela_funcionario");
+
+      var o_que_foi_selecionado =
+        tabela_funcionario.getElementsByClassName("selected")[0];
+
+      var tds = o_que_foi_selecionado.getElementsByTagName("td");
+      var qtd_tds = tds.length;
+
+      for (var i = 0; i < qtd_tds; i++) {
+        document.getElementsByClassName("input_funcionario")[i].value =
+          tds[i].innerHTML;
+      }
+    }
+    function excluir_funcionario() {
+      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+
+      var input_funcionario =
+        document.getElementsByClassName("input_funcionario");
+      var qts_inputs = input_funcionario.length;
+      var all_data = [];
+
+      for (var i = 0; i < qts_inputs; i++) {
+        all_data.push(input_funcionario[i].value);
+      }
+
+      if (input_funcionario[1].value == "") {
+        alert("Preencha um nome!");
+        document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + "exclui_funcionario",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+          document.getElementById("meus_inputs").innerHTML = "";
+          ler_dados_funcionarios();
+        });
+      }
+    }
+
+    // Função para converter uma string em maiúsculas, mas manter valores vazios
+    function toUpperCaseIfString(value) {
+      if (typeof value === "string") {
+        // Verifica se a string não está vazia antes de convertê-la em maiúsculas
+        if (value.trim() === "") {
+          return value; // Mantém o valor vazio
+        }
+        return value.toUpperCase(); // Converte para maiúsculas
+      }
+      return value;
+    }
+
+    function Adicionar_Grupo_material() {
+      
+      console.log("Função salvarFuncionario iniciada. AGORA ");
+      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      // Coletar os dados dos campos de entrada do formulário
+      var id_grupo_material = document.getElementById("id_grupo_material").value;
+
+// Verifique se o valor não está vazio e não é NaN (não é um número)
+if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
+  // Converta o valor em um número (inteiro) usando parseInt
+  id_grupo_material = parseInt(id_grupo_material, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+} else {
+  // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
+  id_grupo_material = 0;
+}
+
+// Agora, a variável id_grupo_material contém o valor como um número ou 0 se não for um número válido.
+
+      var nome_grupo_material = toUpperCaseIfString(
+        document.getElementById("nome_grupo_material").value
+      );
+
+
+      // Criar um objeto com os dados coletados
+      var all_data = {
+        id_grupo_material: id_grupo_material,
+        nome_grupo_material: nome_grupo_material,
+      
+      };
+      console.log(all_data);
+      
+      try {
+        // Enviar os dados para o servidor Flask usando AJAX
+        $.ajax({
+          url: my_url() + "adicionar_atualizar_grupo_material",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        })
+          .done(function (response) {
+            // Trate erros específicos aqui
+            if (response.error) {
+              mostrarErro();
+              console.error("Erro: " + response.error);
+            } else {
+              mostrarSucesso();
+              // Limpar os campos do formulário após o envio bem-sucedido
+              document.getElementById(
+                "btn_Adicionar_Grupo_material"
+              ).disabled = false;
+              limparCampos();
+              carregarDados_Grupos_Materiais();
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+          });
+      } catch (error) {
+        console.error("Erro na função Adicionar_Grupo_material: " + error);
+        mostrarErro();
+      }
+    }
+
+    // Função para limpar os campos do formulário
+    function limparCampos() {
+      var campos = [
+        "nome_grupo_material",
+        
+      ];
+      for (var i = 0; i < campos.length; i++) {
+        document.getElementById(campos[i]).value = "";
+      }
+      for (var i = 1; i <= 3; i++) {
+        var campoTelefone = document.getElementById("telefone" + i);
+        if (campoTelefone) {
+          campoTelefone.value = "";
+        }
+      }
+    }
+
+    // Função para mostrar um alerta personalizado
+    function Adicionar_Grupo_material_mostrarAlerta() {
+      // Verifique se o usuário deseja cancelar
+      Swal.fire({
+        title: "Deseja salvar?",
+        text: "Deseja realmente salvar e limpar os campos do formulário?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, cancelar!",
+        cancelButtonText: "Não, continuar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Adicionar_Grupo_material();
+          // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
+          limparCampos();
+        } else {
+          // O usuário escolheu não cancelar, continue com o processo
+          continuarProcesso();
+        }
+      });
+    }
+
+    function carregarDados_Grupos_Materiais() {
+      $.ajax({
+        url: my_url() + "selecionar_grupo_material_especificos", // Corrigido para "funcionario" em vez de "funcioario"
+        type: "POST",
+      })
+        .done(function (data) {
+          let dados = data.retorno_especifico; // Corrigido para acessar retorno_especifico
+          console.log("carregarDados_grupo_material:", dados);
+          updateTableData_Grupos_Materiais(dados);
+        })
+        .fail(function (error) {
+          console.error("Erro ao buscar dados iniciais:", error);
+        });
+    }
+
+    function updateTableData_Grupos_Materiais(data) {
+      if (table_Grupos_Materiais) {
+        const transformed_Grupos_MateriaisData_Grupos_Materiais = transformData_Grupos_Materiais(data);
+        table_Grupos_Materiais.setData(transformed_Grupos_MateriaisData_Grupos_Materiais);
+      } else {
+        console.error("Tabela não inicializada!");
+      }
+    }
+
+  function transformData_Grupos_Materiais(data) {
+  console.log("Dados de entrada para transformação:", data);
+  const mappedColumns_Grupos_Materiais = {
+    id_grupo_material: "id_grupo_material",
+    nome_grupo_material: "nome_grupo_material",
+    // Adicione outras colunas mapeadas aqui
+  };
+
+  if (!data || !Array.isArray(data)) {
+    console.error("Dados inválidos fornecidos para transformação:", data);
+    return [];
+  }
+
+  const transformed_Grupos_Materiais = data.map((row) => {
+    const transformed_Grupos_MateriaisRow = {};
+
+    for (const columnFrom in row) {
+      if (columnFrom in mappedColumns_Grupos_Materiais) {
+        const newColumnName = mappedColumns_Grupos_Materiais[columnFrom];
+        transformed_Grupos_MateriaisRow[newColumnName] = row[columnFrom] ?? "";
+
+        // Adicione uma nova chave "id_grupo_material" com o mesmo valor que "id_grupo_material"
+        if (columnFrom === "id_grupo_material") {
+          transformed_Grupos_MateriaisRow["id_grupo_material"] = row[columnFrom] ?? "";
+        }
+      } else {
+        transformed_Grupos_MateriaisRow[columnFrom] = row[columnFrom];
+      }
+    }
+
+    // Se "id_grupo_material" não estiver presente, defina "id_grupo_material" como vazio
+    if (!("id_grupo_material" in row)) {
+      transformed_Grupos_MateriaisRow["id_grupo_material"] = "";
+    }
+
+    return transformed_Grupos_MateriaisRow;
+  });
+
+  console.log("Dados transformados:", transformed_Grupos_Materiais);
+  return transformed_Grupos_Materiais;
+}
+
+
+// Vamos adicionar uma função para inicializar a tabela
+function initializeTable_Grupos_Materiais() {
+  // Criação da tabela
+  table_Grupos_Materiais = new Tabulator("#table_Grupos_Materiais", {
+    name: "table_Grupos_Materiais",
+    pagination: "local",
+    paginationSize: 10,
+    paginationSizeSelector: [10, 25, 50, 100, 150, 200],
+    paginationInitialPage: 1,
+    movableColumns: true,
+    paginationButtonNext: "<i class='fas fa-chevron-right'></i>",
+    paginationButtonPrev: "<i class='fas fa-chevron-left'></i>",
+    deferRender: true,
+    scrollCollapse: true,
+    scroller: true,
+    scrollY: 200,
+    data: [],
+    columns: [
+      {
+        title: "Id_Grupo_material",
+        field: "id_grupo_material",
+        hozAlign: "center",
+      },
+      {
+        title: "Grupo Material",
+        field: "nome_grupo_material",
+        hozAlign: "left",
+      },
+    ],
+    // Adiciona o evento rowClick para preencher os campos de entrada e destacar a linha
+    rowClick: function (e, row) {
+          // Remove a classe 'row-highlight' de todas as linhas
+          table_Grupos_Materiais.getRows().forEach(function (row) {
+            row.getElement().classList.remove('row-highlight');
+          });
+
+          // Adiciona a classe 'row-highlight' à linha clicada
+          row.getElement().classList.add('row-highlight');
+
+          // Preenche os campos de entrada
+          preencherCamposDeEntrada(row.getData());
+        },
+      });
+
+      // Adiciona uma linha de resumo diretamente na tabela
+  var sum_id_grupo_material = 0; // Inicializa o somatório da coluna "id_grupo_material"
+  var row = {
+    id_grupo_material: sum_id_grupo_material,
+    nome_grupo_material: "Total",
+    _row: "header",
+  };
+
+  // Adiciona a linha à tabela
+  table_Grupos_Materiais.addData([row]);
+}
+
+function destruirTabela_Grupos_Materiais() {
+  if (table_Grupos_Materiais) {
+    table_Grupos_Materiais.destroy();
+    table_Grupos_Materiais = null;
+  }
+}
+
+    function preencherCamposDeEntrada(rowData) {
+       // Defina o valor do campo id_grupo_material usando JavaScript
+  document.getElementById("id_grupo_material").value = rowData.id_grupo_material;
+  document.getElementById("nome_grupo_material").value = rowData.nome_grupo_material;
+}
+
+  </script>
+</html>

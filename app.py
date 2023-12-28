@@ -44,6 +44,8 @@ from routes.clientes import clientes
 from routes.checklists import checklists
 from routes.novas_Tarefas import novas_Tarefas
 
+from routes.grupo_material import grupo_material
+
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
 app.register_blueprint(buscar_funcionarios_presenca, url_prefix="")
@@ -62,6 +64,12 @@ app.register_blueprint(recebimentos, url_prefix="")
 
 app.register_blueprint(checklists, url_prefix="")
 app.register_blueprint(novas_Tarefas, url_prefix="")
+
+app.register_blueprint(grupo_material, url_prefix="")
+
+
+
+
 
 
 arquivo = credencias.open_by_url(

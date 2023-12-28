@@ -28,6 +28,7 @@ body {
   padding: 0;
   overflow: hidden;
   overflow-x: auto;
+  background-color: var(--text-color2)
 }
 
 :root {
@@ -39,6 +40,12 @@ body {
   --active-icon-color: #2ae7e7; /* Claro */
   --text-color2: #fff; /* Claro */
   --background-situacao: #43a04d; /* Verde claro */
+  --background-meio_cinza: #f5f5f5; /* Verde claro */
+  --background-mais_suave:  #ddd; 
+  --background-mais_suave2: #6c757d; 
+  --cor-border-inpunt: 2px solid #f1c40f;
+  --background-color-inpunt:#fef7e1;
+  --color-inpunt: #ffffff;
 }
 
 #cabecalho_NorthCromo {
@@ -83,7 +90,7 @@ h2 {
 /* Adicione estilos para o ícone, substitua 'fa-icon' pela classe apropriada do ícone que você está usando */
 .icon-container i {
   font-size: 2rem; /* Tamanho do ícone, ajuste conforme necessário */
-  color: #fff; /* Cor do ícone, substitua pela cor desejada */
+  color:var(--text-color2); /* Cor do ícone, substitua pela cor desejada */
 }
 
 /* Adicione este bloco de estilos */
@@ -100,7 +107,7 @@ h2 {
 
  .nav-link.active {
     background-color: #4CAF50; /* Cor de destaque verde */
-    color: #fff; /* Cor do texto no destaque */
+    color:var(--text-color2); /* Cor do texto no destaque */
   }
 
 .sidebar {
@@ -108,7 +115,7 @@ h2 {
   padding: 1.5rem 1rem;
   width: 250px; /* Ajuste a largura conforme necessário */
   height: 100vh;
-  background-color: var(--main-bg-color);
+  background-color: var(--background-mais_suave);
   position: fixed;
   left: -15vw; /* Inicia fora da tela */
   z-index: 100;
@@ -132,7 +139,7 @@ h2 {
   right: 3.5rem; /* Ajuste este valor conforme necessário para afastar mais o botão do canto */
   top: 0;
   transition: right 0.3s 0.3s;
-  color: #fff; /* Cor do texto branco */
+  color:var(--text-color2); /* Cor do texto branco */
   cursor: pointer;
 }
 
@@ -358,7 +365,7 @@ h2 {
   font-family: "Roboto Slab", serif;
   font-weight: 600;
   font-size: 1rem;
-  color: #fff;
+  color:var(--text-color2);
   position: absolute;
   top: -100%;
   right: -50%;
@@ -393,6 +400,7 @@ h2 {
   padding: 10px; /* Adicione algum espaçamento se necessário */
   box-sizing: border-box; /* Inclua a borda e o preenchimento no cálculo do tamanho total */
   overflow-x: auto;
+  background-color: var(--background-meio_cinza)
 }
 
 .change2 .main-section {
@@ -407,14 +415,14 @@ h2 {
   left: 50%;
   transform: translateX(-50%);
   font-size: 12rem;
-  color: #fff;
+  color:var(--text-color2);
 }
 
 /* Adicione um estilo para destacar o botão do menu quando o menu estiver aberto */
 #hamburgerMenu.menu-opened {
   background-color: var(--secondary-color);
   /* Substitua pelo seu código de cor desejado */
-  color: #fff; /* Adicione esta linha para ajustar a cor do texto, se necessário */
+  color:var(--text-color2); /* Adicione esta linha para ajustar a cor do texto, se necessário */
 }
 
 /* validado */
@@ -517,7 +525,7 @@ button {
 
 button:hover {
   background-color: #a0daa2;
-  color: #fff;
+  color:var(--text-color2);
   border: none;
   cursor: pointer;
   border-radius: 4px;
@@ -604,7 +612,7 @@ button:hover {
   padding: 20px;
   border-radius: 4px;
   width: 60%; /* Ajuste para a largura que você deseja, talvez 60%? */
-  background-color: #fff;
+  background-color:var(--text-color2);
   box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
     0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
@@ -1178,7 +1186,7 @@ input[type='radio']:checked + .checkmark {
   .menu-header:hover,
   .menu li:hover {
     background-color: var(--background-situacao); /* Cor de destaque ao passar o mouse ou quando está selecionado */
-    color: #fff;
+    color:var(--text-color2);
   }
   
   .submenu {
@@ -1253,6 +1261,13 @@ input[type='radio']:checked + .checkmark {
   .custom-swal-content {
     font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
   }
+
+
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
+  }
   
   @media (max-width: 1500px) {
     .sidebar {
@@ -1265,6 +1280,12 @@ input[type='radio']:checked + .checkmark {
       width: 80vw;
     }
   }
+
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
+  }
   
   @media (max-width: 1200px) {
     .sidebar {
@@ -1276,6 +1297,12 @@ input[type='radio']:checked + .checkmark {
       left: 25vw;
       width: 75vw;
     }
+  }
+
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
   }
   
   @media (max-width: 900px) {
@@ -1293,6 +1320,12 @@ input[type='radio']:checked + .checkmark {
       font-size: 10rem;
     }
   }
+
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
+  }
   
   @media (max-width: 700px) {
     .sidebar {
@@ -1308,6 +1341,11 @@ input[type='radio']:checked + .checkmark {
     .heading {
       display: none;
     }
+  }
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
   }
   
   @media (max-width: 400px) {
@@ -1325,6 +1363,17 @@ input[type='radio']:checked + .checkmark {
       display: none;
     }
   }
+
+  .focused-input {
+    border:  var(--cor-border-inpunt); /* Cor de destaque amarela */
+    background-color: var(--background-color-inpunt); /* Cor de fundo */
+    color:  var(--color-inpunt); /* Cor do texto branco */
+  }
+
+  .row-highlight {
+    background-color: #ffffcc; /* Cor de destaque desejada */
+  }
+  
   
 
 

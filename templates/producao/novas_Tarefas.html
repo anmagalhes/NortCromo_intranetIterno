@@ -2,8 +2,27 @@
 <html lang="pt-br">
 
   {% include 'head.html' %}
+  <head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="/static/css/meu_estilo.css" />
+  
+  <!-- Adicione o script para a biblioteca Perfect Scrollbar e sua inicialização -->
+  {% include 'funcoes_comuns.html' %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.0.9/dist/js/tabulator.min.js"></script>
+  
+  <!-- Se você precisar do MUI, inclua aqui -->
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/js/mui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/css/mui.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mui@4.1.0/dist/css/mui.min.css.map"></script>
 
-<head>
+    <script>
+      $(function () {
+        $('#tabs').tabs();
+      });
+    </script>
   <style>
 
     /* Adicione estilos CSS aqui para tornar o layout responsivo */
@@ -34,6 +53,18 @@
   .elemento-oculto {
   display: none;
 }
+
+ /* Estilos para TAB-1 */
+ .tab1 #table_checklist .myTable thead {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  /* Estilos para TAB-2 */
+  .tab2 #table_check2ist2 .myTable thead {
+    background-color: #4CAF50;
+    color: white;
+  }
 
     /* Adicione estilos para o scroll em dispositivos móveis */
     @media (max-width: 767px) {
@@ -81,7 +112,7 @@
     }
     }
   </style>
-  <title>Checklist - Recebimento</title>
+  <title>Novas Tarefas</title>
 </head>
   <body>
     <div class="header">
@@ -89,7 +120,7 @@
         src="https://drive.google.com/uc?export=view&id=1-grKAm790rFePojbqFxCeNXy4rHzrV4j"
         alt="Logo da Empresa"
       />
-      RELATÓRIO CHECKLIST - <span>NOTH CROMO</span>
+      NOVAS TAREFAS - <span>NOTH CROMO</span>
     </div>
 
     <link
@@ -98,95 +129,290 @@
       type="image/x-icon"
     />
 
-    <div class="container">
-      <div class="row mt-3 mb-3 scrollable-content">
-        <div class="col-md-3">
-          <label for="numeroControle" class="custom-label">Número de Controrole</label>
-          <input
-            id="numeroControle"
-            type="text"
-            class="form-control highlight-input"
-            placeholder="Controle"
-            list="numerosDeControle"
-          />
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Aguardando Aprovação</a></li>
+        <li><a href="#tabs-2">Cria Novas Tarefas</a></li>
+      </ul>
+
+      <div id="tabs-1" class="container tab1">
+
+         <!-- Tabela Tabular -->
+         <div class="table-responsive myTable table-wrapper scrollable-content">
+          <div id="table_checklist2" class="tabulator myTable"></div>
         </div>
-
-        <!-- Campo Data de Recebimento -->
-        <div class="col-md-4 mb-3">
-          <label for="dataRecebimento_inicial" class="custom-label">Data de Recebimento Inicial</label>
-          <input
-              id="dataRecebimento_inicial"
-              type="date"
-              class="form-control"
-          />
+    
+<!-- Div de Fechamento da TAB1  -->
       </div>
 
-
-      <!-- Campo Data de Recebimento -->
-      <div class="col-md-4 mb-3">
-        <label for="dataRecebimento_Final" class="custom-label">Data de Recebimento Final</label>
-        <input
-            id="dataRecebimento_final"
-            type="date"
-            class="form-control"
-        />
+      <div id="tabs-2" class="container tab2">
+        <div class="container">
+          <div class="row mt-3 mb-3 scrollable-content">
+            <div class="col-md-3">
+              <label for="numeroControle" class="custom-label">Número de Controrole</label>
+              <input
+                id="numeroControle"
+                type="text"
+                class="form-control highlight-input"
+                placeholder="Controle"
+                list="numerosDeControle"
+              />
+            </div>
+    
+            <!-- Campo Data de Recebimento -->
+            <div class="col-md-4 mb-3">
+              <label for="dataLancamento" class="custom-label">Data de Lançamento</label>
+              <input
+                  id="dataLancamento"
+                  type="date"
+                  class="form-control"
+              />
+          </div>
+    
+          <!-- Campo Data de Recebimento -->
+          <div class="col-md-4 mb-3">
+            <label for="client-name" class="custom-label">Nome do Cliente</label>
+            <input
+                id="client-name"
+                type="text"
+                class="form-control"
+                oninput="converterParaMaiusculas(this)" 
+            />
+        </div>
+          </div>
+    
+          <!-- Seção de Quantidade, Código do Produto, Descrição do Produto e Operação -->
+        <div class="row">
+            <div class="col-md-2">
+                <label for="quantidade" class="custom-label">Quantidade</label>
+                <input
+                id="quantidade"
+                type="number"
+                class="form-control"
+                placeholder="Quantidade"
+                value="1" 
+                min="1" 
+            />
+            </div>
+    
+            <div class="col-md-3">
+                <!-- Campo de entrada para o código do produto -->
+                <label for="codigoProduto" class="custom-label">Código do Produto</label>
+                <div class="input-group">
+                    <input
+                        id="codigoProduto"
+                        type="text"
+                        class="form-control"
+                        placeholder="Produto ou serviço"
+                    />
+                    <div class="input-group-append">
+                        <button
+                            id="btnPesquisarProduto"
+                            class="btn btn-outline-secondary"
+                            style="background-color: blue; border-color: blue;"
+                            title="Pesquisar Produto"
+                        >
+                            <i class="material-icons" style="color: white;">search</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="descricaoProduto" class="custom-label">Desc Serviço/ Produto / Tarefa</label>
+                <textarea
+                    id="descricaoProduto"
+                    class="form-control"
+                    oninput="converterParaMaiusculas(this)" 
+                ></textarea>
+            </div>
+            <div class="col-md-3">
+                <label for="operacao" class="custom-label">Operação</label>
+                <input
+                    id="operacao"
+                    type="text"
+                    class="form-control"
+                    placeholder="Operação"
+                    oninput="converterParaMaiusculas(this)" 
+                />
+            </div>
+        </div>
+    
+        <!-- Seção de Observações -->
+        <div class="col-md-12 mb-3">
+            <label for="queixaCliente" class="custom-label">Observação:</label>
+            <textarea id="queixaCliente" class="form-control" rows="1" oninput="autoResize(this)"></textarea>
+          </div>
+    
+    <!-- Modal de Pesquisa de Produto -->
+    <div class="modal fade" id="modalPesquisaProduto" tabindex="-1" role="dialog" aria-labelledby="modalPesquisaProdutoLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modalPesquisaProdutoLabel">Pesquisar Produto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <label for="filtroProdutos" class="custom-label">Filtrar Produtos ou Serviço</label>
+                  <input id="filtroProdutosModal" type="text" class="form-control" placeholder="Digite o código ou nome para pesquisar">
+                  <label for="listaProdutosModal" style="margin-top: 10px;">Lista de Produtos ou Serviço</label>
+                  <select id="listaProdutosModal" class="form-control"></select>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                  <button type="button" class="btn btn-primary" id="btnSelecionarProdutoModal">Selecionar Produto</button>
+              </div>
+          </div>
+      </div>
     </div>
-
-      </div>
-
-      <div class="row mt-2">
+    
+    
+        <!-- Campos ocultos somente para parâmetros -->
+        <input type="text" id="inputIDORDEM" placeholder="IDORDEM" style="display: none;" />
+        <input type="text" id="inputIDPRODUTO" placeholder="IDPRODUTO" style="display: none;" />
+    
+        <input type="text" id="input1" style="display: none;" />
+        <input type="text" id="input2" style="display: none;" />
+        <input type="text" id="input3" style="display: none;" />
+    
+        <!-- Seção para mostrar o valor da operação (está escondida inicialmente) -->
+        <div id="resultado" class="form-group" style="display: none;">
+            <label for="valorOperacao" class="custom-label">Op</label>
+        </div>
+       
+    
+        <div class="row mt-2">
+            <!-- Botão Adicionar -->
+            <div class="col-md-4">
+                <button
+                    id=" btnAdicionar"
+                    onclick="adicionarLinhaTabela()" 
+                    class="btn btn-block button-height"
+                    style="
+                        background-color: #555;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                    "
+                >
+                    <span class="material-icons" style="margin-right: 8px">add</span>
+                    Adicionar
+                </button>
+            </div>
+    
+    <!-- Tabela para exibir itens adicionados-->
+        <!-- Botão Adicionar -->
         <div class="col-md-4">
-          <button
-            id="seuBotaoId"
-            onclick="generatePDFsForSelectedOperations()" 
-            class="btn btn-block button-height"
-            style="
-              background-color: #4caf50;
-              color: white;
-              padding: 10px 20px;
-              border: none;
-              border-radius: 25px;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              width: 100%;
-            "
-          >
-            <span class="material-icons" style="margin-right: 8px">cloud_download</span>
-            GERA PDFs
-          </button>
+            <button
+                id="deleteRowsBtn"
+                onclick="mostrarAlertaExclusao()" 
+                class="btn btn-block button-height"
+                style="
+                    background-color:  #f44336;;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                "
+            >
+                <span class="material-icons" style="margin-right: 8px">delete</span>
+                 Excluir Linhas
+            </button>
         </div>
-      </div>
+        
+            <!-- Botão Salvar -->
+            <div class="col-md-4">
+                <button
+                    id="btnSave"
+                    onclick="mostrarAlerta()"
+                    class="btn btn-block button-height"
+                    style="
+                        background-color: #4caf50;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                    "
+                >
+                    <span class="material-icons" style="margin-right: 8px">save</span>
+                    Salvar
+                </button>
+            </div>
+        </div>
+        
     </div>
+    
+    
+        <datalist id="numerosDeControle"></datalist>
+    
+        <!-- Modal de Confirmação -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmação</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Você tem certeza que quer fechar a página?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="google.script.run.confirmClose()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Tabela Tabular   onclick="generatePDFsForSelectedOperations()"  -->
+        <div class="table-responsive myTable table-wrapper scrollable-content">
+          <div id="table_checklist" class="tabulator myTable"></div>
+        </div>
+    
+     
+        <select id="dateFilterDropdown">
+            <!-- As opções serão preenchidas pelo JavaScript -->
+        </select>
+              <!--Lista supresa no campo  -->
+            <datalist id="numerosDeControle">
+                  <!-- As opções serão adicionadas aqui pelo JavaScript -->
+            </datalist>
+  
+<!-- Div de Fechamento da TAB3  -->
+</div>
 
-    <datalist id="numerosDeControle"></datalist>
-
-
-    <!-- Tabela Tabular   onclick="generatePDFsForSelectedOperations()"  -->
-    <div class="table-responsive myTable table-wrapper scrollable-content">
-      <div id="table_checklist" class="tabulator myTable"></div>
+  <!-- Div Geral da TAB -->
     </div>
-
-    <div id="pdfLinksContainer"></div>
-
-    <div id="linksContainer" class="container"></div>
-  </body>
 
   <script>
+
+let dados_novos_produtos;
 
      // Varivavel para o ApiScript
  var minhaUrl =
         'https://script.google.com/macros/s/AKfycbzuSM5335S2Vfu2AEbQ-7D2kzGHzW3L0al2s4KmWmFNNWAD06t1vAejfB6jsuyuFdPy5g/exec'
     
-    
-    var globalIdOrdem = null
-    window.onbeforeunload = function() {
-        globalIdOrdem = null;
-    };
 
-    // ARMANEZAR OS DADOS
-    var allProducts = [];
-    
+    function converterParaMaiusculas(elemento) {
+    elemento.value = elemento.value.toUpperCase();
+}
 
     function formatarParaFormatoInput(dataFormatada) {
     const partes = dataFormatada.split("/");
@@ -302,32 +528,7 @@ $(window).on('beforeunload', function() {
       return `${dia}/${mes}/${ano}`;
     }
 
-    function updateSelectedIDs() {
-      console.trace("updateSelectedIDs foi chamada de:");
-
-      selectedIDs = [];
-      selectedRowsData = [];
-
-      table_checklist.getRows("active").forEach((row) => {
-        if (row.isSelected()) {
-          const rowData = row.getData();
-
-          selectedIDs.push(rowData.idPCP);
-
-          selectedRowsData.push({
-            id: rowData.idPCP,
-            row: row,
-          });
-        }
-      });
-
-      selectedIDs = [...new Set(selectedIDs)];
-      selectedRowsData = [...new Set(selectedRowsData)];
-
-      console.log("IDs selecionados:", selectedIDs);
-      console.log("Dados de linhas selecionadas:", selectedRowsData);
-    }
-
+    
      // Função para retornar a data atual no formato DD/MM/AAAA
     function getDataAtual() {
     const hoje = new Date();
@@ -338,9 +539,6 @@ $(window).on('beforeunload', function() {
 
     // Formata a data para o formato DD/MM/AAAA
     const dataFormatada = `${dia}/${mes}/${ano}`;  
-
-    document.getElementById('dataRecebimento_inicial').value = formatarParaFormatoInput(dataFormatada);
-
     // Retorna a data formatada
     return dataFormatada;
 }
@@ -356,34 +554,30 @@ function getDataFinal() {
     // Formata a data para o formato DD/MM/AAAA
     const dataFormatada_Final = `${dia}/${mes}/${ano}`;  
 
-    document.getElementById('dataRecebimento_final').value = formatarParaFormatoInput(dataFormatada_Final);
+    document.getElementById('dataLancamento').value = formatarParaFormatoInput(dataFormatada_Final);
 
     // Retorna a data formatada
     return dataFormatada_Final;
 }
 
     $(document).ready(function () {
+
+     // Ocultar informações específicas das TABs 2 e 3
+     $('#data_inicial_recebimento, #data_final_recebimento').hide();
+     // Também oculte os rótulos, se necessário
+     $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
+
       //initializeTable_Checklist_pedentes();
-      getDataAtual();
+      //getDataAtual();
       getDataFinal();
       inicializarTabela();
       initializeTable();
       onPaginaCarregada();
+      selecionar_produtos();
       setupEventListeners();
+      
       console.log("Documento carregado e pronto!");
 
-    // Ocultar informações específicas das TABs 2 e 3
-     // $('#data_inicial_recebimento, #data_final_recebimento').hide();
-    // Também oculte os rótulos, se necessário
-     // $('label[for="data_inicial_recebimento"], label[for="data_final_recebimento"]').hide();
-
-     //setDataFinal_Geral();
-     //horaSistema();
-     //selecionar_clientes();
-     //selecionar_produtos();
-
-    // carregarValorSeg();
-    //Lista_recebimento();
 
     // Formatar campo de telefone
     $('#telefone').keyup(function () {
@@ -404,19 +598,551 @@ function getDataFinal() {
     $(this).removeClass('filled');
     }
     });
-        
+
+    // Adicione um manipulador de eventos para os links das guias
+    $('#tabs a').on('click', function() {
+                  // Obtenha o número da guia a partir do atributo href
+                  var numeroTab = parseInt($(this).attr('href').split('-')[1]);
+
+                    // Chame a função para mostrar a guia
+                     mostrarTab(numeroTab);
+                    // getDataAtual(numeroTab);
+                    // setDataFinal(numeroTab);
+
+                  // Chame as funções relevantes
+                  controleVisibilidadeCampoTab(numeroTab);
+                  controleVisibilidadeCampoTab2(numeroTab);
+
+              });
+
+
+    // Adicionar evento de clique para o botão "Adicionar"
+    $("#btnAdicionar").on("click", function () {
+        adicionarLinhaTabela();
+    });
+
+// Adicionar descrição e operação pela função para atualizar campos
+$("#codigoProduto").on("input", function () {
+    // Obtenha o valor digitado
+    var codigoProduto = $(this).val();
+    console.log('codigoProduto', codigoProduto);
+
+    // Formate o número conforme necessário
+    var numeroFormatado = formatarNumero(codigoProduto);
+
+    // Atualize o valor do campo com o número formatado
+    $(this).val(numeroFormatado);
+
+    // Chame a função para atualizar campos
+    atualizarCamposProduto(numeroFormatado);
+});
+
+var codigoProdutoAutomatico = $("#codigoProduto").val();
+atualizarCamposProduto(codigoProdutoAutomatico);
+
+
+ // Adicionar evento de clique para o botão de pesquisa
+// Adicionar evento de clique para o botão de pesquisa
+$("#btnPesquisarProduto").on("click", function () {
+    console.log("Botão Pesquisar Produto clicado!");
+
+    // Limpar o filtro ao abrir o modal
+    $("#filtroProdutosModal").val("");
+
+    // Carregar a lista de produtos no modal
+    carregarListaProdutosFrontEnd();
+    
+    // Exibir o modal de pesquisa de produto
+    $("#modalPesquisaProduto").modal("show");
+});
+
+// Adicionar evento de clique para o botão "Selecionar Produto" dentro do modal
+$("#btnSelecionarProdutoModal").on("click", function () {
+    // Obter o código do produto selecionado no modal
+    var codigoProdutoSelecionado = $("#listaProdutosModal").val();
+
+    // Atualizar os campos com os detalhes do produto selecionado
+    atualizarCamposProduto(codigoProdutoSelecionado);
+
+    // Fechar o modal
+    $("#modalPesquisaProduto").modal("hide");
+});
+
+
+
+    // Adicionar evento de alteração para o campo de filtro
+    $("#filtroProdutos").on("input", function () {
+        // Obter o valor digitado
+        var filtro = $(this).val();
+        // Chamar a função para filtrar a lista de produtos no front-end
+        filtrarListaProdutosFrontEnd(filtro);
+    });
+
+    // Adicionar evento de alteração para a lista de produtos
+    $("#listaProdutos").on("change", function () {
+         // Obter o código do produto selecionado
+        var codigoProdutoSelecionado = $(this).val();
+
+        // Atualizar os campos com os detalhes do produto selecionado
+        atualizarCamposProduto(codigoProdutoSelecionado);
+
+        // Ocultar a seção de Lista de Produtos
+        $("#form").hide();
+    });
+
+  
             $(".scrollable-content").perfectScrollbar();
               
               });
 
-    function autoResize(element) {
-    element.style.height = 'auto';
-    element.style.height = (element.scrollHeight) + 'px';
+    function autoResize(elemento) {
+    elemento.style.height = 'auto';
+    elemento.style.height = (elemento.scrollHeight) + 'px';
 
     // Converter para maiúsculas
     elemento.value = elemento.value.toUpperCase();
+}
 
+// Função para alternar entre as TABs e atualizar os estilos da tabela
+function switchToTab(tab) {
+    // Remova todas as classes existentes do elemento da tabela
+    $("#table_checklist2").removeClass("tab1 tab2");
+
+    // Adicione a classe correspondente à TAB atual
+    $("#table_checklist2").addClass("tab" + tab);
+  }
+
+
+  //  ......................................///..............................///................/....../..........
+
+ // INFORMAÇÃO PARA AS TABELAS 
+ function mostrarTab(numeroTab) {
+
+// Ocultar todas as guias
+$('#tabs-1, #tabs-2').hide();
+
+// Mostrar a guia ativa
+$('#tabs-' + numeroTab).show();
+
+ // Ocultar rótulos e inputs específicos na TAB1
+ if (numeroTab === 1) {
+  console.log('RHAVI')
+
+  // Se for, exibe os elementos específicos
+  $('#data_inicial_recebimento, #data_final_recebimento').show();
+
+} else {
+          console.log('Não é a Tab 2');
+            // Se não for a "Tab 2", esconde os elementos
+            $('#data_inicial_recebimento, #data_final_recebimento, #btn_adiciona_funcionario, #btn_excluir_funcioario, #btn_editar_dados').hide();
+alert('Não é a Tab 2')
+     }
+
+// Verifica se é a Tab 2
+if (numeroTab === 2) {
+
+  console.log('STVEN')
+
+}
+};
+
+function controleVisibilidadeCampoTab(numeroTab) {
+
+if (numeroTab === 1) {
+  console.log('controleVisibilidadeCampoTab')
+
+} else {
+    
+  console.log('TESTE 01');
+
+}
+}
+
+function controleVisibilidadeCampoTab2(numeroTab) {
+
+if (numeroTab === 2) {
+  console.log('controleVisibilidadeCampoTab2')
+
+} else {
+      console.log('TESTE02');
+
+}
+}
+
+// Função para formatar o número
+function formatarNumero(numero) {
+    // Remova caracteres não numéricos
+    var numeroLimpo = numero.replace(/[^\d]/g, '');
+
+    // Adicione um ponto a cada três dígitos do final para o início
+    var numeroFormatado = numeroLimpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return numeroFormatado;
+}
+
+// Função para adicionar uma nova linha à tabela
+function adicionarLinhaTabela() {
+    // Capturar os valores dos campos de entrada
+    var numeroControle = $("#numeroControle").val();
+    var dataLancamento = $("#dataLancamento").val();
+    var nomeCliente = $("#client-name").val();
+    var quantidade = $("#quantidade").val();
+    var codigoProduto = $("#codigoProduto").val();
+    var descricaoProduto = $("#descricaoProduto").val();
+    var operacao = $("#operacao").val();
+    var observacao = $("#queixaCliente").val();
+
+    // Verificar se todos os campos obrigatórios estão preenchidos
+    if (!numeroControle || !dataLancamento || !nomeCliente || !quantidade || !codigoProduto) {
+        alert("Preencha todos os campos obrigatórios!");
+        return;
+    }
+
+     // Gerar um ID único para a linha
+     var idLinha = Date.now();
+
+     // Adicionar uma nova linha à tabela
+     var newRowData = {
+        idPCP: idLinha,
+        numControle: numeroControle,
+        dataEntrada: dataLancamento,
+        cliente: nomeCliente,
+        qtd: quantidade,
+        cod: codigoProduto,
+        descricao: descricaoProduto,
+        op: operacao,
+        observacao: observacao,
     };
+
+    console.log('newRowData',newRowData)
+    // Adicionar a nova linha à tabela
+    table_checklist.addData([newRowData]);
+
+    // Limpar os campos de entrada após adicionar a linha
+    limparCamposEntrada();
+}
+
+// Função para limpar os campos de entrada após adicionar uma linha
+function limparCamposEntrada() {
+    $("#codigoProduto, #descricaoProduto, #operacao").val("");
+}
+
+function obterDadosDaTabela() {
+    var tableData = table_checklist.getData();
+    return tableData.map(function (row) {
+        return {
+            idLinha: row.idLinha,
+            numControle: row.numControle,
+            dataEntrada: row.dataEntrada,
+            cliente: row.cliente,
+            qtd: row.qtd,
+            cod: row.cod,
+            descricao: row.descricao,
+            op: row.op,
+            observacao: row.observacao
+            // Adicione mais campos conforme necessário
+        };
+    });
+}
+
+// SALVAR OS DADOS DO FRONT PARA O FLASK
+function addRow() {
+    console.log("addRow");
+    // Coleta dos valores do DOM
+    const controleDescricao = $("#input2").val();
+    const dataRecebimento = $("#receipt-date").val();
+    const dataLancamento = $("#dataLancamento").val();
+    const clienteId = $("#input3").val();
+    const quantity = $("#quantity").val();
+    const productCode = $("#searchbar").val();
+    let notes = $("#notes").val().trim();
+    if (!notes) notes = "-";
+    const id = $("#input1").val();
+
+    $.ajax({
+        type: 'POST',
+        data: {
+            qualFuncao: 'checkIfExists',
+            productCode: productCode,
+            globalIdOrdem: globalIdOrdem
+        },
+        url: minhaUrl,
+        success: function(response) {
+            try {
+                if (response.exists) {
+                    alert("Esse serviço já está associado a essa ordem.");
+                } else {
+                    saveToNovasTarefas(controleDescricao, dataLancamento, clienteId, quantity, productCode, notes, dataRecebimento);
+                }
+            } catch (error) {
+                console.error("Erro ao analisar resposta:", error);
+            }
+        },
+        error: function(error) {
+            console.error("Erro ao verificar existência:", error);
+        }
+    });
+}
+
+// ...................................//..............//.................//..
+
+// SALVAR DADOS TABELA PARA O FLASK
+
+function updateSelectedIDs() {
+
+  console.trace("updateSelectedIDs foi chamada de:");
+
+  selectedIDs = [];
+  selectedRowsData = [];
+
+  table_checklist.getRows("active").forEach((row) => {
+    if (row.isSelected()) {
+      const rowData = row.getData();
+      const idAsInt = parseInt(rowData.idPCP, 10);
+
+
+      // Verificar se a conversão foi bem-sucedida antes de adicionar à lista
+      if (!isNaN(idAsInt)) {
+
+        // Mantendo sua estrutura original
+        selectedIDs.push(idAsInt);
+
+        // Adicionando à nossa nova estrutura
+        selectedRowsData.push({
+          id: idAsInt,
+          row: row,
+        });
+      }
+    }
+  });
+
+  // Remove duplicatas transformando em Set e depois de volta em Array
+  const uniqueSelectedIDs = [...new Set(selectedIDs)];
+  const uniqueSelectedRowsData = [...new Set(selectedRowsData)];
+
+  console.log("IDs selecionados:", uniqueSelectedIDs);
+  console.log("Dados de linhas selecionadas:", uniqueSelectedRowsData);
+
+  return uniqueSelectedIDs; // Retornar os IDs selecionados
+}
+
+function saveOptionToTable() {
+        // Captura a opção selecionada pelo usuário
+        let selectedOption = getSelectedRadioValue("SEQOption");
+        if (!selectedOption) {
+          showAlert("Por favor, selecione uma opção no modal.");
+          return;
+        }
+        console.log(
+          "Ids selecionados:",
+          selectedIDs,
+          "Opção selecionada:",
+          selectedOption
+        );
+
+        // Enviar os dados para o servidor
+        sendToServer(selectedIDs, selectedOption);
+
+        // Fechar o modal
+        closeDialog();
+      }
+
+      function getSelectedRadioValue(name) {
+        let radios = document.getElementsByName(name);
+        for (let i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            return radios[i].value;
+          }
+        }
+        return null;
+      }
+
+
+
+  /* Função para exibir o modal de confirmação */
+  function saveAndClose() {
+                $('#myModal').modal('show');
+            }
+
+           /* Função para confirmar o fechamento */
+      function confirmClose() {
+          if (window.confirm("Deseja salvar as alterações?")) {
+              const table = document.getElementById("table_checklist");
+              const rows = table_checklist.getElementsByTagName("tr");
+              
+              // VERIFICAR E ATUALIZAR AS INFORMAÇÕES QUE TIVERAM ALTERAÇÕES NA TABELA 
+              for (let i = 1; i < rows.length; i++) { // Começamos do 1 para pular o cabeçalho da tabela
+                  const cells = rows[i].getElementsByTagName("td");
+                  const id = Number(cells[0].innerText); // Converta para número
+                  const quantity = Number(cells[4].innerText); // Converta para número
+                  
+                  // Atualize a planilha com o novo valor de quantidade
+                 google.script.run.updateSheetNovasTarefas(id, quantity);
+              }
+          }
+          // Primeiro, chamamos a função do lado do servidor para limpar e salvar a planilha
+          google.script.run.withSuccessHandler(onRowsCleared).clearRowsFromSecond();
+      }
+
+function onRowsCleared() {
+    var msgDiv = document.createElement("div");
+    msgDiv.id = "message";
+    msgDiv.innerHTML = "<p><strong>Todas as operações foram concluídas. Você pode fechar a janela agora, Depois voltar para o Aplicativo Sicronizar o aplicativo.</strong></p>";
+    msgDiv.style.color = "red";
+    msgDiv.style.fontSize = "20px";
+    msgDiv.style.textAlign = "center";
+    msgDiv.style.marginTop = "20px";
+
+    document.body.insertBefore(msgDiv, document.body.firstChild);
+    //alert("Todas as operações foram concluídas");
+}
+
+
+// Função para carregar a tabela automaticamente
+function loadTable() {
+
+    // Obtenha o valor do número de controle
+    var numeroControle = document.getElementById("input2").value;
+
+    // Verifique se o número de controle não está vazio
+    if (input2) {
+
+    }
+}
+
+// ----------------------- EVENTOS DE INICIALIZAÇÃO -----------------------
+
+function deleteRowsInMain2() {
+  console.log("deleteAllRowsInMain2");
+  try {
+    $.ajax({
+      type: 'POST',
+      data: {
+        qualFuncao: 'clearDataExceptHeader'
+      },
+      url: minhaUrl,
+      success: function (data) {
+        console.log("Resposta do servidor:", data);
+        if (data.success) {
+          alert(data.message); // Exibe um alerta de sucesso
+        } else {
+          alert("Erro ao realizar a atualização.");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("Erro na chamada AJAX:", textStatus, errorThrown);
+        alert("Erro na chamada AJAX.");
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao chamar a função deleteAllRowsInMain2:", error);
+    alert("Erro ao chamar a função.");
+  }
+}
+
+
+// Quando o usuário fecha o site ou navega para outra página, você pode zerar a variável
+window.onbeforeunload = function() {
+    globalIdOrdem = null;
+};
+
+
+// Função para atualizar campos com dados de produtos
+function atualizarCamposProduto(codigoProduto) {
+            // Encontre o produto pelo código na lista já carregada
+            var produtoEncontrado = dados_novos_produtos.find(function (produto) {
+                return produto.Cod_Produto === codigoProduto;
+            });
+
+            // Se o produto foi encontrado, atualize os campos
+            if (produtoEncontrado) {
+              //console.log('produtoEncontrado',)
+                $("#descricaoProduto").val(produtoEncontrado.nome_produto);
+                $("#operacao").val(produtoEncontrado.nome);
+            } else {
+                //console.log("Produto não encontrado.");
+                $("#descricaoProduto").val("");
+                $("#operacao").val("");
+            }
+        }
+
+// Função para preencher a lista de produtos no front-end
+function preencherListaProdutosFrontEnd() {
+    // Limpar a lista de produtos
+    $("#listaProdutos").empty();
+
+    // Adicionar uma opção padrão
+    $("#listaProdutos").append('<option value="">Selecione um produto</option>');
+
+    // Adicionar cada produto à lista
+    listaDeProdutos.forEach(function (produto) {
+        $("#listaProdutos").append('<option value="' + produto.Cod_Produto + '">' + produto.Cod_Produto + ' - ' + produto.nome + ' - ' + produto.nome_produto + '</option>');
+    });
+}
+
+// Função para filtrar a lista de produtos no front-end
+function filtrarListaProdutosFrontEnd(filtro) {
+    // Filtrar a lista de produtos
+    var produtosFiltrados = listaDeProdutos.filter(function (produto) {
+        // Inclua a lógica de filtro conforme necessário (por exemplo, por código ou nome)
+        return produto.Cod_Produto.includes(filtro) || produto.nome.includes(filtro) || produto.nome_produto.includes(filtro);
+    });
+
+    // Preencher a lista de produtos filtrada
+    preencherListaProdutosFrontEnd(produtosFiltrados);
+}
+
+// Atribuir a resposta da sua chamada AJAX à variável listaDeProdutos
+function carregarListaProdutosFrontEnd(data) {
+    // Atribuir a resposta a dados_novos_produtos globalmente
+    dados_novos_produtos = data.novos_produtos;
+
+    // Limpar a lista de produtos
+    $("#listaProdutos").empty();
+
+    // Adicionar uma opção padrão
+    $("#listaProdutos").append('<option value="">Selecione um produto</option>');
+
+    // Adicionar cada produto à lista
+    dados_novos_produtos.forEach(function (produto) {
+        $("#listaProdutos").append('<option value="' + produto.Cod_Produto + '">' + produto.Cod_Produto + ' - ' + produto.nome + ' - ' + produto.nome_produto + '</option>');
+    });
+}
+
+
+function selecionar_produtos() {
+console.log('Relatorio_Checklits_pedentes')
+try {
+    $.ajax({
+        url: my_url() + "selecionar_novos_produtos",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+        }),
+    })
+    .done(function (data) {
+
+      // Atribua a resposta a dados_novos_produtos globalmente
+      dados_novos_produtos = data.novos_produtos;
+      console.log("dados_novos_produtos:", dados_novos_produtos);
+
+    // Chame a função para atualizar campos
+    atualizarCamposProduto(codigoProduto);
+    carregarListaProdutosFrontEnd(data)
+      
+    })
+    .fail(function (xhr, status, error) {
+        console.error("Erro ao buscar dados consolidados:", error);
+        console.log("Status da requisição:", status);
+        console.log("Resposta do servidor:", xhr.responseText);
+    });
+} catch (error) {
+    console.error("Erro ao executar a função: " + error);
+}
+}
+    
+
+
 
     function showAlert(message) {
       Swal.fire({
@@ -725,7 +1451,7 @@ function getDataFinal() {
           title: "Id PCP",
           field: "idPCP",
           hozAlign: "center",
-          visible: false,
+          visible: true,
         },
         {
           title: "",
@@ -733,143 +1459,141 @@ function getDataFinal() {
           cssClass: "white-bg",
           hozAlign: "center",
           headerSort: false,
+
           headerClick: function (e, column) {
-            try {
-              const headerCheckbox = column
-                .getElement()
-                .querySelector("#selectAllCheckbox");
-              if (headerCheckbox) {
-                // Obtenha todas as linhas ativas
-                const activeRows = table_checklist.getRows("active");
-                selectedIDs = []; // Limpe o array de IDs selecionados
+                try {
+                  const headerCheckbox = column
+                    .getElement()
+                    .querySelector("#selectAllCheckbox");
+                  if (headerCheckbox) {
+                    // Obtenha todas as linhas ativas
+                    const activeRows = table_checklist.getRows("active");
+                    selectedIDs = []; // Limpe o array de IDs selecionados
 
-                if (headerCheckbox.checked) {
-                  // Desmarcar todas as linhas ativas
-                  activeRows.forEach((row) => row.deselect());
-                  headerCheckbox.checked = false;
-                } else {
-                  // Seleccionar todas as linhas ativas e adicionar seus IDs ao array selectedIDs
-                  activeRows.forEach((row) => {
-                    const rowData = row.getData();
-                    selectedIDs.push(rowData.idPCP);
-                    row.select();
-                  });
-                  headerCheckbox.checked = true;
+                    if (headerCheckbox.checked) {
+                      // Desmarcar todas as linhas ativas
+                      activeRows.forEach((row) => row.deselect());
+                      headerCheckbox.checked = false;
+                    } else {
+                      // Seleccionar todas as linhas ativas e adicionar seus IDs ao array selectedIDs
+                      activeRows.forEach((row) => {
+                        const rowData = row.getData();
+                        selectedIDs.push(rowData.idPCP);
+                        row.select();
+                      });
+                      headerCheckbox.checked = true;
+                    }
+                    updateSelectedIDs(); // Atualize selectedIDs após mudança
+                    console.log("IDs selecionados via cabeçalho:", selectedIDs);
+                  }
+                } catch (error) {
+                  console.error("Erro em headerClick:", error);
                 }
-                updateSelectedIDs(); // Atualize selectedIDs após mudança
-                console.log(
-                  "IDs selecionados via cabeçalho:",
-                  selectedIDs
-                );
-              }
-            } catch (error) {
-              console.error("Erro em headerClick:", error);
-            }
-          },
-          titleFormatter: function () {
-            const labelElement = document.createElement("label");
-            labelElement.className = "checkbox-material";
+              },
+              titleFormatter: function () {
+                const labelElement = document.createElement("label");
+                labelElement.className = "checkbox-material";
 
-            const checkboxElement = document.createElement("input");
-            checkboxElement.type = "checkbox";
-            checkboxElement.id = "selectAllCheckbox";
+                const checkboxElement = document.createElement("input");
+                checkboxElement.type = "checkbox";
+                checkboxElement.id = "selectAllCheckbox";
 
-            checkboxElement.addEventListener("change", function (e) {
-              if (this.checked) {
-                table_checklist.getRows("active").forEach((row) => row.select());
-              } else {
-                table_checklist.getRows("active").forEach((row) => row.deselect());
-              }
+                checkboxElement.addEventListener("change", function (e) {
+                  if (this.checked) {
+                    table_checklist.getRows("active").forEach((row) => row.select());
+                  } else {
+                    table_checklist.getRows("active").forEach((row) => row.deselect());
+                  }
 
-              document.querySelectorAll(".row-checkbox").forEach((cb) => {
-                cb.checked = this.checked;
+                  document.querySelectorAll(".row-checkbox").forEach((cb) => {
+                    cb.checked = this.checked;
+                  });
+
+                  // Atualiza o array selectedIDs
+                  updateSelectedIDs();
+
+                  e.stopPropagation();
+                });
+
+                const spanElement = document.createElement("span");
+                spanElement.className = "checkmark";
+
+                labelElement.appendChild(checkboxElement);
+                labelElement.appendChild(spanElement);
+
+                return labelElement;
+              },
+
+              formatter: function (cell, formatterParams, onRendered) {
+                const labelElement = document.createElement("label");
+                labelElement.className = "checkbox-material";
+
+                const checkboxElement = document.createElement("input");
+                checkboxElement.type = "checkbox";
+                checkboxElement.className = "row-checkbox";
+
+                checkboxElement.addEventListener("change", function () {
+                  const rowData = cell.getRow().getData();
+                  const id = rowData.idPCP;
+
+                  if (this.checked) {
+                    cell.getRow().select();
+                  } else {
+                    cell.getRow().deselect();
+                  }
+
+                  // Atualiza o array selectedIDs
+                  updateSelectedIDs();
+                });
+
+                const spanElement = document.createElement("span");
+                spanElement.className = "checkmark";
+
+                labelElement.appendChild(checkboxElement);
+                labelElement.appendChild(spanElement);
+
+                return labelElement;
+              },
+            },
+          ],
+
+          rowSelected: onRowSelected, // Adicionando a função de linha selecionada
+          rowDeselected: onRowDeselected, // Adicionando a função de linha desmarcada
+
+          rowFormatter: function (row) {
+            const data = row.getData();
+            if (data.dataEntrada !== "-") {
+              row.getElement().classList.add("highlighted-row"); // Aplica o destaque na linha
+              row.getCells().forEach((cell) => {
+                if (cell.getColumn().getField() !== "select") {
+                  cell.getElement().style.backgroundColor = "white";
+                  cell.getElement().style.color = "Black";
+                }
               });
-
-              // Atualiza o array selectedIDs
-              updateSelectedIDs();
-
-              e.stopPropagation();
-            });
-
-            const spanElement = document.createElement("span");
-            spanElement.className = "checkmark";
-
-            labelElement.appendChild(checkboxElement);
-            labelElement.appendChild(spanElement);
-
-            return labelElement;
-          },
-
-          formatter: function (cell, formatterParams, onRendered) {
-            const labelElement = document.createElement("label");
-            labelElement.className = "checkbox-material";
-
-            const checkboxElement = document.createElement("input");
-            checkboxElement.type = "checkbox";
-            checkboxElement.className = "row-checkbox";
-
-            checkboxElement.addEventListener("change", function () {
-              const rowData = cell.getRow().getData();
-              const id = rowData.idPCP;
-
-              if (this.checked) {
-                cell.getRow().select();
-              } else {
-                cell.getRow().deselect();
-              }
-
-              // Atualiza o array selectedIDs
-              updateSelectedIDs();
-            });
-
-            const spanElement = document.createElement("span");
-            spanElement.className = "checkmark";
-
-            labelElement.appendChild(checkboxElement);
-            labelElement.appendChild(spanElement);
-
-            return labelElement;
-          },
-        },
-      ],
-
-      rowSelected: onRowSelected, // Adicionando a função de linha selecionada
-      rowDeselected: onRowDeselected, // Adicionando a função de linha desmarcada
-
-      rowFormatter: function (row) {
-        const data = row.getData();
-        if (data.dataEntrada !== "-") {
-          row.getElement().classList.add("highlighted-row"); // Aplica o destaque na linha
-          row.getCells().forEach((cell) => {
-            if (cell.getColumn().getField() !== "select") {
-              cell.getElement().style.backgroundColor = "white";
-              cell.getElement().style.color = "Black";
             }
-          });
-        }
-      },
-      cellEdited: function (cell) {
-        const value = cell.getValue();
-        const oldValue = cell.getOldValue();
+          },
+          cellEdited: function (cell) {
+            const value = cell.getValue();
+            const oldValue = cell.getOldValue();
 
-        // Se o novo valor está vazio, o valor antigo não estava vazio, ou o novo valor é "undefined", restaure o valor antigo
-        if (
-          (value.trim() === "" && oldValue.trim() !== "") ||
-          value === "undefined"
-        ) {
-          cell.restoreOldValue();
-        }
+            // Se o novo valor está vazio, o valor antigo não estava vazio, ou o novo valor é "undefined", restaure o valor antigo
+            if (
+              (value.trim() === "" && oldValue.trim() !== "") ||
+              value === "undefined"
+            ) {
+              cell.restoreOldValue();
+            }
 
-        cell.getElement().style.color = "red";
-      },
+            cell.getElement().style.color = "red";
+          },
 
-      dataChanged: function (data) {
-        // Atualiza as contagens no rodapé
-        //updateFooterCounts();
-      },
+          dataChanged: function (data) {
+            // Atualiza as contagens no rodapé
+            //updateFooterCounts();
+          },
 
-      selectable: "highlight",
-    });
+          selectable_checklist: "highlight",
+        });
 
     // Aplicar o filtro imediatamente após a inicialização da tabela
 
@@ -903,6 +1627,9 @@ function handleTabPress(event) {
     }
   }
 }
+
+
+
 function openDialog() {
   // Atualizar a lista de IDs selecionados antes de fazer qualquer coisa
   updateSelectedIDs();
@@ -2482,8 +3209,8 @@ function mostrarAlerta() {
     cancelButtonText: "Não, cancelar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      // Se o usuário clicar em "Sim, salvar!"
 
+      // Se o usuário clicar em "Sim, salvar!"
       const idsToDelete = updateSelectedIDs(); // Pega os IDs das linhas selecionadas
 
       console.log("IDs a serem deletados:", idsToDelete);
@@ -2504,7 +3231,7 @@ function mostrarAlerta() {
             // Se o usuário clicar em "Sim, deletar!"
             deletarLinhas(idsToDelete);
           }
-          salvarAlterarSeguenciaProducao();
+          salvarAlterar_Novas_Tarefas();
 
           // Alerta informando que os dados foram atualizados com sucesso
           Swal.fire({
@@ -2514,7 +3241,7 @@ function mostrarAlerta() {
           });
         });
       } else {
-        salvarAlterarSeguenciaProducao();
+        salvarAlterar_Novas_Tarefas();
 
         // Alerta informando que os dados foram atualizados com sucesso
         Swal.fire({
@@ -2527,15 +3254,58 @@ function mostrarAlerta() {
   });
 }
 
+
+// Função para mostrar o alerta de confirmação de exclusão
+function mostrarAlertaExclusao() {
+  Swal.fire({
+    title: "Deletar Linha?",
+    text: "Deseja deletar as linhas selecionadas?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sim, deletar!",
+    cancelButtonText: "Não, continuar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const idsToDelete = updateSelectedIDs(); // Pega os IDs das linhas selecionadas
+
+      console.log("IDs a serem deletados:", idsToDelete);
+
+      if (idsToDelete.length > 0) {
+        // Se o usuário clicar em "Sim, deletar!"
+        deletarLinhas(idsToDelete);
+
+        // Alerta informando que os dados foram excluídos com sucesso
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Os dados foram excluídos com sucesso.",
+          icon: "success",
+        });
+      } else {
+        // Se não houver IDs para deletar, apenas exibir um alerta
+        Swal.fire({
+          title: "Nada para excluir!",
+          text: "Não há linhas selecionadas para exclusão.",
+          icon: "info",
+        });
+      }
+    }
+  });
+}
+
+
 // Função para pegar os IDs das linhas selecionadas
 function getselectedIDs() {
-  const selectedRows = table.getSelectedRows(); // Pega todas as linhas selecionadas na tabela Tabulator
+
+  const selectedRows = table_checklist.getSelectedRows(); // Pega todas as linhas selecionadas na tabela Tabulator
 
   selectedRows.forEach((row) => {
     const rowData = row.getData();
     selectedIDs.push(rowData.idPCP); // Assumindo que 'idPCP' é o nome do campo que contém o ID
   });
 
+  console.log('selectedIDs',selectedIDs)
   return selectedIDs;
 }
 
@@ -2548,6 +3318,30 @@ function deletarLinhas() {
     console.warn("Nenhum ID fornecido para exclusão.");
     return;
   }
+
+  console.log("IDs a serem deletados:", idsToDelete);
+
+  // Remover as linhas da tabela no front-end
+  idsToDelete.forEach((idPCP) => {
+    // Certifique-se de que idPCP seja um número
+    const idNumber = parseInt(idPCP, 10);
+
+    console.log("Tentando deletar a linha com ID:", idNumber);
+
+    // Encontrar a linha com base no ID convertido para número
+    const row = table_checklist.getRows().find((rowData) => parseInt(rowData.getData().idPCP, 10) === idNumber);
+
+    // Verificar se a linha existe antes de tentar deletar
+    console.log("Linha que vai ser Deletado.", row);
+
+    if (row) {
+      // Deletar a linha da tabela imediatamente
+      row.delete();
+      console.log("Linha deletada com sucesso.");
+    } else {
+      console.warn(`Linha com ID ${idNumber} não encontrada.`);
+    }
+  });
 
   console.log("IDs a serem deletados:", idsToDelete);
 
@@ -2578,7 +3372,7 @@ function deletarLinhas() {
 }
 
 // SALVAR ALTERAÇÕES NA TABELA
-function salvarAlterarSeguenciaProducao() {
+function salvarAlterar_Novas_Tarefas() {
   // Pegar todas as linhas de dados da tabela Tabulator
   const rows = table_checklist.getData();
   // Capturar e formatar o valor do input dataLancamento
@@ -2595,19 +3389,21 @@ function salvarAlterarSeguenciaProducao() {
     // Adicionar o ID como primeiro elemento no array de dados
     rowData.push(row.idPCP);
 
-    // Colunas específicas que você listou
-    const colunasEspecificas = [
-      "Orç",
-      "pedido",
-      "SEQ",
-      "descricao",
-      "dtProducao",
-      "prazoEntrega",
-      "observacao",
+     // Colunas específicas que você listou
+     const colunasEspecificas = [
+      { header: "idPCP", key: "idPCP" },
+      { header: "Orç", key: "orcamento" },
+      { header: "Pedido", key: "pedido" },
+      { header: "SEQ", key: "sequencia" },
+      { header: "Descrição", key: "descricao" },
+      { header: "Data Produção", key: "dtProducao" },
+      { header: "Prazo Entrega", key: "prazoEntrega" },
+      { header: "Observação", key: "observacao" },
     ];
 
+
     colunasEspecificas.forEach((coluna) => {
-      rowData.push(row[coluna]);
+      rowData[coluna.header] = row[coluna.key];
     });
 
     // Adicionar o valor de dataLancamento ao final do rowData
@@ -2615,25 +3411,30 @@ function salvarAlterarSeguenciaProducao() {
 
     // Adicionar os dados da linha ao array principal
     dataToSave.push(rowData);
+
   });
 
   dataToSave = dataToSave.map((row) => {
-    return row.map((cellValue) => {
-      return cellValue === undefined ? "" : cellValue;
-    });
-  });
+    const newRow = {};
 
-  console.log("Dados a serem enviados para o GAS:", dataToSave);
+  // Itera sobre as propriedades do objeto
+  for (const prop in row) {
+    // Substitui valores undefined por uma string vazia
+    newRow[prop] = row[prop] === undefined ? "" : row[prop];
+  }
+
+  return newRow;
+});
+
+  console.log("NORTH CROMO - Dados a serem enviados para o GAS:", dataToSave);
 
   // Use o AJAX para enviar os dados
   $.ajax({
-    type: "POST",
-    data: {
-      qualFuncao: "salvarAlterarSeguenciaProducao",
-      dataToSave: JSON.stringify(dataToSave), // Envie os dados como JSON
-    },
-    url: minhaUrl,
-  })
+          url: my_url() + "adiciona_funcionario",
+          data: JSON.stringify(dataToSave),
+          contentType: "application/json",
+          type: "POST",
+        })
     .done(function (data) {
       // RESULTADO FRONT
       try {
@@ -2943,19 +3744,26 @@ function updateTableData(data) {
 // Função para carregar a lista de obras
 function Relatorio_Checklits_pedentes_Inicial() {
 console.log('Relatorio_Checklits_pedentes')
-
 try {
     $.ajax({
-        url: my_url() + "selecionar_checklists_especificos",
+        url: my_url() + "selecionar_novos_produtos",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({
         }),
     })
     .done(function (data) {
-      let dados = data.retorno;
-      console.log("carregarDados Checklists_especificos:", dados);
-      updateTableData(data);
+      //let dados = data.checklist_resumido;
+      let dados_resumidos = data.checklist_resumido;
+      let dados_especificos = data.retorno_especifico;
+      let dados_novos_produtos = data.novos_produtos;
+
+      console.log("Dados Checklists Resumidos:", dados_resumidos);
+      console.log("Dados Checklists Específicos:", dados_especificos);
+      console.log("Dados Checklists Específicos:", dados_novos_produtos);
+      
+      //console.log("carregarDados Checklists_especificos:", dados);
+      //updateTableData(data);
     })
     .fail(function (xhr, status, error) {
         console.error("Erro ao buscar dados consolidados:", error);
@@ -2966,6 +3774,23 @@ try {
     console.error("Erro ao executar a função: " + error);
 }
 }
+ // Função para obter detalhes do produto
+ function obterDetalhesProduto(codigoProduto) {
+        // Faça uma requisição AJAX para obter os detalhes do produto
+        $.ajax({
+            url: "/obter_detalhes_produto",  // Substitua pelo URL apropriado no Flask
+            method: "POST",
+            data: {codigoProduto: codigoProduto},
+            success: function (data) {
+                // Atualize os campos com os dados obtidos
+                $("#descricaoProduto").val(data.nome_produto);
+                $("#operacao").val(data.nome);
+            },
+            error: function (error) {
+                console.log("Erro ao obter detalhes do produto:", error);
+            }
+        });
+    }
 
 // Função para carregar a lista de obras
 function Relatorio_Checklits_pedentes() {
@@ -3024,128 +3849,123 @@ function updateTableChecklist_pedentes(retorno_especifico) {
 }
 
 
-function initializeTable_Checklist_pedentes() {
+  function initializeTable_Checklist_pedentes() {
   Table_Checklist_pedentes = new Tabulator("#Table_Checklist_pedentes", {
-    pagination: "local",
-    paginationSize: 10,
-    paginationSizeSelector: [10, 25, 50, 100, 150, 200],
-    paginationInitialPage: 1,
-    movableColumns: true,
-    paginationButtonNext: "<i class='fas fa-chevron-right'></i>",
-    paginationButtonPrev: "<i class='fas fa-chevron-left'></i>",
-    name: "Table_Checklist_pedentes",
-    deferRender: true,
-    scrollCollapse: true,
-    scroller: true,
-    scrollY: 200,
-    data: [],
-    // Classificação inicial
-    initialSort: [
-      { column: "dtProducao", dir: "asc" },
-      { column: "SEQ", dir: "asc" },
-      { column: "op", dir: "asc" },
-    ],
-    columns: [
-      {
-        title: "Nº Controle",
-        field: "idOrdem",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Data Recebimento",
-        field: "dataCadastro",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Cliente",
-        field: "nomeCliente",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Cód",
-        field: "codProduto",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Qtda",
-        field: "qtdProduto",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Desc Serviço/ Produto / Tarefa",
-        field: "nomeProduto",
-        hozAlign: "left",
-        responsive: 0,
-      },
-      {
-        title: "Nota",
-        field: "notaInterna",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Referência Produto",
-        field: "referenciaProduto",
-        hozAlign: "center",
-        responsive: 0,
-      },
-      {
-        title: "Op",
-        field: "op",
-        hozAlign: "center",
-        visible: false,
-        responsive: 0,
-      },
-      {
-        title: "Observação",
-        field: "queixaCliente",
-        hozAlign: "left",
-        responsive: 0,
-      },
-      {
-        title: "Id PCP",
-        field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
-        hozAlign: "center",
-        visible: false,
-        responsive: 0,
-      },
-    ],
-    rowClick: function (e, row) {
-      // Lógica para manipular a linha clicada
-      preencherCamposDeEntrada(row.getData());
-    },
-    groupStart: function (rows, group) {
-      var sum_qtdProduto = 0; // Inicializa o somatório da coluna "qtdProduto"
-      rows.forEach(function (row) {
-        // Somatório dos valores da coluna "qtdProduto" no grupo
-        sum_qtdProduto += row.getData().qtdProduto || 0;
-      });
-
-      console.log("Sum of qtdProduto:", sum_qtdProduto); // Adicione esta linha para debugar
-
-      return [
+      pagination:"local",
+      paginationSize:300,
+      paginationInitialPage: 1,
+      movableColumns:true,
+      paginationButtonNext: "<i class='fas fa-chevron-right'></i>", // Ícone para próximo
+      paginationButtonPrev: "<i class='fas fa-chevron-left'></i>", // Ícone para anterior
+      name: "Table_Checklist_pedentes",
+      deferRender: true,
+      scrollCollapse: true,
+      scroller: true,
+      scrollY: 200,
+      data: [],
+        // Classificação inicial
+        initialSort: [
+        { column: "dtProducao", dir: "asc" },
+        { column: "SEQ", dir: "asc" },
+        { column: "op", dir: "asc" },
+      ],
+      columns: [
         {
-          // Adiciona a linha de resumo no final do grupo
-          qtdProduto: sum_qtdProduto, // Mostra o somatório
-          usuario: "Total", // Pode ser qualquer rótulo desejado
-          _row: "header", // Marca a linha como uma linha de cabeçalho
-        },
-      ];
-    },
-  });
-}
+            title: "Nº Controle",
+            field: "idOrdem",
+            hozAlign: "center",
+            responsive: 0,
+            },
 
-          function destruirTabela__Recebimento_pedentes() {
-            if (Table_Checklist_pedentes) {
-              Table_Checklist_pedentes.destroy();
-              Table_Checklist_pedentes = null;
-            }
-          }        
+            {
+            title: "Data Recebimento",
+            field: "dataCadastro", 
+            hozAlign: "center",
+            responsive: 0,
+          },
+            {
+            title: "Cliente",
+            field: "nomeCliente", 
+            hozAlign: "center",
+            responsive: 0,
+          },
+        {
+          title: "Cód",
+          field: "codProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Qtda",
+          field: "qtdProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Desc Serviço/ Produto / Tarefa",
+          field: "nomeProduto",
+          hozAlign: "left",
+          responsive: 0,
+        },
+        {
+          title: "Nota",
+          field: "notaInterna",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Referência Produto",
+          field: "referenciaProduto",
+          hozAlign: "center",
+          responsive: 0,
+        },
+        {
+          title: "Op",
+          field: "op",
+          hozAlign: "center",
+          visible: false,
+          responsive: 0,
+        },
+        {
+          title: "Observação",
+          field: "queixaCliente",
+          hozAlign: "left",
+          responsive: 0,
+        },
+         {
+              title: "Id PCP",
+              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "center",
+              visible: false,
+              responsive: 0,
+          },
+          {
+              title: "Id PCP",
+              field: "id", // Certifique-se de que a chave corresponde ao objeto transformado
+              hozAlign: "center",
+              visible: false,
+              responsive: 0,
+          },
+      ],
+      rowClick: function (e, row) {
+          table_Presenca_FuncionarioDetalhamento.getRows().forEach(function (r) {
+              r.getElement().classList.remove('selected');
+          });
+
+          row.getElement().classList.add('selected');
+          var rowData = row.getData();
+          preencherCamposDeEntrada(rowData);
+      },
+  });
+  }
+
+
+  function destruirTabela__Recebimento_pedentes() {
+  if (Table_Checklist_pedentes) {
+      Table_Checklist_pedentes.destroy();
+      Table_Checklist_pedentes = null;
+  }
+  }         
           function preencherCamposDeEntrada(rowData) {
           console.log("Preenchendo campos de entrada:", rowData);
           // Defina o valor do campo idPCP usando JavaScript
@@ -3336,5 +4156,92 @@ function exibirMensagemUsuario(mensagem) {
     }, 5000);
 }
 
+
+// ----------------------- PESQUISA -----------------------
+
+function onProductSelected() {
+    var productCode = document.getElementById("product-list").value;
+    document.getElementById("product-search").value = productCode;  // Atualiza o campo de pesquisa com o código do produto selecionado
+    console.log("fillProductList chamado com:", productCode);
+    onProductCodeInput();  // Chama a função
+}
+
+
+        //  TESTE - FILTRAR O PRODUTO CONFORME DIGITADO
+          function filterProducts(inputValue) {
+          var filteredProducts = allProducts.filter(function(product) {
+              // Verificando e convertendo para string
+              var codigoStr = String(product.codigo || "");
+              var nomeStr = String(product.nome || "");
+              
+              return nomeStr.toLowerCase().includes(inputValue.toLowerCase()) || 
+                    codigoStr.toLowerCase().includes(inputValue.toLowerCase());
+          });
+          
+          fillProductList(filteredProducts);  // Atualiza a lista de produtos
+      }
+
+             // FILTRAR O PRODUTO CONFORME DIGITADO
+            function fillProductList(products) {
+                var select = document.getElementById("product-list");
+                select.innerHTML = "";
+                for (var i = 0; i < products.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = products[i].codigo;
+                    option.text = products[i].codigo + " - " + products[i].nome;
+                    select.appendChild(option);
+                }
+                document.getElementById("form").style.display = "block";
+            }
+
+function onProductCodeInput() {
+
+  var productCode = document.getElementById("searchbar").value;
+
+  // Log the productCode being sent
+  console.log("Sending productCode to GAS:", productCode);
+
+  fetchDataFromGAS('fetchAllProductDetails', productCode, function(data) {
+    document.getElementById("product-description").value = data.description;
+    document.getElementById("operation").value = data.operation;
+    window.operationId = data.operationId;
+    showOperationValue(data.operationValue);
+  });
+}
+
+
+function selectProduct() {
+  var selectedValue = document.getElementById("product-list").value;
+  document.getElementById("searchbar").value = selectedValue;
+  document.getElementById("form").style.display = "none";
+
+  fetchDataFromGAS('fetchAllProductDetails', selectedValue, function(data) {
+    document.getElementById("product-description").value = data.description;
+    document.getElementById("operation").value = data.operation;
+    window.operationId = data.operationId;
+    showOperationValue(data.operationValue);
+  });
+}
+
+function showOperationValue(value) {
+    const resultValueElement = document.getElementById("result-value");
+    const resultElement = document.getElementById("result");
+
+    if (resultValueElement) {
+        resultValueElement.textContent = value;
+    } else {
+        console.error("Elemento com ID 'result-value' não encontrado!");
+    }
+
+    if (resultElement) {
+        resultElement.style.display = "none";
+    } else {
+        console.error("Elemento com ID 'result' não encontrado!");
+    }
+}
+
 </script>
+
+</body>
+
 </html>

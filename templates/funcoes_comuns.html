@@ -123,4 +123,19 @@
       icon: "error",
     });
   }
+
+
+  function converterParaMaiusculas(elemento) {
+    elemento.value = elemento.value.toUpperCase();
+}
+
+function highlightInput(element) {
+    element.classList.add('focused-input');
+  }
+
+  function removeHighlight(element) {
+    element.classList.remove('focused-input');
+  }
+
+
 </script>
