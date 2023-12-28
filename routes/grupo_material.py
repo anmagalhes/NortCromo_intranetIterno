@@ -60,31 +60,50 @@ def adicionar_atualizar_grupo_material_f():
         aba = arquivo().worksheet_by_title("grupo_material_suelo")
         dados_da_planilha = aba.get_all_values()
 
-        coluna_sequencia = aba.get_col(1)
-        coluna_sequencia = coluna_sequencia[1:]
-        coluna_sequencia = [
-            int(value) if value.strip() != "" else 0 for value in coluna_sequencia
-        ]
-        prox_id = int(max(coluna_sequencia)) + 1
+        coluna_sequencia = [int(value) for value in aba.get_col(1)[1:] if value.strip()]
+        prox_id = max(coluna_sequencia, default=0) + 1
 
         # Receba os dados do front-end
         dados = request.get_json()
 
+        # Validação de dados do frontend
+        if not dados or not isinstance(dados, dict):
+            return jsonify(retorno="Dados inválidos."), 400
+
         # Obtenha o ID do grupo_material
         id_grupo_material = dados.get("id_grupo_material", 0)
 
-        # Verifica se é uma nova entrada
         if id_grupo_material == 0:
             # Use o próximo ID como "id_grupo_material" nos dados
             id_grupo_material = prox_id
             dados["id_grupo_material"] = id_grupo_material
         else:
             # Verifica se o ID existe na planilha
-            id_existente = any(
-                int(value) == id_grupo_material for value in coluna_sequencia
-            )
-            if not id_existente:
-                return jsonify(retorno="ID do grupo_material não encontrado.")
+            if id_grupo_material not in coluna_sequencia:
+                return jsonify(retorno="ID do grupo_material não encontrado."), 404
+
+            # Obtém a linha correspondente ao ID
+            linha_index = coluna_sequencia.index(id_grupo_material) + 2
+            linha = aba.row_values(linha_index)
+
+            # Transforma a linha em um objeto
+            grupo_material_existente = {
+                "id_grupo_material": int(linha[0]),
+                "nome_grupo_material": linha[1],
+                "data_atualizacao": linha[2],
+                "hora_atualizacao": linha[3],
+            }
+
+            # Atualiza os demais campos no objeto com os novos dados
+            grupo_material_existente.update({
+                "nome_grupo_material": dados.get("nome_grupo_material", grupo_material_existente["nome_grupo_material"]),
+                # Adicione os outros campos aqui conforme necessário
+            })
+
+            # Atualiza a linha correspondente no Google Sheets
+            aba.update([list(grupo_material_existente.values())], start=f"A{linha_index}")
+
+            return jsonify(retorno="Deu certo!", dados=grupo_material_existente)
 
         # Mapeie os campos do frontend para as colunas do Google Sheets
         mapeamento = {
@@ -130,65 +149,10 @@ def adicionar_atualizar_grupo_material_f():
                 overwrite=False,
             )
 
-        return jsonify(retorno="Deu certo!")
+        return jsonify(retorno="Deu certo!", dados=valores)
     except Exception as e:
-        return jsonify(retorno="Algo deu errado: " + str(e))
-
-@grupo_material.route("/adicionar_atualizar_grupo_material2", methods=["POST"])
-def adicionar_atualizar_grupo_material2():
-    try:
-        # Recebe os dados do frontend
-        dados_frontend = request.get_json()
-
-        # Cria um DataFrame com os dados existentes no Google Sheet
-        grupo_material_aba = arquivo().worksheet_by_title("grupo_material_suelo")
-        dados_grupo_material = grupo_material_aba.get_all_values()
-        df_grupo_material = pd.DataFrame(data=dados_grupo_material[1:], columns=dados_grupo_material[0])
-
-        # Verifica se nome_grupo_material já existe
-        nome_grupo_material = dados_frontend["nome_grupo_material"]
-        if nome_grupo_material in df_grupo_material["nome_grupo_material"].values:
-            return jsonify({"message": "Este nome de grupo_material já existe."})
-
-        # Obtém a data, hora e nome de usuário
-        data_hora_atual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-
-        # Verifica o valor de id_grupo_material
-        id_grupo_material = dados_frontend["id_grupo_material"]
-        if id_grupo_material == 0:
-            # Adiciona uma nova linha ao DataFrame
-            novo_id_grupo_material = int(df_grupo_material["id_grupo_material"].astype(float).max() + 1)
-            nova_linha = {
-                "id_grupo_material": int(novo_id_grupo_material),
-                "nome_grupo_material": nome_grupo_material,
-                "data_atualizacao": data_hora_atual.split()[0],
-                "hora_atualizacao": data_hora_atual.split()[1],
-            }
-            df_nova_linha = pd.DataFrame([nova_linha])
-            df_grupo_material["id_grupo_material"] = df_grupo_material["id_grupo_material"].astype(int)
-            df_grupo_material = pd.concat([df_grupo_material, df_nova_linha], ignore_index=True)
-
-            # Adiciona uma nova linha ao Google Sheet
-            grupo_material_aba.append_table([nova_linha])
-            mensagem = "Novo grupo_material adicionado com sucesso."
-        else:
-            # Atualiza a linha correspondente no DataFrame
-            df_grupo_material.loc[df_grupo_material["id_grupo_material"] == id_grupo_material, "nome_grupo_material"] = nome_grupo_material
-            df_grupo_material.loc[df_grupo_material["id_grupo_material"] == id_grupo_material, "data_atualizacao"] = data_hora_atual.split()[0]
-            df_grupo_material.loc[df_grupo_material["id_grupo_material"] == id_grupo_material, "hora_atualizacao"] = data_hora_atual.split()[1]
-
-            # Atualiza a linha correspondente no Google Sheet
-            grupo_material_aba.update([df_grupo_material.columns.values.tolist()] + df_grupo_material.values.tolist())
-            mensagem = f"Grupo_material {id_grupo_material} atualizado com sucesso."
-
-        # Adiciona os resultados à resposta JSON
-        resposta_json = {"message": mensagem}
-        return jsonify(resposta_json)
-
-    except Exception as e:
-        print(f"Erro ao adicionar/atualizar grupo_material: {str(e)}")
-        return jsonify({"error": f"Erro ao adicionar/atualizar grupo_material: {str(e)}"})
-
+        return jsonify(retorno="Algo deu errado."), 500
+    
 @grupo_material.route("/selecionar_grupo_material_especificos", methods=["POST"])
 def selecionar_grupo_material_especificos_f():
     try:
