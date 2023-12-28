@@ -1250,13 +1250,9 @@ input[type='radio']:checked + .checkmark {
     padding: 20px; /* Adicionar padding conforme necessário */
   }
 
-
-
-
-
-
-
-
+  .custom-swal-content {
+    font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+  }
   
   @media (max-width: 1500px) {
     .sidebar {

@@ -229,48 +229,91 @@
                 <i class="material-icons invisible-icon">arrow_drop_down</i>
               </div>
             </li>
-            <li class="expandable hide-text">
-              <i class="material-icons">store</i>
-              <span class="menu-text"> Almoxarifado</span>
-              <i
-                class="material-icons toggle-submenu"
-                style="
-                  transition: transform 0.3s;
-                  font-family: 'Material Icons';
-                "
-                >arrow_drop_down</i
-              >
-              <ul class="submenu">
-                <li>
-                  <i class="material-icons">input</i>
-                  <span class="menu-text"> Entrada de Materiais</span>
-                </li>
-                <li>
-                  <i class="material-icons">output</i>
-                  <span class="menu-text"> Saída de Materiais</span>
-                </li>
-                <li>
-                  <i class="material-icons">report_problem</i>
-                  <span class="menu-text"> Controle</span>
-                </li>
-                <li>
-                  <i class="material-icons">swap_horiz</i>
-                  <span class="menu-text"> Transferências</span>
-                </li>
-                <li>
-                  <i class="material-icons">assessment</i>
-                  <span class="menu-text"> Relatórios</span>
-                </li>
-                <li>
-                  <i class="material-icons">construction</i>
-                  <span class="menu-text"> Estoque Obras</span>
-                </li>
-                <li>
-                  <i class="material-icons">home_work</i>
-                  <span class="menu-text"> Estoque Depósitos</span>
-                </li>
-              </ul>
-            </li>
+
+        <!-- Módulo: Almoxarifado -->
+<li class="expandable hide-text">
+  <div class="menu-header">
+      <i class="material-icons">store</i>
+      <span class="menu-text"> Almoxarifado</span>
+      <i class="material-icons toggle-submenu" 
+         style="transition: transform 0.3s; font-family: 'Material Icons';"
+      >arrow_drop_down</i>
+  </div>
+
+  <ul class="submenu">
+      <li>
+          <i class="material-icons">input</i>
+          <span class="menu-text"> Entrada de Materiais</span>
+      </li>
+      <li>
+          <i class="material-icons">output</i>
+          <span class="menu-text"> Saída de Materiais</span>
+      </li>
+      <li>
+          <i class="material-icons">report_problem</i>
+          <span class="menu-text"> Controle</span>
+      </li>
+      <li>
+          <i class="material-icons">swap_horiz</i>
+          <span class="menu-text"> Transferências</span>
+      </li>
+      <li>
+          <i class="material-icons">assessment</i>
+          <span class="menu-text"> Relatórios</span>
+      </li>
+      <li>
+          <i class="material-icons">construction</i>
+          <span class="menu-text"> Estoque Obras</span>
+      </li>
+      <li>
+          <i class="material-icons">home_work</i>
+          <span class="menu-text"> Estoque Depósitos</span>
+      </li>
+
+      <!-- Adicionando seções adicionais -->
+      <li class="expandable hide-text">
+          <div class="menu-header">
+              <i class="material-icons">inventory</i>
+              <span class="menu-text"> Inventário</span>
+              <i class="material-icons toggle-submenu" 
+                 style="transition: transform 0.3s; font-family: 'Material Icons';"
+              >arrow_drop_down</i>
+          </div>
+
+          <ul class="submenu">
+              <li onclick="submenu_muda_de_tela('inventario.html', event)">
+                  <i class="material-icons">article</i>
+                  <span class="menu-text"> Contagem de Itens</span>
+              </li>
+              <!-- Adicione mais itens relacionados ao inventário conforme necessário -->
+          </ul>
+      </li>
+
+      <!-- Empréstimo e Devolução -->
+      <li class="expandable">
+          <div class="menu-header">
+              <i class="material-icons">assignment_return</i>
+              <span class="menu-text"> Empréstimo e Devolução</span>
+              <i class="material-icons toggle-submenu" 
+                 style="transition: transform 0.3s; font-family: 'Material Icons';"
+              >arrow_drop_down</i>
+          </div>
+
+          <ul class="submenu">
+              <li onclick="submenu_muda_de_tela('emprestimo.html', event)">
+                  <i class="material-icons">call_made</i>
+                  <span class="menu-text"> Solicitar Empréstimo</span>
+              </li>
+              <li onclick="submenu_muda_de_tela('devolucao.html', event)">
+                  <i class="material-icons">call_received</i>
+                  <span class="menu-text"> Solicitar Devolução</span>
+              </li>
+              <!-- Adicione mais itens relacionados a empréstimo e devolução conforme necessário -->
+          </ul>
+      </li>
+  </ul>
+</li>
+
             <li class="expandable" onclick="muda_de_tela('index_3.html')">
               <div class="menu-header">
                 <i class="material-icons">account_balance_wallet</i>
@@ -280,6 +323,163 @@
                 >
               </div>
             </li>
+
+
+        <!-- Módulo: Financeiro -->
+    <li class="expandable hide-text">
+      <div class="menu-header">
+          <i class="material-icons">attach_money</i>
+          <span class="menu-text"> Financeiro</span>
+          <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+      </div>
+      <ul class="submenu">
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">payment</i>
+              <span class="menu-text"> Controle de Contas a Pagar e Receber</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">trending_up</i>
+              <span class="menu-text"> Fluxo de Caixa</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"">
+              <i class="material-icons">account_balance</i>
+              <span class="menu-text"> Conciliação Bancária</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)"">
+              <i class="material-icons">insert_chart_outlined</i>
+              <span class="menu-text"> Relatórios Financeiros</span>
+          </li>
+      </ul>
+    </li>
+        <!-- Módulo: Compras -->
+    <li class="expandable hide-text">
+      <div class="menu-header">
+          <i class="material-icons">shopping_cart</i>
+          <span class="menu-text"> Compras</span>
+          <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+      </div>
+      <ul class="submenu">
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">add_shopping_cart</i>
+              <span class="menu-text"> Gerenciamento de Pedidos de Compra</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">store</i>
+              <span class="menu-text"> Controle de Estoque</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">group</i>
+              <span class="menu-text"> Relacionamento com Fornecedores</span>
+          </li>
+          <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+              <i class="material-icons">assignment</i>
+              <span class="menu-text"> Auditoria de Compras</span>
+          </li>
+      </ul>
+    </li>
+
+
+      <li class="expandable hide-text">
+        <div class="menu-header">
+            <i class="material-icons">receipt</i>
+            <span class="menu-text"> Faturamento de Notas Fiscais</span>
+            <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+        </div>
+        <ul class="submenu">
+            <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                <i class="material-icons">description</i>
+                <span class="menu-text"> Emissão de Notas Fiscais Eletrônicas</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                <i class="material-icons">account_balance_wallet</i>
+                <span class="menu-text"> Controle de Impostos</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                <i class="material-icons">compare_arrows</i>
+                <span class="menu-text"> Gerenciamento de NF-e (Entrada e Saída)</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                <i class="material-icons">sync_alt</i>
+                <span class="menu-text"> Integração com órgãos fiscais</span>
+            </li>
+        </ul>
+    </li>
+
+     <!-- Módulo: Recursos Humanos -->
+  <li class="expandable hide-text">
+    <div class="menu-header">
+        <i class="material-icons">people</i>
+        <span class="menu-text"> Recursos Humanos</span>
+        <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+    </div>
+    <ul class="submenu">
+        <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+            <i class="material-icons">supervised_user_circle</i>
+            <span class="menu-text"> Gestão de Recursos Humanos</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+            <i class="material-icons">schedule</i>
+            <span class="menu-text"> Controle de Ponto</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+            <i class="material-icons">bar_chart</i>
+            <span class="menu-text"> Avaliação de Desempenho</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+            <i class="material-icons">attach_money</i>
+            <span class="menu-text"> Folha de Pagamento</span>
+        </li>
+    </ul>
+  </li>
+
+
+  <!-- Módulo: Produção -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+              <i class="material-icons">build</i>
+              <span class="menu-text"> Produção</span>
+              <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+          </div>
+          <ul class="submenu">
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">settings</i>
+                  <span class="menu-text"> Controle de Produção</span>
+              </li>
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">playlist_add</i>
+                  <span class="menu-text"> Ordens de Produção</span>
+              </li>
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">check</i>
+                  <span class="menu-text"> Controle de Qualidade</span>
+              </li>
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">track_changes</i>
+                  <span class="menu-text"> Rastreabilidade</span>
+              </li>
+          </ul>
+        </li>
+
+        <!-- Módulo: Outro Módulo -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+              <i class="material-icons">extension</i>
+              <span class="menu-text"> Outro Módulo</span>
+              <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+          </div>
+          <ul class="submenu">
+              <!-- Adicione os itens do submenu aqui -->
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">extension</i>
+                  <span class="menu-text"> Item 1</span>
+              </li>
+              <li onclick="submenu_muda_de_tela('novas_Tarefas.html', event)">
+                  <i class="material-icons">extension</i>
+                  <span class="menu-text"> Item 2</span>
+              </li>
+              <!-- Adicione mais itens conforme necessário -->
+          </ul>
+        </li>
             
             <li class="expandable" onclick="logout()">
               <i class="material-icons">exit_to_app</i>
