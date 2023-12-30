@@ -3,47 +3,61 @@
 {% include 'head.html' %}
 <body>
   <div class="seg">
-    <h3>Grupo Material</h3>
+    <h3>Cadastro de Cidade</h3>
 
     <div class="container">
         <!-- Campos de entrada -->
         <div class="row mt-3">
-          <!-- Campo Id Grupo do Material -->
-          <div class="col-md-4 mb-2">
-            <label for="id_grupo_material" class="custom-label">Id Grupo do Material</label>
-            <input
-              id="id_grupo_material"
-              type="text"
-              class="form-control"
-              placeholder="Id Grupo do Material"
-              onfocus="highlightInput(this)"
-              onblur="removeHighlight(this)"
-            />
+          <!-- Campo codigo_tipo_movimento -->
+          <div class="col-md-3 mb-2">
+              <label for="id_cidade" class="custom-label">id cidade</label>
+              <input
+                  id="id_cidade"
+                  type="text"
+                  class="form-control"
+                  placeholder="id_cidade"
+                  onfocus="highlightInput(this)"
+                  onblur="removeHighlight(this)"
+              />
           </div>
-    
-          <!-- Campo Grupo do Material -->
-          <div class="col-md-8 mb-4">
-            <label for="nome_grupo_material" class="custom-label">Grupo do Material Ex: Ferramentas / Epi</label>
-            <input
-              id="nome_grupo_material"
-              type="text"
-              class="form-control"
-              placeholder="Grupo do Material"
-              onfocus="highlightInput(this)"
-              onblur="removeHighlight(this)"
-              oninput="converterParaMaiusculas(this)"
-              
-            />
+      
+          <!-- Campo nome_cidade -->
+          <div class="col-md-3 mb-2 scrollable-content">
+              <label for="nome_cidade" class="custom-label">cidade</label>
+              <input
+                  id="nome_cidade"
+                  type="text"
+                  class="form-control"
+                  placeholder="Digite cidade"
+                  onfocus="highlightInput(this)"
+                  onblur="removeHighlight(this)"
+                  oninput="converterParaMaiusculas(this)"
+                 
+              />
           </div>
-        </div>
-        <!-- Fechamento da div 'row mt-3' -->
 
+           <!-- Campo UF -->
+           <div class="col-md-3 mb-2 scrollable-content">
+            <label for="uf" class="custom-label">UF</label>
+            <input
+                id="id_uf"
+                type="text"
+                class="form-control highlight-input"
+                placeholder="UF"
+                list="ufList"
+                onfocus="highlightInput(this)"
+                onblur="removeHighlight(this)"
+                oninput="converterParaMaiusculas(this)"
+            />
+        </div>
+      </div>
+        <!-- Fechamento da div 'row mt-3' -->
         <div class="row">
           <!-- Botão Adicionar Funcionário -->
           <div class="col-md-4 col-12 mt-3">
             <button
-              id="btn_Adicionar_Grupo_material"
-              onclick="Adicionar_Grupo_material_mostrarAlerta()"
+              id="btn_Adicionar_cidade"
+              onclick="Adicionar_cidade_mostrarAlerta()"
               class="btn btn-block button-height"
               style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
             >
@@ -56,7 +70,7 @@
           <div class="col-md-4 col-12 mt-3">
             <button
               id="btn_excluir_funcioario"
-              onclick="Excluir_Grupo_material_mostrarAlerta()"
+              onclick="Excluir_cidade_mostrarAlerta()"
               class="btn btn-block button-height"
               style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
             >
@@ -68,9 +82,12 @@
         
       <!-- Tabela Tabular -->
       <div class="table-responsive myTable table-wrapper">
-        <div id="table_Grupos_Materiais" class="tabulator myTable"></div>
+        <div id="table_Tipo" class="tabulator myTable"></div>
       </div>
     </div>
+
+    <datalist id="ufList"></datalist>
+
     <!-- Fechando a div 'container' -->
   </div>
 </body>
@@ -78,11 +95,26 @@
   {% include 'funcoes_comuns.html' %}
   <script>
 
+    // Variável global para armazenar os dados de UF
+    var dadosUF;
+
     $(document).ready(function () {
-      carregarDados_Grupos_Materiais();
-      initializeTable_Grupos_Materiais();
+
+      carregarDados_cidade();
+      initializeTable_Tipo();
+      selecionar_uf();
 
       console.log("Colocar a função da tabela ou tabela toda aqui");
+
+
+    // Seletor para o elemento input com id 'id_uf'
+    var ufInput = $("#id_uf");
+
+     // Adiciona um manipulador de eventos 'change' ao elemento input
+        ufInput.on("change", function () {
+        // Chama a função selecionarUF passando o elemento input e os dados das UF
+        selecionarUF(this, dadosUF);// Certifique-se de ter 'data' definido com seus dados de UF
+    });
 
       // Formatar campo de telefone
       $("#telefone").keyup(function () {
@@ -118,7 +150,7 @@
                 $("#endereco").val(dados.logradouro);
                 $("#bairro").val(dados.bairro);
                 $("#cidade").val(dados.localidade);
-                $("#uf").val(dados.uf);
+                $("#cidade").val(dados.cidade);
               } else {
                 alert("CEP não encontrado.");
               }
@@ -162,7 +194,7 @@
       }
     }
     function excluir_funcionario() {
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_cidade").disabled = true;
 
       var input_funcionario =
         document.getElementsByClassName("input_funcionario");
@@ -175,7 +207,7 @@
 
       if (input_funcionario[1].value == "") {
         alert("Preencha um nome!");
-        document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+        document.getElementById("btn_Adicionar_cidade").disabled = false;
       } else {
         $.ajax({
           url: my_url() + "exclui_funcionario",
@@ -184,7 +216,7 @@
           type: "POST",
         }).done(function (data) {
           alert(data.retorno);
-          document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+          document.getElementById("btn_Adicionar_cidade").disabled = false;
           document.getElementById("meus_inputs").innerHTML = "";
           ler_dados_funcionarios();
         });
@@ -203,33 +235,33 @@
       return value;
     }
 
-    function Adicionar_Grupo_material() {
+    function Adicionar_cidade() {
       
       console.log("Função salvarFuncionario iniciada. AGORA ");
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_cidade").disabled = true;
       // Coletar os dados dos campos de entrada do formulário
-      var id_grupo_material = document.getElementById("id_grupo_material").value;
+      var id_cidade = document.getElementById("id_cidade").value;
 
 // Verifique se o valor não está vazio e não é NaN (não é um número)
-if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
+if (id_cidade !== "" && !isNaN(id_cidade)) {
   // Converta o valor em um número (inteiro) usando parseInt
-  id_grupo_material = parseInt(id_grupo_material, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+  id_cidade = parseInt(id_cidade, 10); // O segundo argumento (10) especifica a base numérica (decimal)
 } else {
   // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
-  id_grupo_material = 0;
+  id_cidade = 0;
 }
 
-// Agora, a variável id_grupo_material contém o valor como um número ou 0 se não for um número válido.
+// Agora, a variável id_cidade contém o valor como um número ou 0 se não for um número válido.
 
-      var nome_grupo_material = toUpperCaseIfString(
-        document.getElementById("nome_grupo_material").value
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
       );
 
 
       // Criar um objeto com os dados coletados
       var all_data = {
-        id_grupo_material: id_grupo_material,
-        nome_grupo_material: nome_grupo_material,
+        id_cidade: id_cidade,
+        nome_tipo_movimento: nome_tipo_movimento,
       
       };
       console.log(all_data);
@@ -237,7 +269,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       try {
         // Enviar os dados para o servidor Flask usando AJAX
         $.ajax({
-          url: my_url() + "adicionar_atualizar_grupo_material",
+          url: my_url() + "adicionar_atualizar_tipo",
           data: JSON.stringify(all_data),
           contentType: "application/json",
           type: "POST",
@@ -251,10 +283,10 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
               mostrarSucesso();
               // Limpar os campos do formulário após o envio bem-sucedido
               document.getElementById(
-                "btn_Adicionar_Grupo_material"
+                "btn_Adicionar_cidade"
               ).disabled = false;
               limparCampos();
-              carregarDados_Grupos_Materiais();
+              carregarDados_cidade();
             }
           })
           .fail(function (jqXHR, textStatus, errorThrown) {
@@ -263,7 +295,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
             mostrarErro();
           });
       } catch (error) {
-        console.error("Erro na função Adicionar_Grupo_material: " + error);
+        console.error("Erro na função Adicionar_cidade: " + error);
         mostrarErro();
       }
     }
@@ -271,8 +303,9 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
     // Função para limpar os campos do formulário
     function limparCampos() {
       var campos = [
-        "id_grupo_material",
-        "nome_grupo_material",
+        "id_cidade",
+        "nome_cidade",
+        "nome_tipo_movimento",
       ];
       for (var i = 0; i < campos.length; i++) {
         document.getElementById(campos[i]).value = "";
@@ -285,34 +318,31 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       }
     }
 
-
-    function Excluir_Grupo_material() {
+    function Excluir_cidade() {
       
       console.log("Função salvarFuncionario iniciada. AGORA ");
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_cidade").disabled = true;
       // Coletar os dados dos campos de entrada do formulário
-      var id_grupo_material = document.getElementById("id_grupo_material").value;
+      var id_cidade = document.getElementById("id_cidade").value;
 
     // Verifique se o valor não está vazio e não é NaN (não é um número)
-    if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
+    if (id_cidade !== "" && !isNaN(id_cidade)) {
       // Converta o valor em um número (inteiro) usando parseInt
-      id_grupo_material = parseInt(id_grupo_material, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+      id_cidade = parseInt(id_cidade, 10); // O segundo argumento (10) especifica a base numérica (decimal)
     } else {
       // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
-      id_grupo_material = 0;
+      id_cidade = 0;
     }
 
-// Agora, a variável id_grupo_material contém o valor como um número ou 0 se não for um número válido.
+// Agora, a variável id_cidade contém o valor como um número ou 0 se não for um número válido.
 
-      var nome_grupo_material = toUpperCaseIfString(
-        document.getElementById("nome_grupo_material").value
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
       );
-
-
       // Criar um objeto com os dados coletados
       var all_data = {
-        id_grupo_material: id_grupo_material,
-        nome_grupo_material: nome_grupo_material,
+        id_cidade: id_cidade,
+        nome_tipo_movimento: nome_tipo_movimento,
       
       };
       console.log(all_data);
@@ -320,7 +350,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       try {
         // Enviar os dados para o servidor Flask usando AJAX
         $.ajax({
-          url: my_url() + "excluir_grupo_material",
+          url: my_url() + "Excluir_cidade",
           data: JSON.stringify(all_data),
           contentType: "application/json",
           type: "POST",
@@ -334,10 +364,10 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
               mostrarSucesso();
               // Limpar os campos do formulário após o envio bem-sucedido
               document.getElementById(
-                "btn_Adicionar_Grupo_material"
+                "btn_Adicionar_cidade"
               ).disabled = false;
               limparCampos();
-              carregarDados_Grupos_Materiais();
+              carregarDados_cidade();
             }
           })
           .fail(function (jqXHR, textStatus, errorThrown) {
@@ -346,14 +376,14 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
             mostrarErro();
           });
       } catch (error) {
-        console.error("Erro na função Adicionar_Grupo_material: " + error);
+        console.error("Erro na função Adicionar_cidade: " + error);
         mostrarErro();
       }
     }
 
     
     // Função para mostrar um alerta personalizado
-    function Adicionar_Grupo_material_mostrarAlerta() {
+    function Adicionar_cidade_mostrarAlerta() {
       // Verifique se o usuário deseja cancelar
       Swal.fire({
         title: "Deseja salvar?",
@@ -366,7 +396,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
         cancelButtonText: "Não, continuar!",
       }).then((result) => {
         if (result.isConfirmed) {
-          Adicionar_Grupo_material();
+          Adicionar_cidade();
           // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
           limparCampos();
         } else {
@@ -378,7 +408,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
 
 
     // Função para mostrar um alerta personalizado
-    function Excluir_Grupo_material_mostrarAlerta() {
+    function Excluir_cidade_mostrarAlerta() {
       // Verifique se o usuário deseja cancelar
       Swal.fire({
         title: "Deseja excluir?",
@@ -391,7 +421,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
         cancelButtonText: "Não, continuar!",
       }).then((result) => {
         if (result.isConfirmed) {
-          Excluir_Grupo_material();
+          Excluir_cidade();
           // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
           limparCampos();
         } else {
@@ -401,35 +431,35 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       });
     }
 
-    function carregarDados_Grupos_Materiais() {
+    function carregarDados_cidade() {
       $.ajax({
-        url: my_url() + "selecionar_grupo_material_especificos", // Corrigido para "funcionario" em vez de "funcioario"
+        url: my_url() + "selecionar_cidade_especificos", // Corrigido para "funcionario" em vez de "funcioario"
         type: "POST",
       })
         .done(function (data) {
           let dados = data.retorno_especifico; // Corrigido para acessar retorno_especifico
-          console.log("carregarDados_grupo_material:", dados);
-          updateTableData_Grupos_Materiais(dados);
+          console.log("carregarDados_cidade Movimentações:", dados);
+          updateTableData_cidade(dados);
         })
         .fail(function (error) {
           console.error("Erro ao buscar dados iniciais:", error);
         });
     }
 
-    function updateTableData_Grupos_Materiais(data) {
-      if (table_Grupos_Materiais) {
-        const transformed_Grupos_MateriaisData_Grupos_Materiais = transformData_Grupos_Materiais(data);
-        table_Grupos_Materiais.setData(transformed_Grupos_MateriaisData_Grupos_Materiais);
+    function updateTableData_cidade(data) {
+      if (table_Tipo) {
+        const transformed_cidadeData_cidade = transformData_cidade(data);
+        table_Tipo.setData(transformed_cidadeData_cidade);
       } else {
         console.error("Tabela não inicializada!");
       }
     }
 
-  function transformData_Grupos_Materiais(data) {
+  function transformData_cidade(data) {
   console.log("Dados de entrada para transformação:", data);
-  const mappedColumns_Grupos_Materiais = {
-    id_grupo_material: "id_grupo_material",
-    nome_grupo_material: "nome_grupo_material",
+  const mappedColumns_cidade = {
+    id_cidade: "id_cidade",
+    nome_tipo_movimento: "id_cidade",
     // Adicione outras colunas mapeadas aqui
   };
 
@@ -438,41 +468,41 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
     return [];
   }
 
-  const transformed_Grupos_Materiais = data.map((row) => {
-    const transformed_Grupos_MateriaisRow = {};
+  const transformed_cidade = data.map((row) => {
+    const transformed_cidadeRow = {};
 
     for (const columnFrom in row) {
-      if (columnFrom in mappedColumns_Grupos_Materiais) {
-        const newColumnName = mappedColumns_Grupos_Materiais[columnFrom];
-        transformed_Grupos_MateriaisRow[newColumnName] = row[columnFrom] ?? "";
+      if (columnFrom in mappedColumns_cidade) {
+        const newColumnName = mappedColumns_cidade[columnFrom];
+        transformed_cidadeRow[newColumnName] = row[columnFrom] ?? "";
 
-        // Adicione uma nova chave "id_grupo_material" com o mesmo valor que "id_grupo_material"
-        if (columnFrom === "id_grupo_material") {
-          transformed_Grupos_MateriaisRow["id_grupo_material"] = row[columnFrom] ?? "";
+        // Adicione uma nova chave "id_cidade" com o mesmo valor que "id_cidade"
+        if (columnFrom === "id_cidade") {
+          transformed_cidadeRow["id_cidade"] = row[columnFrom] ?? "";
         }
       } else {
-        transformed_Grupos_MateriaisRow[columnFrom] = row[columnFrom];
+        transformed_cidadeRow[columnFrom] = row[columnFrom];
       }
     }
 
-    // Se "id_grupo_material" não estiver presente, defina "id_grupo_material" como vazio
-    if (!("id_grupo_material" in row)) {
-      transformed_Grupos_MateriaisRow["id_grupo_material"] = "";
+    // Se "id_cidade" não estiver presente, defina "id_cidade" como vazio
+    if (!("id_cidade" in row)) {
+      transformed_cidadeRow["id_cidade"] = "";
     }
 
-    return transformed_Grupos_MateriaisRow;
+    return transformed_cidadeRow;
   });
 
-  console.log("Dados transformados:", transformed_Grupos_Materiais);
-  return transformed_Grupos_Materiais;
+  console.log("Dados transformados:", transformed_cidade);
+  return transformed_cidade;
 }
 
 
 // Vamos adicionar uma função para inicializar a tabela
-function initializeTable_Grupos_Materiais() {
+function initializeTable_Tipo() {
   // Criação da tabela
-  table_Grupos_Materiais = new Tabulator("#table_Grupos_Materiais", {
-    name: "table_Grupos_Materiais",
+  table_Tipo = new Tabulator("#table_Tipo", {
+    name: "table_Tipo",
     pagination: "local",
     paginationSize: 10,
     paginationSizeSelector: [10, 25, 50, 100, 150, 200],
@@ -487,20 +517,20 @@ function initializeTable_Grupos_Materiais() {
     data: [],
     columns: [
       {
-        title: "Id_Grupo_material",
-        field: "id_grupo_material",
+        title: "id_cidade",
+        field: "id_cidade",
         hozAlign: "center",
       },
       {
-        title: "Grupo Material",
-        field: "nome_grupo_material",
+        title: "cidade",
+        field: "nome_cidade",
         hozAlign: "left",
       },
     ],
     // Adiciona o evento rowClick para preencher os campos de entrada e destacar a linha
     rowClick: function (e, row) {
           // Remove a classe 'row-highlight' de todas as linhas
-          table_Grupos_Materiais.getRows().forEach(function (row) {
+          table_Tipo.getRows().forEach(function (row) {
             row.getElement().classList.remove('row-highlight');
           });
 
@@ -513,28 +543,167 @@ function initializeTable_Grupos_Materiais() {
       });
 
       // Adiciona uma linha de resumo diretamente na tabela
-  var sum_id_grupo_material = 0; // Inicializa o somatório da coluna "id_grupo_material"
+  var sum_id_cidade = 0; // Inicializa o somatório da coluna "id_cidade"
   var row = {
-    id_grupo_material: sum_id_grupo_material,
-    nome_grupo_material: "Total",
+    id_cidade: sum_id_cidade,
+    nome_tipo_movimento: "Total",
     _row: "header",
   };
 
   // Adiciona a linha à tabela
-  table_Grupos_Materiais.addData([row]);
+  table_Tipo.addData([row]);
 }
 
-function destruirTabela_Grupos_Materiais() {
-  if (table_Grupos_Materiais) {
-    table_Grupos_Materiais.destroy();
-    table_Grupos_Materiais = null;
+function destruirTabela_cidade() {
+  if (table_Tipo) {
+    table_Tipo.destroy();
+    table_Tipo = null;
   }
 }
 
-    function preencherCamposDeEntrada(rowData) {
-       // Defina o valor do campo id_grupo_material usando JavaScript
-  document.getElementById("id_grupo_material").value = rowData.id_grupo_material;
-  document.getElementById("nome_grupo_material").value = rowData.nome_grupo_material;
+  function preencherCamposDeEntrada(rowData) {
+  // Defina o valor do campo id_cidade usando JavaScript
+  document.getElementById("id_cidade").value = rowData.id_cidade;
+  document.getElementById("nome_cidade").value = rowData.nome_cidade; 
+}
+
+function selecionar_uf() {
+    console.log("selecionar__uf");
+    $.ajax({
+        url: my_url() + "uf_Unicos",
+        type: "POST",
+        success: function (data) {
+            console.log("carregarDadosPopulateUF:", data);
+
+            try {
+                dadosUF = data.retorno_especifico;
+                console.log("carregarDadosPopulateUF:", dadosUF); // Correção aqui
+                populateUF(dadosUF);
+            } catch (e) {
+                console.error("Erro ao analisar os dados:", e);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+        },
+        beforeSend: function () {
+            console.log("Enviando requisição para buscar UF...");
+        },
+        complete: function () {
+            console.log("Requisição para buscar UF completada.");
+        },
+    });
+}
+
+function populateUF(dadosUF) {
+
+    console.log("Populando datalist com UF...");
+    console.log(dadosUF);
+
+    var datalist = document.getElementById("ufList");
+    datalist.innerHTML = ""; // Limpa qualquer opção anterior
+
+    // Agora, usando a variável 'data' em vez de 'numbers'
+    dadosUF.forEach(function (item) {
+        var option = document.createElement("option");
+        option.value = item.nome_uf; // Use 'nome_uf' como valor
+        option.setAttribute("data-id-uf", item.id_uf); // Defina o atributo 'data-id-uf'
+        datalist.appendChild(option);
+
+        console.log("Adicionado:", item.nome_uf, "ID:", item.id_uf);
+    });
+
+    // Adicione esta linha para garantir que os valores sejam exibidos no console
+    console.log("populateUF completed");
+}
+
+// Função para obter a UF selecionada
+function getSelectedUF(input) {
+  // Certifique-se de que há opções disponíveis
+  if (input.options) {
+    // Verifique se há uma opção selecionada
+    if (input.selectedIndex !== -1) {
+      // Obtém a opção selecionada
+      var selectedOptionElement = input.options[input.selectedIndex];
+
+      // Certifique-se de que a opção tem o atributo data-id-uf
+      if (selectedOptionElement && selectedOptionElement.hasAttribute("data-id-uf")) {
+        // Obtém o valor do atributo data-id-uf da opção selecionada
+        var selectedOptionId = selectedOptionElement.getAttribute("data-id-uf");
+
+        return {
+          uf: input.value,
+          id: selectedOptionId
+        };
+      }
+    }
+  }
+
+  // Retorna null se não houver uma opção selecionada ou se a opção não tiver data-id-uf
+  return null;
+}
+
+// Exemplo de como usar a função para obter a UF selecionada
+function enviarParaFlask() {
+  var inputUF = document.getElementById("id_uf");
+  var ufData = getSelectedUF(inputUF);
+
+  if (ufData) {
+    // Agora você pode usar ufData.uf e ufData.id para enviar para o Flask
+    console.log("UF selecionada:", ufData.uf);
+    console.log("ID correspondente:", ufData.id);
+
+    // Aqui você pode fazer a requisição para o Flask usando os dados
+    // Exemplo de como fazer isso usando fetch:
+    fetch('/seu-endpoint-no-flask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ufData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Resposta do Flask:', data);
+    })
+    .catch(error => {
+      console.error('Erro ao enviar para o Flask:', error);
+    });
+  } else {
+    console.log("Nenhuma UF selecionada ou UF selecionada não possui data-id-uf.");
+  }
+}
+
+// Função para pesquisar o ID com base no nome selecionado
+function getUFId(selectedUFName, data) {
+    var selectedUF = data.find(function (item) {
+        return item.nome_uf === selectedUFName;
+    });
+
+    return selectedUF ? selectedUF.id_uf : null;
+}
+
+
+// Função para manipular a seleção da UF
+function selecionarUF(input, data) {
+    var selectedOption = input.value;
+    var selectedOptionId = getUFId(selectedOption, data);
+
+    console.log("UF selecionada:", selectedOption);
+    console.log("ID correspondente:", selectedOptionId);
+
+    if (selectedOptionId !== null) {
+        // Faça algo com o ID, por exemplo, armazene-o em uma variável
+        console.log("ID não é nulo:", selectedOptionId);
+        // Aqui você pode armazenar selectedOptionId ou enviá-lo para o Flask, conforme necessário
+    } else {
+        console.log("ID é nulo ou indefinido.");
+    }
+
+    // Adicione esta linha para garantir que os valores sejam exibidos no console
+    console.log("onChange completed");
 }
 
   </script>

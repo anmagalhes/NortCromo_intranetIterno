@@ -45,6 +45,10 @@ from routes.checklists import checklists
 from routes.novas_Tarefas import novas_Tarefas
 
 from routes.grupo_material import grupo_material
+from routes.tipo_movimentacao import tipo_movimentacao
+from routes.uf import uf
+from routes.cidade import cidade
+
 
 app.register_blueprint(lista_obras, url_prefix="")
 app.register_blueprint(adiciona_funcionario, url_prefix="")
@@ -66,11 +70,9 @@ app.register_blueprint(checklists, url_prefix="")
 app.register_blueprint(novas_Tarefas, url_prefix="")
 
 app.register_blueprint(grupo_material, url_prefix="")
-
-
-
-
-
+app.register_blueprint(tipo_movimentacao, url_prefix="")
+app.register_blueprint(uf, url_prefix="")
+app.register_blueprint(cidade, url_prefix="")
 
 arquivo = credencias.open_by_url(
     "https://docs.google.com/spreadsheets/d/15Jyo4qMmVK0JTSB95__JaVJveAOflbS1qR0qNOucEgI/"

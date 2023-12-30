@@ -1,0 +1,91 @@
+// Dados da nota fiscal
+let notaFiscal = {
+    cliente: {
+        nome: "Nome do Cliente",
+        endereco: "Endereço do Cliente",
+        cpf: "CPF do Cliente"
+    },
+    produtos: [
+        {
+            nome: "Nome do Produto",
+            quantidade: 1,
+            preco: 100.00
+        },
+        {
+            nome: "Outro Produto",
+            quantidade: 2,
+            preco: 50.00
+        }
+    ],
+    servicos: [
+        {
+            descricao: "Descrição do Serviço",
+            preco: 200.00
+        }
+    ]
+};
+
+// URL da API
+let url = "https://api.seusite.com.br/notafiscal";
+
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(notaFiscal),
+})
+.then(response => response.json())
+.then(data => {
+    console.log('Nota fiscal emitida com sucesso!');
+})
+.catch((error) => {
+    console.error('Erro ao emitir a nota fiscal:', error);
+});
+
+// Dados da nota fiscal
+let notaFiscalData = {
+    nota: {
+        numero: "123",
+        data_emissao: "2023-12-29"
+    },
+    servicos: [
+        {
+            descricao: "Serviço 1",
+            valor: 100.0
+        },
+        {
+            descricao: "Serviço 2",
+            valor: 200.0
+        }
+    ],
+    produtos: [
+        {
+            descricao: "Produto 1",
+            quantidade: 2,
+            valor_unitario: 50.0
+        },
+        {
+            descricao: "Produto 2",
+            quantidade: 1,
+            valor_unitario: 100.0
+        }
+    ]
+};
+
+// URL da API
+let url = "https://api.seusite.com.br/nota_fiscal";
+
+// Faz a solicitação POST para a API
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(notaFiscalData)
+})
+.then(response => response.json())
+.then(data => console.log('Nota fiscal emitida com sucesso:', data))
+.catch((error) => {
+    console.error("Erro ao emitir a nota fiscal:", error);
+});

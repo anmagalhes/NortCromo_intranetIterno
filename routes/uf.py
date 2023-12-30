@@ -42,22 +42,21 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 import io
 
-grupo_material = Blueprint(
-    "grupo_material",
+uf = Blueprint(
+    "uf",
     __name__,
     static_folder="static",
     template_folder="templates",
 )
 
 # Variáveis globais para armazenar os DataFrames  - BIBLIOTECA PANDAS X GOOGLESHEET
-df_grupo_material = None
+df_uf = None
 
-
-@grupo_material.route("/adicionar_atualizar_grupo_material", methods=["POST"])
-def adicionar_atualizar_grupo_material_f():
+@uf.route("/adicionar_atualizar_uf", methods=["POST"])
+def adicionar_atualizar_uf_f():
     try:
         # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo().worksheet_by_title("grupo_material_suelo")
+        aba = arquivo().worksheet_by_title("card_uf")
         
         coluna_sequencia = aba.get_col(1)
         coluna_sequencia = coluna_sequencia[1:]
@@ -69,31 +68,31 @@ def adicionar_atualizar_grupo_material_f():
         # Receba os dados do front-end
         dados = request.get_json()
 
-        # Obtenha o ID do grupo_material
-        id_grupo_material = dados.get("id_grupo_material", 0)
+        # Obtenha o ID do uf
+        id_uf = dados.get("id_uf", 0)
         
         # Verifica se é uma nova entrada
-        if id_grupo_material == 0 or id_grupo_material == "":
-            # Use o próximo ID como "id_grupo_material" nos dados
-            id_grupo_material = prox_id
-            dados["id_grupo_material"] = id_grupo_material
+        if id_uf == 0 or id_uf == "":
+            # Use o próximo ID como "id_uf" nos dados
+            id_uf = prox_id
+            dados["id_uf"] = id_uf
         else:
-            id_grupo_material = int(id_grupo_material)  # Converta para inteiro
+            id_uf = int(id_uf)  # Converta para inteiro
     
-            print('id_grupo_material ', id_grupo_material)
+            print('id_uf ', id_uf)
             print('coluna_sequencia ', coluna_sequencia)
             
             for ii in range(len(coluna_sequencia)):
-                if coluna_sequencia[ii] == id_grupo_material:
+                if coluna_sequencia[ii] == id_uf:
                     print('ii', ii)
                     break  # Adiciona um break para interromper a busca após encontrar o índice   
             else:
-                return jsonify(retorno="ID do grupo_material não encontrado.")
+                return jsonify(retorno="ID do uf não encontrado.")
 
         # Mapeie os campos do frontend para as colunas do Google Sheets
         mapeamento = {
-            "id_grupo_material": "id_grupo_material",
-            "nome_grupo_material": "nome_grupo_material",
+            "id_uf": "id_uf",
+            "nome_uf": "nome_uf",
             "data_atualizacao": "data_atualizacao",
             "hora_atualizacao": "hora_atualizacao",
         }
@@ -120,10 +119,10 @@ def adicionar_atualizar_grupo_material_f():
         valores_list = list(valores.values())
 
         # Adiciona ou atualiza a linha com os dados
-        if id_grupo_material in coluna_sequencia:
+        if id_uf in coluna_sequencia:
           
             # Atualiza a linha correspondente no Google Sheets
-            linha_index = coluna_sequencia.index(id_grupo_material) + 2
+            linha_index = coluna_sequencia.index(id_uf) + 2
             print('SUELO PRO ', linha_index)
             
            # Monta a lista de valores a serem atualizados
@@ -146,11 +145,11 @@ def adicionar_atualizar_grupo_material_f():
     except Exception as e:
         return jsonify(retorno="Algo deu errado: " + str(e))
     
-@grupo_material.route("/excluir_grupo_material", methods=["POST"])
-def excluir_grupo_material_f():
+@uf.route("/excluir_uf", methods=["POST"])
+def excluir_uf_f():
     try:
         # Selecione a aba correta (você já deve ter esse código)
-        aba = arquivo().worksheet_by_title("grupo_material_suelo")
+        aba = arquivo().worksheet_by_title("card_uf")
         
         coluna_sequencia = aba.get_col(1)
         coluna_sequencia = coluna_sequencia[1:]
@@ -162,31 +161,31 @@ def excluir_grupo_material_f():
         # Receba os dados do front-end
         dados = request.get_json()
 
-        # Obtenha o ID do grupo_material
-        id_grupo_material = dados.get("id_grupo_material", 0)
+        # Obtenha o ID do uf
+        id_uf = dados.get("id_uf", 0)
         
         # Verifica se é uma nova entrada
-        if id_grupo_material == 0 or id_grupo_material == "":
-            # Use o próximo ID como "id_grupo_material" nos dados
-            id_grupo_material = prox_id
-            dados["id_grupo_material"] = id_grupo_material
+        if id_uf == 0 or id_uf == "":
+            # Use o próximo ID como "id_uf" nos dados
+            id_uf = prox_id
+            dados["id_uf"] = id_uf
         else:
-            id_grupo_material = int(id_grupo_material)  # Converta para inteiro
+            id_uf = int(id_uf)  # Converta para inteiro
     
-            print('id_grupo_material ', id_grupo_material)
+            print('id_uf ', id_uf)
             print('coluna_sequencia ', coluna_sequencia)
             
             for ii in range(len(coluna_sequencia)):
-                if coluna_sequencia[ii] == id_grupo_material:
+                if coluna_sequencia[ii] == id_uf:
                     print('ii', ii)
                     break  # Adiciona um break para interromper a busca após encontrar o índice   
             else:
-                return jsonify(retorno="ID do grupo_material não encontrado.")
+                return jsonify(retorno="ID do uf não encontrado.")
 
         # Mapeie os campos do frontend para as colunas do Google Sheets
         mapeamento = {
-            "id_grupo_material": "id_grupo_material",
-            "nome_grupo_material": "nome_grupo_material",
+            "id_uf": "id_uf",
+            "nome_uf": "nome_uf",
             "data_atualizacao": "data_atualizacao",
             "hora_atualizacao": "hora_atualizacao",
         }
@@ -213,10 +212,10 @@ def excluir_grupo_material_f():
         valores_list = list(valores.values())
 
         # Adiciona ou atualiza a linha com os dados
-        if id_grupo_material in coluna_sequencia:
+        if id_uf in coluna_sequencia:
           
             # Atualiza a linha correspondente no Google Sheets
-            linha_index = coluna_sequencia.index(id_grupo_material) + 2
+            linha_index = coluna_sequencia.index(id_uf) + 2
             print('SUELO PRO ', linha_index)
             
             # Deleta a linha no Google Sheets
@@ -236,78 +235,104 @@ def excluir_grupo_material_f():
     except Exception as e:
         return jsonify(retorno="Algo deu errado: " + str(e))
     
-
-@grupo_material.route("/selecionar_grupo_material_especificos", methods=["POST"])
-def selecionar_grupo_material_especificos_f():
+    
+@uf.route("/uf_Unicos", methods=["POST"])
+def uf_Unicos_f():
     try:
-        grupo_material_aba = arquivo().worksheet_by_title("grupo_material_suelo")
-        dados_grupo_material = grupo_material_aba.get_all_values()
-        df_grupo_material = pd.DataFrame(data=dados_grupo_material[1:], columns=dados_grupo_material[0])
+        uf_aba = arquivo().worksheet_by_title("card_uf")
+        dados_recebimentos = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+
+        # Seleciona apenas as colunas desejadas
+        colunas_desejadas = ["id_uf", "nome_uf"]
+        df_selecionado = df_uf[colunas_desejadas]
+        
+        # Filtra os registros onde a coluna "nome_uf" é diferente de nulo e diferente de vazio
+        uf_ok = df_uf[df_selecionado["nome_uf"].notna() & (df_selecionado["nome_uf"] != "")]
+
+        # Filtra os registros onde a coluna "Nome_cliente" é diferente de vazio ou nulo
+        uf_ok = df_selecionado[df_selecionado["id_uf"].notna()]
+
+        # Converte o DataFrame resultante para um dicionário
+        uf_lista =uf_ok.to_dict(orient="records")
+
+        print("Clientes carregados com sucesso:", uf_lista)
+        return jsonify({"retorno_especifico": uf_lista})
+    
+    except Exception as e:
+        return jsonify({"error": f"Erro ao carregar clientes: {str(e)}"})
+
+@uf.route("/selecionar_Uf_especificos", methods=["POST"])
+def selecionar_Uf_especificos_f():
+    try:
+        uf_aba = arquivo().worksheet_by_title("card_uf")
+        dados_uf = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_uf[1:], columns=dados_uf[0])
         
         # Filtra os registros com base no período fornecido
-        grupo_material_especificos = df_grupo_material[(df_grupo_material["id_grupo_material"].notna()) & (df_grupo_material["id_grupo_material"] != "0") & (df_grupo_material["id_grupo_material"] != "")]
+        uf_especificos = df_uf[(df_uf["id_uf"].notna()) & (df_uf["id_uf"] != "0") & (df_uf["id_uf"] != "")]
     
         # Ordena os produtos pelo numero Ordem
-        grupo_material_especificos = grupo_material_especificos.sort_values(by="nome_grupo_material")
+        uf_especificos = uf_especificos.sort_values(by="nome_uf")
 
-        grupo_material_especificos_lista = grupo_material_especificos.fillna('').to_dict(orient="records")
+        uf_especificos_lista = uf_especificos.fillna('').to_dict(orient="records")
         
         # Adiciona os resultados à resposta JSON
-        resposta_json = {"retorno_especifico": grupo_material_especificos_lista}
+        resposta_json = {"retorno_especifico": uf_especificos_lista}
         
          #print('resposta_json', resposta_json)
 
         return jsonify(resposta_json)
 
     except Exception as e:
-        print(f"Erro ao carregar grupo_material específicos: {str(e)}")
-        return jsonify({"error": f"Erro ao carregar grupo_material específicos: {str(e)}", "traceback": traceback.format_exc()})
+        print(f"Erro ao carregar uf específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar uf específicos: {str(e)}", "traceback": traceback.format_exc()})
 
 
-@grupo_material.route("/selecionar_grupo_material_especificos_Recebimento", methods=["POST"])
-def selecionar_grupo_material_especificos_Recebimento_f():
+@uf.route("/selecionar_uf_especificos_Recebimento", methods=["POST"])
+def selecionar_uf_especificos_Recebimento_f():
     try:
         
         # Obter o período inicial e final do corpo da requisição
         id_recebimento_Filtrado_frontend = request.json["ID_Recebimento"]
         
-        grupo_material_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
-        dados_grupo_material = grupo_material_aba.get_all_values()
-        df_grupo_material = pd.DataFrame(data=dados_grupo_material[1:], columns=dados_grupo_material[0])
+        uf_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
+        dados_uf = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_uf[1:], columns=dados_uf[0])
         
         # Filtra os registros com base no ID_Recebimento fornecido
-        grupo_material_especificos = df_grupo_material[df_grupo_material["ID_Recebimento"] == id_recebimento_Filtrado_frontend]
+        uf_especificos = df_uf[df_uf["ID_Recebimento"] == id_recebimento_Filtrado_frontend]
         
         # Ordena os produtos pelo numero Ordem
-        grupo_material_especificos = grupo_material_especificos.sort_values(by="ID_Recebimento")
+        uf_especificos = uf_especificos.sort_values(by="ID_Recebimento")
 
         # Pega os IDs dos Ordem Recebimento únicos
-        ids_recebimentos_unicos = grupo_material_especificos["ID_Recebimento"].unique()
+        ids_recebimentos_unicos = uf_especificos["ID_Recebimento"].unique()
         
         # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
         
-        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
-        dados_recebimentos = recebimentos_aba.get_all_values()
-        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+        uf_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
 
         # Filtra os Recebimento usando os IDs únicos
-        recebimento_selecionados = df_recebimentos[df_recebimentos["ID_Ordem"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
+        recebimento_selecionados = df_uf[df_uf["nome_uf"].isin(ids_recebimentos_unicos)][["ID", "nome_uf", "DataRec_OrdemServiços"]]
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
 
         # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
-        df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+        df_uf["DataRec_OrdemServiços"] = pd.to_datetime(df_uf["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
         # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
-        df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
+        df_uf["DataRec_OrdemServiços"] = df_uf["DataRec_OrdemServiços"].fillna('')
     
     
-        # Adiciona a coluna Nome_cliente ao DataFrame grupo_material_especificos
+        # Adiciona a coluna Nome_cliente ao DataFrame uf_especificos
         # após o merge
-        grupo_material_especificos["ID_Ordem"] = grupo_material_especificos["ID_Ordem"].fillna('')
+        uf_especificos["nome_uf"] = uf_especificos["nome_uf"].fillna('')
 
         # Pega os IDs dos Ordem Recebimento únicos
-        ids_clientes_unicos = grupo_material_especificos["ID"].unique()
+        ids_clientes_unicos = uf_especificos["ID"].unique()
 
         # Carrega a folha Cliente
         clientes_aba = arquivo().worksheet_by_title("Cliente")
@@ -320,15 +345,15 @@ def selecionar_grupo_material_especificos_Recebimento_f():
          #print("Clientes Selecionados:")
          #print(clientes_selecionados)
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
     
-        # Adiciona a coluna Nome_cliente ao DataFrame grupo_material_especificos
+        # Adiciona a coluna Nome_cliente ao DataFrame uf_especificos
         # após o merge
-        grupo_material_especificos["Nome_cliente"] = grupo_material_especificos["Nome_cliente"].fillna('')
+        uf_especificos["Nome_cliente"] = uf_especificos["Nome_cliente"].fillna('')
 
         # Pega os IDs dos produtos únicos
-        ids_produtos_unicos = grupo_material_especificos["Cod_Produto"].unique()
+        ids_produtos_unicos = uf_especificos["Cod_Produto"].unique()
 
         # Carrega a folha Produto
         produtos_aba = arquivo().worksheet_by_title("Produto")
@@ -341,11 +366,11 @@ def selecionar_grupo_material_especificos_Recebimento_f():
          #print("Produtos Selecionados:")
          #print(produtos_selecionados)
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, produtos_selecionados, on="Cod_Produto", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, produtos_selecionados, on="Cod_Produto", how="left")
 
         # Pega os IDs dos grupos únicos
-        ids_grupos_unicos = grupo_material_especificos["idGrupo"].unique()
+        ids_grupos_unicos = uf_especificos["idGrupo"].unique()
 
         # Carrega a folha Grupo Produto
         grupos_aba = arquivo().worksheet_by_title("Grupo Produto")
@@ -358,11 +383,11 @@ def selecionar_grupo_material_especificos_Recebimento_f():
          #print("Grupos Selecionados:")
          #print(grupos_selecionados)
 
-         # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
+         # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
 
         # Pega os IDs das operações únicas
-        ids_operacoes_unicas = grupo_material_especificos["idoperacaoServico"].unique()
+        ids_operacoes_unicas = uf_especificos["idoperacaoServico"].unique()
 
         # Carrega a folha Operacao
         operacoes_aba = arquivo().worksheet_by_title("Operacao")
@@ -383,7 +408,7 @@ def selecionar_grupo_material_especificos_Recebimento_f():
          #print(operacoes_selecionadas)
    
         # Pega os IDs das componetes únicas
-        ids_componetes_unicas = grupo_material_especificos["ID_Componente"].unique()
+        ids_componetes_unicas = uf_especificos["ID_Componente"].unique()
 
         # Carrega a folha Operacao
         componetes_aba = arquivo().worksheet_by_title("Componente")
@@ -398,115 +423,115 @@ def selecionar_grupo_material_especificos_Recebimento_f():
 
 
         # Imprime as colunas antes da conversão para dicionário
-        #print("Colunas em grupo_material_especificos:")
-        #print(grupo_material_especificos.columns)
+        #print("Colunas em uf_especificos:")
+        #print(uf_especificos.columns)
         # Converte o DataFrame resultante para um dicionário
-        grupo_material_especificos_lista = grupo_material_especificos.fillna('').to_dict(orient="records")
+        uf_especificos_lista = uf_especificos.fillna('').to_dict(orient="records")
 
         # Adiciona os resultados à resposta JSON
-        resposta_json = {"retorno_especifico": grupo_material_especificos_lista}
+        resposta_json = {"retorno_especifico": uf_especificos_lista}
 
         return jsonify(resposta_json)
 
     except Exception as e:
-        print(f"Erro ao carregar grupo_material específicos: {str(e)}")
-        return jsonify({"error": f"Erro ao carregar grupo_material específicos: {str(e)}", "traceback": traceback.format_exc()})
+        print(f"Erro ao carregar uf específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar uf específicos: {str(e)}", "traceback": traceback.format_exc()})
     
-@grupo_material.route("/numeroControle_grupo_material_especificos_Recebimento", methods=["POST"])
-def numeroControle_grupo_material_especificos_Recebimento_f():
+@uf.route("/numeroControle_uf_especificos_Recebimento", methods=["POST"])
+def numeroControle_uf_especificos_Recebimento_f():
     try:
-        grupo_material_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
-        dados_grupo_material = grupo_material_aba.get_all_values()
-        df_grupo_material = pd.DataFrame(data=dados_grupo_material[1:], columns=dados_grupo_material[0])
+        uf_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
+        dados_uf = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_uf[1:], columns=dados_uf[0])
 
         # Ordena os produtos pelo numero Ordem
-        df_grupo_material = df_grupo_material.sort_values(by="ID_Recebimento")
+        df_uf = df_uf.sort_values(by="ID_Recebimento")
 
         # Pega os IDs dos Ordem Recebimento únicos
-        ids_recebimentos_unicos = df_grupo_material["ID_Recebimento"].unique()
+        ids_recebimentos_unicos = df_uf["ID_Recebimento"].unique()
 
         # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
 
-        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
-        dados_recebimentos = recebimentos_aba.get_all_values()
-        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+        uf_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
 
        # Filtra os Recebimento usando os IDs únicos
-        recebimento_selecionados = df_recebimentos[df_recebimentos["ID"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
+        recebimento_selecionados = df_uf[df_uf["ID"].isin(ids_recebimentos_unicos)][["ID", "nome_uf", "DataRec_OrdemServiços"]]
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
 
-        # Adiciona a coluna   ID_Ordem ao DataFrame grupo_material_especificos
+        # Adiciona a coluna   nome_uf ao DataFrame uf_especificos
         # após o merge
-        grupo_material_especificos["ID_Ordem"] = grupo_material_especificos["ID_Ordem"].fillna('')
+        uf_especificos["nome_uf"] = uf_especificos["nome_uf"].fillna('')
 
-        grupo_material_especificos_lista = grupo_material_especificos.fillna('').to_dict(orient="records")
+        uf_especificos_lista = uf_especificos.fillna('').to_dict(orient="records")
 
         # Adiciona os resultados à resposta JSON
-        resposta_json = {"retorno_especifico": grupo_material_especificos_lista}
+        resposta_json = {"retorno_especifico": uf_especificos_lista}
 
         # print('Tony - resposta_json', resposta_json)
         return jsonify(resposta_json)
 
     except Exception as e:
-        print(f"Erro ao carregar grupo_material específicos: {str(e)}")
-        return jsonify({"error": f"Erro ao carregar grupo_material específicos: {str(e)}", "traceback": traceback.format_exc()})
+        print(f"Erro ao carregar uf específicos: {str(e)}")
+        return jsonify({"error": f"Erro ao carregar uf específicos: {str(e)}", "traceback": traceback.format_exc()})
 
-@grupo_material.route("/impressao_grupo_material_especificos_Recebimento", methods=["POST"])
-def impressao_grupo_material_especificos_Recebimento_f():
+@uf.route("/impressao_uf_especificos_Recebimento", methods=["POST"])
+def impressao_uf_especificos_Recebimento_f():
     try:
          # Obter o período inicial e final do corpo da requisição
-        id_grupo_material_Filtrado_frontend = request.json.get("dadosEnviados", [])
+        id_uf_Filtrado_frontend = request.json.get("dadosEnviados", [])
 
-        # print('id_grupo_material_Filtrado_frontend', id_grupo_material_Filtrado_frontend)
+        # print('id_uf_Filtrado_frontend', id_uf_Filtrado_frontend)
 
         # Extrair apenas o campo "idPCP"
-        id_pcp_list = [item.get("idPCP") for item in id_grupo_material_Filtrado_frontend]
+        id_pcp_list = [item.get("idPCP") for item in id_uf_Filtrado_frontend]
 
-        # Inicializar grupo_material_especificos como um DataFrame vazio
-        grupo_material_especificos = pd.DataFrame()
+        # Inicializar uf_especificos como um DataFrame vazio
+        uf_especificos = pd.DataFrame()
         
         # Carrega dados da folha "ChecklistRecebimento2"
-        grupo_material_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
-        dados_grupo_material = grupo_material_aba.get_all_values()
-        df_grupo_material = pd.DataFrame(data=dados_grupo_material[1:], columns=dados_grupo_material[0])
+        uf_aba = arquivo().worksheet_by_title("ChecklistRecebimento2")
+        dados_uf = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_uf[1:], columns=dados_uf[0])
 
         # Verifica se a lista id_pcp_list não está vazia antes de fazer a comparação
         if id_pcp_list:
-            grupo_material_especificos = df_grupo_material[df_grupo_material["id_grupo_material"].isin(id_pcp_list)]
+            uf_especificos = df_uf[df_uf["id_uf"].isin(id_pcp_list)]
             
-        # Imprime grupo_material_especificos após atribuir valor a ele
-        # print('grupo_material_especificos', grupo_material_especificos)
+        # Imprime uf_especificos após atribuir valor a ele
+        # print('uf_especificos', uf_especificos)
 
         # Ordena os produtos pelo numero Ordem
-        grupo_material_especificos = grupo_material_especificos.sort_values(by="ID_Recebimento")
+        uf_especificos = uf_especificos.sort_values(by="ID_Recebimento")
 
         # Pega os IDs dos Ordem Recebimento únicos
-        ids_recebimentos_unicos = df_grupo_material["ID_Recebimento"].unique()
+        ids_recebimentos_unicos = df_uf["ID_Recebimento"].unique()
         # print('ids_recebimentos_unicos', ids_recebimentos_unicos)
 
         # Carrega dados da folha "Recebimento_v2"
-        recebimentos_aba = arquivo().worksheet_by_title("Recebimento_v2")
-        dados_recebimentos = recebimentos_aba.get_all_values()
-        df_recebimentos = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
+        uf_aba = arquivo().worksheet_by_title("Recebimento_v2")
+        dados_recebimentos = uf_aba.get_all_values()
+        df_uf = pd.DataFrame(data=dados_recebimentos[1:], columns=dados_recebimentos[0])
 
         # Filtra os Recebimento usando os IDs únicos
-        recebimento_selecionados = df_recebimentos[df_recebimentos["ID"].isin(ids_recebimentos_unicos)][["ID", "ID_Ordem", "DataRec_OrdemServiços"]]
+        recebimento_selecionados = df_uf[df_uf["ID"].isin(ids_recebimentos_unicos)][["ID", "nome_uf", "DataRec_OrdemServiços"]]
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, recebimento_selecionados, left_on="ID_Recebimento", right_on="ID", how="left")
 
         # Converte a coluna "DataRec_OrdemServiços" para o tipo datetime considerando o formato dd/mm/aaaa
-        df_recebimentos["DataRec_OrdemServiços"] = pd.to_datetime(df_recebimentos["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
+        df_uf["DataRec_OrdemServiços"] = pd.to_datetime(df_uf["DataRec_OrdemServiços"], format="%d/%m/%Y", errors='coerce')
         # Substitui os valores NaN na coluna "DataRec_OrdemServiços" por uma string vazia
-        df_recebimentos["DataRec_OrdemServiços"] = df_recebimentos["DataRec_OrdemServiços"].fillna('')
+        df_uf["DataRec_OrdemServiços"] = df_uf["DataRec_OrdemServiços"].fillna('')
 
-        # Adiciona a coluna Nome_cliente ao DataFrame grupo_material_especificos após o merge
-        grupo_material_especificos["ID_Ordem"] = grupo_material_especificos["ID_Ordem"].fillna('')
+        # Adiciona a coluna Nome_cliente ao DataFrame uf_especificos após o merge
+        uf_especificos["nome_uf"] = uf_especificos["nome_uf"].fillna('')
 
         # Pega os IDs dos Ordem Recebimento únicos
-        ids_clientes_unicos = grupo_material_especificos["ID"].unique()
+        ids_clientes_unicos = uf_especificos["ID"].unique()
 
         # Carrega a folha Cliente
         clientes_aba = arquivo().worksheet_by_title("Cliente")
@@ -519,15 +544,15 @@ def impressao_grupo_material_especificos_Recebimento_f():
          #print("Clientes Selecionados:")
          #print(clientes_selecionados)
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, clientes_selecionados, left_on="ID", right_on="ID", how="left")
     
-        # Adiciona a coluna Nome_cliente ao DataFrame grupo_material_especificos
+        # Adiciona a coluna Nome_cliente ao DataFrame uf_especificos
         # após o merge
-        grupo_material_especificos["Nome_cliente"] = grupo_material_especificos["Nome_cliente"].fillna('')
+        uf_especificos["Nome_cliente"] = uf_especificos["Nome_cliente"].fillna('')
 
         # Pega os IDs dos produtos únicos
-        ids_produtos_unicos = grupo_material_especificos["Cod_Produto"].unique()
+        ids_produtos_unicos = uf_especificos["Cod_Produto"].unique()
 
         # Carrega a folha Produto
         produtos_aba = arquivo().worksheet_by_title("Produto")
@@ -540,11 +565,11 @@ def impressao_grupo_material_especificos_Recebimento_f():
          #print("Produtos Selecionados:")
          #print(produtos_selecionados)
 
-        # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, produtos_selecionados, on="Cod_Produto", how="left")
+        # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, produtos_selecionados, on="Cod_Produto", how="left")
 
         # Pega os IDs dos grupos únicos
-        ids_grupos_unicos = grupo_material_especificos["idGrupo"].unique()
+        ids_grupos_unicos = uf_especificos["idGrupo"].unique()
 
         # Carrega a folha Grupo Produto
         grupos_aba = arquivo().worksheet_by_title("Grupo Produto")
@@ -557,11 +582,11 @@ def impressao_grupo_material_especificos_Recebimento_f():
          #print("Grupos Selecionados:")
          #print(grupos_selecionados)
 
-         # Realiza o merge com os grupo_material
-        grupo_material_especificos = pd.merge(grupo_material_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
+         # Realiza o merge com os uf
+        uf_especificos = pd.merge(uf_especificos, grupos_selecionados, left_on="idGrupo", right_on="Id", how="left")
 
         # Pega os IDs das operações únicas
-        ids_operacoes_unicas = grupo_material_especificos["idoperacaoServico"].unique()
+        ids_operacoes_unicas = uf_especificos["idoperacaoServico"].unique()
 
         # Carrega a folha Operacao
         operacoes_aba = arquivo().worksheet_by_title("Operacao")
@@ -582,7 +607,7 @@ def impressao_grupo_material_especificos_Recebimento_f():
          #print(operacoes_selecionadas)
    
         # Pega os IDs das componetes únicas
-        ids_componetes_unicas = grupo_material_especificos["ID_Componente"].unique()
+        ids_componetes_unicas = uf_especificos["ID_Componente"].unique()
 
         # Carrega a folha Operacao
         componetes_aba = arquivo().worksheet_by_title("Componente")
@@ -596,11 +621,11 @@ def impressao_grupo_material_especificos_Recebimento_f():
         componetes_selecionadas["nome_Componente"] = componetes_selecionadas["nome_Componente"].fillna('')
         
         # Lista das colunas desejadas na ordem desejada
-        colunas_desejadas = ["id_grupo_material", "ID_Ordem", "Nome_cliente", "Qtd_Produto", "nome_produto", "Referencia_Produto",
+        colunas_desejadas = ["id_uf", "nome_uf", "Nome_cliente", "Qtd_Produto", "nome_produto", "Referencia_Produto",
                             "NotaInterna", "QUEIXA_CLIENTE", "DataRec_OrdemServiços", "Usuario_Cadastro", "LINK_PDF_CHECKLIST"]
         
         # Adiciona os resultados à resposta JSON, incluindo apenas as colunas desejadas
-        resposta_json = {"retorno_especifico": grupo_material_especificos[colunas_desejadas].fillna('').to_dict(orient="records")}
+        resposta_json = {"retorno_especifico": uf_especificos[colunas_desejadas].fillna('').to_dict(orient="records")}
 
         # Adiciona os resultados à resposta JSON
         impressao_ChecklistRecebimento_aba = arquivo().worksheet_by_title("Impressao_ChecklistRecebimento")
@@ -627,13 +652,13 @@ def impressao_grupo_material_especificos_Recebimento_f():
     
     
     except Exception as e:
-        print(f"Erro ao carregar grupo_material específicos: {str(e)}")
+        print(f"Erro ao carregar uf específicos: {str(e)}")
 
         # Retornar um indicador de erro para o front-end
-        return jsonify({"success": False, "error": f"Erro ao carregar grupo_material específicos: {str(e)}", "traceback": traceback.format_exc()})
+        return jsonify({"success": False, "error": f"Erro ao carregar uf específicos: {str(e)}", "traceback": traceback.format_exc()})
 
 # ........................................////.........................../////.............
-@grupo_material.route("/criar_copia_e_processar_documento", methods=["POST"])
+@uf.route("/criar_copia_e_processar_documento", methods=["POST"])
 def criar_copia_e_processar_documento():
     resultados_processados = []
 
@@ -661,11 +686,11 @@ def criar_copia_e_processar_documento():
            # print("TONY - dados_linha", dados_linha)
 
             # Verifique se Nome_funcionario não está vazio ou nulo
-            if dados_linha["ID_Ordem"]:
+            if dados_linha["nome_uf"]:
                 try:
                     # Chame a função para criar a cópia do documento
                     doc_copiado_id = google_docs_handler.criar_copia_do_doc(
-                        modelo_id, destino_id, dados_linha["ID_Ordem"]
+                        modelo_id, destino_id, dados_linha["nome_uf"]
                     )
                       # Vprint("doc_copiado_id", doc_copiado_id)
 
@@ -679,7 +704,7 @@ def criar_copia_e_processar_documento():
                     google_docs_handler.adicionar_link_para_linha(
                         doc_copiado_id,
                         link_documento_copiado,
-                        dados_linha["ID_Ordem"],
+                        dados_linha["nome_uf"],
                     )
                     print("adicionar_link_para_linha")
 

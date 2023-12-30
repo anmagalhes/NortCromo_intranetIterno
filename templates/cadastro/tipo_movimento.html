@@ -3,47 +3,61 @@
 {% include 'head.html' %}
 <body>
   <div class="seg">
-    <h3>Grupo Material</h3>
+    <h3>Tipos de Movimentações</h3>
 
     <div class="container">
         <!-- Campos de entrada -->
         <div class="row mt-3">
-          <!-- Campo Id Grupo do Material -->
-          <div class="col-md-4 mb-2">
-            <label for="id_grupo_material" class="custom-label">Id Grupo do Material</label>
-            <input
-              id="id_grupo_material"
-              type="text"
-              class="form-control"
-              placeholder="Id Grupo do Material"
-              onfocus="highlightInput(this)"
-              onblur="removeHighlight(this)"
-            />
+          <!-- Campo codigo_tipo_movimento -->
+          <div class="col-md-3 mb-2">
+              <label for="id_tipo_movimento" class="custom-label">Código tipo movimento</label>
+              <input
+                  id="id_tipo_movimento"
+                  type="text"
+                  class="form-control"
+                  placeholder="Código tipo movimento"
+                  onfocus="highlightInput(this)"
+                  onblur="removeHighlight(this)"
+              />
           </div>
-    
-          <!-- Campo Grupo do Material -->
-          <div class="col-md-8 mb-4">
-            <label for="nome_grupo_material" class="custom-label">Grupo do Material Ex: Ferramentas / Epi</label>
-            <input
-              id="nome_grupo_material"
-              type="text"
-              class="form-control"
-              placeholder="Grupo do Material"
-              onfocus="highlightInput(this)"
-              onblur="removeHighlight(this)"
-              oninput="converterParaMaiusculas(this)"
-              
-            />
+      
+          <!-- Campo Grupo_tipo_movimento -->
+          <div class="col-md-3 mb-2">
+              <label for="grupo_tipo_movimento" class="custom-label">grupo de Movimentações</label>
+              <input
+                  id="grupo_tipo_movimento"
+                  type="text"
+                  class="form-control"
+                  placeholder="grupo Movimentação"
+                  onfocus="highlightInput(this)"
+                  onblur="removeHighlight(this)"
+                  oninput="converterParaMaiusculas(this)"
+              />
           </div>
-        </div>
+      
+          <!-- Campo nome_tipo_movimento -->
+          <div class="col-md-6 mb-4">
+              <label for="nome_tipo_movimento" class="custom-label">Nome Tipo Movimentação</label>
+              <input
+                  id="nome_tipo_movimento"
+                  type="text"
+                  class="form-control"
+                  placeholder="Nome Tipo Movimentação"
+                  onfocus="highlightInput(this)"
+                  onblur="removeHighlight(this)"
+                  oninput="converterParaMaiusculas(this)"
+              />
+          </div>
+      </div>
+      
         <!-- Fechamento da div 'row mt-3' -->
 
         <div class="row">
           <!-- Botão Adicionar Funcionário -->
           <div class="col-md-4 col-12 mt-3">
             <button
-              id="btn_Adicionar_Grupo_material"
-              onclick="Adicionar_Grupo_material_mostrarAlerta()"
+              id="btn_Adicionar_Tipo_Movimentacao"
+              onclick="Adicionar_Tipo_Movimentacao_mostrarAlerta()"
               class="btn btn-block button-height"
               style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
             >
@@ -56,7 +70,7 @@
           <div class="col-md-4 col-12 mt-3">
             <button
               id="btn_excluir_funcioario"
-              onclick="Excluir_Grupo_material_mostrarAlerta()"
+              onclick="Excluir_Tipo_Movimentacao_mostrarAlerta()"
               class="btn btn-block button-height"
               style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
             >
@@ -68,7 +82,7 @@
         
       <!-- Tabela Tabular -->
       <div class="table-responsive myTable table-wrapper">
-        <div id="table_Grupos_Materiais" class="tabulator myTable"></div>
+        <div id="table_Tipo_Movimentacao" class="tabulator myTable"></div>
       </div>
     </div>
     <!-- Fechando a div 'container' -->
@@ -79,8 +93,8 @@
   <script>
 
     $(document).ready(function () {
-      carregarDados_Grupos_Materiais();
-      initializeTable_Grupos_Materiais();
+      carregarDados_Tipo_Movimentacao();
+      initializeTable_Tipo_Movimentacao();
 
       console.log("Colocar a função da tabela ou tabela toda aqui");
 
@@ -162,7 +176,7 @@
       }
     }
     function excluir_funcionario() {
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_Tipo_Movimentacao").disabled = true;
 
       var input_funcionario =
         document.getElementsByClassName("input_funcionario");
@@ -175,7 +189,7 @@
 
       if (input_funcionario[1].value == "") {
         alert("Preencha um nome!");
-        document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+        document.getElementById("btn_Adicionar_Tipo_Movimentacao").disabled = false;
       } else {
         $.ajax({
           url: my_url() + "exclui_funcionario",
@@ -184,7 +198,7 @@
           type: "POST",
         }).done(function (data) {
           alert(data.retorno);
-          document.getElementById("btn_Adicionar_Grupo_material").disabled = false;
+          document.getElementById("btn_Adicionar_Tipo_Movimentacao").disabled = false;
           document.getElementById("meus_inputs").innerHTML = "";
           ler_dados_funcionarios();
         });
@@ -203,33 +217,33 @@
       return value;
     }
 
-    function Adicionar_Grupo_material() {
+    function Adicionar_Tipo_Movimentacao() {
       
       console.log("Função salvarFuncionario iniciada. AGORA ");
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_Tipo_Movimentacao").disabled = true;
       // Coletar os dados dos campos de entrada do formulário
-      var id_grupo_material = document.getElementById("id_grupo_material").value;
+      var id_tipo_movimento = document.getElementById("id_tipo_movimento").value;
 
 // Verifique se o valor não está vazio e não é NaN (não é um número)
-if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
+if (id_tipo_movimento !== "" && !isNaN(id_tipo_movimento)) {
   // Converta o valor em um número (inteiro) usando parseInt
-  id_grupo_material = parseInt(id_grupo_material, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+  id_tipo_movimento = parseInt(id_tipo_movimento, 10); // O segundo argumento (10) especifica a base numérica (decimal)
 } else {
   // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
-  id_grupo_material = 0;
+  id_tipo_movimento = 0;
 }
 
-// Agora, a variável id_grupo_material contém o valor como um número ou 0 se não for um número válido.
+// Agora, a variável id_tipo_movimento contém o valor como um número ou 0 se não for um número válido.
 
-      var nome_grupo_material = toUpperCaseIfString(
-        document.getElementById("nome_grupo_material").value
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
       );
 
 
       // Criar um objeto com os dados coletados
       var all_data = {
-        id_grupo_material: id_grupo_material,
-        nome_grupo_material: nome_grupo_material,
+        id_tipo_movimento: id_tipo_movimento,
+        nome_tipo_movimento: nome_tipo_movimento,
       
       };
       console.log(all_data);
@@ -237,7 +251,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       try {
         // Enviar os dados para o servidor Flask usando AJAX
         $.ajax({
-          url: my_url() + "adicionar_atualizar_grupo_material",
+          url: my_url() + "adicionar_atualizar_tipo_movimentacao",
           data: JSON.stringify(all_data),
           contentType: "application/json",
           type: "POST",
@@ -251,10 +265,10 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
               mostrarSucesso();
               // Limpar os campos do formulário após o envio bem-sucedido
               document.getElementById(
-                "btn_Adicionar_Grupo_material"
+                "btn_Adicionar_Tipo_Movimentacao"
               ).disabled = false;
               limparCampos();
-              carregarDados_Grupos_Materiais();
+              carregarDados_Tipo_Movimentacao();
             }
           })
           .fail(function (jqXHR, textStatus, errorThrown) {
@@ -263,7 +277,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
             mostrarErro();
           });
       } catch (error) {
-        console.error("Erro na função Adicionar_Grupo_material: " + error);
+        console.error("Erro na função Adicionar_Tipo_Movimentacao: " + error);
         mostrarErro();
       }
     }
@@ -271,8 +285,9 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
     // Função para limpar os campos do formulário
     function limparCampos() {
       var campos = [
-        "id_grupo_material",
-        "nome_grupo_material",
+        "id_tipo_movimento",
+        "grupo_tipo_movimento",
+        "nome_tipo_movimento",
       ];
       for (var i = 0; i < campos.length; i++) {
         document.getElementById(campos[i]).value = "";
@@ -286,33 +301,33 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
     }
 
 
-    function Excluir_Grupo_material() {
+    function Excluir_Tipo_Movimentacao() {
       
       console.log("Função salvarFuncionario iniciada. AGORA ");
-      document.getElementById("btn_Adicionar_Grupo_material").disabled = true;
+      document.getElementById("btn_Adicionar_Tipo_Movimentacao").disabled = true;
       // Coletar os dados dos campos de entrada do formulário
-      var id_grupo_material = document.getElementById("id_grupo_material").value;
+      var id_tipo_movimento = document.getElementById("id_tipo_movimento").value;
 
     // Verifique se o valor não está vazio e não é NaN (não é um número)
-    if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
+    if (id_tipo_movimento !== "" && !isNaN(id_tipo_movimento)) {
       // Converta o valor em um número (inteiro) usando parseInt
-      id_grupo_material = parseInt(id_grupo_material, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+      id_tipo_movimento = parseInt(id_tipo_movimento, 10); // O segundo argumento (10) especifica a base numérica (decimal)
     } else {
       // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
-      id_grupo_material = 0;
+      id_tipo_movimento = 0;
     }
 
-// Agora, a variável id_grupo_material contém o valor como um número ou 0 se não for um número válido.
+// Agora, a variável id_tipo_movimento contém o valor como um número ou 0 se não for um número válido.
 
-      var nome_grupo_material = toUpperCaseIfString(
-        document.getElementById("nome_grupo_material").value
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
       );
 
 
       // Criar um objeto com os dados coletados
       var all_data = {
-        id_grupo_material: id_grupo_material,
-        nome_grupo_material: nome_grupo_material,
+        id_tipo_movimento: id_tipo_movimento,
+        nome_tipo_movimento: nome_tipo_movimento,
       
       };
       console.log(all_data);
@@ -320,7 +335,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       try {
         // Enviar os dados para o servidor Flask usando AJAX
         $.ajax({
-          url: my_url() + "excluir_grupo_material",
+          url: my_url() + "Excluir_Tipo_Movimentacao",
           data: JSON.stringify(all_data),
           contentType: "application/json",
           type: "POST",
@@ -334,10 +349,10 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
               mostrarSucesso();
               // Limpar os campos do formulário após o envio bem-sucedido
               document.getElementById(
-                "btn_Adicionar_Grupo_material"
+                "btn_Adicionar_Tipo_Movimentacao"
               ).disabled = false;
               limparCampos();
-              carregarDados_Grupos_Materiais();
+              carregarDados_Tipo_Movimentacao();
             }
           })
           .fail(function (jqXHR, textStatus, errorThrown) {
@@ -346,14 +361,14 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
             mostrarErro();
           });
       } catch (error) {
-        console.error("Erro na função Adicionar_Grupo_material: " + error);
+        console.error("Erro na função Adicionar_Tipo_Movimentacao: " + error);
         mostrarErro();
       }
     }
 
     
     // Função para mostrar um alerta personalizado
-    function Adicionar_Grupo_material_mostrarAlerta() {
+    function Adicionar_Tipo_Movimentacao_mostrarAlerta() {
       // Verifique se o usuário deseja cancelar
       Swal.fire({
         title: "Deseja salvar?",
@@ -366,7 +381,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
         cancelButtonText: "Não, continuar!",
       }).then((result) => {
         if (result.isConfirmed) {
-          Adicionar_Grupo_material();
+          Adicionar_Tipo_Movimentacao();
           // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
           limparCampos();
         } else {
@@ -378,7 +393,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
 
 
     // Função para mostrar um alerta personalizado
-    function Excluir_Grupo_material_mostrarAlerta() {
+    function Excluir_Tipo_Movimentacao_mostrarAlerta() {
       // Verifique se o usuário deseja cancelar
       Swal.fire({
         title: "Deseja excluir?",
@@ -391,7 +406,7 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
         cancelButtonText: "Não, continuar!",
       }).then((result) => {
         if (result.isConfirmed) {
-          Excluir_Grupo_material();
+          Excluir_Tipo_Movimentacao();
           // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
           limparCampos();
         } else {
@@ -401,35 +416,36 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
       });
     }
 
-    function carregarDados_Grupos_Materiais() {
+    function carregarDados_Tipo_Movimentacao() {
       $.ajax({
-        url: my_url() + "selecionar_grupo_material_especificos", // Corrigido para "funcionario" em vez de "funcioario"
+        url: my_url() + "selecionar_tipo_movimentacao_especificos", // Corrigido para "funcionario" em vez de "funcioario"
         type: "POST",
       })
         .done(function (data) {
           let dados = data.retorno_especifico; // Corrigido para acessar retorno_especifico
-          console.log("carregarDados_grupo_material:", dados);
-          updateTableData_Grupos_Materiais(dados);
+          console.log("carregarDados_tipo Movimentações:", dados);
+          updateTableData_Tipos_Movimentacacoes(dados);
         })
         .fail(function (error) {
           console.error("Erro ao buscar dados iniciais:", error);
         });
     }
 
-    function updateTableData_Grupos_Materiais(data) {
-      if (table_Grupos_Materiais) {
-        const transformed_Grupos_MateriaisData_Grupos_Materiais = transformData_Grupos_Materiais(data);
-        table_Grupos_Materiais.setData(transformed_Grupos_MateriaisData_Grupos_Materiais);
+    function updateTableData_Tipos_Movimentacacoes(data) {
+      if (table_Tipo_Movimentacao) {
+        const transformed_Tipos_MovimentacacoesData_Tipos_Movimentacacoes = transformData_Tipos_Movimentacacoes(data);
+        table_Tipo_Movimentacao.setData(transformed_Tipos_MovimentacacoesData_Tipos_Movimentacacoes);
       } else {
         console.error("Tabela não inicializada!");
       }
     }
 
-  function transformData_Grupos_Materiais(data) {
+  function transformData_Tipos_Movimentacacoes(data) {
   console.log("Dados de entrada para transformação:", data);
-  const mappedColumns_Grupos_Materiais = {
-    id_grupo_material: "id_grupo_material",
-    nome_grupo_material: "nome_grupo_material",
+  const mappedColumns_Tipos_Movimentacacoes = {
+    id_tipo_movimento: "id_tipo_movimentacao",
+    nome_tipo_movimento: "nome_tipo_movimentacao",
+    grupo_movimentacao: "grupo_movimentacao",
     // Adicione outras colunas mapeadas aqui
   };
 
@@ -438,41 +454,41 @@ if (id_grupo_material !== "" && !isNaN(id_grupo_material)) {
     return [];
   }
 
-  const transformed_Grupos_Materiais = data.map((row) => {
-    const transformed_Grupos_MateriaisRow = {};
+  const transformed_Tipos_Movimentacacoes = data.map((row) => {
+    const transformed_Tipos_MovimentacacoesRow = {};
 
     for (const columnFrom in row) {
-      if (columnFrom in mappedColumns_Grupos_Materiais) {
-        const newColumnName = mappedColumns_Grupos_Materiais[columnFrom];
-        transformed_Grupos_MateriaisRow[newColumnName] = row[columnFrom] ?? "";
+      if (columnFrom in mappedColumns_Tipos_Movimentacacoes) {
+        const newColumnName = mappedColumns_Tipos_Movimentacacoes[columnFrom];
+        transformed_Tipos_MovimentacacoesRow[newColumnName] = row[columnFrom] ?? "";
 
-        // Adicione uma nova chave "id_grupo_material" com o mesmo valor que "id_grupo_material"
-        if (columnFrom === "id_grupo_material") {
-          transformed_Grupos_MateriaisRow["id_grupo_material"] = row[columnFrom] ?? "";
+        // Adicione uma nova chave "id_tipo_movimento" com o mesmo valor que "id_tipo_movimento"
+        if (columnFrom === "id_tipo_movimentacao") {
+          transformed_Tipos_MovimentacacoesRow["id_tipo_movimentacao"] = row[columnFrom] ?? "";
         }
       } else {
-        transformed_Grupos_MateriaisRow[columnFrom] = row[columnFrom];
+        transformed_Tipos_MovimentacacoesRow[columnFrom] = row[columnFrom];
       }
     }
 
-    // Se "id_grupo_material" não estiver presente, defina "id_grupo_material" como vazio
-    if (!("id_grupo_material" in row)) {
-      transformed_Grupos_MateriaisRow["id_grupo_material"] = "";
+    // Se "id_tipo_movimento" não estiver presente, defina "id_tipo_movimento" como vazio
+    if (!("id_tipo_movimentacao" in row)) {
+      transformed_Tipos_MovimentacacoesRow["id_tipo_movimentacao"] = "";
     }
 
-    return transformed_Grupos_MateriaisRow;
+    return transformed_Tipos_MovimentacacoesRow;
   });
 
-  console.log("Dados transformados:", transformed_Grupos_Materiais);
-  return transformed_Grupos_Materiais;
+  console.log("Dados transformados:", transformed_Tipos_Movimentacacoes);
+  return transformed_Tipos_Movimentacacoes;
 }
 
 
 // Vamos adicionar uma função para inicializar a tabela
-function initializeTable_Grupos_Materiais() {
+function initializeTable_Tipo_Movimentacao() {
   // Criação da tabela
-  table_Grupos_Materiais = new Tabulator("#table_Grupos_Materiais", {
-    name: "table_Grupos_Materiais",
+  table_Tipo_Movimentacao = new Tabulator("#table_Tipo_Movimentacao", {
+    name: "table_Tipo_Movimentacao",
     pagination: "local",
     paginationSize: 10,
     paginationSizeSelector: [10, 25, 50, 100, 150, 200],
@@ -487,20 +503,25 @@ function initializeTable_Grupos_Materiais() {
     data: [],
     columns: [
       {
-        title: "Id_Grupo_material",
-        field: "id_grupo_material",
+        title: "Cod. tipo Movimentação",
+        field: "id_tipo_movimentacao",
         hozAlign: "center",
       },
       {
-        title: "Grupo Material",
-        field: "nome_grupo_material",
+        title: "Grupo de movimentação",
+        field: "nome_tipo_movimentacao",
+        hozAlign: "left",
+      },
+      {
+        title: "Nome Tipo Movimentação",
+        field: "grupo_movimentacao",
         hozAlign: "left",
       },
     ],
     // Adiciona o evento rowClick para preencher os campos de entrada e destacar a linha
     rowClick: function (e, row) {
           // Remove a classe 'row-highlight' de todas as linhas
-          table_Grupos_Materiais.getRows().forEach(function (row) {
+          table_Tipo_Movimentacao.getRows().forEach(function (row) {
             row.getElement().classList.remove('row-highlight');
           });
 
@@ -513,28 +534,29 @@ function initializeTable_Grupos_Materiais() {
       });
 
       // Adiciona uma linha de resumo diretamente na tabela
-  var sum_id_grupo_material = 0; // Inicializa o somatório da coluna "id_grupo_material"
+  var sum_id_tipo_movimento = 0; // Inicializa o somatório da coluna "id_tipo_movimento"
   var row = {
-    id_grupo_material: sum_id_grupo_material,
-    nome_grupo_material: "Total",
+    id_tipo_movimento: sum_id_tipo_movimento,
+    nome_tipo_movimento: "Total",
     _row: "header",
   };
 
   // Adiciona a linha à tabela
-  table_Grupos_Materiais.addData([row]);
+  table_Tipo_Movimentacao.addData([row]);
 }
 
-function destruirTabela_Grupos_Materiais() {
-  if (table_Grupos_Materiais) {
-    table_Grupos_Materiais.destroy();
-    table_Grupos_Materiais = null;
+function destruirTabela_Tipos_Movimentacacoes() {
+  if (table_Tipo_Movimentacao) {
+    table_Tipo_Movimentacao.destroy();
+    table_Tipo_Movimentacao = null;
   }
 }
 
     function preencherCamposDeEntrada(rowData) {
-       // Defina o valor do campo id_grupo_material usando JavaScript
-  document.getElementById("id_grupo_material").value = rowData.id_grupo_material;
-  document.getElementById("nome_grupo_material").value = rowData.nome_grupo_material;
+  // Defina o valor do campo id_tipo_movimento usando JavaScript
+  document.getElementById("id_tipo_movimento").value = rowData.id_tipo_movimentacao;
+  document.getElementById("nome_tipo_movimento").value = rowData.nome_tipo_movimentacao;
+  document.getElementById("grupo_tipo_movimento").value = rowData.grupo_movimentacao; 
 }
 
   </script>

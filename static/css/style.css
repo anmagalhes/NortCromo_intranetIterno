@@ -1373,6 +1373,11 @@ input[type='radio']:checked + .checkmark {
   .row-highlight {
     background-color: #ffffcc; /* Cor de destaque desejada */
   }
+
+  /* Estilo para submenu Financeiro abrir para o lado direito */
+.financeiro-submenu {
+  left: 100%;
+}
   
   
 

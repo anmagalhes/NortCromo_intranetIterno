@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% include 'head.html' %}
+  <body>
+    <div class="seg">
+      <h3>Título</h3>
+      <!-- <label>Navegação</label> -->
+      <!-- <button onclick="meu_template('index_2')">Vai para o Index_2</button> -->
+      <!-- <button onclick="meu_post_request()">Ler</button> -->
+      <!-- <label>Ler Célula</label> -->
+      <!-- <input type="text" id="o_que_foi_lido" /> -->
+      <div id="meus_inputs"></div>
+      <!-- <button onclick="escreve_na_celulaA1()">Escrever</button> -->
+      <button id="btn_adiciona_cliente" onclick="adiciona_cliente()">
+        Adiciona Cliente
+      </button>
+      <div>
+        <table id="example" class="display nowrap" style="width: 100%">
+          <thead>
+            <tr id="cabecalho_cliente"></tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </body>
+  {% include 'funcoes_comuns.html' %}
+  <script>
+    $(document).ready(function () {
+      ler_dados_clientes();
+    });
+
+    function adiciona_cliente() {
+      document.getElementById('btn_adiciona_cliente').disabled = true;
+
+      var input_cliente = document.getElementsByClassName('input_cliente');
+      var qts_inputs = input_cliente.length;
+      var all_data = [];
+
+      for (var i = 0; i < qts_inputs; i++) {
+        all_data.push(input_cliente[i].value);
+      }
+
+      if (input_cliente[1].value == '') {
+        alert('Preencha um nome!');
+        document.getElementById('btn_adiciona_cliente').disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + 'adiciona_cliente',
+          data: JSON.stringify(all_data),
+          contentType: 'application/json',
+          type: 'POST',
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById('btn_adiciona_cliente').disabled = false;
+
+          document.getElementById('meus_inputs').innerHTML = '';
+          ler_dados_clientes();
+        });
+      }
+    }
+    function escreve_na_celulaA1() {
+      var o_que_escrever = document.getElementById('o_que_escrever').value;
+      $.ajax({
+        url: my_url() + 'escrever',
+        type: 'POST',
+        data: {
+          o_que_escrever: o_que_escrever,
+        },
+      }).done(function (data) {
+        alert(data.retorno);
+      });
+    }
+    function ler_dados_clientes() {
+      $.ajax({
+        url: my_url() + 'ler_dados_clientes',
+        type: 'POST',
+      }).done(function (data) {
+        let dados = data.retorno;
+        let cabecalho = dados[0];
+        gera_cabecalho_cliente(cabecalho);
+
+        dados = dados.slice(1, dados.length);
+
+        try {
+          $('#example').DataTable().clear();
+          $('#example').DataTable().destroy();
+        } catch (e) {}
+
+        new DataTable('#example', {
+          data: dados,
+          deferRender: true,
+          scrollCollapse: true,
+          scroller: true,
+          scrollY: 200,
+        });
+      });
+    }
+    function gera_cabecalho_cliente(cabecalho) {
+      var cabecalhoLen = cabecalho.length;
+
+      for (var i = 0; i < cabecalhoLen; i++) {
+        var item_do_cabecalho = `<th>` + cabecalho[i] + `</th>`;
+        document.getElementById('cabecalho_cliente').innerHTML =
+          document.getElementById('cabecalho_cliente').innerHTML +
+          item_do_cabecalho;
+      }
+
+      for (var i = 0; i < cabecalhoLen; i++) {
+        var meu_input =
+          `<label>` +
+          cabecalho[i] +
+          `</label><input class="input_cliente" type="text" id="` +
+          cabecalho[i] +
+          `" />`;
+
+        document.getElementById('meus_inputs').innerHTML =
+          document.getElementById('meus_inputs').innerHTML + meu_input;
+      }
+    }
+  </script>
+</html>

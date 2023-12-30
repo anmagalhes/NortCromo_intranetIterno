@@ -1,0 +1,13 @@
+<script>
+  function my_url() {
+    if (window.location.href.slice(0, 22) == 'http://127.0.0.1:5000/') {
+      return 'http://127.0.0.1:5000/';
+    } else {
+      return 'https://myflaskappdantederette.pythonanywhere.com/';
+    }
+  }
+
+  function meu_template(template) {
+    window.open(my_url() + template, '_self');
+  }
+</script>
