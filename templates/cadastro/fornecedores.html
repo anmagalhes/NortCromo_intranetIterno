@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% include 'head.html' %}
+<body>
+  <div class="seg">
+
+    <h3>Cadastro de Fornecedor</h3>
+    <div class="container container-branco">
+
+      <h2 class="custom-label">Incluir informação Fornecedor:</h2>
+
+      <!-- Campos de entrada -->
+      <div class="row mt-3">
+<!-- Grupo 1: Dados Principais -->
+<div class="col-md-3 mb-3 scrollable-content">
+  <label for="cpf_cnpj" class="custom-label">P.Física / P.Jurídica</label>
+  <div class="mui-select">
+      <select id="cpf_cnpj" class="form-select" 
+              onfocus="highlightInput(this)" 
+              onblur="removeHighlight(this)" 
+              onchange="atualizarTipoDocumento()">
+          <option value="" disabled selected>Selecione</option>
+          <option value="cpf">P.FÍSICA</option>
+          <option value="cnpj">P.JURIDICA</option>
+      </select>
+  </div>
+  <input 
+      id="documento" 
+      type="text" 
+      class="form-control mt-2" 
+      placeholder="Digite o CPF ou CNPJ" 
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)" 
+  />
+</div>
+      <!-- Grupo 2: Nome do Fornecedor -->
+        <div class="col-md-5 mb-5 scrollable-content">
+            <label id="nome_fornecedor" class="custom-label">Nome do Fornecedor</label>
+            <input id="nome_fornecedor" type="text" class="form-control" placeholder="Digite o nome do fornecedor" 
+            onfocus="highlightInput(this)" 
+            onblur="removeHighlight(this)" 
+            oninput="converterParaMaiusculas(this); highlightInput(this);"
+            />
+        </div>
+
+      <!-- Grupo 3: Documentos de Identificação -->
+      <div class="col-md-4 mb-4 scrollable-content">
+        <!-- Label dinâmica para RG ou Inscrição Estadual -->
+        <label id="label_documento" class="custom-label mt-3">RG</label>
+        <input id="rg" type="text" class="form-control" placeholder="Digite o RG ou Inscrição Estadual" 
+              onfocus="highlightInput(this)" 
+              onblur="removeHighlight(this)"
+              oninput="converterParaMaiusculas(this); highlightInput(this);"
+        />
+      </div>
+    </div>
+
+    <!-- Grupo 5: Endereço -->
+<div class="row mt-3">
+  <!-- Logradouro -->
+  <div class="col-md-4 mb-2 scrollable-content">
+      <label for="logradouro" class="custom-label">Logradouro</label>
+      <input
+          id="logradouro"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o logradouro"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+        />
+  </div>
+
+  <!-- Número -->
+  <div class="col-md-2 mb-2 scrollable-content">
+      <label for="numero" class="custom-label">Número</label>
+      <input
+          id="numero"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o número"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+        />
+  </div>
+
+  <!-- Complemento -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="complemento" class="custom-label">Complemento</label>
+      <input
+          id="complemento"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o complemento"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+      />
+  </div>
+
+  <!-- CEP -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="cep" class="custom-label">CEP</label>
+      <input
+          id="cep"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o CEP"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+      />
+  </div>
+</div>
+
+<!-- Segunda linha do Grupo 5 -->
+<div class="row mt-3">
+  <!-- UF -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="uf" class="custom-label">UF</label>
+      <div class="mui-select">
+          <select id="uf" class="form-select" 
+                  onfocus="highlightInput(this)" 
+                  onblur="removeHighlight(this)"
+                  oninput="converterParaMaiusculas(this); highlightInput(this);"
+                  >
+              <!-- Opções do select para UF -->
+              <option value="" disabled selected>Selecione</option>
+              <option value="uf1">UF1</option>
+              <option value="uf2">UF2</option>
+              <!-- Adicione mais opções conforme necessário -->
+          </select>
+      </div>
+  </div>
+
+<!-- Cidade -->
+  <div class="col-md-4 mb-2 scrollable-content">
+      <label for="cidade" class="custom-label">Cidade</label>
+      <input
+          id="cidade"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite a cidade"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+      />
+  </div>
+
+  <!-- Bairro -->
+  <div class="col-md-5 mb-2 scrollable-content">
+      <label for="bairro" class="custom-label">Bairro</label>
+      <input
+          id="bairro"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o bairro"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);"
+      />
+  </div>
+</div>
+
+<!-- Grupo 6: Contatos -->
+<div class="row mt-3">
+  <!-- Telefone Fixo 1 -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="fixo1" class="custom-label">Telefone Fixo</label>
+      <input
+          id="fixo1"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o telefone fixo"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this); formatarCelular(this);"
+      />
+  </div>
+
+  <!-- Celular / WhatsApp -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="whatsapp" class="custom-label">Celular / WhatsApp</label>
+      <input
+          id="whatsapp"
+          type="text"
+          class="form-control highlight-input"
+          placeholder="Digite o celular/WhatsApp"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="formatarCelular(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this); formatarCelular(this);"
+      />
+  </div>
+
+  <!-- Email 1 -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="email1" class="custom-label">Email 1</label>
+      <input
+          id="email1"
+          type="email"
+          class="form-control highlight-input"
+          placeholder="Digite o primeiro endereço de email"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this); validarEmail(this)"
+      />
+  </div>
+
+  <!-- Email 2 -->
+  <div class="col-md-3 mb-2 scrollable-content">
+      <label for="email2" class="custom-label">Email 2</label>
+      <input
+          id="email2"
+          type="email"
+          class="form-control highlight-input"
+          placeholder="Digite o segundo endereço de email"
+          onfocus="highlightInput(this)"
+          onblur="removeHighlight(this)"
+          oninput="converterParaMaiusculas(this)"
+          oninput="converterParaMaiusculas(this); highlightInput(this);validarEmail(this)"
+      />
+  </div>
+ </div>
+
+ <div class="separador"></div>
+  
+      <!-- Grupo 7: Botões -->
+      <div class="row mt-3">
+          <div class="col-md-4 col-12 mb-2">
+              <button id="btn_Adicionar_fornecedor" onclick="Adicionar_fornecedor_mostrarAlerta()" class="btn btn-block button-height" style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;">
+                  <span class="material-icons" style="margin-right: 8px">save</span>
+                  Salvar Dados
+              </button>
+          </div>
+          <div class="col-md-4 col-12 mb-2">
+              <button id="btn_excluir_funcionario" onclick="Excluir_fornecedor_mostrarAlerta()" class="btn btn-block button-height" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;">
+                  <span class="material-icons" style="margin-right: 8px">delete</span>
+                  Excluir Dados
+              </button>
+          </div>
+      </div>
+
+
+<!-- Separador visual para melhor organização -->
+<div class="separador"></div>
+
+<!-- Input de pesquisa -->
+<div class="col-md-4 col-12 mb-2">
+  <!-- Rótulo para o grupo de opções de pesquisa -->
+  <label class="custom-label">Pesquisar Por:</label>
+
+  <!-- Mensagem informativa sobre a parte de filtros -->
+  <p class="text-informativo">Escolha a opção de pesquisa e digite o termo desejado:</p>
+
+  <!-- Grupo de opções (radio buttons) -->
+  <!-- Adapte conforme necessário para mais opções -->
+  <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="opcao_pesquisa" id="radioNome" value="nome" checked>
+      <label class="form-check-label" for="radioNome">Nome</label>
+  </div>
+
+  <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="opcao_pesquisa" id="radioDocumento" value="documento">
+      <label class="form-check-label" for="radioDocumento">Documento</label>
+  </div>
+
+  <!-- Adicione mais opções conforme necessário -->
+
+  <!-- Input de pesquisa -->
+  <div class="input-group mt-2">
+      <input
+          id="termo_pesquisa"
+          type="text"
+          class="form-control"
+          placeholder="Digite para pesquisar"
+          oninput="filtrarTabela()"
+      />
+      <div class="input-group-append">
+          <span class="input-group-text">
+              <!-- Ícone de lupa usando Font Awesome -->
+              <i class="material-icons">search</i>
+
+          </span>
+      </div>
+  </div>
+</div>
+
+<div class="separador"></div>
+
+      <!-- Grupo 8: Tabela Tabular -->
+      <div class="row mt-3">
+          <div class="col-12">
+              <div class="table-responsive myTable table-wrapper">
+                  <div id="table_fornecedor" class="tabulator myTable"></div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Grupo 9: Div para exibir o total referente à Tabela Tabular -->
+      <div class="row mt-3">
+          <div class="col-12">
+              <div id="totalContainer"></div>
+          </div>
+      </div>
+
+      <!-- Grupo 10: Datalist -->
+      <datalist id="ufList"></datalist>
+
+  </div>
+
+</body>
+
+
+  {% include 'funcoes_comuns.html' %}
+  <script>
+
+    // Variável global para armazenar os dados de UF
+    var dadosUF;
+
+    $(document).ready(function () {
+
+      carregarDados_fornecedor();
+      initializeTable_fornecedor();
+      selecionar_uf();
+
+      console.log("Colocar a função da tabela ou tabela toda aqui");
+
+
+    // Seletor para o elemento input com id 'id_uf'
+    var ufInput = $("#id_uf");
+
+     // Adiciona um manipulador de eventos 'change' ao elemento input
+        ufInput.on("change", function () {
+        // Chama a função selecionarUF passando o elemento input e os dados das UF
+        selecionarUF(this, dadosUF);// Certifique-se de ter 'data' definido com seus dados de UF
+    });
+
+      // Adicionar classe ao carregar a página para campos já preenchidos
+    $("input").each(function () {
+        if ($(this).val()) {
+            $(this).addClass("highlight");
+        }
+    });
+
+    // Adicionar classe ao foco
+    $("input").focus(function () {
+        $(this).addClass("highlight focused-input");
+    });
+
+    // Adicionar classe enquanto o usuário digita
+    $("input").on("input", function () {
+        $(this).addClass("highlight");
+    });
+
+    // Remover classe ao desfoque se o campo estiver vazio
+    $("input").blur(function () {
+        if (!$(this).val()) {
+            $(this).removeClass("highlight focused-input");
+        }
+    });
+
+
+     // Formatar campo de telefone
+      $("#telefone").keyup(function () {
+        var val = this.value.replace(/\D/g, "");
+        var newVal = "";
+        while (val.length > 0) {
+          newVal += (val.length > 2 ? " " : "") + val.substr(0, 2);
+          val = val.substr(2);
+        }
+        this.value = newVal.trim();
+      });
+
+
+    });
+
+    $("#cep").blur(function () {
+      var cep = $(this).val().replace(/\D/g, "");
+
+      if (cep != "") {
+        var validacep = /^[0-9]{8}$/;
+        if (validacep.test(cep)) {
+          $.getJSON(
+            "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+            function (dados) {
+              if (!("erro" in dados)) {
+                $("#endereco").val(dados.logradouro);
+                $("#bairro").val(dados.bairro);
+                $("#cidade").val(dados.localidade);
+                $("#cidade").val(dados.cidade);
+              } else {
+                alert("CEP não encontrado.");
+              }
+            }
+          );
+        }
+      }
+    });
+
+    function atualizarRotuloSalario() {
+      var tipo = $("#tipoSalario").val();
+      var rotulo = "Salário";
+
+      switch (tipo) {
+        case "diario":
+          rotulo = "Salário Diário";
+          break;
+        case "meiaColher":
+          rotulo = "Salário Meia Colher";
+          break;
+        case "mensal":
+          rotulo = "Salário Mensal";
+          break;
+      }
+
+      $("#rotuloSalario").text(rotulo);
+    }
+
+    function verifica_selecao() {
+      var tabela_funcionario = document.getElementById("tabela_funcionario");
+
+      var o_que_foi_selecionado =
+        tabela_funcionario.getElementsByClassName("selected")[0];
+
+      var tds = o_que_foi_selecionado.getElementsByTagName("td");
+      var qtd_tds = tds.length;
+
+      for (var i = 0; i < qtd_tds; i++) {
+        document.getElementsByClassName("input_funcionario")[i].value =
+          tds[i].innerHTML;
+      }
+    }
+    function excluir_funcionario() {
+      document.getElementById("btn_Adicionar_fornecedor").disabled = true;
+
+      var input_funcionario =
+        document.getElementsByClassName("input_funcionario");
+      var qts_inputs = input_funcionario.length;
+      var all_data = [];
+
+      for (var i = 0; i < qts_inputs; i++) {
+        all_data.push(input_funcionario[i].value);
+      }
+
+      if (input_funcionario[1].value == "") {
+        alert("Preencha um nome!");
+        document.getElementById("btn_Adicionar_fornecedor").disabled = false;
+      } else {
+        $.ajax({
+          url: my_url() + "exclui_funcionario",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        }).done(function (data) {
+          alert(data.retorno);
+          document.getElementById("btn_Adicionar_fornecedor").disabled = false;
+          document.getElementById("meus_inputs").innerHTML = "";
+          ler_dados_funcionarios();
+        });
+      }
+    }
+
+    // Função para converter uma string em maiúsculas, mas manter valores vazios
+    function toUpperCaseIfString(value) {
+      if (typeof value === "string") {
+        // Verifica se a string não está vazia antes de convertê-la em maiúsculas
+        if (value.trim() === "") {
+          return value; // Mantém o valor vazio
+        }
+        return value.toUpperCase(); // Converte para maiúsculas
+      }
+      return value;
+    }
+
+    function Adicionar_fornecedor() {
+      
+      console.log("Função salvarFuncionario iniciada. AGORA ");
+      document.getElementById("btn_Adicionar_fornecedor").disabled = true;
+      // Coletar os dados dos campos de entrada do formulário
+      var id_fornecedor = document.getElementById("id_fornecedor").value;
+
+// Verifique se o valor não está vazio e não é NaN (não é um número)
+if (id_fornecedor !== "" && !isNaN(id_fornecedor)) {
+  // Converta o valor em um número (inteiro) usando parseInt
+  id_fornecedor = parseInt(id_fornecedor, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+} else {
+  // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
+  id_fornecedor = 0;
+}
+
+// Agora, a variável id_fornecedor contém o valor como um número ou 0 se não for um número válido.
+
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
+      );
+
+
+      // Criar um objeto com os dados coletados
+      var all_data = {
+        id_fornecedor: id_fornecedor,
+        nome_tipo_movimento: nome_tipo_movimento,
+      
+      };
+      console.log(all_data);
+      
+      try {
+        // Enviar os dados para o servidor Flask usando AJAX
+        $.ajax({
+          url: my_url() + "adicionar_atualizar_tipo",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        })
+          .done(function (response) {
+            // Trate erros específicos aqui
+            if (response.error) {
+              mostrarErro();
+              console.error("Erro: " + response.error);
+            } else {
+              mostrarSucesso();
+              // Limpar os campos do formulário após o envio bem-sucedido
+              document.getElementById(
+                "btn_Adicionar_fornecedor"
+              ).disabled = false;
+              limparCampos();
+              carregarDados_fornecedor();
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+          });
+      } catch (error) {
+        console.error("Erro na função Adicionar_fornecedor: " + error);
+        mostrarErro();
+      }
+    }
+
+    // Função para limpar os campos do formulário
+    function limparCampos() {
+      var campos = [
+        "id_fornecedor",
+        "nome_fornecedor",
+        "nome_tipo_movimento",
+      ];
+      for (var i = 0; i < campos.length; i++) {
+        document.getElementById(campos[i]).value = "";
+      }
+      for (var i = 1; i <= 3; i++) {
+        var campoTelefone = document.getElementById("telefone" + i);
+        if (campoTelefone) {
+          campoTelefone.value = "";
+        }
+      }
+    }
+
+    function Excluir_fornecedor() {
+      
+      console.log("Função salvarFuncionario iniciada. AGORA ");
+      document.getElementById("btn_Adicionar_fornecedor").disabled = true;
+      // Coletar os dados dos campos de entrada do formulário
+      var id_fornecedor = document.getElementById("id_fornecedor").value;
+
+    // Verifique se o valor não está vazio e não é NaN (não é um número)
+    if (id_fornecedor !== "" && !isNaN(id_fornecedor)) {
+      // Converta o valor em um número (inteiro) usando parseInt
+      id_fornecedor = parseInt(id_fornecedor, 10); // O segundo argumento (10) especifica a base numérica (decimal)
+    } else {
+      // Caso contrário, defina o valor como 0 (ou qualquer outro valor padrão que você desejar)
+      id_fornecedor = 0;
+    }
+
+// Agora, a variável id_fornecedor contém o valor como um número ou 0 se não for um número válido.
+
+      var nome_tipo_movimento = toUpperCaseIfString(
+        document.getElementById("nome_tipo_movimento").value
+      );
+      // Criar um objeto com os dados coletados
+      var all_data = {
+        id_fornecedor: id_fornecedor,
+        nome_tipo_movimento: nome_tipo_movimento,
+      
+      };
+      console.log(all_data);
+      
+      try {
+        // Enviar os dados para o servidor Flask usando AJAX
+        $.ajax({
+          url: my_url() + "Excluir_fornecedor",
+          data: JSON.stringify(all_data),
+          contentType: "application/json",
+          type: "POST",
+        })
+          .done(function (response) {
+            // Trate erros específicos aqui
+            if (response.error) {
+              mostrarErro();
+              console.error("Erro: " + response.error);
+            } else {
+              mostrarSucesso();
+              // Limpar os campos do formulário após o envio bem-sucedido
+              document.getElementById(
+                "btn_Adicionar_fornecedor"
+              ).disabled = false;
+              limparCampos();
+              carregarDados_fornecedor();
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+          });
+      } catch (error) {
+        console.error("Erro na função Adicionar_fornecedor: " + error);
+        mostrarErro();
+      }
+    }
+
+    
+    // Função para mostrar um alerta personalizado
+    function Adicionar_fornecedor_mostrarAlerta() {
+      // Verifique se o usuário deseja cancelar
+      Swal.fire({
+        title: "Deseja salvar?",
+        text: "Deseja realmente salvar e limpar os campos do formulário?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, cancelar!",
+        cancelButtonText: "Não, continuar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Adicionar_fornecedor();
+          // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
+          limparCampos();
+        } else {
+          // O usuário escolheu não cancelar, continue com o processo
+          continuarProcesso();
+        }
+      });
+    }
+
+
+    // Função para mostrar um alerta personalizado
+    function Excluir_fornecedor_mostrarAlerta() {
+      // Verifique se o usuário deseja cancelar
+      Swal.fire({
+        title: "Deseja excluir?",
+        text: "Deseja realmente exlcuir e limpar os campos do formulário ?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, cancelar!",
+        cancelButtonText: "Não, continuar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Excluir_fornecedor();
+          // Se o usuário clicar em "Sim, cancelar", limpe os campos do formulário
+          limparCampos();
+        } else {
+          // O usuário escolheu não cancelar, continue com o processo
+          continuarProcesso();
+        }
+      });
+    }
+
+    function carregarDados_fornecedor() {
+      $.ajax({
+        url: my_url() + "selecionar_fornecedor_especificos", // Corrigido para "funcionario" em vez de "funcioario"
+        type: "POST",
+      })
+        .done(function (data) {
+          let dados = data.retorno_especifico; // Corrigido para acessar retorno_especifico
+          console.log("carregarDados_fornecedor Movimentações:", dados);
+          updateTableData_fornecedor(dados);
+        })
+        .fail(function (error) {
+          console.error("Erro ao buscar dados iniciais:", error);
+        });
+    }
+
+    function updateTableData_fornecedor(data) {
+      if (table_fornecedor) {
+        const transformed_fornecedorData_fornecedor = transformData_fornecedor(data);
+        table_fornecedor.setData(transformed_fornecedorData_fornecedor);
+      } else {
+        console.error("Tabela não inicializada!");
+      }
+    }
+
+  function transformData_fornecedor(data) {
+  console.log("Dados de entrada para transformação:", data);
+  const mappedColumns_fornecedor = {
+    id_fornecedor: "id_fornecedor",
+    nome_tipo_movimento: "id_fornecedor",
+    // Adicione outras colunas mapeadas aqui
+  };
+
+  if (!data || !Array.isArray(data)) {
+    console.error("Dados inválidos fornecidos para transformação:", data);
+    return [];
+  }
+
+  const transformed_fornecedor = data.map((row) => {
+    const transformed_fornecedorRow = {};
+
+    for (const columnFrom in row) {
+      if (columnFrom in mappedColumns_fornecedor) {
+        const newColumnName = mappedColumns_fornecedor[columnFrom];
+        transformed_fornecedorRow[newColumnName] = row[columnFrom] ?? "";
+
+        // Adicione uma nova chave "id_fornecedor" com o mesmo valor que "id_fornecedor"
+        if (columnFrom === "id_fornecedor") {
+          transformed_fornecedorRow["id_fornecedor"] = row[columnFrom] ?? "";
+        }
+      } else {
+        transformed_fornecedorRow[columnFrom] = row[columnFrom];
+      }
+    }
+
+    // Se "id_fornecedor" não estiver presente, defina "id_fornecedor" como vazio
+    if (!("id_fornecedor" in row)) {
+      transformed_fornecedorRow["id_fornecedor"] = "";
+    }
+
+    return transformed_fornecedorRow;
+  });
+
+  console.log("Dados transformados:", transformed_fornecedor);
+  return transformed_fornecedor;
+}
+
+
+// Função para inicializar a tabela
+function initializeTable_fornecedor() {
+  // Criação da tabela
+  table_fornecedor = new Tabulator("#table_fornecedor", {
+    name: "table_fornecedor",
+    pagination: "local",
+    paginationSize: 10,
+    paginationSizeSelector: [10, 25, 50, 100, 150, 200],
+    paginationInitialPage: 1,
+    movableColumns: true,
+    paginationButtonNext: "<i class='fas fa-chevron-right'></i>",
+    paginationButtonPrev: "<i class='fas fa-chevron-left'></i>",
+    deferRender: true,
+    scrollCollapse: true,
+    scroller: true,
+    scrollY: 200,
+    data: [],
+    columns: [
+      {
+        title: "id_fornecedor",
+        field: "id_fornecedor",
+        hozAlign: "center",
+      },
+      {
+        title: "cidade",
+        field: "nome_fornecedor",
+        hozAlign: "left",
+      },
+    ],
+    // Adiciona o evento rowClick para preencher os campos de entrada e destacar a linha
+    rowClick: function (e, row) {
+      // Remove a classe 'row-highlight' de todas as linhas
+      table_fornecedor.getRows().forEach(function (row) {
+        row.getElement().classList.remove('row-highlight');
+      });
+
+      // Adiciona a classe 'row-highlight' à linha clicada
+      row.getElement().classList.add('row-highlight');
+
+      // Preenche os campos de entrada
+      preencherCamposDeEntrada(row.getData());
+    },
+    // Adiciona o evento de pós-renderização da tabela
+    renderComplete: function() {
+      // Adiciona uma linha de resumo diretamente na tabela após o carregamento
+      addTotalRow();
+
+      // Chama a função para exibir o total fora da tabela
+      exibirTotalForaDaTabela();
+    },
+  });
+}
+
+// Função para calcular e exibir o total fora da tabela
+function exibirTotalForaDaTabela() {
+  // Obtém o número total de linhas
+  var totalRows = table_fornecedor.getDataCount();
+
+  // Exibe o total onde desejar (por exemplo, em uma div com id "totalContainer")
+  var totalContainer = document.getElementById("totalContainer");
+  if (totalContainer) {
+    totalContainer.innerHTML = "Total: " + totalRows;
+  }
+}
+
+// Função para adicionar uma linha de resumo "Total" à tabela
+function addTotalRow() {
+  // Obtém o número total de linhas
+  var totalRows = table_fornecedor.getDataCount();
+
+  // Adiciona uma linha de resumo diretamente na tabela
+  var row = {
+    id_fornecedor: "Total:",
+    nome_fornecedor: totalRows, // Mostra o número total de linhas na coluna "nome_fornecedor"
+    _row: "header",
+  };
+
+  // Adiciona a linha à tabela
+  table_fornecedor.addData([row], true, "top");
+}
+
+function destruirTabela_fornecedor() {
+  if (table_fornecedor) {
+    table_fornecedor.destroy();
+    table_fornecedor = null;
+  }
+}
+
+  function preencherCamposDeEntrada(rowData) {
+  // Defina o valor do campo id_fornecedor usando JavaScript
+  document.getElementById("id_fornecedor").value = rowData.id_fornecedor;
+  document.getElementById("nome_fornecedor").value = rowData.nome_fornecedor; 
+}
+
+function selecionar_uf() {
+    console.log("selecionar__uf");
+    $.ajax({
+        url: my_url() + "uf_Unicos",
+        type: "POST",
+        success: function (data) {
+            console.log("carregarDadosPopulateUF:", data);
+
+            try {
+                dadosUF = data.retorno_especifico;
+                console.log("carregarDadosPopulateUF:", dadosUF); // Correção aqui
+                populateUF(dadosUF);
+            } catch (e) {
+                console.error("Erro ao analisar os dados:", e);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na solicitação AJAX: " + errorThrown);
+            console.error("Status da solicitação: " + textStatus);
+            mostrarErro();
+        },
+        beforeSend: function () {
+            console.log("Enviando requisição para buscar UF...");
+        },
+        complete: function () {
+            console.log("Requisição para buscar UF completada.");
+        },
+    });
+}
+
+function populateUF(dadosUF) {
+
+    console.log("Populando datalist com UF...");
+    console.log(dadosUF);
+
+    var datalist = document.getElementById("ufList");
+    datalist.innerHTML = ""; // Limpa qualquer opção anterior
+
+    // Agora, usando a variável 'data' em vez de 'numbers'
+    dadosUF.forEach(function (item) {
+        var option = document.createElement("option");
+        option.value = item.nome_uf; // Use 'nome_uf' como valor
+        option.setAttribute("data-id-uf", item.id_uf); // Defina o atributo 'data-id-uf'
+        datalist.appendChild(option);
+
+        console.log("Adicionado:", item.nome_uf, "ID:", item.id_uf);
+    });
+
+    // Adicione esta linha para garantir que os valores sejam exibidos no console
+    console.log("populateUF completed");
+}
+
+// Função para obter a UF selecionada
+function getSelectedUF(input) {
+  // Certifique-se de que há opções disponíveis
+  if (input.options) {
+    // Verifique se há uma opção selecionada
+    if (input.selectedIndex !== -1) {
+      // Obtém a opção selecionada
+      var selectedOptionElement = input.options[input.selectedIndex];
+
+      // Certifique-se de que a opção tem o atributo data-id-uf
+      if (selectedOptionElement && selectedOptionElement.hasAttribute("data-id-uf")) {
+        // Obtém o valor do atributo data-id-uf da opção selecionada
+        var selectedOptionId = selectedOptionElement.getAttribute("data-id-uf");
+
+        return {
+          uf: input.value,
+          id: selectedOptionId
+        };
+      }
+    }
+  }
+
+  // Retorna null se não houver uma opção selecionada ou se a opção não tiver data-id-uf
+  return null;
+}
+
+// Exemplo de como usar a função para obter a UF selecionada
+function enviarParaFlask() {
+  var inputUF = document.getElementById("id_uf");
+  var ufData = getSelectedUF(inputUF);
+
+  if (ufData) {
+    // Agora você pode usar ufData.uf e ufData.id para enviar para o Flask
+    console.log("UF selecionada:", ufData.uf);
+    console.log("ID UF:", ufData.id);
+
+    // Aqui você pode fazer a requisição para o Flask usando os dados
+    // Exemplo de como fazer isso usando fetch:
+    fetch('/seu-endpoint-no-flask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ufData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Resposta do Flask:', data);
+    })
+    .catch(error => {
+      console.error('Erro ao enviar para o Flask:', error);
+    });
+  } else {
+    console.log("Nenhuma UF selecionada ou UF selecionada não possui data-id-uf.");
+  }
+}
+
+// Função para pesquisar o ID com base no nome selecionado
+function getUFId(selectedUFName, data) {
+    var selectedUF = data.find(function (item) {
+        return item.nome_uf === selectedUFName;
+    });
+
+    return selectedUF ? selectedUF.id_uf : null;
+}
+
+
+// Função para manipular a seleção da UF
+function selecionarUF(input, data) {
+    var selectedOption = input.value;
+    var selectedOptionId = getUFId(selectedOption, data);
+
+    console.log("UF selecionada:", selectedOption);
+    console.log("ID correspondente:", selectedOptionId);
+
+    if (selectedOptionId !== null) {
+        // Faça algo com o ID, por exemplo, armazene-o em uma variável
+        console.log("ID não é nulo:", selectedOptionId);
+        // Aqui você pode armazenar selectedOptionId ou enviá-lo para o Flask, conforme necessário
+    } else {
+        console.log("ID é nulo ou indefinido.");
+    }
+
+    // Adicione esta linha para garantir que os valores sejam exibidos no console
+    console.log("onChange completed");
+}
+
+
+function atualizarTipoDocumento() {
+        var tipoDocumento = document.getElementById("cpf_cnpj").value;
+        var documentoInput = document.getElementById("documento");
+        var labelDocumento = document.getElementById("label_documento");
+        var labelnome = document.getElementById("nome_fornecedor");
+
+
+        // Limpa qualquer máscara anterior
+        $(documentoInput).unmask();
+
+        if (tipoDocumento === "Selecione") {
+           // Aplica a máscara de CNPJ
+           $(documentoInput).mask("00.000.000/0000-00");
+            // Atualiza o texto da label para "Inscrição Estadual"
+            labelnome.textContent = "Razão Social";
+            labelDocumento.textContent = "Inscrição Estadual";
+        }else if (tipoDocumento === "cpf") {
+            // Aplica a máscara de CPF
+            $(documentoInput).mask("000.000.000-00");
+            // Atualiza o texto da label para "RG"
+            labelnome.textContent = "Nonme";
+            labelDocumento.textContent = "RG";
+        } else if (tipoDocumento === "cnpj") {
+            // Aplica a máscara de CNPJ
+            $(documentoInput).mask("00.000.000/0000-00");
+            // Atualiza o texto da label para "Inscrição Estadual"
+            labelnome.textContent = "Razão Social";
+            labelDocumento.textContent = "Inscrição Estadual";
+        }
+    }
+
+    // Função para formatar automaticamente o número de telefone
+    function formatarTelefone(input) {
+        $(input).mask("(00)0000-0000");
+    }
+
+    // Função para formatar automaticamente o número do celular
+    function formatarCelular(input) {
+        $(input).mask("(00)00000-0000");
+    }
+
+    function filtrarTabela() {
+    // Obtém o valor do campo de pesquisa
+    const termoPesquisa = document.getElementById("termo_pesquisa").value.toLowerCase();
+
+    // Obtém a opção selecionada nos radio buttons
+    const opcaoPesquisa = document.querySelector('input[name="opcao_pesquisa"]:checked').value;
+
+    // Filtra os dados da tabela com base na opção e no termo de pesquisa
+    const resultadosFiltro = tabelaDados.filter((fornecedor) => {
+        // Adapte conforme necessário para refletir a estrutura dos seus dados
+        switch (opcaoPesquisa) {
+            case 'nome':
+                return fornecedor.nome.toLowerCase().includes(termoPesquisa);
+            case 'documento':
+                return fornecedor.documento.toLowerCase().includes(termoPesquisa);
+            // Adicione mais casos conforme necessário para outras opções
+            default:
+                return true; // Caso padrão, sem filtro específico
+        }
+    });
+
+    // Atualiza a tabela com os resultados do filtro
+    table_fornecedor.setData(resultadosFiltro);
+
+    // Exibe o total de registros após o filtro
+    document.getElementById("totalContainer").innerHTML =
+        "<strong>Total de Registros:</strong> " + resultadosFiltro.length;
+}
+
+function validarEmail(input) {
+        const email = input.value;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regex.test(email)) {
+            input.setCustomValidity("Por favor, insira um endereço de e-mail válido.");
+        } else {
+            input.setCustomValidity("");
+        }
+    }
+
+  </script>
+</html>

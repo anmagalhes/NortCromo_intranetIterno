@@ -723,10 +723,6 @@ button:hover {
   border-color: var(--background-situacao);
 }
 
-.highlighted {
-  background-color: #a8f4a2; /* Escolha a cor que preferir */
-}
-
 .header img {
   width: 35px; /* Ajuste o valor de acordo com o tamanho desejado */
   height: auto; /* Mantém a proporção da imagem */
@@ -1268,7 +1264,122 @@ input[type='radio']:checked + .checkmark {
     background-color: var(--background-color-inpunt); /* Cor de fundo */
     color:  var(--color-inpunt); /* Cor do texto branco */
   }
-  
+
+  .highlighted {
+    background-color: #a8f4a2; /* Cor de destaque enquanto o usuário digita */
+  }
+
+input.filled {
+  /* Adicione o estilo desejado quando o campo estiver preenchido */
+  background-color: #FFFFC0; /* Exemplo: fundo cinza claro */
+}
+
+
+
+/* Adapte conforme necessário */
+.custom-label {
+  color: #333;
+  font-weight: bold;
+}
+
+.form-check-label {
+  margin-left: 5px;
+}
+
+.separador {
+  width: 100%;
+  height: 1px;
+  background-color: var(--background-situacao);
+  margin: 10px 0;
+}
+
+.separador::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: #4caf50; /* Cor do destaque */
+  opacity: 0.5; /* Opacidade do destaque */
+}
+
+/* Estilo para o texto informativo */
+.text-informativo {
+  font-size: 14px;
+  color: #6c757d; /* Cor de texto cinza escura */
+  margin-bottom: 10px;
+  white-space: nowrap; 
+}
+
+/* Estilo para o container com fundo branco */
+.container-branco {
+  margin-top: 10px; /* Ajuste conforme necessário */
+  background-color: #fff; /* Cor de fundo branca */
+  padding: 10px; /* Adapte conforme necessário para ajustar o espaçamento interno */
+  border-radius: 10px; /* Adapte conforme necessário para ajustar a borda arredondada */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adapte conforme necessário para adicionar uma sombra */
+}
+
+/* Estilo para o container do select */
+/* Estilo para o container do select */
+.mui-select {
+  position: relative;
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Estilo para o select */
+.mui-select select {
+  width: calc(100% + 20px); /* Ajuste conforme necessário para corrigir a largura */
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #495057; /* Cor do texto para destacar melhor */
+}
+
+/* Estilo para a seta no select */
+.mui-select::after {
+  content: '\25BC'; /* Seta para baixo ▼ */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+  color: #6c757d;
+  pointer-events: none;
+}
+
+/* Estilos para o rodapé */
+.gm_msg_rodape {
+  margin-top: 20px; /* Ajuste conforme necessário */
+  padding: 10px;
+  background-color: #f2f2f2; /* Cor de fundo */
+  border: 1px solid #e0e0e0; /* Borda */
+  border-radius: 5px; /* Cantos arredondados */
+}
+
+.asterisco {
+  color: #ff0000; /* Cor do asterisco */
+  font-size: 1.2em; /* Tamanho da fonte do asterisco */
+  margin-right: 5px; /* Espaçamento à direita do asterisco */
+}
+
+.info {
+  color: #333; /* Cor do texto informativo */
+}
+
+/* Estilos para a classe "outras-paginas" */
+.outras-paginas h2 {
+  color:  #ff0000 !important;
+  /* Outros estilos necessários */
+}
+
   @media (max-width: 1500px) {
     .sidebar {
       width: 20vw;
@@ -1378,7 +1489,8 @@ input[type='radio']:checked + .checkmark {
 .financeiro-submenu {
   left: 100%;
 }
-  
+
+
   
 
 

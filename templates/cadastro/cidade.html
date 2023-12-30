@@ -82,9 +82,12 @@
         
       <!-- Tabela Tabular -->
       <div class="table-responsive myTable table-wrapper">
-        <div id="table_Tipo" class="tabulator myTable"></div>
+        <div id="table_Cidade" class="tabulator myTable"></div>
       </div>
     </div>
+
+    <!-- Div para exibir o total  referente a  Tabela Tabular -->
+    <div div id="totalContainer"></div>
 
     <datalist id="ufList"></datalist>
 
@@ -101,7 +104,7 @@
     $(document).ready(function () {
 
       carregarDados_cidade();
-      initializeTable_Tipo();
+      initializeTable_Cidade();
       selecionar_uf();
 
       console.log("Colocar a função da tabela ou tabela toda aqui");
@@ -447,9 +450,9 @@ if (id_cidade !== "" && !isNaN(id_cidade)) {
     }
 
     function updateTableData_cidade(data) {
-      if (table_Tipo) {
+      if (table_Cidade) {
         const transformed_cidadeData_cidade = transformData_cidade(data);
-        table_Tipo.setData(transformed_cidadeData_cidade);
+        table_Cidade.setData(transformed_cidadeData_cidade);
       } else {
         console.error("Tabela não inicializada!");
       }
@@ -498,11 +501,11 @@ if (id_cidade !== "" && !isNaN(id_cidade)) {
 }
 
 
-// Vamos adicionar uma função para inicializar a tabela
-function initializeTable_Tipo() {
+// Função para inicializar a tabela
+function initializeTable_Cidade() {
   // Criação da tabela
-  table_Tipo = new Tabulator("#table_Tipo", {
-    name: "table_Tipo",
+  table_Cidade = new Tabulator("#table_Cidade", {
+    name: "table_Cidade",
     pagination: "local",
     paginationSize: 10,
     paginationSizeSelector: [10, 25, 50, 100, 150, 200],
@@ -529,35 +532,60 @@ function initializeTable_Tipo() {
     ],
     // Adiciona o evento rowClick para preencher os campos de entrada e destacar a linha
     rowClick: function (e, row) {
-          // Remove a classe 'row-highlight' de todas as linhas
-          table_Tipo.getRows().forEach(function (row) {
-            row.getElement().classList.remove('row-highlight');
-          });
-
-          // Adiciona a classe 'row-highlight' à linha clicada
-          row.getElement().classList.add('row-highlight');
-
-          // Preenche os campos de entrada
-          preencherCamposDeEntrada(row.getData());
-        },
+      // Remove a classe 'row-highlight' de todas as linhas
+      table_Cidade.getRows().forEach(function (row) {
+        row.getElement().classList.remove('row-highlight');
       });
 
-      // Adiciona uma linha de resumo diretamente na tabela
-  var sum_id_cidade = 0; // Inicializa o somatório da coluna "id_cidade"
+      // Adiciona a classe 'row-highlight' à linha clicada
+      row.getElement().classList.add('row-highlight');
+
+      // Preenche os campos de entrada
+      preencherCamposDeEntrada(row.getData());
+    },
+    // Adiciona o evento de pós-renderização da tabela
+    renderComplete: function() {
+      // Adiciona uma linha de resumo diretamente na tabela após o carregamento
+      addTotalRow();
+
+      // Chama a função para exibir o total fora da tabela
+      exibirTotalForaDaTabela();
+    },
+  });
+}
+
+// Função para calcular e exibir o total fora da tabela
+function exibirTotalForaDaTabela() {
+  // Obtém o número total de linhas
+  var totalRows = table_Cidade.getDataCount();
+
+  // Exibe o total onde desejar (por exemplo, em uma div com id "totalContainer")
+  var totalContainer = document.getElementById("totalContainer");
+  if (totalContainer) {
+    totalContainer.innerHTML = "Total: " + totalRows;
+  }
+}
+
+// Função para adicionar uma linha de resumo "Total" à tabela
+function addTotalRow() {
+  // Obtém o número total de linhas
+  var totalRows = table_Cidade.getDataCount();
+
+  // Adiciona uma linha de resumo diretamente na tabela
   var row = {
-    id_cidade: sum_id_cidade,
-    nome_tipo_movimento: "Total",
+    id_cidade: "Total:",
+    nome_cidade: totalRows, // Mostra o número total de linhas na coluna "nome_cidade"
     _row: "header",
   };
 
   // Adiciona a linha à tabela
-  table_Tipo.addData([row]);
+  table_Cidade.addData([row], true, "top");
 }
 
 function destruirTabela_cidade() {
-  if (table_Tipo) {
-    table_Tipo.destroy();
-    table_Tipo = null;
+  if (table_Cidade) {
+    table_Cidade.destroy();
+    table_Cidade = null;
   }
 }
 
@@ -653,7 +681,7 @@ function enviarParaFlask() {
   if (ufData) {
     // Agora você pode usar ufData.uf e ufData.id para enviar para o Flask
     console.log("UF selecionada:", ufData.uf);
-    console.log("ID correspondente:", ufData.id);
+    console.log("ID UF:", ufData.id);
 
     // Aqui você pode fazer a requisição para o Flask usando os dados
     // Exemplo de como fazer isso usando fetch:
