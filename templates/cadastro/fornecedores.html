@@ -4,7 +4,8 @@
 <body>
   <div class="seg">
 
-    <h3>Cadastro de Fornecedor</h3>
+    <h3>Cadastro de Fornecedores</h3>
+
     <div class="container container-branco">
 
       <h2 class="custom-label">Incluir informação Fornecedor:</h2>
@@ -39,7 +40,7 @@
             <input id="nome_fornecedor" type="text" class="form-control" placeholder="Digite o nome do fornecedor" 
             onfocus="highlightInput(this)" 
             onblur="removeHighlight(this)" 
-            oninput="converterParaMaiusculas(this); highlightInput(this);"
+         oninput="converterParaMaiusculas(this)"
             />
         </div>
 
@@ -50,116 +51,124 @@
         <input id="rg" type="text" class="form-control" placeholder="Digite o RG ou Inscrição Estadual" 
               onfocus="highlightInput(this)" 
               onblur="removeHighlight(this)"
-              oninput="converterParaMaiusculas(this); highlightInput(this);"
+           oninput="converterParaMaiusculas(this)"
         />
       </div>
     </div>
 
-    <!-- Grupo 5: Endereço -->
+<!-- Grupo 5: Endereço -->
 <div class="row mt-3">
+  <!-- CEP -->
+<div class="col-md-3 mb-2 scrollable-content">
+  <label for="Cep" class="custom-label">CEP</label>
+  <input
+    id="cep"
+    type="text"
+    class="form-control highlight-input"
+    placeholder="Digite o Cep"
+    onfocus="highlightInput(this)"
+    onblur="removeHighlight(this)"
+    oninput="formatarCEP(this); converterParaMaiusculas(this); buscarEnderecoPorCEP(this.value)"
+    />
+  </div>
+
+
   <!-- Logradouro -->
   <div class="col-md-4 mb-2 scrollable-content">
-      <label for="logradouro" class="custom-label">Logradouro</label>
-      <input
-          id="logradouro"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite o logradouro"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-        />
+    <label for="logradouro" class="custom-label">Logradouro</label>
+    <input
+      id="logradouro"
+      type="text"
+      class="form-control highlight-input"
+      placeholder="Digite o logradouro"
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)"
+      oninput="converterParaMaiusculas(this)"
+    />
+    <p class="comment">Aut. preenchidos.</p>
   </div>
 
   <!-- Número -->
   <div class="col-md-2 mb-2 scrollable-content">
-      <label for="numero" class="custom-label">Número</label>
-      <input
-          id="numero"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite o número"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-        />
+    <label for="numero" class="custom-label">Número</label>
+    <input
+      id="numero"
+      type="text"
+      class="form-control highlight-input"
+      placeholder="Digite"
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)"
+     oninput="converterParaMaiusculas(this)"
+    />
   </div>
 
   <!-- Complemento -->
   <div class="col-md-3 mb-2 scrollable-content">
-      <label for="complemento" class="custom-label">Complemento</label>
-      <input
-          id="complemento"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite o complemento"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-      />
+    <label for="complemento" class="custom-label">Complemento</label>
+    <input
+      id="complemento"
+      type="text"
+      class="form-control highlight-input"
+      placeholder="Digite o complemento"
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)"
+      oninput="converterParaMaiusculas(this)"
+    />
+    <p class="comment">Aut. preenchidos.</p>
   </div>
 
-  <!-- CEP -->
+  <!-- Cidade -->
   <div class="col-md-3 mb-2 scrollable-content">
-      <label for="cep" class="custom-label">CEP</label>
-      <input
-          id="cep"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite o CEP"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-      />
+    <label for="cidade" class="custom-label">Cidade</label>
+    <input
+      id="cidade"
+      type="text"
+      class="form-control highlight-input"
+      placeholder="Digite a cidade"
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)"
+      oninput="converterParaMaiusculas(this)"
+    />
+    <p class="comment">Aut. preenchidos.</p>
   </div>
+
 </div>
 
 <!-- Segunda linha do Grupo 5 -->
 <div class="row mt-3">
   <!-- UF -->
   <div class="col-md-3 mb-2 scrollable-content">
-      <label for="uf" class="custom-label">UF</label>
-      <div class="mui-select">
-          <select id="uf" class="form-select" 
-                  onfocus="highlightInput(this)" 
-                  onblur="removeHighlight(this)"
-                  oninput="converterParaMaiusculas(this); highlightInput(this);"
-                  >
-              <!-- Opções do select para UF -->
-              <option value="" disabled selected>Selecione</option>
-              <option value="uf1">UF1</option>
-              <option value="uf2">UF2</option>
-              <!-- Adicione mais opções conforme necessário -->
-          </select>
-      </div>
-  </div>
-
-<!-- Cidade -->
-  <div class="col-md-4 mb-2 scrollable-content">
-      <label for="cidade" class="custom-label">Cidade</label>
-      <input
-          id="cidade"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite a cidade"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-      />
+    <label for="uf" class="custom-label">UF</label>
+    <div class="mui-select">
+      <select
+        id="uf"
+        class="form-select"
+        onfocus="highlightInput(this)"
+        onblur="removeHighlight(this)"
+     oninput="converterParaMaiusculas(this)"
+      >
+        <!-- Opções do select para UF -->
+        <option value="" disabled selected>Selecione</option>
+        <option value="uf1">UF1</option>
+        <option value="uf2">UF2</option>
+        <!-- Adicione mais opções conforme necessário -->
+      </select>
+    </div>
   </div>
 
   <!-- Bairro -->
   <div class="col-md-5 mb-2 scrollable-content">
-      <label for="bairro" class="custom-label">Bairro</label>
-      <input
-          id="bairro"
-          type="text"
-          class="form-control highlight-input"
-          placeholder="Digite o bairro"
-          onfocus="highlightInput(this)"
-          onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this);"
-      />
+    <label for="bairro" class="custom-label">Bairro</label>
+    <input
+      id="bairro"
+      type="text"
+      class="form-control highlight-input"
+      placeholder="Digite o bairro"
+      onfocus="highlightInput(this)"
+      onblur="removeHighlight(this)"
+      oninput="converterParaMaiusculas(this)"
+    />
+    <p class="comment">Aut. preenchidos.</p>
   </div>
 </div>
 
@@ -175,7 +184,7 @@
           placeholder="Digite o telefone fixo"
           onfocus="highlightInput(this)"
           onblur="removeHighlight(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this); formatarCelular(this);"
+          oninput="converterParaMaiusculas(this); formatarCelular(this);"
       />
   </div>
 
@@ -190,7 +199,7 @@
           onfocus="highlightInput(this)"
           onblur="removeHighlight(this)"
           oninput="formatarCelular(this)"
-          oninput="converterParaMaiusculas(this); highlightInput(this); formatarCelular(this);"
+          oninput="converterParaMaiusculas(this); formatarCelular(this);"
       />
   </div>
 
@@ -375,29 +384,6 @@
       });
 
 
-    });
-
-    $("#cep").blur(function () {
-      var cep = $(this).val().replace(/\D/g, "");
-
-      if (cep != "") {
-        var validacep = /^[0-9]{8}$/;
-        if (validacep.test(cep)) {
-          $.getJSON(
-            "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
-            function (dados) {
-              if (!("erro" in dados)) {
-                $("#endereco").val(dados.logradouro);
-                $("#bairro").val(dados.bairro);
-                $("#cidade").val(dados.localidade);
-                $("#cidade").val(dados.cidade);
-              } else {
-                alert("CEP não encontrado.");
-              }
-            }
-          );
-        }
-      }
     });
 
     function atualizarRotuloSalario() {
@@ -953,22 +939,81 @@ function getUFId(selectedUFName, data) {
 
 // Função para manipular a seleção da UF
 function selecionarUF(input, data) {
-    var selectedOption = input.value;
-    var selectedOptionId = getUFId(selectedOption, data);
+  // Obter a UF do CEP
+  const ufCEP = data.uf;
 
-    console.log("UF selecionada:", selectedOption);
-    console.log("ID correspondente:", selectedOptionId);
+  // Verificar se a UF do CEP já está presente nas opções
+  const optionExists = Array.from(input.options).some((option) => option.value === ufCEP);
 
-    if (selectedOptionId !== null) {
-        // Faça algo com o ID, por exemplo, armazene-o em uma variável
-        console.log("ID não é nulo:", selectedOptionId);
-        // Aqui você pode armazenar selectedOptionId ou enviá-lo para o Flask, conforme necessário
-    } else {
-        console.log("ID é nulo ou indefinido.");
+  if (!optionExists) {
+    // Se não existir, adicionar uma nova opção
+    const newOption = document.createElement('option');
+    newOption.value = ufCEP;
+    newOption.text = ufCEP;
+    input.add(newOption);
+  }
+
+  // Iterar sobre as opções e selecionar aquela que corresponde à UF do CEP
+  for (let i = 0; i < input.options.length; i++) {
+    if (input.options[i].value === ufCEP) {
+      input.selectedIndex = i;
+      break;
     }
+  }
 
-    // Adicione esta linha para garantir que os valores sejam exibidos no console
-    console.log("onChange completed");
+  // Adicione esta linha para garantir que os valores sejam exibidos no console
+  console.log("onChange completed");
+}
+
+
+const ufs = {
+  'AC': '12',
+  'AL': '27',
+  'AP': '16',
+  'AM': '13',
+  'BA': '29',
+  'CE': '23',
+  'DF': '53',
+  'ES': '32',
+  'GO': '52',
+  'MA': '21',
+  'MT': '51',
+  'MS': '50',
+  'MG': '31',
+  'PA': '15',
+  'PB': '25',
+  'PR': '41',
+  'PE': '26',
+  'PI': '22',
+  'RJ': '33',
+  'RN': '24',
+  'RS': '43',
+  'RO': '11',
+  'RR': '14',
+  'SC': '42',
+  'SP': '35',
+  'SE': '28',
+  'TO': '17'
+};
+
+function selecionarUF(uf) {
+  const ufSelect = document.getElementById('uf');
+
+  const optionExists = Array.from(ufSelect.options).some((option) => option.value === uf);
+
+  if (!optionExists) {
+    const newOption = document.createElement('option');
+    newOption.value = uf;
+    newOption.text = uf;
+    ufSelect.add(newOption);
+  }
+
+  for (let i = 0; i < ufSelect.options.length; i++) {
+    if (ufSelect.options[i].value === uf) {
+      ufSelect.selectedIndex = i;
+      break;
+    }
+  }
 }
 
 
@@ -1052,6 +1097,63 @@ function validarEmail(input) {
             input.setCustomValidity("");
         }
     }
+
+  function buscarEnderecoPorCEP(cep) {
+  // Remover caracteres não numéricos do CEP
+  cep = cep.replace(/\D/g, '');
+
+  // Verificar se o CEP tem a quantidade correta de caracteres
+  if (cep.length === 8) {
+    // Montar a URL da requisição ao ViaCEP
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    // Realizar a requisição
+    fetch(url)
+      .then(response => response.json())
+      .then(data => preencherCamposEndereco(data, cep))
+      .catch(error => console.error('Erro na consulta de CEP:', error));
+  }
+}
+
+function preencherCamposEndereco(data, cep) {
+    // Preencher os campos de endereço com os dados obtidos
+    document.getElementById('logradouro').value = data.logradouro || '';
+    document.getElementById('bairro').value = data.bairro || '';
+    document.getElementById('cidade').value = data.localidade || '';
+    document.getElementById('uf').value = data.uf || '';
+    
+    // Preencher automaticamente o campo de complemento
+    document.getElementById('complemento').value = data.complemento || '';
+
+    // Manter o valor do campo CEP mesmo após a consulta
+    document.getElementById('cep').value = cep;
+
+    // Pular automaticamente para o próximo campo (por exemplo, Número)
+    document.getElementById('numero').focus();
+
+    // Exiba os dados no console para fins de teste
+    console.log('Dados do endereço:', data);
+}
+
+let cepSalvo = "";
+
+function salvarCEP(cep) {
+  cepSalvo = cep;
+}
+
+function formatarCEP(cepInput) {
+  // Remover caracteres não numéricos do CEP
+  let cep = cepInput.value.replace(/\D/g, "");
+
+  // Aplicar formatação do CEP (XXXXX-XXX)
+  if (cep.length > 5) {
+    cep = cep.substring(0, 5) + "-" + cep.substring(5, cep.length);
+  }
+
+  // Atualizar o valor do campo de entrada
+  cepInput.value = cep;
+}
+
 
   </script>
 </html>
