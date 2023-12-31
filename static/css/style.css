@@ -1180,7 +1180,8 @@ input[type='radio']:checked + .checkmark {
   
   .menu li[data-selected='true'],
   .menu-header:hover,
-  .menu li:hover {
+  .menu li:hover,
+  .submenu-background {
     background-color: var(--background-situacao); /* Cor de destaque ao passar o mouse ou quando está selecionado */
     color:var(--text-color2);
   }
@@ -1415,7 +1416,15 @@ input.filled {
     background-color: var(--background-color-inpunt); /* Cor de fundo */
     color:  var(--color-inpunt); /* Cor do texto branco */
   }
-  
+
+  #engenhariaSubMenu {
+    /* estilos específicos para o elemento com id "engenhariaSubMenu" */
+    color: red;
+    font-weight: bold;
+    /* outros estilos... */
+  }
+
+
   @media (max-width: 900px) {
     .sidebar {
       width: 30vw;

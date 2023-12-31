@@ -70,6 +70,7 @@
     onblur="removeHighlight(this)"
     oninput="formatarCEP(this); converterParaMaiusculas(this); buscarEnderecoPorCEP(this.value)"
     />
+    <p class="comment">Após preenchimento, outros campos serão automaticamente alimentados..</p>
   </div>
 
 
@@ -116,9 +117,12 @@
     />
     <p class="comment">Aut. preenchidos.</p>
   </div>
+</div>
 
+
+  <div class="row mt-3">
   <!-- Cidade -->
-  <div class="col-md-3 mb-2 scrollable-content">
+  <div class="col-md-4 mb-2 scrollable-content">
     <label for="cidade" class="custom-label">Cidade</label>
     <input
       id="cidade"
@@ -132,10 +136,6 @@
     <p class="comment">Aut. preenchidos.</p>
   </div>
 
-</div>
-
-<!-- Segunda linha do Grupo 5 -->
-<div class="row mt-3">
   <!-- UF -->
   <div class="col-md-3 mb-2 scrollable-content">
     <label for="uf" class="custom-label">UF</label>
@@ -1154,6 +1154,18 @@ function formatarCEP(cepInput) {
   cepInput.value = cep;
 }
 
+
+function selecionarMenu(menuId) {
+      // Oculta todos os menus e submenus
+      var allMenus = document.querySelectorAll('.menu, .submenu');
+      allMenus.forEach(function(menu) {
+        menu.style.display = 'none';
+      });
+
+      // Exibe o menu clicado
+      var selectedMenu = document.getElementById(menuId);
+      selectedMenu.style.display = 'block';
+    }
 
   </script>
 </html>

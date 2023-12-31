@@ -50,7 +50,17 @@
           </button>
 
           <!-- Adicionando o contêiner para informações específicas do menu -->
-          <ul>
+          <ul class="menu">
+            <!-- Engenharia -->
+            <li class="expandable hide-text" id="engenhariaSubMenu" onclick="selecionarMenu('engenharia')">
+              <div class="menu-header">
+                 <i class="material-icons">engineering</i>
+                 <span class="menu-text" id="engenhariaText">Engenharia</span>
+                 <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
+              </div>
+
+            <!-- Conteúdo específico para o grupo "Engenharia" -->
+            <ul class="submenu" id="engenhariaSubMenu">
             <li class="expandable hide-text">
             <div class="menu-header">
               <i class="material-icons">folder</i>
@@ -65,6 +75,7 @@
                 >arrow_drop_down</i
               >
               </div>
+               <!-- Conteúdo específico para o submenu "Cadastro de Materiais" -->
               <ul class="submenu">
                 <li>
                   <i
@@ -134,9 +145,107 @@
                 <i class="material-icons">location_city</i>
                 <span class="menu-text">Cidade</span>
               </li>
-              
               </ul>
+          <!-- Fim do conteúdo específico para o submenu "Cadastro de Materiais" -->
+           
+             </li>
+          </ul>
+ <!-- Fim do conteúdo específico para o grupo "Engenharia" -->
+        </li>
+
+
+        <!-- Suprimentos -->
+    <li class="expandable hide-text" id="suprimentosSubMenu" onclick="selecionarMenu('suprimentos')">
+      <div class="menu-header">
+        <i class="material-icons">local_shipping</i>
+        <span class="menu-text" id="suprimentosText">Suprimentos</span>
+        <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
+      </div>
+
+      <!-- Conteúdo específico para o grupo "Suprimentos" -->
+      <ul class="submenu" id="suprimentosSubMenu">
+        <!-- Compras -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">shopping_cart</i>
+            <span class="menu-text">Compras</span>
+            <i class="material-icons toggle-submenu">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Compras" -->
+          <ul class="submenu">
+            <li onclick="submenu_muda_de_tela('compras/lista_compras.html', event)">
+              <i class="material-icons">list_alt</i>
+              <span class="menu-text">Lista de Compras</span>
             </li>
+            <li onclick="submenu_muda_de_tela('compras/criar_compra.html', event)">
+              <i class="material-icons">add_shopping_cart</i>
+              <span class="menu-text">Criar Compra</span>
+            </li>
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Compras" -->
+
+        </li>
+
+        <!-- Contratos e Medição -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">assignment</i>
+            <span class="menu-text">Contratos e Medição</span>
+            <i class="material-icons toggle-submenu">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Contratos e Medição" -->
+          <ul class="submenu">
+            <li onclick="submenu_muda_de_tela('contratos/lista_contratos.html', event)">
+              <i class="material-icons">list_alt</i>
+              <span class="menu-text">Lista de Contratos</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('contratos/medicoes.html', event)">
+              <i class="material-icons">assessment</i>
+              <span class="menu-text">Medições</span>
+            </li>
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Contratos e Medição" -->
+
+        </li>
+
+        <!-- Estoque -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">store</i>
+            <span class="menu-text">Estoque</span>
+            <i class="material-icons toggle-submenu">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Estoque" -->
+          <ul class="submenu">
+            <li onclick="submenu_muda_de_tela('estoque/lista_estoque.html', event)">
+              <i class="material-icons">list_alt</i>
+              <span class="menu-text">Lista de Estoque</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('estoque/entrada_saida.html', event)">
+              <i class="material-icons">swap_horiz</i>
+              <span class="menu-text">Entrada/Saída</span>
+            </li>
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Estoque" -->
+
+        </li>
+
+        <!-- Integração com Serviços de Compras -->
+        <li onclick="submenu_muda_de_tela('integracao_servicos_compras.html', event)">
+          <i class="material-icons">sync_alt</i>
+          <span class="menu-text">Integração com Serviços de Compras</span>
+        </li>
+      </ul>
+      <!-- Fim do conteúdo específico para o grupo "Suprimentos" -->
+    </li>
+  </ul>
+
+  <!-- Adicione mais menus conforme necessário -->
+</li>
+
 
             <!-- Cadastro de Materiais -->
           <li class="expandable hide-text">
@@ -172,7 +281,10 @@
                   <span class="menu-text"> Localização</span>
               </li>
           </ul>
-      </li>
+          <!-- Fim do conteúdo específico para o submenu "Cadastro de Materiais" -->
+       </li>
+      </ul>
+      <!-- Fim do conteúdo específico para o grupo "Engenharia" -->
 
               <!-- Obras -->
             <li class="expandable hide-text">
@@ -1113,7 +1225,6 @@ $("#menu ul li.expandable").on("click", function (e) {
     }
   });
 }
-
 </script>
 
 
