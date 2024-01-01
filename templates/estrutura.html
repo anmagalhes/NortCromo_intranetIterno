@@ -153,8 +153,6 @@
         <!-- Fim do conteúdo específico para o grupo "Engenharia" -->
         </li>
 
-
-<!-- Módulo: Suprimentos -->
 <!-- Módulo: Suprimentos -->
 <li class="expandable hide-text" id="suprimentosSubMenu" onclick="selecionarMenu('suprimentos')">
   <div class="menu-header">
@@ -695,7 +693,7 @@
 
               {% include 'funcoes_comuns.html' %}
               
-              <script>
+<script>
 
 // Função para lidar com o clique nos submenus
 function handleSubmenuClick(event) {
@@ -764,15 +762,24 @@ function toggleMenuMobile() {
     menuMobile.style.display = menuMobile.style.display === "block" ? "none" : "block";
 }
 
-// Função para abrir o menu
-function abrirMenu() {
-    $("#menu-lateral").toggleClass("open-menu");
+// Função para alternar visibilidade do menu no mobile
+  function toggleMobileMenu() {
+    console.log("toggleMobileMenu");
+
+    // Toggle da classe "change2" no elemento com a classe "container"
+    $(".container").toggleClass("change2");
+
+    // Recolhe todos os submenus
+    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2 change3");
+
+    // Remove a classe "active" de todos os itens do menu
+    $("#menu ul li.expandable").removeClass("active");
+
+    // Log para verificar o estado das classes após a alteração
+    console.log('Classes após a alteração:', $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").attr('class'));
+    console.log('Classes do li.expandable após a alteração:', $("#menu ul li.expandable").attr('class'));
 }
 
-// Função para alternar visibilidade do menu no mobile
-function toggleMobileMenu() {
-    $("#lado_esquerdo").toggleClass("open");
-}
 
 // Função para mudar de tela na seção de presença
 function muda_de_tela_presenca(x) {
@@ -886,92 +893,143 @@ function muda_de_tela_presenca(x) {
     $(document).ready(function () {
     // Elementos globais
     const menu = document.getElementById("menu");
-    const toggleMenuBtn = document.getElementById("toggleMenuBtn");
-    const closeMenuBtn = document.getElementById("closeMenuBtn");
-    const container = document.getElementById("container");
+        const toggleMenuBtn = document.getElementById("toggleMenuBtn");
+        const closeMenuBtn = document.getElementById("closeMenuBtn");
+        const container = document.getElementById("container");
 
-    // Elementos do menu mobile
-    const menuOverlay = document.getElementById("menu-overlay");
-    const menuMobile = document.querySelector(".menu-mobile");
-    const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
-    const menuFlutuanteBtn = document.getElementById("menu-flutuante");
+        // Elementos do menu mobile
+        const menuOverlay = document.getElementById("menu-overlay");
+        const menuMobile = document.querySelector(".menu-mobile");
+        const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
+        const menuFlutuanteBtn = document.getElementById("menu-flutuante");
 
-    // Adicione um identificador único a cada ícone do Material Design
-    const iconButtons = document.querySelectorAll(".material-icons");
+        // Identificadores únicos para ícones do Material Design
+        const iconButtons = document.querySelectorAll(".material-icons");
 
-    // Adicione este bloco para lidar com o clique nos submenus
-    $(".load-on-click li").on("click", handleSubmenuClick);
+        // Lidar com cliques nos submenus
+        $(".load-on-click li").on("click", handleSubmenuClick);
 
-
-    // Evento de clique para abrir o menu e fechar
+// Evento de clique para abrir e fechar o menu
 $(".hamburger-menu").click(function () {
-    console.log('Botão do menu clicado');
+    try {
+        console.log('Botão do menu clicado');
 
-    // Alternar a classe change2 no elemento com a classe container
-    $(".container").toggleClass("change2");
+        // Verificar se o menu está atualmente aberto
+        const isMenuOpen = $(".container").hasClass("change2");
 
-    // Recolher todos os submenus
-    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+        // Verificar se o item do menu está ativo
+        const isActive = $(this).hasClass("active");
 
-    // Remover a classe active de todos os itens do menu
-    $("#menu ul li.expandable").removeClass("active");
+        // Recolher todos os subníveis se o item do menu já estiver ativo
+        if (isActive) {
+            console.log("Recolhendo subníveis, pois o item já está ativo.");
+            $(this).find(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").hide();
+        } else {
+            // Recolher todos os subníveis se o menu já estiver aberto
+            if (isMenuOpen) {
+                console.log("Recolhendo subníveis, pois o menu já está aberto.");
+                $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+                $("#menu ul li.expandable").removeClass("active");
+            }
+        }
 
-    // Log para verificar o estado das classes após a alteração
-    console.log('Classes após a alteração:', $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").attr('class'));
-    console.log('Classes do li.expandable após a alteração:', $("#menu ul li.expandable").attr('class'));
+        // Alternar a classe "change2" no elemento com a classe "container"
+        console.log("Alternando classe 'change2' no elemento com a classe 'container'.");
+        $(".container").toggleClass("change2");
+
+        // Log para verificar o estado das classes após a alteração
+        console.log('Classes após a alteração:', $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").attr('class'));
+        console.log('Classes do li.expandable após a alteração:', $("#menu ul li.expandable").attr('class'));
+    } catch (error) {
+        console.error("Error in hamburger-menu click:", error);
+    }
 });
 
 // Event listener para itens do menu expansível
-$(".expandable").on("click", function (event) {
+$(".expandable").click(function () {
     try {
-        const el = event.currentTarget;
+        console.log("Clique detectado em item do menu expansível.");
 
-        // Recolher todos os submenus do nível 2 ao nível 4 ao clicar no menu principal
-        if ($(el).hasClass("main-menu")) {
-            $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+        // Verificar se o item do menu está ativo
+        const isActive = $(this).hasClass("active");
+
+        // Recolher todos os subníveis se o item do menu já estiver ativo
+        if (isActive) {
+            console.log("Recolhendo subníveis, pois o item já está ativo.");
+            $(this).find(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").hide();
         }
 
-        // Alternar a classe active no item clicado
-        $(el).toggleClass("active");
+        // Alternar a classe 'active' no item do menu
+        console.log("Alternando classe 'active'.");
+        $(this).toggleClass("active");
 
-        // Alternar a classe change2 no item clicado e seu submenu
-        $(el).find(".submenu").toggleClass("change2");
+        // Alternar a visibilidade do submenu
+        console.log("Alternando visibilidade do submenu.");
+        $(this).children(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").toggle();
 
-        // Remover a classe active de outros itens do menu
-        $("#menu ul li.expandable").not(el).removeClass("active");
+        // Alternar a classe 'rotated' no ícone de seta (se houver)
+        console.log("Alternando classe 'rotated' no ícone de seta.");
+        $(this).find(".toggle-submenu").toggleClass("rotated");
 
-        // Evitar recolher o menu principal
-        event.stopPropagation();
+        // Alternar a visibilidade do texto do menu
+        console.log("Alternando visibilidade do texto do menu.");
+        $(this).children(".menu-text").toggle();
     } catch (error) {
-        console.error("Erro no clique do item do menu:", error);
+        console.error("Error in expandable click:", error);
     }
 });
 
-// Evento de clique nos itens do menu
-$("#menu ul li.expandable").on("click", function (e) {
-    try {
-        const el = e.currentTarget;
+                // Event listener para itens do menu expansível
+                $(".expandable").on("click", function (event) {
+                    try {
+                        const el = event.currentTarget;
 
-        // Alternar a classe active no item clicado
-        $(el).toggleClass("active");
+                // Recolher todos os submenus do nível 2 ao nível 4 ao clicar no menu principal
+                if ($(el).hasClass("main-menu")) {
+                    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+                }
 
-        // Alternar a classe change2 no item clicado e seu submenu
-        $(el).find(".submenu").toggleClass("change2");
+                // Alternar a classe "active" no item clicado
+                $(el).toggleClass("active");
 
-        // Remover a classe active de outros itens do menu
-        $("#menu ul li.expandable").not(el).removeClass("active");
-        
-        // Evitar recolher o menu principal
+                // Alternar a classe "change2" no item clicado e seu submenu
+                $(el).find(".submenu").toggleClass("change2");
+
+                // Remover a classe "active" de outros itens do menu
+                $("#menu ul li.expandable").not(el).removeClass("active");
+
+                // Evitar recolher o menu principal
+                event.stopPropagation();
+            } catch (error) {
+                console.error("Erro no clique do item do menu:", error);
+            }
+        });
+
+    // Evento de clique nos itens do menu
+    $("#menu ul li.expandable").on("click", function (e) {
+        try {
+            const el = e.currentTarget;
+
+            // Alternar a classe active no item clicado
+            $(el).toggleClass("active");
+
+            // Alternar a classe change2 no item clicado e seu submenu
+            $(el).find(".submenu").toggleClass("change2");
+
+            // Remover a classe active de outros itens do menu
+            $("#menu ul li.expandable").not(el).removeClass("active");
+            
+            // Evitar recolher o menu principal
+            e.stopPropagation();
+        } catch (error) {
+            console.error("Erro no clique do item do menu:", error);
+        }
+    });
+
+    // Impede a propagação do evento de clique para o pai
+    $("#menu ul li.expandable .submenu").on("click", function (e) {
         e.stopPropagation();
-    } catch (error) {
-        console.error("Erro no clique do item do menu:", error);
-    }
-});
-
-// Impede a propagação do evento de clique para o pai
-$("#menu ul li.expandable .submenu").on("click", function (e) {
-    e.stopPropagation();
-});
+    });
 
 // Adicione este bloco para fechar o menu principal e recolher todos os submenus ao clicar no botão de fechar
 $("#closeMenuBtn").click(function () {
@@ -1014,12 +1072,6 @@ $(".submenu-nivel4 .expandable").on("click", function (event) {
     }
 });
 
-    // Evento de clique para abrir o menu e fechar
-    $("#toggleMenuBtn").click(function () {
-        console.log('Botão do menu clicado');
-        $("#menu").toggleClass("change2");
-    });
-
 
     iconButtons.forEach((button) => {
     button.addEventListener("click", function () {
@@ -1049,10 +1101,6 @@ if (toggleMenuBtn) {
         toggleMobileMenu();
     });
 }
-
-
-
-
 // Verifica se a tela é mobile
 const isMobile = window.innerWidth <= 768;
 if (isMobile) {
@@ -1060,24 +1108,7 @@ if (isMobile) {
     $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
 }
 
-            // Event listener para itens do menu expansível
-            $(".expandable").click(function () {
-            try {
-                // Alternar a classe 'active' no item do menu
-                $(this).toggleClass("active");
-
-                // Alternar a visibilidade do submenu
-                $(this).children(".submenu").toggle();
-
-                // Alternar a classe 'rotated' no ícone de seta (se houver)
-                $(this).find(".toggle-submenu").toggleClass("rotated");
-
-                // Alternar a visibilidade do texto do menu
-                $(this).children(".menu-text").toggle();
-            } catch (error) {
-                console.error("Error in expandable click:", error);
-            }
-        });
+            
                             function updatePageTitle(title) {
                             $("#pageTitle").text(title);
                         }
@@ -1136,7 +1167,7 @@ if (isMobile) {
                         const target = event.target;
                         const submenu = target.nextElementSibling;
                 
-                          // Lógica para lidar com cliques no cabeçalho do menu
+                    // Lógica para lidar com cliques no cabeçalho do menu
                     if (target.classList.contains("menu-header") && submenu) {
                       submenu.classList.toggle("show-submenu");
                       const toggleIcon = target.querySelector(".toggle-submenu");
@@ -1254,7 +1285,7 @@ if (isMobile) {
                 }
             }
 
-                              function setSubmenuHeight() {
+                   function setSubmenuHeight() {
                   const submenus = document.querySelectorAll('.menu li.expandable .submenu');
                   submenus.forEach(submenu => {
                     if (submenu.parentElement.classList.contains('active')) {
@@ -1264,6 +1295,9 @@ if (isMobile) {
                     }
                   });
                 }
+
+
+
               </script>
               
               </html>
