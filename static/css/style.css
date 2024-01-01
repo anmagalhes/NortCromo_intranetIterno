@@ -118,7 +118,7 @@ h2 {
   background-color: var(--background-mais_suave);
   position: fixed;
   left: -15vw; /* Inicia fora da tela */
-  z-index: 100;
+  z-index: 1;
   height: 95vh;
   overflow-y: auto; /* Adicione esta linha para habilitar a rolagem vertical */
   transition: left 0.3s;
@@ -1418,6 +1418,20 @@ input.filled {
   }
 
   #engenhariaSubMenu {
+    /* estilos específicos para o elemento com id "engenhariaSubMenu" */
+    color: red;
+    font-weight: bold;
+    /* outros estilos... */
+  }
+
+  #suprimentosSubMenu {
+    /* estilos específicos para o elemento com id "engenhariaSubMenu" */
+    color: red;
+    font-weight: bold;
+    /* outros estilos... */
+  }
+
+  #finaceirosSubMenu {
     /* estilos específicos para o elemento com id "engenhariaSubMenu" */
     color: red;
     font-weight: bold;
