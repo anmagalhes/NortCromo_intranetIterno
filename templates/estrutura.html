@@ -154,102 +154,17 @@
         </li>
 
 
-    <!-- Suprimentos -->
-    <li class="expandable hide-text" id="suprimentosSubMenu" onclick="selecionarMenu('suprimentos')">
-      <div class="menu-header">
-        <i class="material-icons">local_shipping</i>
-        <span class="menu-text" id="suprimentosText">Suprimentos</span>
-        <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
-      </div>
-
-      <!-- Conteúdo específico para o grupo "Suprimentos" -->
-      <ul class="submenu" id="suprimentos">
-        <!-- Compras -->
-        <li class="expandable hide-text">
-          <div class="menu-header">
-            <i class="material-icons">shopping_cart</i>
-            <span class="menu-text">Compras</span>
-            <i class="material-icons toggle-submenu">arrow_drop_down</i>
-          </div>
-
-          <!-- Conteúdo específico para o submenu "Compras" -->
-          <ul class="submenu">
-            <li onclick="submenu_muda_de_tela('compras/lista_compras.html', event)">
-              <i class="material-icons">list_alt</i>
-              <span class="menu-text">Lista de Compras</span>
-            </li>
-            <li onclick="submenu_muda_de_tela('compras/criar_compra.html', event)">
-              <i class="material-icons">add_shopping_cart</i>
-              <span class="menu-text">Criar Compra</span>
-            </li>
-          </ul>
-          <!-- Fim do conteúdo específico para o submenu "Compras" -->
-
-        </li>
-
-        <!-- Contratos e Medição -->
-        <li class="expandable hide-text">
-          <div class="menu-header">
-            <i class="material-icons">assignment</i>
-            <span class="menu-text">Contratos e Medição</span>
-            <i class="material-icons toggle-submenu">arrow_drop_down</i>
-          </div>
-
-          <!-- Conteúdo específico para o submenu "Contratos e Medição" -->
-          <ul class="submenu">
-            <li onclick="submenu_muda_de_tela('contratos/lista_contratos.html', event)">
-              <i class="material-icons">list_alt</i>
-              <span class="menu-text">Lista de Contratos</span>
-            </li>
-            <li onclick="submenu_muda_de_tela('contratos/medicoes.html', event)">
-              <i class="material-icons">assessment</i>
-              <span class="menu-text">Medições</span>
-            </li>
-          </ul>
-      <!-- Fim do conteúdo específico para o submenu "Cadastro de Materiais" -->
-
-        <!-- Estoque -->
-        <li class="expandable hide-text">
-          <div class="menu-header">
-            <i class="material-icons">store</i>
-            <span class="menu-text">Estoque</span>
-            <i class="material-icons toggle-submenu">arrow_drop_down</i>
-          </div>
-
-          <!-- Conteúdo específico para o submenu "Estoque" -->
-          <ul class="submenu">
-            <li onclick="submenu_muda_de_tela('estoque/lista_estoque.html', event)">
-              <i class="material-icons">list_alt</i>
-              <span class="menu-text">Lista de Estoque</span>
-            </li>
-            <li onclick="submenu_muda_de_tela('estoque/entrada_saida.html', event)">
-              <i class="material-icons">swap_horiz</i>
-              <span class="menu-text">Entrada/Saída</span>
-            </li>
-          </ul>
-      <!-- Fim do conteúdo específico para o submenu "Cadastro de Materiais" -->
-       
-         <!-- Integração com Serviços de Compras -->
-         <li onclick="submenu_muda_de_tela('integracao_servicos_compras.html', event)">
-          <i class="material-icons">sync_alt</i>
-          <span class="menu-text">Integração com Serviços de Compras</span>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</li>
-
-
-<!-- Financeiros -->
-<li class="expandable hide-text" id="financeirosSubMenu">
+<!-- Módulo: Suprimentos -->
+<!-- Módulo: Suprimentos -->
+<li class="expandable hide-text" id="suprimentosSubMenu" onclick="selecionarMenu('suprimentos')">
   <div class="menu-header">
     <i class="material-icons">local_shipping</i>
-    <span class="menu-text" id="financeirosText">Financeiros</span>
+    <span class="menu-text" id="suprimentosText">Suprimentos</span>
     <i class="material-icons toggle-submenu" style="transition: transform 0.3s;">arrow_drop_down</i>
   </div>
 
-  <!-- Conteúdo específico para o grupo "Financeiros" -->
-  <ul class="submenu submenu-nivel2" id="financeiros" onclick="selecionarMenu('comprasFinanceirosSubMenu')">
+  <!-- Conteúdo específico para o grupo "Suprimentos" -->
+  <ul class="submenu submenu-nivel2" id="suprimentos">
     <!-- Compras -->
     <li class="expandable hide-text">
       <div class="menu-header">
@@ -258,20 +173,35 @@
         <i class="material-icons toggle-submenu">arrow_drop_down</i>
       </div>
 
-      <!-- Conteúdo específico para o submenu "Compras" -->
-      <ul class="submenu submenu-nivel3" id="comprasFinanceirosSubMenu">
-        <li onclick="submenu_muda_de_tela('compras/lista_compras.html', event)">
-          <i class="material-icons">list_alt</i>
-          <span class="menu-text">Lista de Compras</span>
+      <!-- Novo nível para "Pedidos de Compra" -->
+      <ul class="submenu submenu-nivel3" id="cadastrocomprasSubMenu">
+        <!-- Cadastro -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">list</i>
+            <span class="menu-text"> Pedidos de Compra</span>
+            <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Compras" -->
+          <ul class="submenu submenu-nivel4">
+            <li onclick="submenu_muda_de_tela('compra/lista_pedidos.html', event)">
+              <i class="material-icons">monetization_on</i>
+              <span class="menu-text">Contas Receitas</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('compra/criar_pedido.html', event)">
+              <i class="material-icons">add_shopping_cart</i>
+              <span class="menu-text">Criar Pedido</span>
+            </li>
+            <!-- Adicione mais itens de pedidos conforme necessário -->
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Pedidos de Compra" -->
         </li>
-        <li onclick="submenu_muda_de_tela('compras/criar_compra.html', event)">
-          <i class="material-icons">add_shopping_cart</i>
-          <span class="menu-text">Criar Compra</span>
-        </li>
+        <!-- Fim do novo nível "Pedidos de Compra" -->
       </ul>
       <!-- Fim do conteúdo específico para o submenu "Compras" -->
-
     </li>
+    <!-- Fim do novo nível "Compras" -->
 
     <!-- Contratos e Medição -->
     <li class="expandable hide-text">
@@ -282,7 +212,7 @@
       </div>
 
       <!-- Conteúdo específico para o submenu "Contratos e Medição" -->
-      <ul class="submenu submenu-nivel3" id="comprasFinanceirosSubMenu">
+      <ul class="submenu submenu-nivel3" id="contratos_Submenu">
         <li onclick="submenu_muda_de_tela('contratos/lista_contratos.html', event)">
           <i class="material-icons">list_alt</i>
           <span class="menu-text">Lista de Contratos</span>
@@ -291,8 +221,11 @@
           <i class="material-icons">assessment</i>
           <span class="menu-text">Medições</span>
         </li>
+        <!-- Adicione mais itens de contratos conforme necessário -->
       </ul>
       <!-- Fim do conteúdo específico para o submenu "Contratos e Medição" -->
+    </li>
+    <!-- Fim do novo nível "Contratos e Medição" -->
 
     <!-- Estoque -->
     <li class="expandable hide-text">
@@ -303,7 +236,7 @@
       </div>
 
       <!-- Conteúdo específico para o submenu "Estoque" -->
-      <ul class="submenu" id="estoqueFinanceirosSubMenu">
+      <ul class="submenu submenu-nivel3" id="estoques_Submenu">
         <li onclick="submenu_muda_de_tela('estoque/lista_estoque.html', event)">
           <i class="material-icons">list_alt</i>
           <span class="menu-text">Lista de Estoque</span>
@@ -312,16 +245,164 @@
           <i class="material-icons">swap_horiz</i>
           <span class="menu-text">Entrada/Saída</span>
         </li>
+        <!-- Adicione mais itens de estoque conforme necessário -->
       </ul>
       <!-- Fim do conteúdo específico para o submenu "Estoque" -->
+    </li>
+    <!-- Fim do novo nível "Estoque" -->
 
     <!-- Integração com Serviços de Compras -->
     <li onclick="submenu_muda_de_tela('integracao_servicos_compras.html', event)">
       <i class="material-icons">sync_alt</i>
       <span class="menu-text">Integração com Serviços de Compras</span>
     </li>
+
+  </ul>
+  <!-- Fim do conteúdo específico para o grupo "Suprimentos" -->
+</li>
+
+
+<!-- Módulo: Financeiro -->
+<li class="expandable hide-text" id="financeirosSubMenu" onclick="selecionarMenu('financeiros')">
+  <div class="menu-header">
+    <i class="material-icons">attach_money</i>
+    <span class="menu-text" id="financeirosText">Financeiros</span>
+    <i class="material-icons toggle-icon">arrow_drop_down</i>
+  </div>
+
+  <!-- Conteúdo específico para o grupo "Financeiros" -->
+  <ul class="submenu submenu-nivel2" id="financeiros">
+    <!-- Cadastro -->
+    <li class="expandable hide-text">
+      <div class="menu-header">
+        <i class="material-icons">list</i>
+        <span class="menu-text"> Cadastros</span>
+        <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+      </div>
+
+      <!-- Conteúdo específico para o submenu "Cadastros" -->
+      <ul class="submenu submenu-nivel3" id="cadastroFinanceirosSubMenu">
+        <!-- Cadastro -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">list</i>
+            <span class="menu-text"> Cadastrosaaaa</span>
+            <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Compras" -->
+          <ul class="submenu submenu-nivel4">
+            <li onclick="submenu_muda_de_tela('contas_receitas.html', event)">
+              <i class="material-icons">monetization_on</i>
+              <span class="menu-text">Contas Receitas</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('contas_despesas.html', event)">
+              <i class="material-icons">money_off</i>
+              <span class="menu-text">Contas Despesas</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('contas_bancos.html', event)">
+              <i class="material-icons">account_balance</i>
+              <span class="menu-text">Contas Bancos</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('formas_pagamento.html', event)">
+              <i class="material-icons">payment</i>
+              <span class="menu-text">Formas de Pagamento</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('centros_custos.html', event)">
+              <i class="material-icons">category</i>
+              <span class="menu-text">Centros de Custos</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('clientes_cadastrados.html', event)">
+              <i class="material-icons">person</i>
+              <span class="menu-text">Clientes</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('fornecedores_cadastrados.html', event)">
+              <i class="material-icons">business_center</i>
+              <span class="menu-text">Fornecedores</span>
+            </li>
+            <!-- Adicione mais itens de cadastros conforme necessário -->
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Cadastros" -->
+
+        </li>
+        <!-- Fim do novo nível "Cadastros" -->
+
+      </ul>
+      <!-- Fim do conteúdo específico para o submenu "Cadastros" -->
+
+    </li>
+
+    <!-- Lançamentos Financeiros -->
+    <li class="expandable">
+      <div class="menu-header">
+        <i class="material-icons">swap_horizontal_circle</i>
+        <span class="menu-text"> Lançamentos</span>
+        <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+      </div>
+
+      <ul class="submenu submenu-nivel3">
+        <li onclick="submenu_muda_de_tela('lancamentos_receitas.html', event)">
+          <i class="material-icons">arrow_downward</i>
+          <span class="menu-text">Lançamentos de Receitas</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('lancamentos_despesas.html', event)">
+          <i class="material-icons">arrow_upward</i>
+          <span class="menu-text">Lançamentos de Despesas</span>
+        </li>
+        <!-- Adicione mais itens de lançamentos conforme necessário -->
+      </ul>
+
+    </li>
+
+    <!-- Relatórios Financeiros -->
+    <li class="expandable">
+      <div class="menu-header">
+        <i class="material-icons">insert_chart_outlined</i>
+        <span class="menu-text"> Relatórios Financeiros</span>
+        <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+      </div>
+
+      <ul class="submenu submenu-nivel3">
+        <li onclick="submenu_muda_de_tela('previsto_realizado_ano.html', event)">
+          <i class="material-icons">trending_up</i>
+          <span class="menu-text">Previsto Realizado - Ano</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('previsto_realizado_mes.html', event)">
+          <i class="material-icons">trending_up</i>
+          <span class="menu-text">Previsto Realizado - Mês</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('dre_ano_resumo.html', event)">
+          <i class="material-icons">list_alt</i>
+          <span class="menu-text">DRE Ano - Resumo</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('conciliacao_bancaria.html', event)">
+          <i class="material-icons">compare_arrows</i>
+          <span class="menu-text">Conciliação Bancária</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('a_receber_a_pagar.html', event)">
+          <i class="material-icons">compare_arrows</i>
+          <span class="menu-text">A Receber - A Pagar</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('consolidado_obras.html', event)">
+          <i class="material-icons">business</i>
+          <span class="menu-text">Consolidado Obras</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('orcado_x_realizado.html', event)">
+          <i class="material-icons">trending_up</i>
+          <span class="menu-text">Orçado X Realizado</span>
+        </li>
+        <li onclick="submenu_muda_de_tela('movimentacoes.html', event)">
+          <i class="material-icons">swap_horizontal_circle</i>
+          <span class="menu-text">Movimentações</span>
+        </li>
+        <!-- Adicione mais itens de relatórios financeiros conforme necessário -->
+      </ul>
+
+    </li>
+
   </ul>
 </li>
+
 
 
 <!-- Módulo: Almoxarifado -->
@@ -656,150 +737,25 @@ function selecionarMenu(menuItem) {
         const menuElement = $(`#${menuItem}`);
 
         if (menuElement.length > 0) {
-            // Adicione classes e estilos para mostrar o terceiro nível
+            // Adicione classes e estilos para mostrar o terceiro ou quarto nível
             menuElement.addClass("active");
-            menuElement.find(".submenu").addClass("change2");
+            
+            if (menuElement.hasClass("submenu-nivel4")) {
+                menuElement.find(".submenu").addClass("change3");
+                menuElement.find(".toggle-submenu").addClass("arrow-up");
+            } else {
+                menuElement.find(".submenu").addClass("change2");
+                menuElement.find(".toggle-submenu").addClass("arrow-up");
+            }
 
             // Abra o submenu
             menuElement.find(".submenu").show();
-
-            // Atualize a seta para cima no ícone de menu
-            menuElement.find(".toggle-submenu").addClass("arrow-up");
         } else {
             console.error("Item de menu não encontrado:", menuItem);
         }
     } catch (error) {
         console.error("Erro em selecionarMenu:", error);
     }
-}
-
-
-    try {
-    $(document).ready(function () {
-    // Elementos globais
-    const menu = document.getElementById("menu");
-    const toggleMenuBtn = document.getElementById("toggleMenuBtn");
-    const closeMenuBtn = document.getElementById("closeMenuBtn");
-    const container = document.getElementById("container");
-
-    // Elementos do menu mobile
-    const menuOverlay = document.getElementById("menu-overlay");
-    const menuMobile = document.querySelector(".menu-mobile");
-    const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
-    const menuFlutuanteBtn = document.getElementById("menu-flutuante");
-
-    // Adicione um identificador único a cada ícone do Material Design
-    const iconButtons = document.querySelectorAll(".material-icons");
-
-    // Adicione este bloco para lidar com o clique nos submenus
-    $(".load-on-click li").on("click", handleSubmenuClick);
-
-    // Adicione este bloco para lidar com o clique nos headers dos submenus
-  // Adicione este bloco para lidar com o clique nos headers dos submenus (nível 2)
-$(".expandable").on("click", function (event) {
-    try {
-        const el = event.currentTarget;
-
-        if (el) {
-            // Alternar a classe active no item clicado
-            $(el).toggleClass("active");
-
-            // Alternar a classe change2 no item clicado e seu submenu
-            $(el).find(".submenu").toggleClass("change2");
-
-            // Remover a classe active de outros itens do menu
-            $("#menu ul li.expandable").not(el).removeClass("active");
-
-            // Alternar a seta para cima ou para baixo com base na existência da classe change2
-            $(el).find(".toggle-submenu").toggleClass("arrow-up", $(el).find(".submenu").hasClass("change2"));
-
-            // Evitar recolher o menu principal
-            event.stopPropagation();
-        } else {
-            console.error("Elemento não encontrado.");
-        }
-    } catch (error) {
-        console.error("Erro no clique do item do menu:", error);
-    }
-});
-
-    // Evento de clique para abrir o menu e fechar
-    $("#toggleMenuBtn").click(function () {
-        console.log('Botão do menu clicado');
-        $("#menu").toggleClass("change2");
-    });
-
-    // Evento de clique nos itens do menu
-    $("#menu ul li.expandable").on("click", function (e) {
-        try {
-            const el = e.currentTarget;
-
-            if (el) {
-                // Alternar a classe active no item clicado
-                $(el).toggleClass("active");
-
-                // Alternar a classe change2 no item clicado e seu submenu
-                $(el).find(".submenu").toggleClass("change2");
-
-                // Remover a classe active de outros itens do menu
-                $("#menu ul li.expandable").not(el).removeClass("active");
-
-                // Alternar a seta para cima ou para baixo com base na existência da classe change2
-                $(el).find(".toggle-submenu").toggleClass("arrow-up", $(el).find(".submenu").hasClass("change2"));
-            } else {
-                console.error("Elemento não encontrado.");
-            }
-        } catch (error) {
-            console.error("Erro no clique do item do menu:", error);
-        }
-    });
-
-    // Impede a propagação do evento de clique para o pai
-    $("#menu ul li.expandable .submenu").on("click", function (e) {
-        e.stopPropagation();
-    });
-
-    // Fechar o menu ao clicar no botão de fechar
-    $("#closeMenuBtn").click(function () {
-        $("#menu").removeClass("change2");
-        // Remover a classe active de todos os itens do menu ao fechar
-        $("#menu ul li.expandable").removeClass("active");
-    });
-
-    // Evento de clique para abrir o menu e fechar
-    $(".hamburger-menu").click(function () {
-        console.log('Botão do menu clicado');
-        // Alternar a classe change2 no elemento com a classe container
-        $(".container").toggleClass("change2");
-    });
-
-    iconButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-        const template = this.parentElement.getAttribute("data-template");
-        loadContent(template);
-        toggleMenuState(this.innerText);
-    });
-});
-
-// Event listener para o botão de menu flutuante
-if (menuFlutuanteBtn) {
-    menuFlutuanteBtn.addEventListener("click", function () {
-        toggleMobileMenu();
-    });
-}
-
-// Event listener para o botão de abertura de menu no mobile
-if (openMenuFloatingBtnMobile) {
-    openMenuFloatingBtnMobile.addEventListener("click", function () {
-        toggleMobileMenu();
-    });
-}
-
-// Event listener para o botão de toggle do menu no desktop
-if (toggleMenuBtn) {
-    toggleMenuBtn.addEventListener("click", function () {
-        toggleMobileMenu();
-    });
 }
 
 // Função para alternar visibilidade do menu mobile
@@ -818,76 +774,8 @@ function toggleMobileMenu() {
     $("#lado_esquerdo").toggleClass("open");
 }
 
-// Verifica se a tela é mobile
-const isMobile = window.innerWidth <= 768;
-if (isMobile) {
-    $("#openMenuBtn").on("click", toggleMobileMenu);
-    $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
-}
-
-// Event listener para itens do menu expansível
-$(".expandable").click(function () {
-            try {
-                // Alternar a classe 'active' no item do menu
-                $(this).toggleClass("active");
-
-                // Alternar a visibilidade do submenu
-                $(this).children(".submenu").toggle();
-
-                // Alternar a classe 'rotated' no ícone de seta (se houver)
-                $(this).find(".toggle-submenu").toggleClass("rotated");
-
-                // Alternar a visibilidade do texto do menu
-                $(this).children(".menu-text").toggle();
-            } catch (error) {
-                console.error("Error in expandable click:", error);
-            }
-        });
-                            function updatePageTitle(title) {
-                            $("#pageTitle").text(title);
-                        }
-                
-                          // Event listener para itens do menu no desktop
-                          $(".desktop-menu-item").click(function () {
-                              try {
-                                  const template = $(this).attr("data-template");
-                                  loadContent(template);
-                                  $("#menu").css("left", "-260px");
-                              } catch (error) {
-                                  console.error("Error in desktop-menu-item click:", error);
-                              }
-                          });
-                
-                        // Event listener para itens do submenu
-                         $(document).on("click", ".submenu li", function () {
-                        try {
-                          // Adicione a lógica para verificar se é um item de terceiro nível
-                          const isThirdLevelItem = $(this).closest(".submenu-nivel3").length > 0;
-                            closeMobileMenu();
-
-                            // Adicione a verificação antes de chamar a função loadContent
-                            if (isThirdLevelItem) {
-                                loadContent($(this).attr("data-template"));
-                            }
-
-                            // Adicione a lógica para congelar o estado do nível 2 se estiver no nível 3
-                          const isSecondLevelItem = $(this).closest(".submenu-nivel2").length > 0;
-                          if (isThirdLevelItem && isSecondLevelItem) {
-                              return;
-                          }
-
-                        } catch (error) {
-                            console.error("Error in submenu li click:", error);
-                        }
-                    });
-                
-                      });
-                  } catch (error) {
-                      console.error("Error in document ready:", error);
-                  }
-                
-                  // Função para mudar de tela na seção de presença
-                  function muda_de_tela_presenca(x) {
+// Função para mudar de tela na seção de presença
+function muda_de_tela_presenca(x) {
                       try {
                           alert("Função muda_de_tela_presenca chamada com: " + x);
                           $.ajax({
@@ -977,7 +865,263 @@ $(".expandable").click(function () {
                           console.error("Error in toggleMenuState:", error);
                       }
                   }
+
+ // Função para manipular cliques em itens do submenu
+ function handleSubmenuItemClick() {
+        closeMobileMenu();
+        loadContent($(this).attr("data-template"));
+    }
+
+    // Função para fechar o menu mobile
+    function closeMobileMenu() {
+        const menuMobile = $("#lado_esquerdo");
+        const menuOverlay = $("#menu-overlay");
+
+        menuMobile.removeClass("open");
+        menuOverlay.hide();
+        
+    }
+
+    try {
+    $(document).ready(function () {
+    // Elementos globais
+    const menu = document.getElementById("menu");
+    const toggleMenuBtn = document.getElementById("toggleMenuBtn");
+    const closeMenuBtn = document.getElementById("closeMenuBtn");
+    const container = document.getElementById("container");
+
+    // Elementos do menu mobile
+    const menuOverlay = document.getElementById("menu-overlay");
+    const menuMobile = document.querySelector(".menu-mobile");
+    const openMenuFloatingBtnMobile = document.getElementById("openMenuFloatingBtnMobile");
+    const menuFlutuanteBtn = document.getElementById("menu-flutuante");
+
+    // Adicione um identificador único a cada ícone do Material Design
+    const iconButtons = document.querySelectorAll(".material-icons");
+
+    // Adicione este bloco para lidar com o clique nos submenus
+    $(".load-on-click li").on("click", handleSubmenuClick);
+
+
+    // Evento de clique para abrir o menu e fechar
+$(".hamburger-menu").click(function () {
+    console.log('Botão do menu clicado');
+
+    // Alternar a classe change2 no elemento com a classe container
+    $(".container").toggleClass("change2");
+
+    // Recolher todos os submenus
+    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+
+    // Remover a classe active de todos os itens do menu
+    $("#menu ul li.expandable").removeClass("active");
+
+    // Log para verificar o estado das classes após a alteração
+    console.log('Classes após a alteração:', $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").attr('class'));
+    console.log('Classes do li.expandable após a alteração:', $("#menu ul li.expandable").attr('class'));
+});
+
+// Event listener para itens do menu expansível
+$(".expandable").on("click", function (event) {
+    try {
+        const el = event.currentTarget;
+
+        // Recolher todos os submenus do nível 2 ao nível 4 ao clicar no menu principal
+        if ($(el).hasClass("main-menu")) {
+            $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2");
+        }
+
+        // Alternar a classe active no item clicado
+        $(el).toggleClass("active");
+
+        // Alternar a classe change2 no item clicado e seu submenu
+        $(el).find(".submenu").toggleClass("change2");
+
+        // Remover a classe active de outros itens do menu
+        $("#menu ul li.expandable").not(el).removeClass("active");
+
+        // Evitar recolher o menu principal
+        event.stopPropagation();
+    } catch (error) {
+        console.error("Erro no clique do item do menu:", error);
+    }
+});
+
+// Evento de clique nos itens do menu
+$("#menu ul li.expandable").on("click", function (e) {
+    try {
+        const el = e.currentTarget;
+
+        // Alternar a classe active no item clicado
+        $(el).toggleClass("active");
+
+        // Alternar a classe change2 no item clicado e seu submenu
+        $(el).find(".submenu").toggleClass("change2");
+
+        // Remover a classe active de outros itens do menu
+        $("#menu ul li.expandable").not(el).removeClass("active");
+        
+        // Evitar recolher o menu principal
+        e.stopPropagation();
+    } catch (error) {
+        console.error("Erro no clique do item do menu:", error);
+    }
+});
+
+// Impede a propagação do evento de clique para o pai
+$("#menu ul li.expandable .submenu").on("click", function (e) {
+    e.stopPropagation();
+});
+
+// Adicione este bloco para fechar o menu principal e recolher todos os submenus ao clicar no botão de fechar
+$("#closeMenuBtn").click(function () {
+    $(".container").removeClass("change2");
+    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2 change3");
+    $("#menu ul li.expandable").removeClass("active");
+});
+
+// Adicione este bloco para recolher todos os submenus ao clicar no cabeçalho do menu principal
+$(".main-menu .menu-header").on("click", function () {
+    $(".submenu, .submenu-nivel2, .submenu-nivel3, .submenu-nivel4").removeClass("change2 change3");
+    $("#menu ul li.expandable").removeClass("active");
+});
+
+// Adicione este bloco para lidar com o clique nos headers dos submenus (nível 4)
+$(".submenu-nivel4 .expandable").on("click", function (event) {
+    try {
+        const el = event.currentTarget;
+
+        if (el) {
+            // Alternar a classe active no item clicado
+            $(el).toggleClass("active");
+
+            // Alternar a classe change3 no item clicado e seu submenu
+            $(el).find(".submenu").toggleClass("change3");
+
+            // Remover a classe active de outros itens do menu
+            $("#menu ul li .submenu-nivel4 .expandable").not(el).removeClass("active");
+
+            // Alternar a seta para cima ou para baixo com base na existência da classe change3
+            $(el).find(".toggle-submenu").toggleClass("arrow-up", $(el).find(".submenu").hasClass("change3"));
+
+            // Evitar recolher o menu principal
+            event.stopPropagation();
+        } else {
+            console.error("Elemento não encontrado.");
+        }
+    } catch (error) {
+        console.error("Erro no clique do item do menu:", error);
+    }
+});
+
+    // Evento de clique para abrir o menu e fechar
+    $("#toggleMenuBtn").click(function () {
+        console.log('Botão do menu clicado');
+        $("#menu").toggleClass("change2");
+    });
+
+
+    iconButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+        const template = this.parentElement.getAttribute("data-template");
+        loadContent(template);
+        toggleMenuState(this.innerText);
+    });
+});
+
+// Event listener para o botão de menu flutuante
+if (menuFlutuanteBtn) {
+    menuFlutuanteBtn.addEventListener("click", function () {
+        toggleMobileMenu();
+    });
+}
+
+// Event listener para o botão de abertura de menu no mobile
+if (openMenuFloatingBtnMobile) {
+    openMenuFloatingBtnMobile.addEventListener("click", function () {
+        toggleMobileMenu();
+    });
+}
+
+// Event listener para o botão de toggle do menu no desktop
+if (toggleMenuBtn) {
+    toggleMenuBtn.addEventListener("click", function () {
+        toggleMobileMenu();
+    });
+}
+
+
+
+
+// Verifica se a tela é mobile
+const isMobile = window.innerWidth <= 768;
+if (isMobile) {
+    $("#openMenuBtn").on("click", toggleMobileMenu);
+    $("#toggleMenuBtn, .submenu li").on("click", toggleMobileMenu);
+}
+
+            // Event listener para itens do menu expansível
+            $(".expandable").click(function () {
+            try {
+                // Alternar a classe 'active' no item do menu
+                $(this).toggleClass("active");
+
+                // Alternar a visibilidade do submenu
+                $(this).children(".submenu").toggle();
+
+                // Alternar a classe 'rotated' no ícone de seta (se houver)
+                $(this).find(".toggle-submenu").toggleClass("rotated");
+
+                // Alternar a visibilidade do texto do menu
+                $(this).children(".menu-text").toggle();
+            } catch (error) {
+                console.error("Error in expandable click:", error);
+            }
+        });
+                            function updatePageTitle(title) {
+                            $("#pageTitle").text(title);
+                        }
                 
+                          // Event listener para itens do menu no desktop
+                          $(".desktop-menu-item").click(function () {
+                              try {
+                                  const template = $(this).attr("data-template");
+                                  loadContent(template);
+                                  $("#menu").css("left", "-260px");
+                              } catch (error) {
+                                  console.error("Error in desktop-menu-item click:", error);
+                              }
+                          });
+                
+                        // Event listener para itens do submenu
+                         $(document).on("click", ".submenu li", function () {
+                        try {
+                          // Adicione a lógica para verificar se é um item de terceiro nível
+                          const isThirdLevelItem = $(this).closest(".submenu-nivel3").length > 0;
+                            closeMobileMenu();
+
+                            // Adicione a verificação antes de chamar a função loadContent
+                            if (isThirdLevelItem) {
+                                loadContent($(this).attr("data-template"));
+                            }
+
+                            // Adicione a lógica para congelar o estado do nível 2 se estiver no nível 3
+                          const isSecondLevelItem = $(this).closest(".submenu-nivel2").length > 0;
+                          if (isThirdLevelItem && isSecondLevelItem) {
+                              return;
+                          }
+
+                        } catch (error) {
+                            console.error("Error in submenu li click:", error);
+                        }
+                    });
+                
+                      });
+                  } catch (error) {
+                      console.error("Error in document ready:", error);
+                  }
+                
+                  
                   // Event listeners para os botões de toggle do menu
                   toggleMenuBtn.addEventListener("click", toggleMenuState);
                   //openMenuBtn.addEventListener("click", toggleMenuState);
@@ -1090,30 +1234,27 @@ $(".expandable").click(function () {
                   });
                 
                   function toggleSubMenu(submenuId) {
-    try {
-        const submenu = document.getElementById(submenuId);
+                try {
+                    const submenu = document.getElementById(submenuId);
 
-        if (submenu) {
-            const isExpanded = submenu.classList.contains("expanded");
+                    if (submenu) {
+                        const isExpanded = submenu.classList.contains("expanded");
 
-            // Alterna a classe 'expanded' para mostrar ou ocultar o subnível
-            submenu.classList.toggle("expanded", !isExpanded);
+                        // Alterna a classe 'expanded' para mostrar ou ocultar o subnível
+                        submenu.classList.toggle("expanded", !isExpanded);
 
-            // Atualiza a seta com base na existência da classe 'expanded'
-            const toggleIcon = submenu.previousElementSibling.querySelector(".toggle-submenu");
-            toggleIcon.innerText = submenu.classList.contains("expanded") ? "arrow_drop_up" : "arrow_drop_down";
-        } else {
-            console.error("Submenu não encontrado.");
-        }
-    } catch (error) {
-        console.error("Erro ao alternar submenu:", error);
-    }
-}
+                        // Atualiza a seta com base na existência da classe 'expanded'
+                        const toggleIcon = submenu.previousElementSibling.querySelector(".toggle-submenu");
+                        toggleIcon.innerText = submenu.classList.contains("expanded") ? "arrow_drop_up" : "arrow_drop_down";
+                    } else {
+                        console.error("Submenu não encontrado.");
+                    }
+                } catch (error) {
+                    console.error("Erro ao alternar submenu:", error);
+                }
+            }
 
-
-                
-                
-                   function setSubmenuHeight() {
+                              function setSubmenuHeight() {
                   const submenus = document.querySelectorAll('.menu li.expandable .submenu');
                   submenus.forEach(submenu => {
                     if (submenu.parentElement.classList.contains('active')) {
@@ -1123,25 +1264,6 @@ $(".expandable").click(function () {
                     }
                   });
                 }
-
-    // Função para manipular cliques em itens do submenu
-    function handleSubmenuItemClick() {
-        closeMobileMenu();
-        loadContent($(this).attr("data-template"));
-    }
-
-    // Função para fechar o menu mobile
-    function closeMobileMenu() {
-        const menuMobile = $("#lado_esquerdo");
-        const menuOverlay = $("#menu-overlay");
-
-        menuMobile.removeClass("open");
-        menuOverlay.hide();
-        
-    }
-
-  
-
               </script>
               
               </html>

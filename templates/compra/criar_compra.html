@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% include 'head.html' %}
+  <body>
+    <div class="seg">
+
+      <h3>Cadastro de Pedido de Compra</h3>
+
+      <div class="container container-branco">
+
+        <h2 class="custom-label">Informações do Pedido:</h2>
+
+        <!-- Campos de entrada -->
+        <div class="row mt-3">
+          <!-- Campo Número do Pedido -->
+          <div class="col-md-3 mb-2 scrollable-content">
+            <label for="numero_pedido" class="custom-label">Número do Pedido</label>
+            <input
+              id="numero_pedido"
+              type="text"
+              class="form-control"
+              placeholder="Digite o número do pedido"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+            />
+          </div>
+
+          <!-- Campo Data do Pedido -->
+          <div class="col-md-3 mb-2 scrollable-content">
+            <label for="data_pedido" class="custom-label">Data do Pedido</label>
+            <input
+              id="data_pedido"
+              type="date"
+              class="form-control"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+            />
+          </div>
+        </div>
+
+        <!-- Detalhes do Pedido -->
+        <div class="row mt-3">
+          <!-- Campo Produto -->
+          <div class="col-md-4 mb-2 scrollable-content">
+            <label for="produto" class="custom-label">Produto</label>
+            <input
+              id="produto"
+              type="text"
+              class="form-control"
+              placeholder="Digite o nome do produto"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+              oninput="converterParaMaiusculas(this)"
+            />
+          </div>
+
+          <!-- Campo Quantidade -->
+          <div class="col-md-2 mb-2 scrollable-content">
+            <label for="quantidade" class="custom-label">Quantidade</label>
+            <input
+              id="quantidade"
+              type="number"
+              class="form-control"
+              placeholder="Quantidade"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+            />
+          </div>
+
+          <!-- Campo Valor Unitário -->
+          <div class="col-md-3 mb-2 scrollable-content">
+            <label for="valor_unitario" class="custom-label">Valor Unitário</label>
+            <input
+              id="valor_unitario"
+              type="text"
+              class="form-control"
+              placeholder="Valor Unitário"
+              onfocus="highlightInput(this)"
+              onblur="removeHighlight(this)"
+            />
+          </div>
+
+          <!-- Botão Adicionar Item -->
+          <div class="col-md-2 mt-3">
+            <button
+              id="btn_adicionar_item"
+              onclick="AdicionarItemAoPedido()"
+              class="btn btn-block button-height"
+              style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">add_shopping_cart</span>
+              Adicionar Item
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabela de Itens do Pedido -->
+        <div class="table-responsive myTable table-wrapper mt-3">
+          <div id="table_PedidoCompra" class="tabulator myTable"></div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="row mt-3">
+          <!-- Botão Salvar Pedido -->
+          <div class="col-md-4 col-12">
+            <button
+              id="btn_salvar_pedido"
+              onclick="SalvarPedido()"
+              class="btn btn-block button-height"
+              style="background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">save</span>
+              Salvar Pedido
+            </button>
+          </div>
+
+          <!-- Botão Cancelar Pedido -->
+          <div class="col-md-4 col-12 mt-3 mt-md-0">
+            <button
+              id="btn_cancelar_pedido"
+              onclick="CancelarPedido()"
+              class="btn btn-block button-height"
+              style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">cancel</span>
+              Cancelar Pedido
+            </button>
+          </div>
+
+          <!-- Botão Limpar Formulário -->
+          <div class="col-md-4 col-12 mt-3 mt-md-0">
+            <button
+              id="btn_limpar_formulario"
+              onclick="LimparFormulario()"
+              class="btn btn-block button-height"
+              style="background-color: #2196f3; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; display: flex; align-items: center; width: 100%;"
+            >
+              <span class="material-icons" style="margin-right: 8px">clear_all</span>
+              Limpar Formulário
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  {% include 'funcoes_comuns.html' %}
+  <script>
+    // Adicione seus scripts adicionais aqui, como funções para manipular a tabela de itens do pedido, salvar, cancelar, etc.
+    function AdicionarItemAoPedido() {
+      // Implemente a lógica para adicionar um item à tabela de itens do pedido
+    }
+
+    function SalvarPedido() {
+      // Implemente a lógica para salvar o pedido
+    }
+
+    function CancelarPedido() {
+      // Implemente a lógica para cancelar o pedido
+    }
+
+    function LimparFormulario() {
+      // Implemente a lógica para limpar o formulário
+    }
+  </script>
+</html>
