@@ -1201,6 +1201,10 @@ input[type='radio']:checked + .checkmark {
     transition: max-height 0.5s;
   }
 
+  .submenu {
+    display: none;
+  }
+  
   .submenu .material-icons {
     color: white;
   }

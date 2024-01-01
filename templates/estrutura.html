@@ -241,7 +241,7 @@
 
 
 <!-- Financeiros -->
-<li class="expandable hide-text" id="financeirosSubMenu" onclick="selecionarMenu('financeiros')">
+<li class="expandable hide-text" id="financeirosSubMenu">
   <div class="menu-header">
     <i class="material-icons">local_shipping</i>
     <span class="menu-text" id="financeirosText">Financeiros</span>
@@ -249,7 +249,7 @@
   </div>
 
   <!-- Conteúdo específico para o grupo "Financeiros" -->
-  <ul class="submenu submenu-nivel2" id="financeiros">
+  <ul class="submenu submenu-nivel2" id="financeiros" onclick="selecionarMenu('comprasFinanceirosSubMenu')">
     <!-- Compras -->
     <li class="expandable hide-text">
       <div class="menu-header">
@@ -616,8 +616,66 @@
               
               <script>
 
-                try {
-                    $(document).ready(function () {
+// Função para lidar com o clique nos submenus
+function handleSubmenuClick(event) {
+    event.stopPropagation();
+    submenu_muda_de_tela($(this).attr("data-template"), event);
+}
+         
+// Função para carregar conteúdo
+function loadContent(template, event) {
+    try {
+            console.log("Carregando conteúdo para o template:", template);
+            $.ajax({
+                url: my_url() + "muda_de_tela",
+                type: "POST",
+                data: {
+                    qual_template: template,
+                },
+                success: function (response) {
+                    $("#mainContent").html(response);
+                    //updatePageTitle(pageTitle);
+                },
+                error: function (response) {
+                    $("#mainContent").html("Error");
+                },
+            }).done(function (data) {});
+    } catch (error) {
+        console.error("Error in loadContent:", error);
+    } finally {
+        // Adicione lógica para não recolher os subníveis se a função não fizer nada
+        if (isThirdLevelItem) {
+            recolherSubniveis();
+        }
+    }
+}
+
+function selecionarMenu(menuItem) {
+    try {
+        // Selecione o item de menu correspondente ao parâmetro
+        const menuElement = $(`#${menuItem}`);
+
+        if (menuElement.length > 0) {
+            // Adicione classes e estilos para mostrar o terceiro nível
+            menuElement.addClass("active");
+            menuElement.find(".submenu").addClass("change2");
+
+            // Abra o submenu
+            menuElement.find(".submenu").show();
+
+            // Atualize a seta para cima no ícone de menu
+            menuElement.find(".toggle-submenu").addClass("arrow-up");
+        } else {
+            console.error("Item de menu não encontrado:", menuItem);
+        }
+    } catch (error) {
+        console.error("Erro em selecionarMenu:", error);
+    }
+}
+
+
+    try {
+    $(document).ready(function () {
     // Elementos globais
     const menu = document.getElementById("menu");
     const toggleMenuBtn = document.getElementById("toggleMenuBtn");
@@ -634,17 +692,36 @@
     const iconButtons = document.querySelectorAll(".material-icons");
 
     // Adicione este bloco para lidar com o clique nos submenus
-    $(".load-on-click li").on("click", function (event) {
-        event.stopPropagation();
-        submenu_muda_de_tela($(this).attr("data-template"), event);
-    });
+    $(".load-on-click li").on("click", handleSubmenuClick);
 
     // Adicione este bloco para lidar com o clique nos headers dos submenus
-    $(".expandable").on("click", function () {
-        $(this).toggleClass("active");
-        $(this).find(".submenu").toggleClass("change2");
-        $(".expandable").not(this).removeClass("active").children(".submenu").removeClass("change2");
-    });
+  // Adicione este bloco para lidar com o clique nos headers dos submenus (nível 2)
+$(".expandable").on("click", function (event) {
+    try {
+        const el = event.currentTarget;
+
+        if (el) {
+            // Alternar a classe active no item clicado
+            $(el).toggleClass("active");
+
+            // Alternar a classe change2 no item clicado e seu submenu
+            $(el).find(".submenu").toggleClass("change2");
+
+            // Remover a classe active de outros itens do menu
+            $("#menu ul li.expandable").not(el).removeClass("active");
+
+            // Alternar a seta para cima ou para baixo com base na existência da classe change2
+            $(el).find(".toggle-submenu").toggleClass("arrow-up", $(el).find(".submenu").hasClass("change2"));
+
+            // Evitar recolher o menu principal
+            event.stopPropagation();
+        } else {
+            console.error("Elemento não encontrado.");
+        }
+    } catch (error) {
+        console.error("Erro no clique do item do menu:", error);
+    }
+});
 
     // Evento de clique para abrir o menu e fechar
     $("#toggleMenuBtn").click(function () {
@@ -766,30 +843,6 @@ $(".expandable").click(function () {
                 console.error("Error in expandable click:", error);
             }
         });
-
-            // Função para carregar conteúdo
-            function loadContent(template) {
-                              try {
-                                  console.log("Carregando conteúdo para o template:", template);
-                                  $.ajax({
-                                      url: my_url() + "muda_de_tela",
-                                      type: "POST",
-                                      data: {
-                                          qual_template: template,
-                                      },
-                                      success: function (response) {
-                                          $("#mainContent").html(response);
-                                          //updatePageTitle(pageTitle);
-                                      },
-                                      error: function (response) {
-                                          $("#mainContent").html("Error");
-                                      },
-                                  }).done(function (data) {});
-                              } catch (error) {
-                                  console.error("Error in loadContent:", error);
-                              }
-                          }
-                
                             function updatePageTitle(title) {
                             $("#pageTitle").text(title);
                         }
@@ -805,11 +858,24 @@ $(".expandable").click(function () {
                               }
                           });
                 
-                          // Event listener para itens do submenu
-                          $(document).on("click", ".submenu li", function () {
+                        // Event listener para itens do submenu
+                         $(document).on("click", ".submenu li", function () {
                         try {
+                          // Adicione a lógica para verificar se é um item de terceiro nível
+                          const isThirdLevelItem = $(this).closest(".submenu-nivel3").length > 0;
                             closeMobileMenu();
-                            loadContent($(this).attr("data-template"));
+
+                            // Adicione a verificação antes de chamar a função loadContent
+                            if (isThirdLevelItem) {
+                                loadContent($(this).attr("data-template"));
+                            }
+
+                            // Adicione a lógica para congelar o estado do nível 2 se estiver no nível 3
+                          const isSecondLevelItem = $(this).closest(".submenu-nivel2").length > 0;
+                          if (isThirdLevelItem && isSecondLevelItem) {
+                              return;
+                          }
+
                         } catch (error) {
                             console.error("Error in submenu li click:", error);
                         }
@@ -1023,18 +1089,28 @@ $(".expandable").click(function () {
                     }
                   });
                 
-                  function toggleSubMenu(subMenuId) {
-                        var submenu = $("#submenu");
-                        var submenuIcon = $("#submenu-icon");
-                
-                        submenu.toggle();
-                
-                        if (submenu.is(":visible")) {
-                          submenuIcon.text('arrow_drop_up');
-                        } else {
-                          submenuIcon.text('arrow_drop_down');
-                        }
-                      }
+                  function toggleSubMenu(submenuId) {
+    try {
+        const submenu = document.getElementById(submenuId);
+
+        if (submenu) {
+            const isExpanded = submenu.classList.contains("expanded");
+
+            // Alterna a classe 'expanded' para mostrar ou ocultar o subnível
+            submenu.classList.toggle("expanded", !isExpanded);
+
+            // Atualiza a seta com base na existência da classe 'expanded'
+            const toggleIcon = submenu.previousElementSibling.querySelector(".toggle-submenu");
+            toggleIcon.innerText = submenu.classList.contains("expanded") ? "arrow_drop_up" : "arrow_drop_down";
+        } else {
+            console.error("Submenu não encontrado.");
+        }
+    } catch (error) {
+        console.error("Erro ao alternar submenu:", error);
+    }
+}
+
+
                 
                 
                    function setSubmenuHeight() {
@@ -1061,7 +1137,10 @@ $(".expandable").click(function () {
 
         menuMobile.removeClass("open");
         menuOverlay.hide();
+        
     }
+
+  
 
               </script>
               
