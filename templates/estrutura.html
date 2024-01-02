@@ -153,6 +153,7 @@
         <!-- Fim do conteúdo específico para o grupo "Engenharia" -->
         </li>
 
+
 <!-- Módulo: Suprimentos -->
 <li class="expandable hide-text" id="suprimentosSubMenu" onclick="selecionarMenu('suprimentos')">
   <div class="menu-header">
@@ -171,31 +172,56 @@
         <i class="material-icons toggle-submenu">arrow_drop_down</i>
       </div>
 
-      <!-- Novo nível para "Pedidos de Compra" -->
+      <!-- Novo nível para "Solicitações de Compras" -->
       <ul class="submenu submenu-nivel3" id="cadastrocomprasSubMenu">
         <!-- Cadastro -->
         <li class="expandable hide-text">
           <div class="menu-header">
-            <i class="material-icons">list</i>
-            <span class="menu-text"> Pedidos de Compra</span>
+            <i class="material-icons">description</i>
+            <span class="menu-text">Solicitações de Compras</span>
             <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
           </div>
 
-          <!-- Conteúdo específico para o submenu "Compras" -->
-          <ul class="submenu submenu-nivel4">
-            <li onclick="submenu_muda_de_tela('compra/lista_pedidos.html', event)">
-              <i class="material-icons">monetization_on</i>
-              <span class="menu-text">Contas Receitas</span>
+          <!-- Conteúdo específico para o submenu "Solicitações de Compras" -->
+          <ul class="submenu submenu-nivel4" style="max-height: 150px; overflow-y: auto;">
+            <li onclick="submenu_muda_de_tela('compra/criar_compra.html', event)">
+              <i class="material-icons">shopping_cart</i>
+              <span class="menu-text">Criar Compra</span>
             </li>
-            <li onclick="submenu_muda_de_tela('compra/criar_pedido.html', event)">
+            <li onclick="submenu_muda_de_tela('compra/necessidade_compra.html', event)">
               <i class="material-icons">add_shopping_cart</i>
-              <span class="menu-text">Criar Pedido</span>
+              <span class="menu-text">Necessidade de Compra</span>
             </li>
-            <!-- Adicione mais itens de pedidos conforme necessário -->
           </ul>
-          <!-- Fim do conteúdo específico para o submenu "Pedidos de Compra" -->
+          <!-- Fim do conteúdo específico para o submenu "Solicitações de Compras" -->
         </li>
-        <!-- Fim do novo nível "Pedidos de Compra" -->
+        <!-- Fim do novo nível "Solicitações de Compras" -->
+
+        <!-- Novo item "Pedidos Pendentes" (mesmo nível que "Solicitações de Compras") -->
+        <li class="expandable hide-text">
+          <div class="menu-header">
+            <i class="material-icons">schedule</i>
+            <span class="menu-text">Pedidos Pendentes</span>
+            <i class="material-icons toggle-submenu" style="transition: transform 0.3s; font-family: 'Material Icons';">arrow_drop_down</i>
+          </div>
+
+          <!-- Conteúdo específico para o submenu "Pedidos Pendentes" -->
+          <ul class="submenu submenu-nivel4">
+            <li onclick="submenu_muda_de_tela('compra/pedidos_pendentes/visualizar.html', event)">
+              <i class="material-icons">query_builder</i>
+              <span class="menu-text">Visualizar Pedidos Pendentes</span>
+            </li>
+            <li onclick="submenu_muda_de_tela('compra/pedidos_pendentes/aprovar.html', event)">
+              <i class="material-icons">thumb_up</i>
+              <span class="menu-text">Aprovar Pedidos</span>
+            </li>
+            <!-- Adicione mais itens de pedidos pendentes conforme necessário -->
+          </ul>
+          <!-- Fim do conteúdo específico para o submenu "Pedidos Pendentes" -->
+        </li>
+        <!-- Fim do novo item "Pedidos Pendentes" -->
+
+        <!-- Adicione mais itens de pedidos conforme necessário -->
       </ul>
       <!-- Fim do conteúdo específico para o submenu "Compras" -->
     </li>
@@ -258,6 +284,7 @@
   </ul>
   <!-- Fim do conteúdo específico para o grupo "Suprimentos" -->
 </li>
+
 
 
 <!-- Módulo: Financeiro -->
